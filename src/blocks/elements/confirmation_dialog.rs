@@ -72,6 +72,7 @@ impl ConfirmationDialog {
     /// assert_eq!(confirm_json["text"]["text"], Value::String("".into()));
     /// assert_eq!(confirm_json["confirm"]["text"], Value::String("".into()));
     /// assert_eq!(confirm_json["deny"]["text"], Value::String("".into()));
+    /// assert_eq!(confirm_json["style"], Value::Null);
     /// ```
     pub fn new() -> Self {
         Self {
