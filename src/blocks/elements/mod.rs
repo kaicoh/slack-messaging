@@ -45,6 +45,7 @@ pub use number_input::NumberInput;
 pub use opt::Opt;
 pub use opt_group::OptGroup;
 pub use overflow_menu::OverflowMenu;
+pub use plain_text_input::PlainTextInput;
 pub use radio_button_group::RadioButtonGroup;
 pub use select_conversations::SelectConversations;
 pub use select_externals::SelectExternals;
