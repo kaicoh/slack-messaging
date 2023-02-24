@@ -181,7 +181,7 @@ impl OptGroup {
         Self { options, ..self }
     }
 
-    /// Add Option object to options field.
+    /// Adds Option object to options field.
     ///
     /// ```
     /// use slack_messaging::blocks::elements::{OptGroup, Opt};
