@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::{ConfirmationDialog, Opt};
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct CheckboxGroup {
@@ -33,7 +33,10 @@ impl CheckboxGroup {
     }
 
     pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self { action_id: action_id.into(), ..self }
+        Self {
+            action_id: action_id.into(),
+            ..self
+        }
     }
 
     pub fn set_options(self, options: Vec<Opt>) -> Self {
@@ -47,13 +50,22 @@ impl CheckboxGroup {
     }
 
     pub fn set_initial_options(self, initial_options: Vec<Opt>) -> Self {
-        Self { initial_options, ..self }
+        Self {
+            initial_options,
+            ..self
+        }
     }
 
     pub fn push_initial_option(self, initial_option: Opt) -> Self {
-        let Self { mut initial_options, .. } = self;
+        let Self {
+            mut initial_options,
+            ..
+        } = self;
         initial_options.push(initial_option);
-        Self { initial_options, ..self }
+        Self {
+            initial_options,
+            ..self
+        }
     }
 
     pub fn set_confirm(self, confirm: ConfirmationDialog) -> Self {

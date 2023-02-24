@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::{Attachment, Block};
+use serde::Serialize;
 
 #[derive(Debug, Default, Serialize)]
 pub struct Message {
@@ -38,9 +38,14 @@ impl Message {
     }
 
     pub fn push_attachment(self, attachment: Attachment) -> Self {
-        let Self { mut attachments, .. } = self;
+        let Self {
+            mut attachments, ..
+        } = self;
         attachments.push(attachment);
-        Self { attachments, ..self }
+        Self {
+            attachments,
+            ..self
+        }
     }
 
     pub fn attach(self, attachment: Attachment) -> Self {

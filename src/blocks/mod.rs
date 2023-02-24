@@ -17,7 +17,7 @@ pub use divider::Divider;
 pub use header::Header;
 pub use image::Image;
 pub use input::{Input, InputElement};
-pub use section::{Section, Accessory};
+pub use section::{Accessory, Section};
 pub use video::Video;
 
 #[derive(Debug, Serialize)]

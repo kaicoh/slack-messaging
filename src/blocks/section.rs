@@ -1,11 +1,10 @@
-use serde::Serialize;
 use super::elements::{
     Button, CheckboxGroup, DatePicker, DatetimePicker, MultiSelectConversations,
-    MultiSelectExternals, MultiSelectPublicChannels, MultiSelectStaticOptions,
-    MultiSelectUsers, OverflowMenu, RadioButtonGroup, SelectConversations,
-    SelectExternals, SelectPublicChannels, SelectStaticOptions, SelectUsers,
-    Text, TimePicker,
+    MultiSelectExternals, MultiSelectPublicChannels, MultiSelectStaticOptions, MultiSelectUsers,
+    OverflowMenu, RadioButtonGroup, SelectConversations, SelectExternals, SelectPublicChannels,
+    SelectStaticOptions, SelectUsers, Text, TimePicker,
 };
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct Section {
@@ -71,10 +70,7 @@ impl Section {
     pub fn push_field(self, field: Text) -> Self {
         let mut fields = self.fields;
         fields.push(field);
-        Self {
-            fields,
-            ..self
-        }
+        Self { fields, ..self }
     }
 
     pub fn push_field_plain<T: Into<String>>(self, field: T) -> Self {

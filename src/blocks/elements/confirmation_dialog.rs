@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::Text;
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct ConfirmationDialog {
@@ -17,10 +17,11 @@ pub struct ConfirmationDialog {
 
 impl ConfirmationDialog {
     pub fn new<S, T, U, V>(title: S, text: T, confirm: U, deny: V) -> Self
-        where S: Into<String>,
-              T: Into<String>,
-              U: Into<String>,
-              V: Into<String>,
+    where
+        S: Into<String>,
+        T: Into<String>,
+        U: Into<String>,
+        V: Into<String>,
     {
         Self {
             title: Text::plain(title),

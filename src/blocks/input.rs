@@ -1,11 +1,10 @@
-use serde::Serialize;
 use super::elements::{
-    CheckboxGroup, DatePicker, DatetimePicker, EmailInput,
-    MultiSelectConversations, MultiSelectExternals, MultiSelectPublicChannels,
-    MultiSelectStaticOptions, MultiSelectUsers, NumberInput, PlainTextInput,
-    RadioButtonGroup, SelectConversations, SelectExternals, SelectPublicChannels,
-    SelectStaticOptions, SelectUsers, Text, TimePicker, UrlInput,
+    CheckboxGroup, DatePicker, DatetimePicker, EmailInput, MultiSelectConversations,
+    MultiSelectExternals, MultiSelectPublicChannels, MultiSelectStaticOptions, MultiSelectUsers,
+    NumberInput, PlainTextInput, RadioButtonGroup, SelectConversations, SelectExternals,
+    SelectPublicChannels, SelectStaticOptions, SelectUsers, Text, TimePicker, UrlInput,
 };
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct Input {

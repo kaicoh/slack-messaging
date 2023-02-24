@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::{ConfirmationDialog, Opt, Text};
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct SelectExternals {
@@ -38,7 +38,10 @@ impl SelectExternals {
     }
 
     pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self { action_id: action_id.into(), ..self }
+        Self {
+            action_id: action_id.into(),
+            ..self
+        }
     }
 
     pub fn set_initial_option(self, initial_option: Opt) -> Self {

@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::{ConfirmationDialog, Text};
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct Button {
@@ -28,8 +28,9 @@ pub struct Button {
 
 impl Button {
     pub fn new<S, T>(text: S, action_id: T) -> Self
-        where S: Into<String>,
-              T: Into<String>,
+    where
+        S: Into<String>,
+        T: Into<String>,
     {
         Self {
             kind: "button",
@@ -48,15 +49,24 @@ impl Button {
     }
 
     pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self { action_id: action_id.into(), ..self }
+        Self {
+            action_id: action_id.into(),
+            ..self
+        }
     }
 
     pub fn set_url<T: Into<String>>(self, url: T) -> Self {
-        Self { url: Some(url.into()), ..self }
+        Self {
+            url: Some(url.into()),
+            ..self
+        }
     }
 
     pub fn set_value<T: Into<String>>(self, value: T) -> Self {
-        Self { value: Some(value.into()), ..self }
+        Self {
+            value: Some(value.into()),
+            ..self
+        }
     }
 
     pub fn set_primary(self) -> Self {

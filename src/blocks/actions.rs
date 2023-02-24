@@ -1,11 +1,10 @@
-use serde::Serialize;
 use super::elements::{
     Button, CheckboxGroup, DatePicker, DatetimePicker, MultiSelectConversations,
-    MultiSelectExternals, MultiSelectPublicChannels, MultiSelectStaticOptions,
-    MultiSelectUsers, OverflowMenu, RadioButtonGroup, SelectConversations,
-    SelectExternals, SelectPublicChannels, SelectStaticOptions, SelectUsers,
-    TimePicker,
+    MultiSelectExternals, MultiSelectPublicChannels, MultiSelectStaticOptions, MultiSelectUsers,
+    OverflowMenu, RadioButtonGroup, SelectConversations, SelectExternals, SelectPublicChannels,
+    SelectStaticOptions, SelectUsers, TimePicker,
 };
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct Actions {

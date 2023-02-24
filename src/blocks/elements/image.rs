@@ -12,8 +12,9 @@ pub struct Image {
 
 impl Image {
     pub fn new<S, T>(alt: S, url: T) -> Self
-        where S: Into<String>,
-              T: Into<String>,
+    where
+        S: Into<String>,
+        T: Into<String>,
     {
         Self {
             kind: "image",

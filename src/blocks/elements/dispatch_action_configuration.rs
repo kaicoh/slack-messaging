@@ -18,7 +18,9 @@ impl DispatchActionConfiguration {
     }
 
     pub fn push_trigger_action(self, action: TriggerAction) -> Self {
-        let Self { mut trigger_actions_on } = self;
+        let Self {
+            mut trigger_actions_on,
+        } = self;
         trigger_actions_on.push(action);
         Self { trigger_actions_on }
     }

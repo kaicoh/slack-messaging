@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::Text;
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct Opt {
@@ -16,8 +16,9 @@ pub struct Opt {
 
 impl Opt {
     pub fn plain<S, T>(text: S, value: T) -> Self
-        where S: Into<String>,
-              T: Into<String>,
+    where
+        S: Into<String>,
+        T: Into<String>,
     {
         Self {
             text: Text::plain(text),
@@ -27,8 +28,9 @@ impl Opt {
         }
     }
     pub fn mrkdwn<S, T>(text: S, value: T) -> Self
-        where S: Into<String>,
-              T: Into<String>,
+    where
+        S: Into<String>,
+        T: Into<String>,
     {
         Self {
             text: Text::mrkdwn(text),
@@ -43,7 +45,10 @@ impl Opt {
     }
 
     pub fn set_value<T: Into<String>>(self, value: T) -> Self {
-        Self { value: value.into(), ..self }
+        Self {
+            value: value.into(),
+            ..self
+        }
     }
 
     pub fn set_description<T: Into<String>>(self, description: T) -> Self {
@@ -54,6 +59,9 @@ impl Opt {
     }
 
     pub fn set_url<T: Into<String>>(self, url: T) -> Self {
-        Self { url: Some(url.into()), ..self }
+        Self {
+            url: Some(url.into()),
+            ..self
+        }
     }
 }

@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::ConfirmationDialog;
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct DatetimePicker {
@@ -30,7 +30,10 @@ impl DatetimePicker {
     }
 
     pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self { action_id: action_id.into(), ..self }
+        Self {
+            action_id: action_id.into(),
+            ..self
+        }
     }
 
     pub fn set_initial_date_time<T: Into<i64>>(self, datetime: T) -> Self {

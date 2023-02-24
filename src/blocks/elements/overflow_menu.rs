@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::{ConfirmationDialog, Opt};
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct OverflowMenu {
@@ -26,23 +26,20 @@ impl OverflowMenu {
     }
 
     pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self { action_id: action_id.into(), ..self }
+        Self {
+            action_id: action_id.into(),
+            ..self
+        }
     }
 
     pub fn set_options(self, options: Vec<Opt>) -> Self {
-        Self {
-            options,
-            ..self
-        }
+        Self { options, ..self }
     }
 
     pub fn push_option(self, option: Opt) -> Self {
         let Self { mut options, .. } = self;
         options.push(option);
-        Self {
-            options,
-            ..self
-        }
+        Self { options, ..self }
     }
 
     pub fn set_confirm(self, confirm: ConfirmationDialog) -> Self {

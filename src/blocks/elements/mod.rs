@@ -32,7 +32,7 @@ pub use checkbox_group::CheckboxGroup;
 pub use confirmation_dialog::ConfirmationDialog;
 pub use datepicker::DatePicker;
 pub use datetimepicker::DatetimePicker;
-pub use dispatch_action_configuration::{TriggerAction, DispatchActionConfiguration};
+pub use dispatch_action_configuration::{DispatchActionConfiguration, TriggerAction};
 pub use email_input::EmailInput;
 pub use filter::{Conversation, Filter};
 pub use image::Image;

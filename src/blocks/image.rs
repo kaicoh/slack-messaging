@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::elements::Text;
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct Image {
@@ -31,12 +31,11 @@ impl Default for Image {
 
 impl Image {
     pub fn new<S, T>(alt: S, url: T) -> Self
-        where S: Into<String>,
-              T: Into<String>,
+    where
+        S: Into<String>,
+        T: Into<String>,
     {
-        Self::default()
-            .set_image_url(url)
-            .set_alt_text(alt)
+        Self::default().set_image_url(url).set_alt_text(alt)
     }
 
     pub fn set_image_url<T: Into<String>>(self, url: T) -> Self {

@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::{ConfirmationDialog, Opt, OptGroup, Text};
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct MultiSelectStaticOptions {
@@ -46,7 +46,10 @@ impl MultiSelectStaticOptions {
     }
 
     pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self { action_id: action_id.into(), ..self }
+        Self {
+            action_id: action_id.into(),
+            ..self
+        }
     }
 
     pub fn set_options(self, options: Vec<Opt>) -> Self {
@@ -76,7 +79,9 @@ impl MultiSelectStaticOptions {
     }
 
     pub fn push_option_group(self, option_group: OptGroup) -> Self {
-        let Self { mut option_groups, .. } = self;
+        let Self {
+            mut option_groups, ..
+        } = self;
         option_groups.push(option_group);
         Self {
             options: vec![],
@@ -93,7 +98,10 @@ impl MultiSelectStaticOptions {
     }
 
     pub fn push_initial_option(self, initial_option: Opt) -> Self {
-        let Self { mut initial_options, .. } = self;
+        let Self {
+            mut initial_options,
+            ..
+        } = self;
         initial_options.push(initial_option);
         Self {
             initial_options,

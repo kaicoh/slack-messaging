@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::{ConfirmationDialog, Text};
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct MultiSelectUsers {
@@ -38,7 +38,10 @@ impl MultiSelectUsers {
     }
 
     pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self { action_id: action_id.into(), ..self }
+        Self {
+            action_id: action_id.into(),
+            ..self
+        }
     }
 
     pub fn set_initial_users(self, initial_users: Vec<String>) -> Self {
@@ -49,7 +52,9 @@ impl MultiSelectUsers {
     }
 
     pub fn push_initial_user<T: Into<String>>(self, user: T) -> Self {
-        let Self { mut initial_users, .. } = self;
+        let Self {
+            mut initial_users, ..
+        } = self;
         initial_users.push(user.into());
         Self {
             initial_users,

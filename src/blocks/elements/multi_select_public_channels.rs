@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::{ConfirmationDialog, Text};
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct MultiSelectPublicChannels {
@@ -38,7 +38,10 @@ impl MultiSelectPublicChannels {
     }
 
     pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self { action_id: action_id.into(), ..self }
+        Self {
+            action_id: action_id.into(),
+            ..self
+        }
     }
 
     pub fn set_initial_channels(self, initial_channels: Vec<String>) -> Self {
@@ -49,7 +52,10 @@ impl MultiSelectPublicChannels {
     }
 
     pub fn push_initial_channel<T: Into<String>>(self, channel: T) -> Self {
-        let Self { mut initial_channels, .. } = self;
+        let Self {
+            mut initial_channels,
+            ..
+        } = self;
         initial_channels.push(channel.into());
         Self {
             initial_channels,

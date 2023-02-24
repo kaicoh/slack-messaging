@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::elements::{Image, Text};
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct Context {

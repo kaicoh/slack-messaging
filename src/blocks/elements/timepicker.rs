@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::{ConfirmationDialog, Text};
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct TimePicker {
@@ -38,7 +38,10 @@ impl TimePicker {
     }
 
     pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self { action_id: action_id.into(), ..self }
+        Self {
+            action_id: action_id.into(),
+            ..self
+        }
     }
 
     pub fn set_initial_time<T: Into<String>>(self, value: T) -> Self {

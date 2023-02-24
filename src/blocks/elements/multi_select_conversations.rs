@@ -1,5 +1,5 @@
-use serde::Serialize;
 use super::{ConfirmationDialog, Filter, Text};
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct MultiSelectConversations {
@@ -46,7 +46,10 @@ impl MultiSelectConversations {
     }
 
     pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self { action_id: action_id.into(), ..self }
+        Self {
+            action_id: action_id.into(),
+            ..self
+        }
     }
 
     pub fn set_initial_conversations(self, initial_conversations: Vec<String>) -> Self {
@@ -57,7 +60,10 @@ impl MultiSelectConversations {
     }
 
     pub fn push_initial_conversation<T: Into<String>>(self, conversation: T) -> Self {
-        let Self { mut initial_conversations, .. } = self;
+        let Self {
+            mut initial_conversations,
+            ..
+        } = self;
         initial_conversations.push(conversation.into());
         Self {
             initial_conversations,

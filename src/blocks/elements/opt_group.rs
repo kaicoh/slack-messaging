@@ -1,6 +1,6 @@
-use serde::Serialize;
-use super::Text;
 use super::Opt;
+use super::Text;
+use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct OptGroup {
