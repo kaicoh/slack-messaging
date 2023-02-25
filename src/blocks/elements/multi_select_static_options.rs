@@ -339,16 +339,6 @@ impl MultiSelectStaticOptions {
     /// use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt, OptGroup};
     /// use serde_json::json;
     ///
-    /// let group_0 = OptGroup::new()
-    ///     .label("Group Zero")
-    ///     .push_option(
-    ///         Opt::plain("option-00").set_value("value-00")
-    ///     )
-    ///     .push_option(
-    ///         Opt::plain("option-01").set_value("value-01")
-    ///     );
-    ///
-    ///
     /// let menu = MultiSelectStaticOptions::new()
     ///     .push_option_group(
     ///         OptGroup::new()
