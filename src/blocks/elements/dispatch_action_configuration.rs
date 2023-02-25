@@ -87,7 +87,9 @@ impl DispatchActionConfiguration {
     /// assert_eq!(config_json, expected);
     /// ```
     pub fn set_trigger_actions(self, actions: Vec<TriggerAction>) -> Self {
-        Self { trigger_actions_on: actions }
+        Self {
+            trigger_actions_on: actions,
+        }
     }
 
     /// Adds trigger_action to trigger_actions_on field.
