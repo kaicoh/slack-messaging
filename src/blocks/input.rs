@@ -170,7 +170,7 @@ impl Input {
     }
 
     /// Sets an object to element field. The object is anything from what can
-    /// transform into the enum [Inputelement].
+    /// transform into the enum [Inputlement].
     ///
     /// ```
     /// use slack_messaging::blocks::Input;
