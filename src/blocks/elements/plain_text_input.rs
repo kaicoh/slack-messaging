@@ -1,6 +1,35 @@
 use super::{DispatchActionConfiguration, Text};
 use serde::Serialize;
 
+/// [Plain-text input element](https://api.slack.com/reference/block-kit/block-elements#input)
+/// representation.
+///
+/// # Example
+///
+/// ```
+/// use slack_messaging::blocks::elements::PlainTextInput;
+/// use serde_json::json;
+///
+/// let plain = PlainTextInput::new()
+///     .set_action_id("plain_input")
+///     .multiline()
+///     .placeholder("Enter some plain text");
+///
+/// let expected = json!({
+///     "type": "plain_text_input",
+///     "action_id": "plain_input",
+///     "multiline": true,
+///     "placeholder": {
+///         "type": "plain_text",
+///         "text": "Enter some plain text",
+///         "emoji": true
+///     }
+/// });
+///
+/// let plain_json = serde_json::to_value(plain).unwrap();
+///
+/// assert_eq!(plain_json, expected);
+/// ```
 #[derive(Debug, Serialize)]
 pub struct PlainTextInput {
     #[serde(rename = "type")]
@@ -30,11 +59,11 @@ pub struct PlainTextInput {
     placeholder: Option<Text>,
 }
 
-impl PlainTextInput {
-    pub fn new<T: Into<String>>(action_id: T) -> Self {
+impl Default for PlainTextInput {
+    fn default() -> Self {
         Self {
             kind: "plain_text_input",
-            action_id: action_id.into(),
+            action_id: "".into(),
             initial_value: None,
             multiline: None,
             min_length: None,
@@ -44,7 +73,47 @@ impl PlainTextInput {
             placeholder: None,
         }
     }
+}
 
+impl PlainTextInput {
+    /// Constructs a Plain-text input element with empty values.
+    ///
+    /// ```
+    /// use slack_messaging::blocks::elements::PlainTextInput;
+    /// use serde_json::json;
+    ///
+    /// let plain = PlainTextInput::new();
+    ///
+    /// let expected = json!({
+    ///     "type": "plain_text_input",
+    ///     "action_id": ""
+    /// });
+    ///
+    /// let plain_json = serde_json::to_value(plain).unwrap();
+    ///
+    /// assert_eq!(plain_json, expected);
+    /// ```
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Sets action_id field.
+    ///
+    /// ```
+    /// use slack_messaging::blocks::elements::PlainTextInput;
+    /// use serde_json::json;
+    ///
+    /// let plain = PlainTextInput::new().set_action_id("plain_input");
+    ///
+    /// let expected = json!({
+    ///     "type": "plain_text_input",
+    ///     "action_id": "plain_input"
+    /// });
+    ///
+    /// let plain_json = serde_json::to_value(plain).unwrap();
+    ///
+    /// assert_eq!(plain_json, expected);
+    /// ```
     pub fn set_action_id<T: Into<String>>(self, value: T) -> Self {
         Self {
             action_id: value.into(),
@@ -52,6 +121,24 @@ impl PlainTextInput {
         }
     }
 
+    /// Sets initial_value field.
+    ///
+    /// ```
+    /// use slack_messaging::blocks::elements::PlainTextInput;
+    /// use serde_json::json;
+    ///
+    /// let plain = PlainTextInput::new().set_initial_value("some value");
+    ///
+    /// let expected = json!({
+    ///     "type": "plain_text_input",
+    ///     "action_id": "",
+    ///     "initial_value": "some value"
+    /// });
+    ///
+    /// let plain_json = serde_json::to_value(plain).unwrap();
+    ///
+    /// assert_eq!(plain_json, expected);
+    /// ```
     pub fn set_initial_value<T: Into<String>>(self, value: T) -> Self {
         Self {
             initial_value: Some(value.into()),
@@ -59,6 +146,24 @@ impl PlainTextInput {
         }
     }
 
+    /// Sets multiline field.
+    ///
+    /// ```
+    /// use slack_messaging::blocks::elements::PlainTextInput;
+    /// use serde_json::json;
+    ///
+    /// let plain = PlainTextInput::new().set_multiline(false);
+    ///
+    /// let expected = json!({
+    ///     "type": "plain_text_input",
+    ///     "action_id": "",
+    ///     "multiline": false
+    /// });
+    ///
+    /// let plain_json = serde_json::to_value(plain).unwrap();
+    ///
+    /// assert_eq!(plain_json, expected);
+    /// ```
     pub fn set_multiline(self, value: bool) -> Self {
         Self {
             multiline: Some(value),
@@ -66,10 +171,46 @@ impl PlainTextInput {
         }
     }
 
+    /// Sets true to multiline field.
+    ///
+    /// ```
+    /// use slack_messaging::blocks::elements::PlainTextInput;
+    /// use serde_json::json;
+    ///
+    /// let plain = PlainTextInput::new().multiline();
+    ///
+    /// let expected = json!({
+    ///     "type": "plain_text_input",
+    ///     "action_id": "",
+    ///     "multiline":true
+    /// });
+    ///
+    /// let plain_json = serde_json::to_value(plain).unwrap();
+    ///
+    /// assert_eq!(plain_json, expected);
+    /// ```
     pub fn multiline(self) -> Self {
         self.set_multiline(true)
     }
 
+    /// Sets min_length field.
+    ///
+    /// ```
+    /// use slack_messaging::blocks::elements::PlainTextInput;
+    /// use serde_json::json;
+    ///
+    /// let plain = PlainTextInput::new().set_min_length(10);
+    ///
+    /// let expected = json!({
+    ///     "type": "plain_text_input",
+    ///     "action_id": "",
+    ///     "min_length": 10
+    /// });
+    ///
+    /// let plain_json = serde_json::to_value(plain).unwrap();
+    ///
+    /// assert_eq!(plain_json, expected);
+    /// ```
     pub fn set_min_length<T: Into<i64>>(self, value: T) -> Self {
         Self {
             min_length: Some(value.into()),
@@ -77,6 +218,24 @@ impl PlainTextInput {
         }
     }
 
+    /// Sets max_length field.
+    ///
+    /// ```
+    /// use slack_messaging::blocks::elements::PlainTextInput;
+    /// use serde_json::json;
+    ///
+    /// let plain = PlainTextInput::new().set_max_length(200);
+    ///
+    /// let expected = json!({
+    ///     "type": "plain_text_input",
+    ///     "action_id": "",
+    ///     "max_length": 200
+    /// });
+    ///
+    /// let plain_json = serde_json::to_value(plain).unwrap();
+    ///
+    /// assert_eq!(plain_json, expected);
+    /// ```
     pub fn set_max_length<T: Into<i64>>(self, value: T) -> Self {
         Self {
             max_length: Some(value.into()),
@@ -84,6 +243,31 @@ impl PlainTextInput {
         }
     }
 
+    /// Sets dispatch_action_config field.
+    ///
+    /// ```
+    /// use slack_messaging::blocks::elements::{PlainTextInput, DispatchActionConfiguration,
+    /// TriggerAction};
+    /// use serde_json::json;
+    ///
+    /// let plain = PlainTextInput::new()
+    ///     .set_dispatch_action_config(
+    ///         DispatchActionConfiguration::new()
+    ///             .push_trigger_action(TriggerAction::OnCharacterEntered)
+    ///     );
+    ///
+    /// let expected = json!({
+    ///     "type": "plain_text_input",
+    ///     "action_id": "",
+    ///     "dispatch_action_config": {
+    ///         "trigger_actions_on": ["on_character_entered"]
+    ///     }
+    /// });
+    ///
+    /// let plain_json = serde_json::to_value(plain).unwrap();
+    ///
+    /// assert_eq!(plain_json, expected);
+    /// ```
     pub fn set_dispatch_action_config(self, config: DispatchActionConfiguration) -> Self {
         Self {
             dispatch_action_config: Some(config),
@@ -91,6 +275,24 @@ impl PlainTextInput {
         }
     }
 
+    /// Sets focus_on_load field.
+    ///
+    /// ```
+    /// use slack_messaging::blocks::elements::PlainTextInput;
+    /// use serde_json::json;
+    ///
+    /// let plain = PlainTextInput::new().set_focus_on_load(true);
+    ///
+    /// let expected = json!({
+    ///     "type": "plain_text_input",
+    ///     "action_id": "",
+    ///     "focus_on_load": true
+    /// });
+    ///
+    /// let plain_json = serde_json::to_value(plain).unwrap();
+    ///
+    /// assert_eq!(plain_json, expected);
+    /// ```
     pub fn set_focus_on_load(self, focus_on_load: bool) -> Self {
         Self {
             focus_on_load: Some(focus_on_load),
@@ -98,6 +300,29 @@ impl PlainTextInput {
         }
     }
 
+    /// Sets placeholder field.
+    ///
+    /// ```
+    /// use slack_messaging::blocks::elements::{PlainTextInput, Text};
+    /// use serde_json::json;
+    ///
+    /// let plain = PlainTextInput::new()
+    ///     .set_placeholder(Text::plain("Enter some plain text"));
+    ///
+    /// let expected = json!({
+    ///     "type": "plain_text_input",
+    ///     "action_id": "",
+    ///     "placeholder": {
+    ///         "type": "plain_text",
+    ///         "text": "Enter some plain text",
+    ///         "emoji": true
+    ///     }
+    /// });
+    ///
+    /// let plain_json = serde_json::to_value(plain).unwrap();
+    ///
+    /// assert_eq!(plain_json, expected);
+    /// ```
     pub fn set_placeholder(self, placeholder: Text) -> Self {
         Self {
             placeholder: Some(placeholder),
@@ -105,6 +330,28 @@ impl PlainTextInput {
         }
     }
 
+    /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
+    ///
+    /// ```
+    /// use slack_messaging::blocks::elements::PlainTextInput;
+    /// use serde_json::json;
+    ///
+    /// let plain = PlainTextInput::new().placeholder("Enter some plain text");
+    ///
+    /// let expected = json!({
+    ///     "type": "plain_text_input",
+    ///     "action_id": "",
+    ///     "placeholder": {
+    ///         "type": "plain_text",
+    ///         "text": "Enter some plain text",
+    ///         "emoji": true
+    ///     }
+    /// });
+    ///
+    /// let plain_json = serde_json::to_value(plain).unwrap();
+    ///
+    /// assert_eq!(plain_json, expected);
+    /// ```
     pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
         self.set_placeholder(Text::plain(placeholder))
     }
