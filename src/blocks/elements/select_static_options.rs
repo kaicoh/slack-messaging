@@ -507,7 +507,7 @@ impl SelectStaticOptions {
         }
     }
 
-    /// Sets focus_on_load field.
+    /// Sets placeholder field.
     ///
     /// ```
     /// use slack_messaging::blocks::elements::{SelectStaticOptions, Text};
@@ -537,7 +537,7 @@ impl SelectStaticOptions {
         }
     }
 
-    /// Sets focus_on_load field.
+    /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
     ///
     /// ```
     /// use slack_messaging::blocks::elements::SelectStaticOptions;
