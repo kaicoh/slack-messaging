@@ -54,7 +54,7 @@ impl Default for DatetimePicker {
 }
 
 impl DatetimePicker {
-    /// Constructs a Date picker element with empty values.
+    /// Constructs a Datetime picker element with empty values.
     ///
     /// ```
     /// use slack_messaging::blocks::elements::DatetimePicker;
