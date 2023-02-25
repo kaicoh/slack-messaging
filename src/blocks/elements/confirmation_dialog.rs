@@ -57,6 +57,18 @@ pub struct ConfirmationDialog {
     style: Option<&'static str>,
 }
 
+impl Default for ConfirmationDialog {
+    fn default() -> Self {
+        Self {
+            title: Text::plain(""),
+            text: Text::plain(""),
+            confirm: Text::plain(""),
+            deny: Text::plain(""),
+            style: None,
+        }
+    }
+}
+
 impl ConfirmationDialog {
     /// Constructs a Confirmation dialog object with empty values.
     ///
@@ -75,13 +87,7 @@ impl ConfirmationDialog {
     /// assert_eq!(confirm_json["style"], Value::Null);
     /// ```
     pub fn new() -> Self {
-        Self {
-            title: Text::plain(""),
-            text: Text::plain(""),
-            confirm: Text::plain(""),
-            deny: Text::plain(""),
-            style: None,
-        }
+        Self::default()
     }
 
     /// Sets title field with plain_text object.

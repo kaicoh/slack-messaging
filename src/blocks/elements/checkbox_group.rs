@@ -65,6 +65,19 @@ pub struct CheckboxGroup {
     focus_on_load: Option<bool>,
 }
 
+impl Default for CheckboxGroup {
+    fn default() -> Self {
+        Self {
+            kind: "checkboxes",
+            action_id: "".into(),
+            options: vec![],
+            initial_options: vec![],
+            confirm: None,
+            focus_on_load: None,
+        }
+    }
+}
+
 impl CheckboxGroup {
     /// Constructs a Checkbox group with empty values.
     ///
@@ -85,14 +98,7 @@ impl CheckboxGroup {
     /// assert_eq!(checkboxes_json, expected);
     /// ```
     pub fn new() -> Self {
-        Self {
-            kind: "checkboxes",
-            action_id: "".into(),
-            options: vec![],
-            initial_options: vec![],
-            confirm: None,
-            focus_on_load: None,
-        }
+        Self::default()
     }
 
     /// Sets action_id field.

@@ -40,6 +40,17 @@ pub struct Opt {
     url: Option<String>,
 }
 
+impl Default for Opt {
+    fn default() -> Self {
+        Self {
+            text: Text::plain(""),
+            value: "".into(),
+            description: None,
+            url: None,
+        }
+    }
+}
+
 impl Opt {
     /// Constructs a Option object with empty values.
     ///
@@ -57,12 +68,7 @@ impl Opt {
     /// assert_eq!(option_json["url"], Value::Null);
     /// ```
     pub fn new() -> Self {
-        Self {
-            text: Text::plain(""),
-            value: "".into(),
-            description: None,
-            url: None,
-        }
+        Self::default()
     }
 
     /// Constructs a Option object with plain_text object.

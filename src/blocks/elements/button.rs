@@ -55,6 +55,21 @@ pub struct Button {
     accessibility_label: Option<String>,
 }
 
+impl Default for Button {
+    fn default() -> Self {
+        Self {
+            kind: "button",
+            text: Text::plain(""),
+            action_id: "".into(),
+            url: None,
+            value: None,
+            style: None,
+            confirm: None,
+            accessibility_label: None,
+        }
+    }
+}
+
 impl Button {
     /// Constructs a Button element.
     ///
@@ -79,16 +94,7 @@ impl Button {
     /// assert_eq!(button_json, expected);
     /// ```
     pub fn new() -> Self {
-        Self {
-            kind: "button",
-            text: Text::plain(""),
-            action_id: "".into(),
-            url: None,
-            value: None,
-            style: None,
-            confirm: None,
-            accessibility_label: None,
-        }
+        Self::default()
     }
 
     /// Sets text field.

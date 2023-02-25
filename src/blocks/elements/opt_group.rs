@@ -55,6 +55,15 @@ pub struct OptGroup {
     options: Vec<Opt>,
 }
 
+impl Default for OptGroup {
+    fn default() -> Self {
+        Self {
+            label: Text::plain(""),
+            options: vec![],
+        }
+    }
+}
+
 impl OptGroup {
     /// Constructs a Option group object with empty values.
     ///
@@ -78,10 +87,7 @@ impl OptGroup {
     /// assert_eq!(options_json, expected);
     /// ```
     pub fn new() -> Self {
-        Self {
-            label: Text::plain(""),
-            options: vec![],
-        }
+        Self::default()
     }
 
     /// Sets label field with Text object.
