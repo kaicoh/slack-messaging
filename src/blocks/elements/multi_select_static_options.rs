@@ -636,7 +636,7 @@ impl MultiSelectStaticOptions {
     /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
     ///
     /// ```
-    /// use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Text};
+    /// use slack_messaging::blocks::elements::MultiSelectStaticOptions;
     /// use serde_json::json;
     ///
     /// let menu = MultiSelectStaticOptions::new().placeholder("Select items");
