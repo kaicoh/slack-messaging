@@ -284,7 +284,7 @@ impl SelectExternals {
     /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
     ///
     /// ```
-    /// use slack_messaging::blocks::elements::{SelectExternals, Text};
+    /// use slack_messaging::blocks::elements::SelectExternals;
     /// use serde_json::json;
     ///
     /// let menu = SelectExternals::new().placeholder("Select an item");
