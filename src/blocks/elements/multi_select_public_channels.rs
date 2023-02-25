@@ -308,7 +308,7 @@ impl MultiSelectPublicChannels {
     /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
     ///
     /// ```
-    /// use slack_messaging::blocks::elements::{MultiSelectPublicChannels, Text};
+    /// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
     /// use serde_json::json;
     ///
     /// let menu = MultiSelectPublicChannels::new().placeholder("Select channels");
