@@ -6,6 +6,210 @@ use super::elements::{
 };
 use serde::Serialize;
 
+/// [Actions block](https://api.slack.com/reference/block-kit/blocks#actions)
+/// representation.
+///
+/// # Example
+///
+/// The following is reproduction of [the 1st sample actions](https://api.slack.com/reference/block-kit/blocks#actions_examples).
+///
+/// ```
+/// use slack_messaging::blocks::Actions;
+/// use slack_messaging::blocks::elements::{Button, SelectStaticOptions, Opt};
+/// use serde_json::json;
+///
+/// let actions = Actions::new()
+///     .set_block_id("actions1")
+///     .push_element(
+///         SelectStaticOptions::new()
+///             .set_action_id("select_2")
+///             .placeholder("Which witch is the witchiest witch?")
+///             .push_option(Opt::plain("Matilda").set_value("matilda"))
+///             .push_option(Opt::plain("Glinda").set_value("glinda"))
+///             .push_option(Opt::plain("Granny Weatherwax").set_value("grannyWeatherwax"))
+///             .push_option(Opt::plain("Hermione").set_value("hermione"))
+///     )
+///     .push_element(
+///         Button::new()
+///             .set_action_id("button_1")
+///             .set_value("cancel")
+///             .text("Cancel")
+///     );
+///
+/// let expected = json!({
+///     "type": "actions",
+///     "block_id": "actions1",
+///     "elements": [
+///         {
+///             "type": "static_select",
+///             "action_id": "select_2",
+///             "placeholder": {
+///                 "type": "plain_text",
+///                 "text": "Which witch is the witchiest witch?",
+///                 "emoji": true
+///             },
+///             "options": [
+///                 {
+///                     "text": {
+///                         "type": "plain_text",
+///                         "text": "Matilda",
+///                         "emoji": true
+///                     },
+///                     "value": "matilda"
+///                 },
+///                 {
+///                     "text": {
+///                         "type": "plain_text",
+///                         "text": "Glinda",
+///                         "emoji": true
+///                     },
+///                     "value": "glinda"
+///                 },
+///                 {
+///                     "text": {
+///                         "type": "plain_text",
+///                         "text": "Granny Weatherwax",
+///                         "emoji": true
+///                     },
+///                     "value": "grannyWeatherwax"
+///                 },
+///                 {
+///                     "text": {
+///                         "type": "plain_text",
+///                         "text": "Hermione",
+///                         "emoji": true
+///                     },
+///                     "value": "hermione"
+///                 }
+///             ]
+///         },
+///         {
+///             "type": "button",
+///             "text": {
+///                 "type": "plain_text",
+///                 "text": "Cancel",
+///                 "emoji": true
+///             },
+///             "value": "cancel",
+///             "action_id": "button_1"
+///         }
+///     ]
+/// });
+///
+/// let actions_json = serde_json::to_value(actions).unwrap();
+///
+/// assert_eq!(actions_json, expected);
+/// ```
+///
+/// And the following is the [2nd sample actions](https://api.slack.com/reference/block-kit/blocks#actions_examples).
+///
+/// ```
+/// use slack_messaging::blocks::Actions;
+/// use slack_messaging::blocks::elements::{Button, DatePicker, Opt, OverflowMenu};
+/// use serde_json::json;
+///
+/// let actions = Actions::new()
+///     .set_block_id("actionblock789")
+///     .push_element(
+///         DatePicker::new()
+///             .set_action_id("datepicker123")
+///             .set_initial_date("1990-04-28")
+///             .placeholder("Select a date")
+///     )
+///     .push_element(
+///         OverflowMenu::new()
+///             .set_action_id("overflow")
+///             .push_option(Opt::plain("*this is plain_text text*").set_value("value-0"))
+///             .push_option(Opt::plain("*this is plain_text text*").set_value("value-1"))
+///             .push_option(Opt::plain("*this is plain_text text*").set_value("value-2"))
+///             .push_option(Opt::plain("*this is plain_text text*").set_value("value-3"))
+///             .push_option(Opt::plain("*this is plain_text text*").set_value("value-4"))
+///     )
+///     .push_element(
+///         Button::new()
+///             .set_action_id("button")
+///             .set_value("click_me_123")
+///             .text("Click Me")
+///     );
+///
+/// let expected = json!({
+///     "type": "actions",
+///     "block_id": "actionblock789",
+///     "elements": [
+///         {
+///             "type": "datepicker",
+///             "action_id": "datepicker123",
+///             "initial_date": "1990-04-28",
+///             "placeholder": {
+///                 "type": "plain_text",
+///                 "text": "Select a date",
+///                 "emoji": true
+///             }
+///         },
+///         {
+///             "type": "overflow",
+///             "action_id": "overflow",
+///             "options": [
+///                 {
+///                     "text": {
+///                         "type": "plain_text",
+///                         "text": "*this is plain_text text*",
+///                         "emoji": true
+///                     },
+///                     "value": "value-0"
+///                 },
+///                 {
+///                     "text": {
+///                         "type": "plain_text",
+///                         "text": "*this is plain_text text*",
+///                         "emoji": true
+///                     },
+///                     "value": "value-1"
+///                 },
+///                 {
+///                     "text": {
+///                         "type": "plain_text",
+///                         "text": "*this is plain_text text*",
+///                         "emoji": true
+///                     },
+///                     "value": "value-2"
+///                 },
+///                 {
+///                     "text": {
+///                         "type": "plain_text",
+///                         "text": "*this is plain_text text*",
+///                         "emoji": true
+///                     },
+///                     "value": "value-3"
+///                 },
+///                 {
+///                     "text": {
+///                         "type": "plain_text",
+///                         "text": "*this is plain_text text*",
+///                         "emoji": true
+///                     },
+///                     "value": "value-4"
+///                 }
+///             ]
+///         },
+///         {
+///             "type": "button",
+///             "text": {
+///                 "type": "plain_text",
+///                 "text": "Click Me",
+///                 "emoji": true
+///             },
+///             "value": "click_me_123",
+///             "action_id": "button"
+///         }
+///     ]
+/// });
+///
+/// let actions_json = serde_json::to_value(actions).unwrap();
+///
+/// assert_eq!(actions_json, expected);
+/// ```
+///
 #[derive(Debug, Serialize)]
 pub struct Actions {
     #[serde(rename = "type")]
@@ -28,20 +232,179 @@ impl Default for Actions {
 }
 
 impl Actions {
+    /// Constructs an Actions block.
+    ///
+    /// ```
+    /// use slack_messaging::blocks::Actions;
+    /// use serde_json::json;
+    ///
+    /// let actions = Actions::new();
+    ///
+    /// let expected = json!({
+    ///     "type": "actions",
+    ///     "elements": []
+    /// });
+    ///
+    /// let actions_json = serde_json::to_value(actions).unwrap();
+    ///
+    /// assert_eq!(actions_json, expected);
+    /// ```
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// Sets elements field directly. The argument is a vector composed from any objects
+    /// that can transform into the enum [ActionsElement].
+    ///
+    /// ```
+    /// use slack_messaging::blocks::Actions;
+    /// use slack_messaging::blocks::elements::{Button, SelectStaticOptions, Opt};
+    /// use serde_json::json;
+    ///
+    /// let actions = Actions::new()
+    ///     .set_elements(
+    ///         vec![
+    ///             SelectStaticOptions::new()
+    ///                 .set_action_id("select_2")
+    ///                 .placeholder("Which witch is the witchiest witch?")
+    ///                 .push_option(Opt::plain("Matilda").set_value("matilda"))
+    ///                 .push_option(Opt::plain("Glinda").set_value("glinda"))
+    ///                 .into(),
+    ///             Button::new()
+    ///                 .set_action_id("button_1")
+    ///                 .set_value("cancel")
+    ///                 .text("Cancel")
+    ///                 .into(),
+    ///         ]
+    ///     );
+    ///
+    /// let expected = json!({
+    ///     "type": "actions",
+    ///     "elements": [
+    ///         {
+    ///             "type": "static_select",
+    ///             "action_id": "select_2",
+    ///             "placeholder": {
+    ///                 "type": "plain_text",
+    ///                 "text": "Which witch is the witchiest witch?",
+    ///                 "emoji": true
+    ///             },
+    ///             "options": [
+    ///                 {
+    ///                     "text": {
+    ///                         "type": "plain_text",
+    ///                         "text": "Matilda",
+    ///                         "emoji": true
+    ///                     },
+    ///                     "value": "matilda"
+    ///                 },
+    ///                 {
+    ///                     "text": {
+    ///                         "type": "plain_text",
+    ///                         "text": "Glinda",
+    ///                         "emoji": true
+    ///                     },
+    ///                     "value": "glinda"
+    ///                 }
+    ///             ]
+    ///         },
+    ///         {
+    ///             "type": "button",
+    ///             "text": {
+    ///                 "type": "plain_text",
+    ///                 "text": "Cancel",
+    ///                 "emoji": true
+    ///             },
+    ///             "value": "cancel",
+    ///             "action_id": "button_1"
+    ///         }
+    ///     ]
+    /// });
+    ///
+    /// let actions_json = serde_json::to_value(actions).unwrap();
+    ///
+    /// assert_eq!(actions_json, expected);
+    /// ```
     pub fn set_elements(self, elements: Vec<ActionsElement>) -> Self {
         Self { elements, ..self }
     }
 
+    /// Adds an object to elements field. The argument is an any objects
+    /// that can transform into the enum [ActionsElement].
+    ///
+    /// ```
+    /// use slack_messaging::blocks::Actions;
+    /// use slack_messaging::blocks::elements::{Button, DatePicker};
+    /// use serde_json::json;
+    ///
+    /// let actions = Actions::new()
+    ///     .push_element(
+    ///         DatePicker::new()
+    ///             .set_action_id("datepicker123")
+    ///             .set_initial_date("1990-04-28")
+    ///             .placeholder("Select a date")
+    ///     )
+    ///     .push_element(
+    ///         Button::new()
+    ///             .set_action_id("button")
+    ///             .set_value("click_me_123")
+    ///             .text("Click Me")
+    ///     );
+    ///
+    /// let expected = json!({
+    ///     "type": "actions",
+    ///     "elements": [
+    ///         {
+    ///             "type": "datepicker",
+    ///             "action_id": "datepicker123",
+    ///             "initial_date": "1990-04-28",
+    ///             "placeholder": {
+    ///                 "type": "plain_text",
+    ///                 "text": "Select a date",
+    ///                 "emoji": true
+    ///             }
+    ///         },
+    ///         {
+    ///             "type": "button",
+    ///             "text": {
+    ///                 "type": "plain_text",
+    ///                 "text": "Click Me",
+    ///                 "emoji": true
+    ///             },
+    ///             "value": "click_me_123",
+    ///             "action_id": "button"
+    ///         }
+    ///     ]
+    /// });
+    ///
+    /// let actions_json = serde_json::to_value(actions).unwrap();
+    ///
+    /// assert_eq!(actions_json, expected);
+    /// ```
     pub fn push_element<T: Into<ActionsElement>>(self, element: T) -> Self {
         let mut elements = self.elements;
         elements.push(element.into());
         Self { elements, ..self }
     }
 
+    /// Sets block_id field.
+    ///
+    /// ```
+    /// use slack_messaging::blocks::Actions;
+    /// use serde_json::json;
+    ///
+    /// let actions = Actions::new().set_block_id("actions_block_1");
+    ///
+    /// let expected = json!({
+    ///     "type": "actions",
+    ///     "elements": [],
+    ///     "block_id": "actions_block_1"
+    /// });
+    ///
+    /// let actions_json = serde_json::to_value(actions).unwrap();
+    ///
+    /// assert_eq!(actions_json, expected);
+    /// ```
     pub fn set_block_id<T: Into<String>>(self, block_id: T) -> Self {
         Self {
             block_id: Some(block_id.into()),
@@ -50,6 +413,7 @@ impl Actions {
     }
 }
 
+/// Objects that can be an element of the [Actions]'s elements field.
 #[derive(Debug, Serialize)]
 #[serde(untagged)]
 pub enum ActionsElement {
