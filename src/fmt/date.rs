@@ -79,9 +79,9 @@ struct FormatReplacer {
 
 impl FormatReplacer {
     const DATE_NUM: &str = "%Y-%m-%d";
-    const DATE: &str = "%B %d, %Y";
-    const DATE_SHORT: &str = "%b %d, %Y";
-    const DATE_LONG: &str = "%A, %B %d, %Y";
+    const DATE: &str = "%B %e, %Y";
+    const DATE_SHORT: &str = "%b %e, %Y";
+    const DATE_LONG: &str = "%A, %B %e, %Y";
     const TIME: &str = "%l:%M %p";
     const TIME_SECS: &str = "%l:%M:%S %p";
 
@@ -161,7 +161,7 @@ mod tests {
     #[test]
     fn it_replaces_format_date() {
         let result = FormatReplacer::new("Posted {date}.").replace_date().value;
-        assert_eq!(result, "Posted %B %d, %Y.");
+        assert_eq!(result, "Posted %B %e, %Y.");
     }
 
     #[test]
@@ -169,7 +169,7 @@ mod tests {
         let result = FormatReplacer::new("Posted {date_short}.")
             .replace_date_short()
             .value;
-        assert_eq!(result, "Posted %b %d, %Y.");
+        assert_eq!(result, "Posted %b %e, %Y.");
     }
 
     #[test]
@@ -177,7 +177,7 @@ mod tests {
         let result = FormatReplacer::new("Posted {date_long}.")
             .replace_date_long()
             .value;
-        assert_eq!(result, "Posted %A, %B %d, %Y.");
+        assert_eq!(result, "Posted %A, %B %e, %Y.");
     }
 
     #[test]
@@ -185,7 +185,7 @@ mod tests {
         let result = FormatReplacer::new("Posted {date_pretty}.")
             .replace_date_pretty()
             .value;
-        assert_eq!(result, "Posted %B %d, %Y.");
+        assert_eq!(result, "Posted %B %e, %Y.");
     }
 
     #[test]
@@ -193,7 +193,7 @@ mod tests {
         let result = FormatReplacer::new("Posted {date_short_pretty}.")
             .replace_date_short_pretty()
             .value;
-        assert_eq!(result, "Posted %b %d, %Y.");
+        assert_eq!(result, "Posted %b %e, %Y.");
     }
 
     #[test]
@@ -201,7 +201,7 @@ mod tests {
         let result = FormatReplacer::new("Posted {date_long_pretty}.")
             .replace_date_long_pretty()
             .value;
-        assert_eq!(result, "Posted %A, %B %d, %Y.");
+        assert_eq!(result, "Posted %A, %B %e, %Y.");
     }
 
     #[test]
