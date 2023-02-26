@@ -1,5 +1,9 @@
 # Slack Messaging
 
+[![Version](https://img.shields.io/crates/v/slack-messaging)](https://crates.io/crates/slack-messaging)
+[![License](https://img.shields.io/crates/l/slack-messaging)](LICENSE)
+[![Test](https://img.shields.io/github/actions/workflow/status/kaicoh/slack-messaging/test.yml)](https://github.com/kaicoh/slack-messaging/actions/workflows/test.yml)
+
 This is a library for [Rust](https://www.rust-lang.org/) to support building messages for [slack messaging api](https://api.slack.com/messaging/managing).
 Using this, you can build any messages in type-safe way like following.
 
