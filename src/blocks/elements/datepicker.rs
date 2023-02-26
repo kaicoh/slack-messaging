@@ -30,7 +30,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(datepicker_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct DatePicker {
     #[serde(rename = "type")]
     kind: &'static str,

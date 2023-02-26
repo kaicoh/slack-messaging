@@ -20,7 +20,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(divider_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Divider {
     #[serde(rename = "type")]
     kind: &'static str,

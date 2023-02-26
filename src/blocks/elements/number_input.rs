@@ -24,7 +24,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(num_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct NumberInput {
     #[serde(rename = "type")]
     kind: &'static str,

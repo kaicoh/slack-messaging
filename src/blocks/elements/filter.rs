@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 /// Type of conversation to set into [Filter object](https://api.slack.com/reference/block-kit/composition-objects#filter_conversations)
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum Conversation {
     Im,
@@ -36,7 +36,7 @@ pub enum Conversation {
 ///
 /// assert_eq!(filter_json, expected);
 /// ```
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Default, Clone, Serialize)]
 pub struct Filter {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     include: Vec<Conversation>,

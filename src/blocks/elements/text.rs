@@ -6,7 +6,7 @@ const TYPE_MRKDWN: &str = "mrkdwn";
 /// [Text object](https://api.slack.com/reference/block-kit/composition-objects#text)
 /// representation.
 ///
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Text {
     #[serde(rename = "type")]
     kind: &'static str,

@@ -28,7 +28,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(url_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct UrlInput {
     #[serde(rename = "type")]
     kind: &'static str,

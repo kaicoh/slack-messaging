@@ -43,7 +43,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(confirm_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct ConfirmationDialog {
     title: Text,
 

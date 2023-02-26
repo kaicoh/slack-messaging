@@ -28,7 +28,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(header_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Header {
     #[serde(rename = "type")]
     kind: &'static str,

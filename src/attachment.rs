@@ -111,7 +111,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(attachment_json, expected);
 /// ```
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Default, Clone, Serialize)]
 pub struct Attachment {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     blocks: Vec<Block>,

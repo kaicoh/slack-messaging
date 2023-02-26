@@ -52,7 +52,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(input_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Input {
     #[serde(rename = "type")]
     kind: &'static str,
@@ -447,7 +447,7 @@ impl Input {
 }
 
 /// Objects that can be an element of the [Input]'s element field.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 #[serde(untagged)]
 pub enum InputElement {
     /// [Checkbox group](https://api.slack.com/reference/block-kit/block-elements#checkboxes)

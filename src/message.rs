@@ -78,7 +78,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(message_json, expected);
 /// ```
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Default, Clone, Serialize)]
 pub struct Message {
     #[serde(skip_serializing_if = "Option::is_none")]
     text: Option<String>,

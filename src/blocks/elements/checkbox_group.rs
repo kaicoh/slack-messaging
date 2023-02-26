@@ -46,7 +46,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(checkboxes_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct CheckboxGroup {
     #[serde(rename = "type")]
     kind: &'static str,

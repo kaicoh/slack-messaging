@@ -27,7 +27,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(option_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Opt {
     text: Text,
 

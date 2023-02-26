@@ -46,7 +46,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(radio_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct RadioButtonGroup {
     #[serde(rename = "type")]
     kind: &'static str,

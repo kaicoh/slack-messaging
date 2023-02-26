@@ -56,7 +56,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(section_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Section {
     #[serde(rename = "type")]
     kind: &'static str,
@@ -385,7 +385,7 @@ impl Section {
 }
 
 /// Objects that can be set to [Section] as an accessory.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 #[serde(untagged)]
 pub enum Accessory {
     /// [Button element](https://api.slack.com/reference/block-kit/block-elements#button)

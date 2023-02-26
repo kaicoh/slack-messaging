@@ -30,7 +30,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(button_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Button {
     #[serde(rename = "type")]
     kind: &'static str,

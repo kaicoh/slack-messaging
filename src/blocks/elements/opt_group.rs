@@ -49,7 +49,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(options_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct OptGroup {
     label: Text,
     options: Vec<Opt>,

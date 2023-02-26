@@ -42,7 +42,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(context_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Context {
     #[serde(rename = "type")]
     kind: &'static str,
@@ -197,7 +197,7 @@ impl Context {
 }
 
 /// Objects that can be an element of the [Context]'s elements field.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 #[serde(untagged)]
 pub enum ContextElement {
     /// [Image element](https://api.slack.com/reference/block-kit/block-elements#image)

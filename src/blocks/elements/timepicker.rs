@@ -32,7 +32,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(timepicker_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct TimePicker {
     #[serde(rename = "type")]
     kind: &'static str,

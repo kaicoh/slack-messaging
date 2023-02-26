@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 /// Interaction type to set into [Dispatch action configuration](https://api.slack.com/reference/block-kit/composition-objects#dispatch_action_config)
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum TriggerAction {
     /// Represents `on_enter_pressed`.
@@ -35,7 +35,7 @@ pub enum TriggerAction {
 ///
 /// assert_eq!(config_json, expected);
 /// ```
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Default, Clone, Serialize)]
 pub struct DispatchActionConfiguration {
     trigger_actions_on: Vec<TriggerAction>,
 }

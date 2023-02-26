@@ -210,7 +210,7 @@ use serde::Serialize;
 /// assert_eq!(actions_json, expected);
 /// ```
 ///
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Actions {
     #[serde(rename = "type")]
     kind: &'static str,
@@ -414,7 +414,7 @@ impl Actions {
 }
 
 /// Objects that can be an element of the [Actions]'s elements field.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 #[serde(untagged)]
 pub enum ActionsElement {
     /// [Button element](https://api.slack.com/reference/block-kit/block-elements#button)

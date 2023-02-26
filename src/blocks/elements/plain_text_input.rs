@@ -30,7 +30,7 @@ use serde::Serialize;
 ///
 /// assert_eq!(plain_json, expected);
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct PlainTextInput {
     #[serde(rename = "type")]
     kind: &'static str,
