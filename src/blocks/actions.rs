@@ -329,7 +329,7 @@ impl Actions {
         Self { elements, ..self }
     }
 
-    /// Adds an object to elements field. The argument is an any objects
+    /// Adds an object to elements field. The argument is an any object
     /// that can transform into the enum [ActionsElement].
     ///
     /// ```

@@ -340,8 +340,8 @@ impl Section {
         self.push_field(Text::mrkdwn(field))
     }
 
-    /// Sets object to accessory field. The argument is from the objects that can
-    /// transform into the enum [Accessory].
+    /// Sets object to accessory field. The argument is an any object
+    /// that can transform into the enum [Accessory].
     ///
     /// ```
     /// use slack_messaging::blocks::Section;

@@ -1,4 +1,4 @@
-use super::{Attachment, Block};
+use super::{Attachment, blocks::Block};
 use serde::Serialize;
 
 #[derive(Debug, Default, Serialize)]

@@ -1,3 +1,4 @@
+/// Objects from that the blocks are composed.
 pub mod elements;
 
 mod actions;
@@ -20,7 +21,9 @@ pub use input::{Input, InputElement};
 pub use section::{Accessory, Section};
 pub use video::Video;
 
+/// Objects that can be set to blocks in [Message](crate::message::Message) or [Attachment](crate::attachment::Attachment).
 #[derive(Debug, Serialize)]
+#[serde(untagged)]
 pub enum Block {
     Actions(Box<Actions>),
     Context(Box<Context>),

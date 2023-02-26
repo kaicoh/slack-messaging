@@ -169,8 +169,8 @@ impl Input {
         self.set_label(Text::plain(label))
     }
 
-    /// Sets an object to element field. The object is anything from what can
-    /// transform into the enum [Inputlement].
+    /// Sets an object to element field. The argument is an any object
+    /// that can transform into the enum [InputElement].
     ///
     /// ```
     /// use slack_messaging::blocks::Input;
