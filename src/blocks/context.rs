@@ -200,7 +200,12 @@ impl Context {
 #[derive(Debug, Serialize)]
 #[serde(untagged)]
 pub enum ContextElement {
+    /// [Image element](https://api.slack.com/reference/block-kit/block-elements#image)
+    /// representation
     Image(Box<Image>),
+
+    /// [Text object](https://api.slack.com/reference/block-kit/composition-objects#text)
+    /// representation
     Text(Box<Text>),
 }
 

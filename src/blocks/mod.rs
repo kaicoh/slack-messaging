@@ -25,13 +25,28 @@ pub use video::Video;
 #[derive(Debug, Serialize)]
 #[serde(untagged)]
 pub enum Block {
+    /// [Actions block](https://api.slack.com/reference/block-kit/blocks#actions) representation
     Actions(Box<Actions>),
+
+    /// [Context block](https://api.slack.com/reference/block-kit/blocks#context) representation
     Context(Box<Context>),
+
+    /// [Divider block](https://api.slack.com/reference/block-kit/blocks#divider) representation
     Divider(Box<Divider>),
+
+    /// [Header block](https://api.slack.com/reference/block-kit/blocks#header) representation
     Header(Box<Header>),
+
+    /// [Image block](https://api.slack.com/reference/block-kit/blocks#image) representation
     Image(Box<Image>),
+
+    /// [Input block](https://api.slack.com/reference/block-kit/blocks#input) representation
     Input(Box<Input>),
+
+    /// [Section block](https://api.slack.com/reference/block-kit/blocks#section) representation
     Section(Box<Section>),
+
+    /// [Video block](https://api.slack.com/reference/block-kit/blocks#video) representation
     Video(Box<Video>),
 }
 

@@ -417,22 +417,72 @@ impl Actions {
 #[derive(Debug, Serialize)]
 #[serde(untagged)]
 pub enum ActionsElement {
+    /// [Button element](https://api.slack.com/reference/block-kit/block-elements#button)
+    /// representation
     Button(Box<Button>),
+
+    /// [Checkbox group](https://api.slack.com/reference/block-kit/block-elements#checkboxes)
+    /// representation
     CheckboxGroup(Box<CheckboxGroup>),
+
+    /// [Date picker element](https://api.slack.com/reference/block-kit/block-elements#datepicker)
+    /// representation
     DatePicker(Box<DatePicker>),
+
+    /// [Datetime picker element](https://api.slack.com/reference/block-kit/block-elements#datetimepicker)
+    /// representation
     DatetimePicker(Box<DatetimePicker>),
+
+    /// [Multi-select menu Conversations list element](https://api.slack.com/reference/block-kit/block-elements#conversation_multi_select)
+    /// representation
     MultiSelectConversations(Box<MultiSelectConversations>),
+
+    /// [Multi-select menu External data source element](https://api.slack.com/reference/block-kit/block-elements#external_multi_select)
+    /// representation
     MultiSelectExternals(Box<MultiSelectExternals>),
+
+    /// [Multi-select menu Public channels element](https://api.slack.com/reference/block-kit/block-elements#channel_multi_select)
+    /// representation
     MultiSelectPublicChannels(Box<MultiSelectPublicChannels>),
+
+    /// [Multi-select menu Static options element](https://api.slack.com/reference/block-kit/block-elements#static_multi_select)
+    /// representation
     MultiSelectStaticOptions(Box<MultiSelectStaticOptions>),
+
+    /// [Multi-select menu User list element](https://api.slack.com/reference/block-kit/block-elements#users_multi_select)
+    /// representation
     MultiSelectUsers(Box<MultiSelectUsers>),
+
+    /// [Overflow menu element](https://api.slack.com/reference/block-kit/block-elements#overflow)
+    /// representation
     OverflowMenu(Box<OverflowMenu>),
+
+    /// [Radio buton group element](https://api.slack.com/reference/block-kit/block-elements#radio)
+    /// representation
     RadioButtonGroup(Box<RadioButtonGroup>),
+
+    /// [Select menu of conversations element](https://api.slack.com/reference/block-kit/block-elements#conversations_select)
+    /// representation
     SelectConversations(Box<SelectConversations>),
+
+    /// [Select menu of external data source element](https://api.slack.com/reference/block-kit/block-elements#external_select)
+    /// representation
     SelectExternals(Box<SelectExternals>),
+
+    /// [Select menu of public channels element](https://api.slack.com/reference/block-kit/block-elements#conversations_select)
+    /// representation
     SelectPublicChannels(Box<SelectPublicChannels>),
+
+    /// [Select menu of static options element](https://api.slack.com/reference/block-kit/block-elements#static_select)
+    /// representation
     SelectStaticOptions(Box<SelectStaticOptions>),
+
+    /// [Select menu of users element](https://api.slack.com/reference/block-kit/block-elements#users_select)
+    /// representation
     SelectUsers(Box<SelectUsers>),
+
+    /// [Time picker element](https://api.slack.com/reference/block-kit/block-elements#timepicker)
+    /// representation
     TimePicker(Box<TimePicker>),
 }
 
