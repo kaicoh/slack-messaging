@@ -10,6 +10,9 @@ repository = "https://github.com/kaicoh/slack-messaging"
 documentation = "https://docs.rs/slack-messaging"
 description = "Support building messages for Slack Messaging API"
 
+[package.metadata.docs.rs]
+all-features = true
+
 [dependencies]
 chrono = { version = "0.4", optional = true }
 regex = { version = "1.7", optional = true }
