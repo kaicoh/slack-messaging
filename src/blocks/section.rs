@@ -18,7 +18,7 @@ use serde::Serialize;
 ///
 /// let section = Section::new()
 ///     .set_block_id("section_1")
-///     .mrkdwn("A message *with some bold text* and _some italicized text_.")
+///     .set_text_mrkdwn("A message *with some bold text* and _some italicized text_.")
 ///     .push_field_mrkdwn("High")
 ///     .push_field_plain("String")
 ///     .set_accessory(
@@ -143,7 +143,7 @@ impl Section {
     /// use serde_json::json;
     ///
     /// let section = Section::new()
-    ///     .plain_text("A message *with some bold text* and _some italicized text_.");
+    ///     .set_text_plain("A message *with some bold text* and _some italicized text_.");
     ///
     /// let expected = json!({
     ///     "type": "section",
@@ -158,7 +158,7 @@ impl Section {
     ///
     /// assert_eq!(section_json, expected);
     /// ```
-    pub fn plain_text<T: Into<String>>(self, text: T) -> Self {
+    pub fn set_text_plain<T: Into<String>>(self, text: T) -> Self {
         self.set_text(Text::plain(text))
     }
 
@@ -169,7 +169,7 @@ impl Section {
     /// use serde_json::json;
     ///
     /// let section = Section::new()
-    ///     .mrkdwn("A message *with some bold text* and _some italicized text_.");
+    ///     .set_text_mrkdwn("A message *with some bold text* and _some italicized text_.");
     ///
     /// let expected = json!({
     ///     "type": "section",
@@ -183,7 +183,7 @@ impl Section {
     ///
     /// assert_eq!(section_json, expected);
     /// ```
-    pub fn mrkdwn<T: Into<String>>(self, text: T) -> Self {
+    pub fn set_text_mrkdwn<T: Into<String>>(self, text: T) -> Self {
         self.set_text(Text::mrkdwn(text))
     }
 
@@ -384,7 +384,7 @@ impl Section {
     }
 }
 
-/// The objects that can be set to [Section] as an accessory.
+/// Objects that can be set to [Section] as an accessory.
 #[derive(Debug, Serialize)]
 #[serde(untagged)]
 pub enum Accessory {
