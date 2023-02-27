@@ -24,7 +24,7 @@ jobs:
           toolchain: stable
 
       - name: Run cargo check
-        run: cargo check
+        run: cargo check --all-features
 
   test:
     name: Test -- ${{ matrix.os }}
@@ -50,7 +50,7 @@ jobs:
           shared-key: ${{ matrix.os }}
 
       - name: Run cargo test
-        run: cargo test
+        run: cargo test --all-features
 
   lints:
     name: Lints
@@ -66,4 +66,4 @@ jobs:
           components: clippy
 
       - name: Run cargo clippy
-        run: cargo clippy -- -D warnings
+        run: cargo clippy --all --tests --all-features -- -D warnings

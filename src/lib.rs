@@ -98,10 +98,19 @@
 //!     ]
 //! }
 //! ```
+//!
+//! ## Optional Features
+//!
+//! The following are a list of [Cargo features](https://doc.rust-lang.org/stable/cargo/reference/features.html#the-features-section) that can be enabled or disabled:
+//!
+//! - **fmt** : Enable [fmt] module.
 
 mod attachment;
 /// Objects from that the [Message] and the [Attachment] are composed.
 pub mod blocks;
+/// Format text for slack app. Require `fmt` feature.
+#[cfg(feature = "fmt")]
+pub mod fmt;
 mod message;
 
 pub use attachment::Attachment;
