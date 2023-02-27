@@ -2,50 +2,110 @@ use chrono::prelude::*;
 use regex::Regex;
 use std::fmt;
 
-const DEFAULT_FORMAT: &str = "{date} {time}";
+const DEFAULT_TOKEN: &str = "{date} {time}";
 
+/// A Builder for slack [Date Format](https://api.slack.com/reference/surfaces/formatting#date-formatting).
+/// This turns [chrono](https://docs.rs/chrono/0.4.23/chrono/)'s [DateTime](https://docs.rs/chrono/0.4.23/chrono/struct.DateTime.html) into `<!date^timestamp^token_string^optional_link|fallback_text>` (slack Date Format).
+///
+/// # Example
+///
+/// ```
+/// use chrono::prelude::*;
+/// use slack_messaging::fmt::DateFormat;
+///
+/// let dt = DateTime::parse_from_rfc3339("2023-02-27T12:34:56+09:00").unwrap();
+/// let f = DateFormat::new(dt).token("{date_short} at {time}");
+///
+/// // without optional_link
+/// assert_eq!(
+///     format!("{f}"),
+///     "<!date^1677468896^{date_short} at {time}|Feb 27, 2023 at 12:34 PM>"
+/// );
+///
+/// // with optional_link
+/// assert_eq!(
+///     format!("{}", f.optional_link("https://example.com")),
+///     "<!date^1677468896^{date_short} at {time}^https://example.com|Feb 27, 2023 at 12:34 PM>"
+/// );
+/// ```
 #[derive(Debug, Clone)]
 pub struct DateFormat<'a> {
     value: DateTime<FixedOffset>,
-    format: &'a str,
-    link: Option<&'a str>,
+    token_string: &'a str,
+    optional_link: Option<&'a str>,
 }
 
 impl<'a> DateFormat<'a> {
+    /// Constructs a DateFormat from [DateTime](https://docs.rs/chrono/0.4.23/chrono/struct.DateTime.html)
+    /// with default token_string `{date} {time}`.
+    ///
+    /// ```
+    /// use chrono::prelude::*;
+    /// use slack_messaging::fmt::DateFormat;
+    ///
+    /// let dt = DateTime::parse_from_rfc3339("2023-02-27T12:34:56+09:00").unwrap();
+    /// let f = DateFormat::new(dt);
+    ///
+    /// assert_eq!(
+    ///     format!("{f}"),
+    ///     "<!date^1677468896^{date} {time}|February 27, 2023 12:34 PM>"
+    /// );
+    /// ```
     pub fn new(value: DateTime<FixedOffset>) -> Self {
         Self {
             value,
-            format: DEFAULT_FORMAT,
-            link: None,
+            token_string: DEFAULT_TOKEN,
+            optional_link: None,
         }
     }
 
-    pub fn set_format(self, format: &'a str) -> Self {
-        Self { format, ..self }
-    }
-
-    pub fn format(self, format: &'a str) -> Self {
-        self.set_format(format)
-    }
-
-    pub fn set_link(self, link: &'a str) -> Self {
+    /// Sets `token_string` to format. For more info about `token_string`, see [slack doc](https://api.slack.com/reference/surfaces/formatting#date-formatting).
+    pub fn set_token(self, token_string: &'a str) -> Self {
         Self {
-            link: Some(link),
+            token_string,
             ..self
         }
     }
 
-    pub fn link(self, link: &'a str) -> Self {
-        self.set_link(link)
+    /// Alias of [set_token](crate::fmt::DateFormat::set_token) method.
+    pub fn token(self, token: &'a str) -> Self {
+        self.set_token(token)
     }
 
+    /// Sets `optional_link` to format. For more info about `optional_link`, see [slack doc](https://api.slack.com/reference/surfaces/formatting#date-formatting).
+    pub fn set_optional_link(self, link: &'a str) -> Self {
+        Self {
+            optional_link: Some(link),
+            ..self
+        }
+    }
+
+    /// Alias of [set_optional_link](crate::fmt::DateFormat::set_optional_link) method.
+    pub fn optional_link(self, link: &'a str) -> Self {
+        self.set_optional_link(link)
+    }
+
+    /// Returns `fallback_text` from given `token_string`.
+    ///
+    /// ```
+    /// use chrono::prelude::*;
+    /// use slack_messaging::fmt::DateFormat;
+    ///
+    /// let dt = DateTime::parse_from_rfc3339("2023-02-27T12:34:56+09:00").unwrap();
+    /// let f = DateFormat::new(dt);
+    ///
+    /// assert_eq!(
+    ///     f.token("Updated At {date_num} {time_secs}.").fallback_text(),
+    ///     "Updated At 2023-02-27 12:34:56 PM."
+    /// );
+    /// ```
     pub fn fallback_text(&self) -> String {
-        let format = FormatReplacer::new(self.format).replaced_value();
-        self.value.format(&format).to_string()
+        let strf = FormatReplacer::new(self.token_string).replaced_value();
+        self.value.format(&strf).to_string()
     }
 
-    fn optional_link(&self) -> String {
-        if let Some(link) = self.link {
+    fn optional_link_text(&self) -> String {
+        if let Some(link) = self.optional_link {
             format!("^{link}")
         } else {
             "".to_string()
@@ -59,8 +119,8 @@ impl<'a> fmt::Display for DateFormat<'a> {
             f,
             "<!date^{}^{}{}|{}>",
             self.value.timestamp(),
-            self.format,
-            self.optional_link(),
+            self.token_string,
+            self.optional_link_text(),
             self.fallback_text(),
         )
     }
@@ -229,7 +289,7 @@ mod tests {
 
     #[test]
     fn it_formats_with_date_num() {
-        let f = sample().format("{date_num} at {time}");
+        let f = sample().token("{date_num} at {time}");
         assert_eq!(
             format!("{f}"),
             "<!date^1677468896^{date_num} at {time}|2023-02-27 at 12:34 PM>"
@@ -238,7 +298,7 @@ mod tests {
 
     #[test]
     fn it_formats_with_date_and_time() {
-        let f = sample().format("{date} at {time}");
+        let f = sample().token("{date} at {time}");
         assert_eq!(
             format!("{f}"),
             "<!date^1677468896^{date} at {time}|February 27, 2023 at 12:34 PM>"
@@ -247,7 +307,7 @@ mod tests {
 
     #[test]
     fn it_formats_with_date_short() {
-        let f = sample().format("{date_short} at {time}");
+        let f = sample().token("{date_short} at {time}");
         assert_eq!(
             format!("{f}"),
             "<!date^1677468896^{date_short} at {time}|Feb 27, 2023 at 12:34 PM>"
@@ -256,7 +316,7 @@ mod tests {
 
     #[test]
     fn it_formats_with_date_long() {
-        let f = sample().format("{date_long} at {time}");
+        let f = sample().token("{date_long} at {time}");
         assert_eq!(
             format!("{f}"),
             "<!date^1677468896^{date_long} at {time}|Monday, February 27, 2023 at 12:34 PM>"
@@ -265,7 +325,7 @@ mod tests {
 
     #[test]
     fn it_formats_with_date_pretty() {
-        let f = sample().format("{date_pretty} at {time}");
+        let f = sample().token("{date_pretty} at {time}");
         assert_eq!(
             format!("{f}"),
             "<!date^1677468896^{date_pretty} at {time}|February 27, 2023 at 12:34 PM>"
@@ -274,7 +334,7 @@ mod tests {
 
     #[test]
     fn it_formats_with_date_short_pretty() {
-        let f = sample().format("{date_short_pretty} at {time}");
+        let f = sample().token("{date_short_pretty} at {time}");
         assert_eq!(
             format!("{f}"),
             "<!date^1677468896^{date_short_pretty} at {time}|Feb 27, 2023 at 12:34 PM>"
@@ -283,7 +343,7 @@ mod tests {
 
     #[test]
     fn it_formats_with_date_long_pretty() {
-        let f = sample().format("{date_long_pretty} at {time}");
+        let f = sample().token("{date_long_pretty} at {time}");
         assert_eq!(
             format!("{f}"),
             "<!date^1677468896^{date_long_pretty} at {time}|Monday, February 27, 2023 at 12:34 PM>"
@@ -292,7 +352,7 @@ mod tests {
 
     #[test]
     fn it_formats_with_time_secs() {
-        let f = sample().format("{date} at {time_secs}");
+        let f = sample().token("{date} at {time_secs}");
         assert_eq!(
             format!("{f}"),
             "<!date^1677468896^{date} at {time_secs}|February 27, 2023 at 12:34:56 PM>"
@@ -302,8 +362,8 @@ mod tests {
     #[test]
     fn it_formats_with_optional_link() {
         let f = sample()
-            .format("{date} at {time}")
-            .link("https://google.com");
+            .token("{date} at {time}")
+            .optional_link("https://google.com");
         assert_eq!(
             format!("{f}"),
             "<!date^1677468896^{date} at {time}^https://google.com|February 27, 2023 at 12:34 PM>"
