@@ -103,6 +103,27 @@ The message payload of the above example is following.
 }
 ```
 
+## Optional Features
+
+The following are a list of [Cargo features](https://doc.rust-lang.org/stable/cargo/reference/features.html#the-features-section) that can be enabled or disabled.
+
+### fmt
+
+Enable `fmt` module and format messages in [this way](https://api.slack.com/reference/surfaces/formatting).
+
+```rust
+use chrono::prelude::*;
+use slack_messaging::fmt::DateFormat;
+
+let dt = DateTime::parse_from_rfc3339("2023-02-27T12:34:56+09:00").unwrap();
+let f = DateFormat::new(dt).token("{date_short} at {time}");
+
+assert_eq!(
+    format!("{f}"),
+    "<!date^1677468896^{date_short} at {time}|Feb 27, 2023 at 12:34 PM>"
+);
+```
+
 ## License
 
 This software is released under the [MIT License](LICENSE).
