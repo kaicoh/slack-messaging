@@ -97,6 +97,15 @@ pub struct Message {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     channel: Option<String>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    response_type: Option<ResponseType>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    replace_original: Option<bool>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    delete_original: Option<bool>,
 }
 
 impl Message {
@@ -416,4 +425,129 @@ impl Message {
             ..self
         }
     }
+
+    /// Sets response_type field.
+    ///
+    /// ```
+    /// use slack_messaging::{Message, ResponseType};
+    /// use serde_json::json;
+    ///
+    /// let message = Message::new()
+    ///     .set_response_type(ResponseType::InChannel);
+    ///
+    /// let expected = json!({
+    ///     "response_type": "in_channel",
+    /// });
+    ///
+    /// let message_json = serde_json::to_value(message).unwrap();
+    ///
+    /// assert_eq!(message_json, expected);
+    /// ```
+    pub fn set_response_type(self, response_type: ResponseType) -> Self {
+        Self {
+            response_type: Some(response_type),
+            ..self
+        }
+    }
+
+    /// Sets replace_original field.
+    ///
+    /// ```
+    /// use slack_messaging::Message;
+    /// use serde_json::json;
+    ///
+    /// let message = Message::new().set_replace_original(true);
+    ///
+    /// let expected = json!({
+    ///     "replace_original": true,
+    /// });
+    ///
+    /// let message_json = serde_json::to_value(message).unwrap();
+    ///
+    /// assert_eq!(message_json, expected);
+    /// ```
+    pub fn set_replace_original(self, replace: bool) -> Self {
+        Self {
+            replace_original: Some(replace),
+            ..self
+        }
+    }
+
+    /// Sets true to replace_original field.
+    ///
+    /// ```
+    /// use slack_messaging::Message;
+    /// use serde_json::json;
+    ///
+    /// let message = Message::new().replace_original();
+    ///
+    /// let expected = json!({
+    ///     "replace_original": true,
+    /// });
+    ///
+    /// let message_json = serde_json::to_value(message).unwrap();
+    ///
+    /// assert_eq!(message_json, expected);
+    /// ```
+    pub fn replace_original(self) -> Self {
+        Self {
+            replace_original: Some(true),
+            ..self
+        }
+    }
+
+    /// Sets delete_original field.
+    ///
+    /// ```
+    /// use slack_messaging::Message;
+    /// use serde_json::json;
+    ///
+    /// let message = Message::new().set_delete_original(true);
+    ///
+    /// let expected = json!({
+    ///     "delete_original": true,
+    /// });
+    ///
+    /// let message_json = serde_json::to_value(message).unwrap();
+    ///
+    /// assert_eq!(message_json, expected);
+    /// ```
+    pub fn set_delete_original(self, delete: bool) -> Self {
+        Self {
+            delete_original: Some(delete),
+            ..self
+        }
+    }
+
+    /// Sets true to delete_original field.
+    ///
+    /// ```
+    /// use slack_messaging::Message;
+    /// use serde_json::json;
+    ///
+    /// let message = Message::new().delete_original();
+    ///
+    /// let expected = json!({
+    ///     "delete_original": true,
+    /// });
+    ///
+    /// let message_json = serde_json::to_value(message).unwrap();
+    ///
+    /// assert_eq!(message_json, expected);
+    /// ```
+    pub fn delete_original(self) -> Self {
+        Self {
+            delete_original: Some(true),
+            ..self
+        }
+    }
+}
+
+/// Objects that can be set to response_type field in [Message](crate::message::Message).
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ResponseType {
+    /// Sets this if you want to publish a message to the same conversation as the interaction
+    /// source.
+    InChannel
 }
