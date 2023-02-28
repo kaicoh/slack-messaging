@@ -114,4 +114,4 @@ pub mod fmt;
 mod message;
 
 pub use attachment::Attachment;
-pub use message::Message;
+pub use message::{Message, ResponseType};
