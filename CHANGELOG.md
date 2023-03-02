@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.2][] - 2023-03-02
+
+- https://github.com/kaicoh/slack-messaging/pull/6 Add `mrkdwn` and `plain_text` macros.
+
 ## [0.2.1][] - 2023-02-28
 
 - https://github.com/kaicoh/slack-messaging/pull/4 Extend Message to be an interaction response.
@@ -12,6 +16,7 @@
 
 - pre-release
 
+[0.2.2]: https://github.com/kaicoh/slack-messaging/releases/v0.2.2
 [0.2.1]: https://github.com/kaicoh/slack-messaging/releases/v0.2.1
 [0.2.0]: https://github.com/kaicoh/slack-messaging/releases/v0.2.0
 [0.1.0]: https://github.com/kaicoh/slack-messaging/releases/v0.1.0
