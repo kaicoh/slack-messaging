@@ -111,6 +111,8 @@ pub mod blocks;
 /// Format text for slack app. Require `fmt` feature.
 #[cfg(feature = "fmt")]
 pub mod fmt;
+#[macro_use]
+mod macros;
 mod message;
 
 pub use attachment::Attachment;
