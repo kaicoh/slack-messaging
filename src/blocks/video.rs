@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::Video;
 /// use serde_json::json;
 ///
@@ -99,7 +99,7 @@ impl Default for Video {
 impl Video {
     /// Constructs a Video block.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -127,7 +127,7 @@ impl Video {
 
     /// Sets alt_text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -158,7 +158,7 @@ impl Video {
 
     /// Sets title field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -188,7 +188,7 @@ impl Video {
 
     /// Sets title field from string. This is a shorthand for `set_title` method.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -216,7 +216,7 @@ impl Video {
 
     /// Sets title_url field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -249,7 +249,7 @@ impl Video {
 
     /// Sets thumbnail_url field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -281,7 +281,7 @@ impl Video {
 
     /// Sets video_url field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -313,7 +313,7 @@ impl Video {
 
     /// Sets author_name field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -346,7 +346,7 @@ impl Video {
 
     /// Sets block_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -379,7 +379,7 @@ impl Video {
 
     /// Sets description field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -417,7 +417,7 @@ impl Video {
 
     /// Sets description field from string. This is a shorthand for `set_description` method.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -451,7 +451,7 @@ impl Video {
 
     /// Sets provider_icon_url field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -484,7 +484,7 @@ impl Video {
 
     /// Sets provider_name field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///

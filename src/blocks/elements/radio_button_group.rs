@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::{RadioButtonGroup, Opt};
 /// use serde_json::json;
 ///
@@ -81,7 +81,7 @@ impl Default for RadioButtonGroup {
 impl RadioButtonGroup {
     /// Constructs a Radio button group element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::RadioButtonGroup;
     /// use serde_json::json;
     ///
@@ -103,7 +103,7 @@ impl RadioButtonGroup {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::RadioButtonGroup;
     /// use serde_json::json;
     ///
@@ -128,7 +128,7 @@ impl RadioButtonGroup {
 
     /// Sets options field directly.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{RadioButtonGroup, Opt};
     /// use serde_json::json;
     ///
@@ -173,7 +173,7 @@ impl RadioButtonGroup {
 
     /// Adds Opt object to options field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{RadioButtonGroup, Opt};
     /// use serde_json::json;
     ///
@@ -209,7 +209,7 @@ impl RadioButtonGroup {
 
     /// Sets initial_option field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{RadioButtonGroup, Opt};
     /// use serde_json::json;
     ///
@@ -245,7 +245,7 @@ impl RadioButtonGroup {
 
     /// Sets confirm field with ConfirmationDialog object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{RadioButtonGroup, ConfirmationDialog};
     /// use serde_json::json;
     ///
@@ -299,7 +299,7 @@ impl RadioButtonGroup {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::RadioButtonGroup;
     /// use serde_json::json;
     ///

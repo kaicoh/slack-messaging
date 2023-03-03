@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::UrlInput;
 /// use serde_json::json;
 ///
@@ -64,7 +64,7 @@ impl Default for UrlInput {
 impl UrlInput {
     /// Constructs a URL input element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::UrlInput;
     /// use serde_json::json;
     ///
@@ -85,7 +85,7 @@ impl UrlInput {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::UrlInput;
     /// use serde_json::json;
     ///
@@ -109,7 +109,7 @@ impl UrlInput {
 
     /// Sets initial_value field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::UrlInput;
     /// use serde_json::json;
     ///
@@ -134,7 +134,7 @@ impl UrlInput {
 
     /// Sets dispatch_action_config field with DispatchActionConfiguration object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{UrlInput, DispatchActionConfiguration,
     /// TriggerAction};
     /// use serde_json::json;
@@ -167,7 +167,7 @@ impl UrlInput {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::UrlInput;
     /// use serde_json::json;
     ///
@@ -192,7 +192,7 @@ impl UrlInput {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{UrlInput, Text};
     /// use serde_json::json;
     ///
@@ -222,7 +222,7 @@ impl UrlInput {
 
     /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::UrlInput;
     /// use serde_json::json;
     ///

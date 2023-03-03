@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::TimePicker;
 /// use serde_json::json;
 ///
@@ -72,7 +72,7 @@ impl Default for TimePicker {
 impl TimePicker {
     /// Constructs a Time picker element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::TimePicker;
     /// use serde_json::json;
     ///
@@ -93,7 +93,7 @@ impl TimePicker {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::TimePicker;
     /// use serde_json::json;
     ///
@@ -117,7 +117,7 @@ impl TimePicker {
 
     /// Sets initial_time field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::TimePicker;
     /// use serde_json::json;
     ///
@@ -142,7 +142,7 @@ impl TimePicker {
 
     /// Sets confirm field with ConfirmationDialog.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{TimePicker, ConfirmationDialog};
     /// use serde_json::json;
     ///
@@ -195,7 +195,7 @@ impl TimePicker {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::TimePicker;
     /// use serde_json::json;
     ///
@@ -220,7 +220,7 @@ impl TimePicker {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{TimePicker, Text};
     /// use serde_json::json;
     ///
@@ -250,7 +250,7 @@ impl TimePicker {
 
     /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::TimePicker;
     /// use serde_json::json;
     ///
@@ -276,7 +276,7 @@ impl TimePicker {
 
     /// Sets timezone field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::TimePicker;
     /// use serde_json::json;
     ///

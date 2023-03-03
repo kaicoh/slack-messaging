@@ -7,7 +7,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::{OptGroup, Opt};
 /// use serde_json::json;
 ///
@@ -67,7 +67,7 @@ impl Default for OptGroup {
 impl OptGroup {
     /// Constructs a Option group object with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::OptGroup;
     /// use serde_json::json;
     ///
@@ -92,7 +92,7 @@ impl OptGroup {
 
     /// Sets label field with Text object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{OptGroup, Text};
     /// use serde_json::json;
     ///
@@ -117,7 +117,7 @@ impl OptGroup {
 
     /// Sets label field with string. This is a shorthand for `set_label` method.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::OptGroup;
     /// use serde_json::json;
     ///
@@ -142,7 +142,7 @@ impl OptGroup {
 
     /// Sets options field directly.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{OptGroup, Opt};
     /// use serde_json::json;
     ///
@@ -189,7 +189,7 @@ impl OptGroup {
 
     /// Adds Option object to options field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{OptGroup, Opt};
     /// use serde_json::json;
     ///

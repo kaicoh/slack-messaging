@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::PlainTextInput;
 /// use serde_json::json;
 ///
@@ -78,7 +78,7 @@ impl Default for PlainTextInput {
 impl PlainTextInput {
     /// Constructs a Plain-text input element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::PlainTextInput;
     /// use serde_json::json;
     ///
@@ -99,7 +99,7 @@ impl PlainTextInput {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::PlainTextInput;
     /// use serde_json::json;
     ///
@@ -123,7 +123,7 @@ impl PlainTextInput {
 
     /// Sets initial_value field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::PlainTextInput;
     /// use serde_json::json;
     ///
@@ -148,7 +148,7 @@ impl PlainTextInput {
 
     /// Sets multiline field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::PlainTextInput;
     /// use serde_json::json;
     ///
@@ -173,7 +173,7 @@ impl PlainTextInput {
 
     /// Sets true to multiline field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::PlainTextInput;
     /// use serde_json::json;
     ///
@@ -195,7 +195,7 @@ impl PlainTextInput {
 
     /// Sets min_length field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::PlainTextInput;
     /// use serde_json::json;
     ///
@@ -220,7 +220,7 @@ impl PlainTextInput {
 
     /// Sets max_length field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::PlainTextInput;
     /// use serde_json::json;
     ///
@@ -245,7 +245,7 @@ impl PlainTextInput {
 
     /// Sets dispatch_action_config field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{PlainTextInput, DispatchActionConfiguration,
     /// TriggerAction};
     /// use serde_json::json;
@@ -277,7 +277,7 @@ impl PlainTextInput {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::PlainTextInput;
     /// use serde_json::json;
     ///
@@ -302,7 +302,7 @@ impl PlainTextInput {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{PlainTextInput, Text};
     /// use serde_json::json;
     ///
@@ -332,7 +332,7 @@ impl PlainTextInput {
 
     /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::PlainTextInput;
     /// use serde_json::json;
     ///

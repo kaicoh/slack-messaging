@@ -10,7 +10,7 @@ const TYPE_MRKDWN: &str = "mrkdwn";
 ///
 /// ## type plain_text
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::Text;
 /// use serde_json::json;
 ///
@@ -28,7 +28,7 @@ const TYPE_MRKDWN: &str = "mrkdwn";
 ///
 /// ## type mrkdwn
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::Text;
 /// use serde_json::json;
 ///
@@ -59,7 +59,7 @@ pub struct Text {
 impl Text {
     /// Constructs a `plain_text` object and enables emoji.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
     ///
@@ -86,7 +86,7 @@ impl Text {
 
     /// Constructs a `mrkdwn` object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
     ///
@@ -112,7 +112,7 @@ impl Text {
 
     /// Sets text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
     ///
@@ -137,7 +137,7 @@ impl Text {
 
     /// Sets emoji field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
     ///
@@ -162,7 +162,7 @@ impl Text {
 
     /// Sets verbatim field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
     ///

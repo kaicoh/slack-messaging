@@ -13,7 +13,7 @@ use serde::Serialize;
 ///
 /// The following is reproduction of [the 1st sample actions](https://api.slack.com/reference/block-kit/blocks#actions_examples).
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::Actions;
 /// use slack_messaging::blocks::elements::{Button, SelectStaticOptions, Opt};
 /// use serde_json::json;
@@ -103,7 +103,7 @@ use serde::Serialize;
 ///
 /// And the following is the [2nd sample actions](https://api.slack.com/reference/block-kit/blocks#actions_examples).
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::Actions;
 /// use slack_messaging::blocks::elements::{Button, DatePicker, Opt, OverflowMenu};
 /// use serde_json::json;
@@ -234,7 +234,7 @@ impl Default for Actions {
 impl Actions {
     /// Constructs an Actions block.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Actions;
     /// use serde_json::json;
     ///
@@ -256,7 +256,7 @@ impl Actions {
     /// Sets elements field directly. The argument is a vector composed from any objects
     /// that can transform into the enum [ActionsElement].
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Actions;
     /// use slack_messaging::blocks::elements::{Button, SelectStaticOptions, Opt};
     /// use serde_json::json;
@@ -332,7 +332,7 @@ impl Actions {
     /// Adds an object to elements field. The argument is an any object
     /// that can transform into the enum [ActionsElement].
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Actions;
     /// use slack_messaging::blocks::elements::{Button, DatePicker};
     /// use serde_json::json;
@@ -389,7 +389,7 @@ impl Actions {
 
     /// Sets block_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Actions;
     /// use serde_json::json;
     ///

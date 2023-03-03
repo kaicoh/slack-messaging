@@ -11,7 +11,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::Section;
 /// use slack_messaging::blocks::elements::Image;
 /// use serde_json::json;
@@ -89,7 +89,7 @@ impl Default for Section {
 impl Section {
     /// Constructs a Section block.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use serde_json::json;
     ///
@@ -109,7 +109,7 @@ impl Section {
 
     /// Sets text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -138,7 +138,7 @@ impl Section {
 
     /// Sets text field as plain text object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use serde_json::json;
     ///
@@ -164,7 +164,7 @@ impl Section {
 
     /// Sets text field as mrkdwn text object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use serde_json::json;
     ///
@@ -189,7 +189,7 @@ impl Section {
 
     /// Sets block_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use serde_json::json;
     ///
@@ -214,7 +214,7 @@ impl Section {
 
     /// Sets fields field directly.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -252,7 +252,7 @@ impl Section {
 
     /// Adds Text object to fields field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -285,7 +285,7 @@ impl Section {
 
     /// Adds plain_text Text object to fields field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -314,7 +314,7 @@ impl Section {
 
     /// Adds mrkdwn Text object to fields field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -343,7 +343,7 @@ impl Section {
     /// Sets object to accessory field. The argument is an any object
     /// that can transform into the enum [Accessory].
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;

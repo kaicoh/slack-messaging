@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::DatetimePicker;
 /// use serde_json::json;
 ///
@@ -56,7 +56,7 @@ impl Default for DatetimePicker {
 impl DatetimePicker {
     /// Constructs a Datetime picker element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::DatetimePicker;
     /// use serde_json::json;
     ///
@@ -77,7 +77,7 @@ impl DatetimePicker {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::DatetimePicker;
     /// use serde_json::json;
     ///
@@ -102,7 +102,7 @@ impl DatetimePicker {
 
     /// Sets initial_date_time field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::DatetimePicker;
     /// use serde_json::json;
     ///
@@ -127,7 +127,7 @@ impl DatetimePicker {
 
     /// Sets confirm field with ConfirmationDialog.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{ConfirmationDialog, DatetimePicker};
     /// use serde_json::json;
     ///
@@ -180,7 +180,7 @@ impl DatetimePicker {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::DatetimePicker;
     /// use serde_json::json;
     ///

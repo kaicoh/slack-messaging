@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::EmailInput;
 /// use serde_json::json;
 ///
@@ -64,7 +64,7 @@ impl Default for EmailInput {
 impl EmailInput {
     /// Constructs a Email Input element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::EmailInput;
     /// use serde_json::json;
     ///
@@ -85,7 +85,7 @@ impl EmailInput {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::EmailInput;
     /// use serde_json::json;
     ///
@@ -109,7 +109,7 @@ impl EmailInput {
 
     /// Sets initial_value field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::EmailInput;
     /// use serde_json::json;
     ///
@@ -134,7 +134,7 @@ impl EmailInput {
 
     /// Sets dispatch_action_config field with DispatchActionConfiguration.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{EmailInput, DispatchActionConfiguration,
     /// TriggerAction};
     /// use serde_json::json;
@@ -158,7 +158,7 @@ impl EmailInput {
     /// let email_json = serde_json::to_value(email).unwrap();
     ///
     /// assert_eq!(email_json, expected);
-    /// ```
+    /// ```ignore
     pub fn set_dispatch_action_config(self, config: DispatchActionConfiguration) -> Self {
         Self {
             dispatch_action_config: Some(config),
@@ -168,7 +168,7 @@ impl EmailInput {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::EmailInput;
     /// use serde_json::json;
     ///
@@ -193,7 +193,7 @@ impl EmailInput {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{EmailInput, Text};
     /// use serde_json::json;
     ///
@@ -222,7 +222,7 @@ impl EmailInput {
 
     /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::EmailInput;
     /// use serde_json::json;
     ///

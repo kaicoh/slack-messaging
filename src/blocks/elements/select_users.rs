@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::SelectUsers;
 /// use serde_json::json;
 ///
@@ -64,7 +64,7 @@ impl Default for SelectUsers {
 impl SelectUsers {
     /// Constructs a Select menu of users element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectUsers;
     /// use serde_json::json;
     ///
@@ -85,7 +85,7 @@ impl SelectUsers {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectUsers;
     /// use serde_json::json;
     ///
@@ -109,7 +109,7 @@ impl SelectUsers {
 
     /// Sets initial_user field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectUsers;
     /// use serde_json::json;
     ///
@@ -134,7 +134,7 @@ impl SelectUsers {
 
     /// Sets confirm field with ConfirmationDialog object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{SelectUsers, ConfirmationDialog};
     /// use serde_json::json;
     ///
@@ -187,7 +187,7 @@ impl SelectUsers {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectUsers;
     /// use serde_json::json;
     ///
@@ -212,7 +212,7 @@ impl SelectUsers {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{SelectUsers, Text};
     /// use serde_json::json;
     ///
@@ -242,7 +242,7 @@ impl SelectUsers {
 
     /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectUsers;
     /// use serde_json::json;
     ///

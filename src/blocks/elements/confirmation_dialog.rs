@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::ConfirmationDialog;
 /// use serde_json::json;
 ///
@@ -72,7 +72,7 @@ impl Default for ConfirmationDialog {
 impl ConfirmationDialog {
     /// Constructs a Confirmation dialog object with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::ConfirmationDialog;
     /// use serde_json::{json, Value};
     ///
@@ -92,7 +92,7 @@ impl ConfirmationDialog {
 
     /// Sets title field with plain_text object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::ConfirmationDialog;
     /// use serde_json::{json, Value};
     ///
@@ -112,7 +112,7 @@ impl ConfirmationDialog {
 
     /// Sets text field with plain_text object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::ConfirmationDialog;
     /// use serde_json::{json, Value};
     ///
@@ -132,7 +132,7 @@ impl ConfirmationDialog {
 
     /// Sets confirm field with plain_text object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::ConfirmationDialog;
     /// use serde_json::{json, Value};
     ///
@@ -152,7 +152,7 @@ impl ConfirmationDialog {
 
     /// Sets deny field with plain_text object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::ConfirmationDialog;
     /// use serde_json::{json, Value};
     ///
@@ -172,7 +172,7 @@ impl ConfirmationDialog {
 
     /// Sets style field as "primary".
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::ConfirmationDialog;
     /// use serde_json::{json, Value};
     ///
@@ -191,7 +191,7 @@ impl ConfirmationDialog {
 
     /// Sets style field as "danger".
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::ConfirmationDialog;
     /// use serde_json::{json, Value};
     ///

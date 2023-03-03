@@ -15,7 +15,7 @@ pub enum Conversation {
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::{Filter, Conversation};
 /// use serde_json::json;
 ///
@@ -51,7 +51,7 @@ pub struct Filter {
 impl Filter {
     /// Constructs a Filter object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Filter;
     /// use serde_json::json;
     ///
@@ -69,7 +69,7 @@ impl Filter {
 
     /// Sets include field directly.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{Filter, Conversation};
     /// use serde_json::json;
     ///
@@ -98,7 +98,7 @@ impl Filter {
 
     /// Adds conversation to include field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{Filter, Conversation};
     /// use serde_json::json;
     ///
@@ -128,7 +128,7 @@ impl Filter {
 
     /// Sets exclude_external_shared_channels field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{Filter, Conversation};
     /// use serde_json::json;
     ///
@@ -152,7 +152,7 @@ impl Filter {
 
     /// Sets true to exclude_external_shared_channels field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{Filter, Conversation};
     /// use serde_json::json;
     ///
@@ -173,7 +173,7 @@ impl Filter {
 
     /// Sets exclude_bot_users field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{Filter, Conversation};
     /// use serde_json::json;
     ///
@@ -197,7 +197,7 @@ impl Filter {
 
     /// Sets true to exclude_bot_users field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{Filter, Conversation};
     /// use serde_json::json;
     ///

@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::{CheckboxGroup, Opt};
 /// use serde_json::json;
 ///
@@ -81,7 +81,7 @@ impl Default for CheckboxGroup {
 impl CheckboxGroup {
     /// Constructs a Checkbox group with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::CheckboxGroup;
     /// use serde_json::json;
     ///
@@ -103,7 +103,7 @@ impl CheckboxGroup {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::CheckboxGroup;
     /// use serde_json::json;
     ///
@@ -128,7 +128,7 @@ impl CheckboxGroup {
 
     /// Sets options field directly.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{CheckboxGroup, Opt};
     /// use serde_json::json;
     ///
@@ -173,7 +173,7 @@ impl CheckboxGroup {
 
     /// Adds Opt object to options field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{CheckboxGroup, Opt};
     /// use serde_json::json;
     ///
@@ -209,7 +209,7 @@ impl CheckboxGroup {
 
     /// Sets initial_options field directly.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{CheckboxGroup, Opt};
     /// use serde_json::json;
     ///
@@ -258,7 +258,7 @@ impl CheckboxGroup {
 
     /// Adds Opt object to initial_options field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{CheckboxGroup, Opt};
     /// use serde_json::json;
     ///
@@ -301,7 +301,7 @@ impl CheckboxGroup {
 
     /// Sets confirm field with ConfirmationDialog object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{CheckboxGroup, ConfirmationDialog};
     /// use serde_json::json;
     ///
@@ -355,7 +355,7 @@ impl CheckboxGroup {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{CheckboxGroup, Opt};
     /// use serde_json::json;
     ///

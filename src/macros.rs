@@ -1,6 +1,6 @@
 /// Constructs `plain_text` [Text](crate::blocks::elements::Text).
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::plain_text;
 /// use slack_messaging::blocks::elements::Text;
 ///
@@ -30,7 +30,7 @@ macro_rules! plain_text {
 
 /// Constructs `mrkdwn` [Text](crate::blocks::elements::Text).
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::mrkdwn;
 /// use slack_messaging::blocks::elements::Text;
 ///

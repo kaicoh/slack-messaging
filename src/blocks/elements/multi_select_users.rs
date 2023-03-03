@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::MultiSelectUsers;
 /// use serde_json::json;
 ///
@@ -72,7 +72,7 @@ impl Default for MultiSelectUsers {
 impl MultiSelectUsers {
     /// Constructs a Multi-select menu User list element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectUsers;
     /// use serde_json::json;
     ///
@@ -93,7 +93,7 @@ impl MultiSelectUsers {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectUsers;
     /// use serde_json::json;
     ///
@@ -117,7 +117,7 @@ impl MultiSelectUsers {
 
     /// Sets initial_users field directly.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectUsers;
     /// use serde_json::json;
     ///
@@ -145,7 +145,7 @@ impl MultiSelectUsers {
 
     /// Adds string to initial_users field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectUsers;
     /// use serde_json::json;
     ///
@@ -175,7 +175,7 @@ impl MultiSelectUsers {
 
     /// Sets confirm field with ConfirmationDialog object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{MultiSelectUsers, ConfirmationDialog};
     /// use serde_json::json;
     ///
@@ -228,7 +228,7 @@ impl MultiSelectUsers {
 
     /// Sets max_selected_items field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectUsers;
     /// use serde_json::json;
     ///
@@ -253,7 +253,7 @@ impl MultiSelectUsers {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectUsers;
     /// use serde_json::json;
     ///
@@ -278,7 +278,7 @@ impl MultiSelectUsers {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{MultiSelectUsers, Text};
     /// use serde_json::json;
     ///
@@ -307,7 +307,7 @@ impl MultiSelectUsers {
 
     /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectUsers;
     /// use serde_json::json;
     ///

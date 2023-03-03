@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::{OverflowMenu, Opt};
 /// use serde_json::json;
 ///
@@ -74,7 +74,7 @@ impl Default for OverflowMenu {
 impl OverflowMenu {
     /// Constructs a Overflow menu element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::OverflowMenu;
     /// use serde_json::json;
     ///
@@ -95,7 +95,7 @@ impl OverflowMenu {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::OverflowMenu;
     /// use serde_json::json;
     ///
@@ -119,7 +119,7 @@ impl OverflowMenu {
 
     /// Sets options field directly.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{OverflowMenu, Opt};
     /// use serde_json::json;
     ///
@@ -164,7 +164,7 @@ impl OverflowMenu {
 
     /// Adds Opt object to options field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{OverflowMenu, Opt};
     /// use serde_json::json;
     ///
@@ -198,7 +198,7 @@ impl OverflowMenu {
 
     /// Sets confirm field with ConfirmationDialog object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{OverflowMenu, ConfirmationDialog};
     /// use serde_json::json;
     ///

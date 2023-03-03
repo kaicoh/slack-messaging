@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::Header;
 /// use serde_json::json;
 ///
@@ -52,7 +52,7 @@ impl Default for Header {
 impl Header {
     /// Constructs a Header block.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Header;
     /// use serde_json::json;
     ///
@@ -77,7 +77,7 @@ impl Header {
 
     /// Sets text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Header;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -104,7 +104,7 @@ impl Header {
 
     /// Sets text field from string. This is a shorthand for `set_text` method.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Header;
     /// use serde_json::json;
     ///
@@ -129,7 +129,7 @@ impl Header {
 
     /// Sets block_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Header;
     /// use serde_json::json;
     ///

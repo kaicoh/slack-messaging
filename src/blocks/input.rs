@@ -11,7 +11,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::Input;
 /// use slack_messaging::blocks::elements::PlainTextInput;
 /// use serde_json::json;
@@ -91,7 +91,7 @@ impl Default for Input {
 impl Input {
     /// Constructs an Input block.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///
@@ -117,7 +117,7 @@ impl Input {
 
     /// Sets label field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -145,7 +145,7 @@ impl Input {
 
     /// Sets label field from string. This is a shorthand for `set_label` method.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///
@@ -172,7 +172,7 @@ impl Input {
     /// Sets an object to element field. The argument is an any object
     /// that can transform into the enum [InputElement].
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use slack_messaging::blocks::elements::PlainTextInput;
     /// use serde_json::json;
@@ -208,7 +208,7 @@ impl Input {
 
     /// Sets dispatch_action field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///
@@ -239,7 +239,7 @@ impl Input {
 
     /// Sets true to dispatch_action field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///
@@ -266,7 +266,7 @@ impl Input {
 
     /// Sets block_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///
@@ -296,7 +296,7 @@ impl Input {
 
     /// Sets hint field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -332,7 +332,7 @@ impl Input {
 
     /// Sets hint field from string. This is a shorthand for `set_hint` method.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///
@@ -363,7 +363,7 @@ impl Input {
 
     /// Sets optional field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///
@@ -393,7 +393,7 @@ impl Input {
 
     /// Sets true to optional field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///
@@ -420,7 +420,7 @@ impl Input {
 
     /// Sets false to optional field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///

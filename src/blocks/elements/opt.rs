@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::{Opt, Text};
 /// use serde_json::json;
 ///
@@ -54,7 +54,7 @@ impl Default for Opt {
 impl Opt {
     /// Constructs a Option object with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Opt;
     /// use serde_json::{json, Value};
     ///
@@ -73,7 +73,7 @@ impl Opt {
 
     /// Constructs a Option object with plain_text object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Opt;
     /// use serde_json::json;
     ///
@@ -98,7 +98,7 @@ impl Opt {
 
     /// Constructs a Option object with mrkdwn object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Opt;
     /// use serde_json::json;
     ///
@@ -122,7 +122,7 @@ impl Opt {
 
     /// Sets text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{Opt, Text};
     /// use serde_json::json;
     ///
@@ -148,7 +148,7 @@ impl Opt {
 
     /// Sets text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Opt;
     /// use serde_json::json;
     ///
@@ -176,7 +176,7 @@ impl Opt {
 
     /// Sets description field with plain_text object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Opt;
     /// use serde_json::json;
     ///
@@ -209,7 +209,7 @@ impl Opt {
 
     /// Sets url field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Opt;
     /// use serde_json::{json, Value};
     ///

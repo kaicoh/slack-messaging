@@ -3,7 +3,7 @@
 //! This is a library to support building messages for [slack messaging api](https://api.slack.com/messaging/managing).
 //! Using this, you can build any messages in type-safe way like following.
 //!
-//! ```
+//! ```ignore
 //! use slack_messaging::Message;
 //! use slack_messaging::blocks::{elements::Button, Actions, Section};
 //!

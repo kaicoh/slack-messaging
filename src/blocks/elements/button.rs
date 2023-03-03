@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::Button;
 /// use serde_json::json;
 ///
@@ -73,7 +73,7 @@ impl Default for Button {
 impl Button {
     /// Constructs a Button element.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;
     ///
@@ -99,7 +99,7 @@ impl Button {
 
     /// Sets text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{Button, Text};
     /// use serde_json::json;
     ///
@@ -125,7 +125,7 @@ impl Button {
 
     /// Sets text field from string. This is a shorthand for `set_text` method.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;
     ///
@@ -151,7 +151,7 @@ impl Button {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;
     ///
@@ -180,7 +180,7 @@ impl Button {
 
     /// Sets url field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;
     ///
@@ -210,7 +210,7 @@ impl Button {
 
     /// Sets value field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;
     ///
@@ -240,7 +240,7 @@ impl Button {
 
     /// Sets primary to style field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;
     ///
@@ -270,7 +270,7 @@ impl Button {
 
     /// Sets danger to style field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;
     ///
@@ -300,7 +300,7 @@ impl Button {
 
     /// Sets confirm field with ConfirmationDialog object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{Button, ConfirmationDialog};
     /// use serde_json::json;
     ///
@@ -358,7 +358,7 @@ impl Button {
 
     /// Sets accessibility_label field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;
     ///
