@@ -16,7 +16,7 @@ use serde::{Deserialize, Serialize};
 /// assert_eq!(plain_text.text(), "Hello, World!");
 /// assert_eq!(plain_text.emoji(), true);
 /// ```
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
 pub struct PlainText {
     text: String,
 
@@ -49,22 +49,6 @@ pub struct PlainTextBuilder {
 }
 
 impl PlainTextBuilder {
-    /// Sets text field.
-    pub fn text<T: Into<String>>(self, text: T) -> Self {
-        Self {
-            text: Some(text.into()),
-            ..self
-        }
-    }
-
-    /// Sets emoji field.
-    pub fn emoji(self, emoji: bool) -> Self {
-        Self {
-            emoji: Some(emoji),
-            ..self
-        }
-    }
-
     /// Constructs a PlainText
     ///
     /// ```
@@ -81,6 +65,22 @@ impl PlainTextBuilder {
         PlainText {
             text: self.text.unwrap_or_default(),
             emoji: self.emoji,
+        }
+    }
+
+    /// Sets `text` field.
+    pub fn text<T: Into<String>>(self, text: T) -> Self {
+        Self {
+            text: Some(text.into()),
+            ..self
+        }
+    }
+
+    /// Sets `emoji` field.
+    pub fn emoji(self, emoji: bool) -> Self {
+        Self {
+            emoji: Some(emoji),
+            ..self
         }
     }
 }

@@ -49,6 +49,80 @@ pub enum Text {
     PlainText(PlainText),
 }
 
+impl From<Mrkdwn> for Text {
+    fn from(value: Mrkdwn) -> Self {
+        Self::Mrkdwn(value)
+    }
+}
+
+impl From<PlainText> for Text {
+    fn from(value: PlainText) -> Self {
+        Self::PlainText(value)
+    }
+}
+
+impl TryFrom<Text> for Mrkdwn {
+    type Error = &'static str;
+
+    fn try_from(value: Text) -> Result<Self, Self::Error> {
+        match value {
+            Text::Mrkdwn(val) => Ok(val),
+            _ => Err("The variant is not \"Mrkdwn\""),
+        }
+    }
+}
+
+impl TryFrom<Text> for PlainText {
+    type Error = &'static str;
+
+    fn try_from(value: Text) -> Result<Self, Self::Error> {
+        match value {
+            Text::PlainText(val) => Ok(val),
+            _ => Err("The variant is not \"PlainText\""),
+        }
+    }
+}
+
+/// plain_text [Text object](https://api.slack.com/reference/block-kit/composition-objects#text).
+/// This is used for plain_text-only object.
+/// # Example
+///
+/// ```
+/// use slack_messaging::plain_text;
+/// use slack_messaging::blocks::elements::TextOnlyPlain;
+/// use serde_json::json;
+///
+/// let text = TextOnlyPlain::PlainText(plain_text!("Hi, Tanaka"));
+/// let text_json = serde_json::to_value(text).unwrap();
+///
+/// let expected = json!({
+///     "type": "plain_text",
+///     "text": "Hi, Tanaka",
+///     "emoji": true
+/// });
+///
+/// assert_eq!(text_json, expected);
+/// ```
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(tag = "type", rename_all = "snake_case")]
+pub enum TextOnlyPlain {
+    PlainText(PlainText),
+}
+
+impl From<PlainText> for TextOnlyPlain {
+    fn from(value: PlainText) -> Self {
+        Self::PlainText(value)
+    }
+}
+
+impl From<TextOnlyPlain> for PlainText {
+    fn from(value: TextOnlyPlain) -> Self {
+        match value {
+            TextOnlyPlain::PlainText(val) => val,
+        }
+    }
+}
+
 const TYPE_PLAIN: &str = "plain_text";
 const TYPE_MRKDWN: &str = "mrkdwn";
 

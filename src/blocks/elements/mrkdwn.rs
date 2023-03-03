@@ -16,7 +16,7 @@ use serde::{Deserialize, Serialize};
 /// assert_eq!(mrkdwn.text(), "Hello, World!");
 /// assert_eq!(mrkdwn.verbatim(), true);
 /// ```
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
 pub struct Mrkdwn {
     text: String,
 
@@ -49,22 +49,6 @@ pub struct MrkdwnBuilder {
 }
 
 impl MrkdwnBuilder {
-    /// Sets text field.
-    pub fn text<T: Into<String>>(self, text: T) -> Self {
-        Self {
-            text: Some(text.into()),
-            ..self
-        }
-    }
-
-    /// Sets verbatim field.
-    pub fn verbatim(self, verbatim: bool) -> Self {
-        Self {
-            verbatim: Some(verbatim),
-            ..self
-        }
-    }
-
     /// Constructs a Mrkdwn
     ///
     /// ```
@@ -81,6 +65,22 @@ impl MrkdwnBuilder {
         Mrkdwn {
             text: self.text.unwrap_or_default(),
             verbatim: self.verbatim,
+        }
+    }
+
+    /// Sets `text` field.
+    pub fn text<T: Into<String>>(self, text: T) -> Self {
+        Self {
+            text: Some(text.into()),
+            ..self
+        }
+    }
+
+    /// Sets `verbatim` field.
+    pub fn verbatim(self, verbatim: bool) -> Self {
+        Self {
+            verbatim: Some(verbatim),
+            ..self
         }
     }
 }
