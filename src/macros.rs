@@ -1,11 +1,14 @@
-/// Constructs `plain_text` [Text](crate::blocks::elements::Text).
+/// Constructs [PlainText](crate::blocks::elements::PlainText) and sets true to `emoji` field.
 ///
-/// ```ignore
+/// ```
 /// use slack_messaging::plain_text;
-/// use slack_messaging::blocks::elements::Text;
+/// use slack_messaging::blocks::elements::PlainText;
 ///
 /// let text = plain_text!("Hello, World!");
-/// let expected = Text::plain("Hello, World!");
+/// let expected = PlainText::builder()
+///     .text("Hello, World!")
+///     .emoji(true)
+///     .build();
 ///
 /// assert_eq!(text, expected);
 ///
@@ -14,28 +17,39 @@
 ///
 /// // You can use this like format! macro.
 /// let text = plain_text!("{}, {}!", greet, name);
-/// let expected = Text::plain("Hi, Tanaka!");
+/// let expected = PlainText::builder()
+///     .text("Hi, Tanaka!")
+///     .emoji(true)
+///     .build();
 ///
 /// assert_eq!(text, expected);
 /// ```
 #[macro_export]
 macro_rules! plain_text {
     ($fmt:expr) => {
-        $crate::blocks::elements::Text::plain(format!($fmt))
+        $crate::blocks::elements::PlainText::builder()
+            .text(format!($fmt))
+            .emoji(true)
+            .build()
     };
     ($fmt:expr, $($arg:tt)+) => {
-        $crate::blocks::elements::Text::plain(format!($fmt, $($arg)+))
+        $crate::blocks::elements::PlainText::builder()
+            .text(format!($fmt, $($arg)+))
+            .emoji(true)
+            .build()
     };
 }
 
-/// Constructs `mrkdwn` [Text](crate::blocks::elements::Text).
+/// Constructs [Mrkdwn](crate::blocks::elements::Mrkdwn).
 ///
-/// ```ignore
+/// ```
 /// use slack_messaging::mrkdwn;
-/// use slack_messaging::blocks::elements::Text;
+/// use slack_messaging::blocks::elements::Mrkdwn;
 ///
 /// let text = mrkdwn!("Hello, World!");
-/// let expected = Text::mrkdwn("Hello, World!");
+/// let expected = Mrkdwn::builder()
+///     .text("Hello, World!")
+///     .build();
 ///
 /// assert_eq!(text, expected);
 ///
@@ -44,47 +58,22 @@ macro_rules! plain_text {
 ///
 /// // You can use this like format! macro.
 /// let text = mrkdwn!("{}, {}!", greet, name);
-/// let expected = Text::mrkdwn("Hi, Tanaka!");
+/// let expected = Mrkdwn::builder()
+///     .text("Hi, Tanaka!")
+///     .build();
 ///
 /// assert_eq!(text, expected);
 /// ```
 #[macro_export]
 macro_rules! mrkdwn {
     ($fmt:expr) => {
-        $crate::blocks::elements::Text::mrkdwn(format!($fmt))
+        $crate::blocks::elements::Mrkdwn::builder()
+            .text(format!($fmt))
+            .build()
     };
     ($fmt:expr, $($arg:tt)+) => {
-        $crate::blocks::elements::Text::mrkdwn(format!($fmt, $($arg)+))
+        $crate::blocks::elements::Mrkdwn::builder()
+            .text(format!($fmt, $($arg)+))
+            .build()
     };
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::blocks::elements::Text;
-
-    #[test]
-    fn it_works_macro_plain_text_given_expression() {
-        let text = plain_text!("Hello, Tanaka!");
-        assert_eq!(text, Text::plain("Hello, Tanaka!"));
-    }
-
-    #[test]
-    fn it_works_macro_plain_text_given_expression_and_tokens() {
-        let name = "Tanaka";
-        let text = plain_text!("Hello, {}!", name);
-        assert_eq!(text, Text::plain("Hello, Tanaka!"));
-    }
-
-    #[test]
-    fn it_works_macro_mrkdwn_given_expression() {
-        let text = mrkdwn!("Hello, Tanaka!");
-        assert_eq!(text, Text::mrkdwn("Hello, Tanaka!"));
-    }
-
-    #[test]
-    fn it_works_macro_mrkdwn_given_expression_and_tokens() {
-        let name = "Tanaka";
-        let text = mrkdwn!("Hello, {}!", name);
-        assert_eq!(text, Text::mrkdwn("Hello, Tanaka!"));
-    }
 }
