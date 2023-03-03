@@ -1,4 +1,4 @@
-use super::{ConfirmationDialog, Text};
+use super::{ConfirmationDialog, LegacyText};
 use serde::Serialize;
 
 /// [Time picker element](https://api.slack.com/reference/block-kit/block-elements#timepicker)
@@ -49,7 +49,7 @@ pub struct TimePicker {
     focus_on_load: Option<bool>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    placeholder: Option<Text>,
+    placeholder: Option<LegacyText>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     timezone: Option<String>,
@@ -241,7 +241,7 @@ impl TimePicker {
     ///
     /// assert_eq!(timepicker_json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn set_placeholder(self, placeholder: LegacyText) -> Self {
         Self {
             placeholder: Some(placeholder),
             ..self
@@ -271,7 +271,7 @@ impl TimePicker {
     /// assert_eq!(timepicker_json, expected);
     /// ```
     pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
+        self.set_placeholder(LegacyText::plain(placeholder))
     }
 
     /// Sets timezone field.

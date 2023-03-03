@@ -1,4 +1,4 @@
-use super::elements::Text;
+use super::elements::LegacyText;
 use serde::Serialize;
 
 /// [Header block](https://api.slack.com/reference/block-kit/blocks#header)
@@ -33,7 +33,7 @@ pub struct Header {
     #[serde(rename = "type")]
     kind: &'static str,
 
-    text: Text,
+    text: LegacyText,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     block_id: Option<String>,
@@ -43,7 +43,7 @@ impl Default for Header {
     fn default() -> Self {
         Self {
             kind: "header",
-            text: Text::plain(""),
+            text: LegacyText::plain(""),
             block_id: None,
         }
     }
@@ -98,7 +98,7 @@ impl Header {
     ///
     /// assert_eq!(header_json, expected);
     /// ```
-    pub fn set_text(self, text: Text) -> Self {
+    pub fn set_text(self, text: LegacyText) -> Self {
         Self { text, ..self }
     }
 
@@ -124,7 +124,7 @@ impl Header {
     /// assert_eq!(header_json, expected);
     /// ```
     pub fn text<T: Into<String>>(self, text: T) -> Self {
-        self.set_text(Text::plain(text))
+        self.set_text(LegacyText::plain(text))
     }
 
     /// Sets block_id field.

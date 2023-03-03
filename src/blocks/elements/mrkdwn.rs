@@ -37,10 +37,7 @@ impl Mrkdwn {
 
     /// Returns `verbatim` field. If it is not set, this returns false.
     pub fn verbatim(&self) -> bool {
-        match self.verbatim {
-            Some(val) => val,
-            None => false
-        }
+        self.verbatim.unwrap_or(false)
     }
 }
 

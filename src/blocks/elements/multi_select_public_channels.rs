@@ -1,4 +1,4 @@
-use super::{ConfirmationDialog, Text};
+use super::{ConfirmationDialog, LegacyText};
 use serde::Serialize;
 
 /// [Multi-select menu Public channels element](https://api.slack.com/reference/block-kit/block-elements#channel_multi_select)
@@ -48,7 +48,7 @@ pub struct MultiSelectPublicChannels {
     focus_on_load: Option<bool>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    placeholder: Option<Text>,
+    placeholder: Option<LegacyText>,
 }
 
 impl Default for MultiSelectPublicChannels {
@@ -298,7 +298,7 @@ impl MultiSelectPublicChannels {
     ///
     /// assert_eq!(menu_json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn set_placeholder(self, placeholder: LegacyText) -> Self {
         Self {
             placeholder: Some(placeholder),
             ..self
@@ -328,6 +328,6 @@ impl MultiSelectPublicChannels {
     /// assert_eq!(menu_json, expected);
     /// ```
     pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
+        self.set_placeholder(LegacyText::plain(placeholder))
     }
 }

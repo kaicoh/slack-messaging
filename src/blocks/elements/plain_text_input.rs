@@ -1,4 +1,4 @@
-use super::{DispatchActionConfiguration, Text};
+use super::{DispatchActionConfiguration, LegacyText};
 use serde::Serialize;
 
 /// [Plain-text input element](https://api.slack.com/reference/block-kit/block-elements#input)
@@ -56,7 +56,7 @@ pub struct PlainTextInput {
     focus_on_load: Option<bool>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    placeholder: Option<Text>,
+    placeholder: Option<LegacyText>,
 }
 
 impl Default for PlainTextInput {
@@ -323,7 +323,7 @@ impl PlainTextInput {
     ///
     /// assert_eq!(plain_json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn set_placeholder(self, placeholder: LegacyText) -> Self {
         Self {
             placeholder: Some(placeholder),
             ..self
@@ -353,6 +353,6 @@ impl PlainTextInput {
     /// assert_eq!(plain_json, expected);
     /// ```
     pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
+        self.set_placeholder(LegacyText::plain(placeholder))
     }
 }

@@ -1,4 +1,4 @@
-use super::elements::Text;
+use super::elements::LegacyText;
 use serde::Serialize;
 
 /// [Image block](https://api.slack.com/reference/block-kit/blocks#image)
@@ -42,7 +42,7 @@ pub struct Image {
     alt_text: String,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    title: Option<Text>,
+    title: Option<LegacyText>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     block_id: Option<String>,
@@ -158,7 +158,7 @@ impl Image {
     ///
     /// assert_eq!(image_json, expected);
     /// ```
-    pub fn set_title(self, text: Text) -> Self {
+    pub fn set_title(self, text: LegacyText) -> Self {
         Self {
             title: Some(text),
             ..self
@@ -189,7 +189,7 @@ impl Image {
     /// assert_eq!(image_json, expected);
     /// ```
     pub fn title<T: Into<String>>(self, title: T) -> Self {
-        self.set_title(Text::plain(title))
+        self.set_title(LegacyText::plain(title))
     }
 
     /// Sets block_id field.

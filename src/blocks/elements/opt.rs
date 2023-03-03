@@ -1,4 +1,4 @@
-use super::Text;
+use super::LegacyText;
 use serde::Serialize;
 
 /// [Option object](https://api.slack.com/reference/block-kit/composition-objects#option)
@@ -29,12 +29,12 @@ use serde::Serialize;
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct Opt {
-    text: Text,
+    text: LegacyText,
 
     value: String,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<Text>,
+    description: Option<LegacyText>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     url: Option<String>,
@@ -43,7 +43,7 @@ pub struct Opt {
 impl Default for Opt {
     fn default() -> Self {
         Self {
-            text: Text::plain(""),
+            text: LegacyText::plain(""),
             value: "".into(),
             description: None,
             url: None,
@@ -93,7 +93,7 @@ impl Opt {
     /// assert_eq!(option_json, expected);
     /// ```
     pub fn plain<T: Into<String>>(text: T) -> Self {
-        Self::new().set_text(Text::plain(text))
+        Self::new().set_text(LegacyText::plain(text))
     }
 
     /// Constructs a Option object with mrkdwn object.
@@ -117,13 +117,13 @@ impl Opt {
     /// assert_eq!(option_json, expected);
     /// ```
     pub fn mrkdwn<T: Into<String>>(text: T) -> Self {
-        Self::new().set_text(Text::mrkdwn(text))
+        Self::new().set_text(LegacyText::mrkdwn(text))
     }
 
     /// Sets text field.
     ///
     /// ```ignore
-    /// use slack_messaging::blocks::elements::{Opt, Text};
+    /// use slack_messaging::blocks::elements::{Opt, LegacyText};
     /// use serde_json::json;
     ///
     /// let option = Opt::new()
@@ -142,7 +142,7 @@ impl Opt {
     ///
     /// assert_eq!(option_json, expected);
     /// ```
-    pub fn set_text(self, text: Text) -> Self {
+    pub fn set_text(self, text: LegacyText) -> Self {
         Self { text, ..self }
     }
 
@@ -202,7 +202,7 @@ impl Opt {
     /// ```
     pub fn set_description<T: Into<String>>(self, description: T) -> Self {
         Self {
-            description: Some(Text::plain(description)),
+            description: Some(LegacyText::plain(description)),
             ..self
         }
     }

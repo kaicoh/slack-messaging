@@ -2,7 +2,7 @@ use super::elements::{
     CheckboxGroup, DatePicker, DatetimePicker, EmailInput, MultiSelectConversations,
     MultiSelectExternals, MultiSelectPublicChannels, MultiSelectStaticOptions, MultiSelectUsers,
     NumberInput, PlainTextInput, RadioButtonGroup, SelectConversations, SelectExternals,
-    SelectPublicChannels, SelectStaticOptions, SelectUsers, Text, TimePicker, UrlInput,
+    SelectPublicChannels, SelectStaticOptions, SelectUsers, LegacyText, TimePicker, UrlInput,
 };
 use serde::Serialize;
 
@@ -57,7 +57,7 @@ pub struct Input {
     #[serde(rename = "type")]
     kind: &'static str,
 
-    label: Text,
+    label: LegacyText,
 
     element: Option<InputElement>,
 
@@ -68,7 +68,7 @@ pub struct Input {
     block_id: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    hint: Option<Text>,
+    hint: Option<LegacyText>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     optional: Option<bool>,
@@ -78,7 +78,7 @@ impl Default for Input {
     fn default() -> Self {
         Self {
             kind: "input",
-            label: Text::plain(""),
+            label: LegacyText::plain(""),
             element: None,
             dispatch_action: None,
             block_id: None,
@@ -139,7 +139,7 @@ impl Input {
     ///
     /// assert_eq!(input_json, expected);
     /// ```
-    pub fn set_label(self, label: Text) -> Self {
+    pub fn set_label(self, label: LegacyText) -> Self {
         Self { label, ..self }
     }
 
@@ -166,7 +166,7 @@ impl Input {
     /// assert_eq!(input_json, expected);
     /// ```
     pub fn label<T: Into<String>>(self, label: T) -> Self {
-        self.set_label(Text::plain(label))
+        self.set_label(LegacyText::plain(label))
     }
 
     /// Sets an object to element field. The argument is an any object
@@ -323,7 +323,7 @@ impl Input {
     ///
     /// assert_eq!(input_json, expected);
     /// ```
-    pub fn set_hint(self, hint: Text) -> Self {
+    pub fn set_hint(self, hint: LegacyText) -> Self {
         Self {
             hint: Some(hint),
             ..self
@@ -358,7 +358,7 @@ impl Input {
     /// assert_eq!(input_json, expected);
     /// ```
     pub fn hint<T: Into<String>>(self, hint: T) -> Self {
-        self.set_hint(Text::plain(hint))
+        self.set_hint(LegacyText::plain(hint))
     }
 
     /// Sets optional field.

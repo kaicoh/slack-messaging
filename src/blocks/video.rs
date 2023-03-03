@@ -1,4 +1,4 @@
-use super::elements::Text;
+use super::elements::LegacyText;
 use serde::Serialize;
 
 /// [Video block](https://api.slack.com/reference/block-kit/blocks#video)
@@ -53,7 +53,7 @@ pub struct Video {
 
     alt_text: String,
 
-    title: Text,
+    title: LegacyText,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     title_url: Option<String>,
@@ -69,7 +69,7 @@ pub struct Video {
     block_id: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<Text>,
+    description: Option<LegacyText>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     provider_icon_url: Option<String>,
@@ -83,7 +83,7 @@ impl Default for Video {
         Self {
             kind: "video",
             alt_text: "".to_string(),
-            title: Text::plain(""),
+            title: LegacyText::plain(""),
             title_url: None,
             thumbnail_url: "".to_string(),
             video_url: "".to_string(),
@@ -182,7 +182,7 @@ impl Video {
     ///
     /// assert_eq!(video_json, expected);
     /// ```
-    pub fn set_title(self, title: Text) -> Self {
+    pub fn set_title(self, title: LegacyText) -> Self {
         Self { title, ..self }
     }
 
@@ -211,7 +211,7 @@ impl Video {
     /// assert_eq!(video_json, expected);
     /// ```
     pub fn title<T: Into<String>>(self, title: T) -> Self {
-        self.set_title(Text::plain(title))
+        self.set_title(LegacyText::plain(title))
     }
 
     /// Sets title_url field.
@@ -408,7 +408,7 @@ impl Video {
     ///
     /// assert_eq!(video_json, expected);
     /// ```
-    pub fn set_description(self, description: Text) -> Self {
+    pub fn set_description(self, description: LegacyText) -> Self {
         Self {
             description: Some(description),
             ..self
@@ -446,7 +446,7 @@ impl Video {
     /// assert_eq!(video_json, expected);
     /// ```
     pub fn description<T: Into<String>>(self, description: T) -> Self {
-        self.set_description(Text::plain(description))
+        self.set_description(LegacyText::plain(description))
     }
 
     /// Sets provider_icon_url field.

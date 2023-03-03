@@ -1,4 +1,4 @@
-use super::{DispatchActionConfiguration, Text};
+use super::{DispatchActionConfiguration, LegacyText};
 use serde::Serialize;
 
 /// [Email input element](https://api.slack.com/reference/block-kit/block-elements#email)
@@ -45,7 +45,7 @@ pub struct EmailInput {
     focus_on_load: Option<bool>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    placeholder: Option<Text>,
+    placeholder: Option<LegacyText>,
 }
 
 impl Default for EmailInput {
@@ -194,7 +194,7 @@ impl EmailInput {
     /// Sets placeholder field.
     ///
     /// ```ignore
-    /// use slack_messaging::blocks::elements::{EmailInput, Text};
+    /// use slack_messaging::blocks::elements::{EmailInput, LegacyText};
     /// use serde_json::json;
     ///
     /// let email = EmailInput::new().set_placeholder(Text::plain("Enter your email."));
@@ -213,7 +213,7 @@ impl EmailInput {
     ///
     /// assert_eq!(email_json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn set_placeholder(self, placeholder: LegacyText) -> Self {
         Self {
             placeholder: Some(placeholder),
             ..self
@@ -243,6 +243,6 @@ impl EmailInput {
     /// assert_eq!(email_json, expected);
     /// ```
     pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
+        self.set_placeholder(LegacyText::plain(placeholder))
     }
 }

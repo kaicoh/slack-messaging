@@ -2,7 +2,7 @@ use super::elements::{
     Button, CheckboxGroup, DatePicker, DatetimePicker, Image, MultiSelectConversations,
     MultiSelectExternals, MultiSelectPublicChannels, MultiSelectStaticOptions, MultiSelectUsers,
     OverflowMenu, RadioButtonGroup, SelectConversations, SelectExternals, SelectPublicChannels,
-    SelectStaticOptions, SelectUsers, Text, TimePicker,
+    SelectStaticOptions, SelectUsers, LegacyText, TimePicker,
 };
 use serde::Serialize;
 
@@ -62,13 +62,13 @@ pub struct Section {
     kind: &'static str,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    text: Option<Text>,
+    text: Option<LegacyText>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     block_id: Option<String>,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    fields: Vec<Text>,
+    fields: Vec<LegacyText>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     accessory: Option<Accessory>,
@@ -129,7 +129,7 @@ impl Section {
     ///
     /// assert_eq!(section_json, expected);
     /// ```
-    pub fn set_text(self, text: Text) -> Self {
+    pub fn set_text(self, text: LegacyText) -> Self {
         Self {
             text: Some(text),
             ..self
@@ -159,7 +159,7 @@ impl Section {
     /// assert_eq!(section_json, expected);
     /// ```
     pub fn set_text_plain<T: Into<String>>(self, text: T) -> Self {
-        self.set_text(Text::plain(text))
+        self.set_text(LegacyText::plain(text))
     }
 
     /// Sets text field as mrkdwn text object.
@@ -184,7 +184,7 @@ impl Section {
     /// assert_eq!(section_json, expected);
     /// ```
     pub fn set_text_mrkdwn<T: Into<String>>(self, text: T) -> Self {
-        self.set_text(Text::mrkdwn(text))
+        self.set_text(LegacyText::mrkdwn(text))
     }
 
     /// Sets block_id field.
@@ -246,7 +246,7 @@ impl Section {
     ///
     /// assert_eq!(section_json, expected);
     /// ```
-    pub fn set_fields(self, fields: Vec<Text>) -> Self {
+    pub fn set_fields(self, fields: Vec<LegacyText>) -> Self {
         Self { fields, ..self }
     }
 
@@ -277,7 +277,7 @@ impl Section {
     ///
     /// assert_eq!(section_json, expected);
     /// ```
-    pub fn push_field(self, field: Text) -> Self {
+    pub fn push_field(self, field: LegacyText) -> Self {
         let mut fields = self.fields;
         fields.push(field);
         Self { fields, ..self }
@@ -309,7 +309,7 @@ impl Section {
     /// assert_eq!(section_json, expected);
     /// ```
     pub fn push_field_plain<T: Into<String>>(self, field: T) -> Self {
-        self.push_field(Text::plain(field))
+        self.push_field(LegacyText::plain(field))
     }
 
     /// Adds mrkdwn Text object to fields field.
@@ -337,7 +337,7 @@ impl Section {
     /// assert_eq!(section_json, expected);
     /// ```
     pub fn push_field_mrkdwn<T: Into<String>>(self, field: T) -> Self {
-        self.push_field(Text::mrkdwn(field))
+        self.push_field(LegacyText::mrkdwn(field))
     }
 
     /// Sets object to accessory field. The argument is an any object

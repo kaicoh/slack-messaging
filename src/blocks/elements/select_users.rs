@@ -1,4 +1,4 @@
-use super::{ConfirmationDialog, Text};
+use super::{ConfirmationDialog, LegacyText};
 use serde::Serialize;
 
 /// [Select menu of users element](https://api.slack.com/reference/block-kit/block-elements#users_select)
@@ -45,7 +45,7 @@ pub struct SelectUsers {
     focus_on_load: Option<bool>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    placeholder: Option<Text>,
+    placeholder: Option<LegacyText>,
 }
 
 impl Default for SelectUsers {
@@ -213,7 +213,7 @@ impl SelectUsers {
     /// Sets placeholder field.
     ///
     /// ```ignore
-    /// use slack_messaging::blocks::elements::{SelectUsers, Text};
+    /// use slack_messaging::blocks::elements::{SelectUsers, LegacyText};
     /// use serde_json::json;
     ///
     /// let menu = SelectUsers::new()
@@ -233,7 +233,7 @@ impl SelectUsers {
     ///
     /// assert_eq!(menu_json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn set_placeholder(self, placeholder: LegacyText) -> Self {
         Self {
             placeholder: Some(placeholder),
             ..self
@@ -263,6 +263,6 @@ impl SelectUsers {
     /// assert_eq!(menu_json, expected);
     /// ```
     pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
+        self.set_placeholder(LegacyText::plain(placeholder))
     }
 }

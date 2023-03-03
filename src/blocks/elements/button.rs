@@ -1,4 +1,4 @@
-use super::{ConfirmationDialog, Text};
+use super::{ConfirmationDialog, LegacyText};
 use serde::Serialize;
 
 /// [Button element](https://api.slack.com/reference/block-kit/block-elements#button)
@@ -35,7 +35,7 @@ pub struct Button {
     #[serde(rename = "type")]
     kind: &'static str,
 
-    text: Text,
+    text: LegacyText,
 
     action_id: String,
 
@@ -59,7 +59,7 @@ impl Default for Button {
     fn default() -> Self {
         Self {
             kind: "button",
-            text: Text::plain(""),
+            text: LegacyText::plain(""),
             action_id: "".into(),
             url: None,
             value: None,
@@ -119,7 +119,7 @@ impl Button {
     ///
     /// assert_eq!(button_json, expected);
     /// ```
-    pub fn set_text(self, text: Text) -> Self {
+    pub fn set_text(self, text: LegacyText) -> Self {
         Self { text, ..self }
     }
 
@@ -146,7 +146,7 @@ impl Button {
     /// assert_eq!(button_json, expected);
     /// ```
     pub fn text<T: Into<String>>(self, text: T) -> Self {
-        self.set_text(Text::plain(text))
+        self.set_text(LegacyText::plain(text))
     }
 
     /// Sets action_id field.

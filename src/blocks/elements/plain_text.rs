@@ -37,10 +37,7 @@ impl PlainText {
 
     /// Returns `emoji` field. If the it is not set, this returns false.
     pub fn emoji(&self) -> bool {
-        match self.emoji {
-            Some(val) => val,
-            None => false
-        }
+        self.emoji.unwrap_or(false)
     }
 }
 

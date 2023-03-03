@@ -1,4 +1,4 @@
-use super::elements::{Image, Text};
+use super::elements::{Image, LegacyText};
 use serde::Serialize;
 
 /// [Context block](https://api.slack.com/reference/block-kit/blocks#context)
@@ -206,7 +206,7 @@ pub enum ContextElement {
 
     /// [Text object](https://api.slack.com/reference/block-kit/composition-objects#text)
     /// representation
-    Text(Box<Text>),
+    Text(Box<LegacyText>),
 }
 
 impl From<Image> for ContextElement {
@@ -215,8 +215,8 @@ impl From<Image> for ContextElement {
     }
 }
 
-impl From<Text> for ContextElement {
-    fn from(value: Text) -> Self {
+impl From<LegacyText> for ContextElement {
+    fn from(value: LegacyText) -> Self {
         Self::Text(Box::new(value))
     }
 }

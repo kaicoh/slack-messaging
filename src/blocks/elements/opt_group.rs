@@ -1,5 +1,5 @@
 use super::Opt;
-use super::Text;
+use super::LegacyText;
 use serde::Serialize;
 
 /// [Option group object](https://api.slack.com/reference/block-kit/composition-objects#option_group)
@@ -51,14 +51,14 @@ use serde::Serialize;
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct OptGroup {
-    label: Text,
+    label: LegacyText,
     options: Vec<Opt>,
 }
 
 impl Default for OptGroup {
     fn default() -> Self {
         Self {
-            label: Text::plain(""),
+            label: LegacyText::plain(""),
             options: vec![],
         }
     }
@@ -111,7 +111,7 @@ impl OptGroup {
     ///
     /// assert_eq!(options_json, expected);
     /// ```
-    pub fn set_label(self, label: Text) -> Self {
+    pub fn set_label(self, label: LegacyText) -> Self {
         Self { label, ..self }
     }
 
@@ -137,7 +137,7 @@ impl OptGroup {
     /// assert_eq!(options_json, expected);
     /// ```
     pub fn label<T: Into<String>>(self, label: T) -> Self {
-        self.set_label(Text::plain(label))
+        self.set_label(LegacyText::plain(label))
     }
 
     /// Sets options field directly.

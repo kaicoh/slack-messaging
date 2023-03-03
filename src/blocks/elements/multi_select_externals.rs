@@ -1,4 +1,4 @@
-use super::{ConfirmationDialog, Opt, Text};
+use super::{ConfirmationDialog, Opt, LegacyText};
 use serde::Serialize;
 
 /// [Multi-select menu External data source element](https://api.slack.com/reference/block-kit/block-elements#external_multi_select)
@@ -53,7 +53,7 @@ pub struct MultiSelectExternals {
     focus_on_load: Option<bool>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    placeholder: Option<Text>,
+    placeholder: Option<LegacyText>,
 }
 
 impl Default for MultiSelectExternals {
@@ -361,7 +361,7 @@ impl MultiSelectExternals {
     ///
     /// assert_eq!(menu_json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn set_placeholder(self, placeholder: LegacyText) -> Self {
         Self {
             placeholder: Some(placeholder),
             ..self
@@ -391,6 +391,6 @@ impl MultiSelectExternals {
     /// assert_eq!(menu_json, expected);
     /// ```
     pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
+        self.set_placeholder(LegacyText::plain(placeholder))
     }
 }

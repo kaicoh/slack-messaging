@@ -1,4 +1,4 @@
-use super::Text;
+use super::LegacyText;
 use serde::Serialize;
 
 /// [Confirmation dialog object](https://api.slack.com/reference/block-kit/composition-objects#confirm)
@@ -45,13 +45,13 @@ use serde::Serialize;
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct ConfirmationDialog {
-    title: Text,
+    title: LegacyText,
 
-    text: Text,
+    text: LegacyText,
 
-    confirm: Text,
+    confirm: LegacyText,
 
-    deny: Text,
+    deny: LegacyText,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     style: Option<&'static str>,
@@ -60,10 +60,10 @@ pub struct ConfirmationDialog {
 impl Default for ConfirmationDialog {
     fn default() -> Self {
         Self {
-            title: Text::plain(""),
-            text: Text::plain(""),
-            confirm: Text::plain(""),
-            deny: Text::plain(""),
+            title: LegacyText::plain(""),
+            text: LegacyText::plain(""),
+            confirm: LegacyText::plain(""),
+            deny: LegacyText::plain(""),
             style: None,
         }
     }
@@ -105,7 +105,7 @@ impl ConfirmationDialog {
     /// ```
     pub fn set_title<T: Into<String>>(self, title: T) -> Self {
         Self {
-            title: Text::plain(title),
+            title: LegacyText::plain(title),
             ..self
         }
     }
@@ -125,7 +125,7 @@ impl ConfirmationDialog {
     /// ```
     pub fn set_text<T: Into<String>>(self, text: T) -> Self {
         Self {
-            text: Text::plain(text),
+            text: LegacyText::plain(text),
             ..self
         }
     }
@@ -145,7 +145,7 @@ impl ConfirmationDialog {
     /// ```
     pub fn set_confirm<T: Into<String>>(self, confirm: T) -> Self {
         Self {
-            confirm: Text::plain(confirm),
+            confirm: LegacyText::plain(confirm),
             ..self
         }
     }
@@ -165,7 +165,7 @@ impl ConfirmationDialog {
     /// ```
     pub fn set_deny<T: Into<String>>(self, deny: T) -> Self {
         Self {
-            deny: Text::plain(deny),
+            deny: LegacyText::plain(deny),
             ..self
         }
     }

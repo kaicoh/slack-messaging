@@ -1,4 +1,4 @@
-use super::{DispatchActionConfiguration, Text};
+use super::{DispatchActionConfiguration, LegacyText};
 use serde::Serialize;
 
 /// [Number input element](https://api.slack.com/reference/block-kit/block-elements#number)
@@ -50,7 +50,7 @@ pub struct NumberInput {
     focus_on_load: Option<bool>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    placeholder: Option<Text>,
+    placeholder: Option<LegacyText>,
 }
 
 impl Default for NumberInput {
@@ -337,7 +337,7 @@ impl NumberInput {
     ///
     /// assert_eq!(num_json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn set_placeholder(self, placeholder: LegacyText) -> Self {
         Self {
             placeholder: Some(placeholder),
             ..self
@@ -367,6 +367,6 @@ impl NumberInput {
     /// assert_eq!(num_json, expected);
     /// ```
     pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
+        self.set_placeholder(LegacyText::plain(placeholder))
     }
 }

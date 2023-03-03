@@ -1,4 +1,4 @@
-use super::{ConfirmationDialog, Filter, Text};
+use super::{ConfirmationDialog, Filter, LegacyText};
 use serde::Serialize;
 
 /// [Select menu of conversations element](https://api.slack.com/reference/block-kit/block-elements#conversations_select)
@@ -54,7 +54,7 @@ pub struct SelectConversations {
     focus_on_load: Option<bool>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    placeholder: Option<Text>,
+    placeholder: Option<LegacyText>,
 }
 
 impl Default for SelectConversations {
@@ -378,7 +378,7 @@ impl SelectConversations {
     ///
     /// assert_eq!(menu_json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn set_placeholder(self, placeholder: LegacyText) -> Self {
         Self {
             placeholder: Some(placeholder),
             ..self
@@ -408,6 +408,6 @@ impl SelectConversations {
     /// assert_eq!(menu_json, expected);
     /// ```
     pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
+        self.set_placeholder(LegacyText::plain(placeholder))
     }
 }
