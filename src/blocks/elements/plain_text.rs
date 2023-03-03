@@ -1,20 +1,14 @@
 use serde::{Deserialize, Serialize};
 
-/// `plain_text` [Text object](https://api.slack.com/reference/block-kit/composition-objects#text)
-/// representation.
+/// Inner values of `plain_text` [Text object](https://api.slack.com/reference/block-kit/composition-objects#text).
 ///
 /// # Example
 ///
 /// ```
-/// use slack_messaging::blocks::elements::PlainText;
-///
-/// let plain_text = PlainText::builder()
+/// # use slack_messaging::blocks::elements::PlainText;
+/// let plain_text = PlainText::new()
 ///     .text("Hello, World!")
-///     .emoji(true)
-///     .build();
-///
-/// assert_eq!(plain_text.text(), "Hello, World!");
-/// assert_eq!(plain_text.emoji(), true);
+///     .emoji(true);
 /// ```
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 pub struct PlainText {
@@ -25,53 +19,15 @@ pub struct PlainText {
 }
 
 impl PlainText {
-    /// Constructs a PlainTextBuilder.
-    pub fn builder() -> PlainTextBuilder {
-        PlainTextBuilder::default()
-    }
-
-    /// Returns `text` field
-    pub fn text(&self) -> &str {
-        self.text.as_str()
-    }
-
-    /// Returns `emoji` field. If the it is not set, this returns false.
-    pub fn emoji(&self) -> bool {
-        self.emoji.unwrap_or(false)
-    }
-}
-
-/// Builder object for [PlainText]
-#[derive(Debug, Default)]
-pub struct PlainTextBuilder {
-    text: Option<String>,
-    emoji: Option<bool>,
-}
-
-impl PlainTextBuilder {
-    /// Constructs a PlainText
-    ///
-    /// ```
-    /// use slack_messaging::blocks::elements::PlainText;
-    ///
-    /// let plain_text = PlainText::builder()
-    ///     .text("Hello, World!")
-    ///     .build();
-    ///
-    /// assert_eq!(plain_text.text(), "Hello, World!");
-    /// assert_eq!(plain_text.emoji(), false);
-    /// ```
-    pub fn build(self) -> PlainText {
-        PlainText {
-            text: self.text.unwrap_or_default(),
-            emoji: self.emoji,
-        }
+    /// Constructs a PlainText.
+    pub fn new() -> PlainText {
+        Self::default()
     }
 
     /// Sets `text` field.
     pub fn text<T: Into<String>>(self, text: T) -> Self {
         Self {
-            text: Some(text.into()),
+            text: text.into(),
             ..self
         }
     }
@@ -87,6 +43,7 @@ impl PlainTextBuilder {
 
 impl PartialEq for PlainText {
     fn eq(&self, other: &Self) -> bool {
-        self.text() == other.text() && self.emoji() == other.emoji()
+        self.text.as_str() == other.text.as_str()
+            && self.emoji.unwrap_or(false) == other.emoji.unwrap_or(false)
     }
 }

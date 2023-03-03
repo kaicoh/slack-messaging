@@ -38,7 +38,7 @@ pub use dispatch_action_configuration::{DispatchActionConfiguration, TriggerActi
 pub use email_input::EmailInput;
 pub use filter::{Conversation, Filter};
 pub use image::Image;
-pub use mrkdwn::{Mrkdwn, MrkdwnBuilder};
+pub use mrkdwn::Mrkdwn;
 pub use multi_select_conversations::MultiSelectConversations;
 pub use multi_select_externals::MultiSelectExternals;
 pub use multi_select_public_channels::MultiSelectPublicChannels;
@@ -48,7 +48,7 @@ pub use number_input::NumberInput;
 pub use opt::Opt;
 pub use opt_group::OptGroup;
 pub use overflow_menu::OverflowMenu;
-pub use plain_text::{PlainText, PlainTextBuilder};
+pub use plain_text::PlainText;
 pub use plain_text_input::PlainTextInput;
 pub use radio_button_group::RadioButtonGroup;
 pub use select_conversations::SelectConversations;

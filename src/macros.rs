@@ -5,10 +5,9 @@
 /// use slack_messaging::blocks::elements::PlainText;
 ///
 /// let text = plain_text!("Hello, World!");
-/// let expected = PlainText::builder()
+/// let expected = PlainText::new()
 ///     .text("Hello, World!")
-///     .emoji(true)
-///     .build();
+///     .emoji(true);
 ///
 /// assert_eq!(text, expected);
 ///
@@ -17,26 +16,23 @@
 ///
 /// // You can use this like format! macro.
 /// let text = plain_text!("{}, {}!", greet, name);
-/// let expected = PlainText::builder()
+/// let expected = PlainText::new()
 ///     .text("Hi, Tanaka!")
-///     .emoji(true)
-///     .build();
+///     .emoji(true);
 ///
 /// assert_eq!(text, expected);
 /// ```
 #[macro_export]
 macro_rules! plain_text {
     ($fmt:expr) => {
-        $crate::blocks::elements::PlainText::builder()
+        $crate::blocks::elements::PlainText::new()
             .text(format!($fmt))
             .emoji(true)
-            .build()
     };
     ($fmt:expr, $($arg:tt)+) => {
-        $crate::blocks::elements::PlainText::builder()
+        $crate::blocks::elements::PlainText::new()
             .text(format!($fmt, $($arg)+))
             .emoji(true)
-            .build()
     };
 }
 
@@ -47,9 +43,7 @@ macro_rules! plain_text {
 /// use slack_messaging::blocks::elements::Mrkdwn;
 ///
 /// let text = mrkdwn!("Hello, World!");
-/// let expected = Mrkdwn::builder()
-///     .text("Hello, World!")
-///     .build();
+/// let expected = Mrkdwn::new().text("Hello, World!");
 ///
 /// assert_eq!(text, expected);
 ///
@@ -58,22 +52,18 @@ macro_rules! plain_text {
 ///
 /// // You can use this like format! macro.
 /// let text = mrkdwn!("{}, {}!", greet, name);
-/// let expected = Mrkdwn::builder()
-///     .text("Hi, Tanaka!")
-///     .build();
+/// let expected = Mrkdwn::new().text("Hi, Tanaka!");
 ///
 /// assert_eq!(text, expected);
 /// ```
 #[macro_export]
 macro_rules! mrkdwn {
     ($fmt:expr) => {
-        $crate::blocks::elements::Mrkdwn::builder()
+        $crate::blocks::elements::Mrkdwn::new()
             .text(format!($fmt))
-            .build()
     };
     ($fmt:expr, $($arg:tt)+) => {
-        $crate::blocks::elements::Mrkdwn::builder()
+        $crate::blocks::elements::Mrkdwn::new()
             .text(format!($fmt, $($arg)+))
-            .build()
     };
 }

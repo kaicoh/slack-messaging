@@ -2,7 +2,7 @@ use super::{Mrkdwn, PlainText};
 use serde::{Deserialize, Serialize};
 
 /// [Text object](https://api.slack.com/reference/block-kit/composition-objects#text)
-/// either plain_text or mrkdwn.
+/// representasion.
 ///
 /// # Example
 ///
@@ -11,17 +11,22 @@ use serde::{Deserialize, Serialize};
 /// ```
 /// use slack_messaging::mrkdwn;
 /// use slack_messaging::blocks::elements::Text;
-/// use serde_json::json;
 ///
 /// let text = Text::Mrkdwn(mrkdwn!("Hi, Tanaka"));
-/// let text_json = serde_json::to_value(text).unwrap();
+/// let json = serde_json::to_value(text).unwrap();
 ///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "mrkdwn",
 ///     "text": "Hi, Tanaka"
 /// });
 ///
-/// assert_eq!(text_json, expected);
+/// assert_eq!(json, expected);
+///
+/// // Or using `From` trait
+/// let text: Text = mrkdwn!("Hi, Tanaka").into();
+/// let json = serde_json::to_value(text).unwrap();
+///
+/// assert_eq!(json, expected);
 /// ```
 ///
 /// ## Plain Text
@@ -29,18 +34,23 @@ use serde::{Deserialize, Serialize};
 /// ```
 /// use slack_messaging::plain_text;
 /// use slack_messaging::blocks::elements::Text;
-/// use serde_json::json;
 ///
 /// let text = Text::PlainText(plain_text!("Hi, Tanaka"));
-/// let text_json = serde_json::to_value(text).unwrap();
+/// let json = serde_json::to_value(text).unwrap();
 ///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "plain_text",
 ///     "text": "Hi, Tanaka",
 ///     "emoji": true
 /// });
 ///
-/// assert_eq!(text_json, expected);
+/// assert_eq!(json, expected);
+///
+/// // Or using `From` trait
+/// let text: Text = plain_text!("Hi, Tanaka").into();
+/// let json = serde_json::to_value(text).unwrap();
+///
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
@@ -61,47 +71,25 @@ impl From<PlainText> for Text {
     }
 }
 
-impl TryFrom<Text> for Mrkdwn {
-    type Error = &'static str;
-
-    fn try_from(value: Text) -> Result<Self, Self::Error> {
-        match value {
-            Text::Mrkdwn(val) => Ok(val),
-            _ => Err("The variant is not \"Mrkdwn\""),
-        }
-    }
-}
-
-impl TryFrom<Text> for PlainText {
-    type Error = &'static str;
-
-    fn try_from(value: Text) -> Result<Self, Self::Error> {
-        match value {
-            Text::PlainText(val) => Ok(val),
-            _ => Err("The variant is not \"PlainText\""),
-        }
-    }
-}
-
-/// plain_text [Text object](https://api.slack.com/reference/block-kit/composition-objects#text).
-/// This is used for plain_text-only object.
+/// plain_text [Text object](https://api.slack.com/reference/block-kit/composition-objects#text)
+/// representation. This is used for plain_text-only object.
+///
 /// # Example
 ///
 /// ```
 /// use slack_messaging::plain_text;
 /// use slack_messaging::blocks::elements::TextOnlyPlain;
-/// use serde_json::json;
 ///
 /// let text = TextOnlyPlain::PlainText(plain_text!("Hi, Tanaka"));
-/// let text_json = serde_json::to_value(text).unwrap();
+/// let json = serde_json::to_value(text).unwrap();
 ///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "plain_text",
 ///     "text": "Hi, Tanaka",
 ///     "emoji": true
 /// });
 ///
-/// assert_eq!(text_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
@@ -112,14 +100,6 @@ pub enum TextOnlyPlain {
 impl From<PlainText> for TextOnlyPlain {
     fn from(value: PlainText) -> Self {
         Self::PlainText(value)
-    }
-}
-
-impl From<TextOnlyPlain> for PlainText {
-    fn from(value: TextOnlyPlain) -> Self {
-        match value {
-            TextOnlyPlain::PlainText(val) => val,
-        }
     }
 }
 
