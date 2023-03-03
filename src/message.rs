@@ -549,5 +549,5 @@ impl Message {
 pub enum ResponseType {
     /// Sets this if you want to publish a message to the same conversation as the interaction
     /// source.
-    InChannel
+    InChannel,
 }

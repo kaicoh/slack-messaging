@@ -1,5 +1,5 @@
-use super::Opt;
 use super::LegacyText;
+use super::Opt;
 use serde::Serialize;
 
 /// [Option group object](https://api.slack.com/reference/block-kit/composition-objects#option_group)

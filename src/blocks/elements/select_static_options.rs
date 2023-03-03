@@ -1,4 +1,4 @@
-use super::{ConfirmationDialog, Opt, OptGroup, LegacyText};
+use super::{ConfirmationDialog, LegacyText, Opt, OptGroup};
 use serde::Serialize;
 
 /// [Select menu of static options element](https://api.slack.com/reference/block-kit/block-elements#static_select)

@@ -1,47 +1,57 @@
-use serde::Serialize;
-
-const TYPE_PLAIN: &str = "plain_text";
-const TYPE_MRKDWN: &str = "mrkdwn";
+use super::{Mrkdwn, PlainText};
+use serde::{Deserialize, Serialize};
 
 /// [Text object](https://api.slack.com/reference/block-kit/composition-objects#text)
-/// representation.
+/// either plain_text or mrkdwn.
 ///
 /// # Example
 ///
-/// ## type plain_text
+/// ## Mrkdwn
 ///
-/// ```ignore
+/// ```
+/// use slack_messaging::mrkdwn;
 /// use slack_messaging::blocks::elements::Text;
 /// use serde_json::json;
 ///
-/// let text = Text::plain("Hello, World!");
+/// let text = Text::Mrkdwn(mrkdwn!("Hi, Tanaka"));
+/// let text_json = serde_json::to_value(text).unwrap();
+///
+/// let expected = json!({
+///     "type": "mrkdwn",
+///     "text": "Hi, Tanaka"
+/// });
+///
+/// assert_eq!(text_json, expected);
+/// ```
+///
+/// ## Plain Text
+///
+/// ```
+/// use slack_messaging::plain_text;
+/// use slack_messaging::blocks::elements::Text;
+/// use serde_json::json;
+///
+/// let text = Text::PlainText(plain_text!("Hi, Tanaka"));
 /// let text_json = serde_json::to_value(text).unwrap();
 ///
 /// let expected = json!({
 ///     "type": "plain_text",
-///     "text": "Hello, World!",
+///     "text": "Hi, Tanaka",
 ///     "emoji": true
 /// });
 ///
 /// assert_eq!(text_json, expected);
 /// ```
-///
-/// ## type mrkdwn
-///
-/// ```ignore
-/// use slack_messaging::blocks::elements::Text;
-/// use serde_json::json;
-///
-/// let text = Text::mrkdwn("Hello, World!");
-/// let text_json = serde_json::to_value(text).unwrap();
-///
-/// let expected = json!({
-///     "type": "mrkdwn",
-///     "text": "Hello, World!",
-/// });
-///
-/// assert_eq!(text_json, expected);
-/// ```
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(tag = "type", rename_all = "snake_case")]
+pub enum Text {
+    Mrkdwn(Mrkdwn),
+    PlainText(PlainText),
+}
+
+const TYPE_PLAIN: &str = "plain_text";
+const TYPE_MRKDWN: &str = "mrkdwn";
+
 #[derive(Debug, Clone, Serialize)]
 pub struct LegacyText {
     #[serde(rename = "type")]
@@ -57,24 +67,6 @@ pub struct LegacyText {
 }
 
 impl LegacyText {
-    /// Constructs a `plain_text` object and enables emoji.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::Text;
-    /// use serde_json::json;
-    ///
-    /// let text = Text::plain("hello world");
-    ///
-    /// let expected = json!({
-    ///     "type": "plain_text",
-    ///     "text": "hello world",
-    ///     "emoji": true
-    /// });
-    ///
-    /// let text_json = serde_json::to_value(text).unwrap();
-    ///
-    /// assert_eq!(text_json, expected);
-    /// ```
     pub fn plain<T: Into<String>>(text: T) -> Self {
         Self {
             kind: TYPE_PLAIN,
@@ -84,23 +76,6 @@ impl LegacyText {
         }
     }
 
-    /// Constructs a `mrkdwn` object.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::Text;
-    /// use serde_json::json;
-    ///
-    /// let text = Text::mrkdwn("hello world");
-    ///
-    /// let expected = json!({
-    ///     "type": "mrkdwn",
-    ///     "text": "hello world",
-    /// });
-    ///
-    /// let text_json = serde_json::to_value(text).unwrap();
-    ///
-    /// assert_eq!(text_json, expected);
-    /// ```
     pub fn mrkdwn<T: Into<String>>(text: T) -> Self {
         Self {
             kind: TYPE_MRKDWN,
@@ -110,24 +85,6 @@ impl LegacyText {
         }
     }
 
-    /// Sets text field.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::Text;
-    /// use serde_json::json;
-    ///
-    /// let text = Text::plain("hello world").set_text("hi!");
-    ///
-    /// let expected = json!({
-    ///    "type": "plain_text",
-    ///    "text": "hi!",
-    ///    "emoji": true
-    /// });
-    ///
-    /// let text_json = serde_json::to_value(text).unwrap();
-    ///
-    /// assert_eq!(text_json, expected);
-    /// ```
     pub fn set_text<T: Into<String>>(self, text: T) -> Self {
         Self {
             text: text.into(),
@@ -135,24 +92,6 @@ impl LegacyText {
         }
     }
 
-    /// Sets emoji field.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::Text;
-    /// use serde_json::json;
-    ///
-    /// let text = Text::plain("hello world").set_emoji(false);
-    ///
-    /// let expected = json!({
-    ///    "type": "plain_text",
-    ///    "text": "hello world",
-    ///    "emoji": false
-    /// });
-    ///
-    /// let text_json = serde_json::to_value(text).unwrap();
-    ///
-    /// assert_eq!(text_json, expected);
-    /// ```
     pub fn set_emoji(self, emoji: bool) -> Self {
         Self {
             emoji: Some(emoji),
@@ -160,24 +99,6 @@ impl LegacyText {
         }
     }
 
-    /// Sets verbatim field.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::Text;
-    /// use serde_json::json;
-    ///
-    /// let text = Text::mrkdwn("hello world").set_verbatim(true);
-    ///
-    /// let expected = json!({
-    ///    "type": "mrkdwn",
-    ///    "text": "hello world",
-    ///    "verbatim": true
-    /// });
-    ///
-    /// let text_json = serde_json::to_value(text).unwrap();
-    ///
-    /// assert_eq!(text_json, expected);
-    /// ```
     pub fn set_verbatim(self, verbatim: bool) -> Self {
         Self {
             verbatim: Some(verbatim),

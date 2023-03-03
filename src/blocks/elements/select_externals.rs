@@ -1,4 +1,4 @@
-use super::{ConfirmationDialog, Opt, LegacyText};
+use super::{ConfirmationDialog, LegacyText, Opt};
 use serde::Serialize;
 
 /// [Select menu of external data source element](https://api.slack.com/reference/block-kit/block-elements#external_select)

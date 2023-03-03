@@ -1,8 +1,8 @@
 use super::elements::{
-    Button, CheckboxGroup, DatePicker, DatetimePicker, Image, MultiSelectConversations,
+    Button, CheckboxGroup, DatePicker, DatetimePicker, Image, LegacyText, MultiSelectConversations,
     MultiSelectExternals, MultiSelectPublicChannels, MultiSelectStaticOptions, MultiSelectUsers,
     OverflowMenu, RadioButtonGroup, SelectConversations, SelectExternals, SelectPublicChannels,
-    SelectStaticOptions, SelectUsers, LegacyText, TimePicker,
+    SelectStaticOptions, SelectUsers, TimePicker,
 };
 use serde::Serialize;
 

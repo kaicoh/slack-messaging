@@ -56,6 +56,6 @@ pub use select_externals::SelectExternals;
 pub use select_public_channels::SelectPublicChannels;
 pub use select_static_options::SelectStaticOptions;
 pub use select_users::SelectUsers;
-pub use text::LegacyText;
+pub use text::{LegacyText, Text};
 pub use timepicker::TimePicker;
 pub use url_input::UrlInput;
