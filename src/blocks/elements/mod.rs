@@ -31,7 +31,7 @@ mod url_input;
 
 pub use button::Button;
 pub use checkbox_group::CheckboxGroup;
-pub use confirmation_dialog::{ConfirmationDialog, ConfirmationDialogBuilder, ConfirmationStyle};
+pub use confirmation_dialog::{ConfirmationDialog, ConfirmationStyle};
 pub use datepicker::DatePicker;
 pub use datetimepicker::DatetimePicker;
 pub use dispatch_action_configuration::{DispatchActionConfiguration, TriggerAction};
