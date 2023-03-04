@@ -71,6 +71,12 @@ impl From<PlainText> for Text {
     }
 }
 
+impl Default for Text {
+    fn default() -> Self {
+        Self::PlainText(PlainText::default())
+    }
+}
+
 /// plain_text [Text object](https://api.slack.com/reference/block-kit/composition-objects#text)
 /// representation. This is used for plain_text-only object.
 ///
@@ -100,6 +106,12 @@ pub enum TextOnlyPlain {
 impl From<PlainText> for TextOnlyPlain {
     fn from(value: PlainText) -> Self {
         Self::PlainText(value)
+    }
+}
+
+impl Default for TextOnlyPlain {
+    fn default() -> Self {
+        Self::PlainText(PlainText::default())
     }
 }
 

@@ -1,4 +1,4 @@
-use super::{PlainText, Text, TextOnlyPlain};
+use super::{Text, TextOnlyPlain};
 use serde::{Deserialize, Serialize};
 
 /// [Confirmation dialog object](https://api.slack.com/reference/block-kit/composition-objects#confirm)
@@ -44,7 +44,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// assert_eq!(json, expected);
 /// ```
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
 pub struct ConfirmationDialog {
     title: TextOnlyPlain,
 
@@ -61,13 +61,7 @@ pub struct ConfirmationDialog {
 impl ConfirmationDialog {
     /// Constructs a Confirmation.
     pub fn new() -> Self {
-        ConfirmationDialog {
-            title: PlainText::default().into(),
-            text: PlainText::default().into(),
-            confirm: PlainText::default().into(),
-            deny: PlainText::default().into(),
-            style: None,
-        }
+        Self::default()
     }
 
     /// Sets `title` field.

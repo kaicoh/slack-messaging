@@ -45,7 +45,7 @@ pub use multi_select_public_channels::MultiSelectPublicChannels;
 pub use multi_select_static_options::MultiSelectStaticOptions;
 pub use multi_select_users::MultiSelectUsers;
 pub use number_input::NumberInput;
-pub use opt::Opt;
+pub use opt::{Opt, OptOnlyPlain};
 pub use opt_group::OptGroup;
 pub use overflow_menu::OverflowMenu;
 pub use plain_text::PlainText;
