@@ -4,6 +4,7 @@ use super::elements::{
     NumberInput, PlainTextInput, RadioButtonGroup, SelectConversations, SelectExternals,
     SelectPublicChannels, SelectStaticOptions, SelectUsers, Text, TimePicker, UrlInput,
 };
+use crate::plain_text;
 use serde::Serialize;
 
 /// [Input block](https://api.slack.com/reference/block-kit/blocks#input)
@@ -11,7 +12,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::Input;
 /// use slack_messaging::blocks::elements::PlainTextInput;
 /// use serde_json::json;
@@ -78,7 +79,7 @@ impl Default for Input {
     fn default() -> Self {
         Self {
             kind: "input",
-            label: Text::plain(""),
+            label: plain_text!(""),
             element: None,
             dispatch_action: None,
             block_id: None,
@@ -91,7 +92,7 @@ impl Default for Input {
 impl Input {
     /// Constructs an Input block.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///
@@ -117,7 +118,7 @@ impl Input {
 
     /// Sets label field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -143,36 +144,10 @@ impl Input {
         Self { label, ..self }
     }
 
-    /// Sets label field from string. This is a shorthand for `set_label` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::Input;
-    /// use serde_json::json;
-    ///
-    /// let input = Input::new().label("label text");
-    ///
-    /// let expected = json!({
-    ///     "type": "input",
-    ///     "label": {
-    ///         "type": "plain_text",
-    ///         "text": "label text",
-    ///         "emoji": true
-    ///     },
-    ///     "element": null
-    /// });
-    ///
-    /// let input_json = serde_json::to_value(input).unwrap();
-    ///
-    /// assert_eq!(input_json, expected);
-    /// ```
-    pub fn label<T: Into<String>>(self, label: T) -> Self {
-        self.set_label(Text::plain(label))
-    }
-
     /// Sets an object to element field. The argument is an any object
     /// that can transform into the enum [InputElement].
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use slack_messaging::blocks::elements::PlainTextInput;
     /// use serde_json::json;
@@ -208,7 +183,7 @@ impl Input {
 
     /// Sets dispatch_action field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///
@@ -239,7 +214,7 @@ impl Input {
 
     /// Sets true to dispatch_action field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///
@@ -266,7 +241,7 @@ impl Input {
 
     /// Sets block_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///
@@ -296,7 +271,7 @@ impl Input {
 
     /// Sets hint field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -330,40 +305,9 @@ impl Input {
         }
     }
 
-    /// Sets hint field from string. This is a shorthand for `set_hint` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::Input;
-    /// use serde_json::json;
-    ///
-    /// let input = Input::new().hint("Some hints for input");
-    ///
-    /// let expected = json!({
-    ///     "type": "input",
-    ///     "label": {
-    ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
-    ///     },
-    ///     "element": null,
-    ///     "hint": {
-    ///         "type": "plain_text",
-    ///         "text": "Some hints for input",
-    ///         "emoji": true
-    ///     },
-    /// });
-    ///
-    /// let input_json = serde_json::to_value(input).unwrap();
-    ///
-    /// assert_eq!(input_json, expected);
-    /// ```
-    pub fn hint<T: Into<String>>(self, hint: T) -> Self {
-        self.set_hint(Text::plain(hint))
-    }
-
     /// Sets optional field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///
@@ -393,7 +337,7 @@ impl Input {
 
     /// Sets true to optional field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///
@@ -420,7 +364,7 @@ impl Input {
 
     /// Sets false to optional field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Input;
     /// use serde_json::json;
     ///

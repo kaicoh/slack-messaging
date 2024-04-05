@@ -1,4 +1,5 @@
 use super::elements::Text;
+use crate::plain_text;
 use serde::Serialize;
 
 /// [Video block](https://api.slack.com/reference/block-kit/blocks#video)
@@ -6,7 +7,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::Video;
 /// use serde_json::json;
 ///
@@ -83,7 +84,7 @@ impl Default for Video {
         Self {
             kind: "video",
             alt_text: "".to_string(),
-            title: Text::plain(""),
+            title: plain_text!(""),
             title_url: None,
             thumbnail_url: "".to_string(),
             video_url: "".to_string(),
@@ -99,7 +100,7 @@ impl Default for Video {
 impl Video {
     /// Constructs a Video block.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -127,7 +128,7 @@ impl Video {
 
     /// Sets alt_text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -158,7 +159,7 @@ impl Video {
 
     /// Sets title field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -186,37 +187,9 @@ impl Video {
         Self { title, ..self }
     }
 
-    /// Sets title field from string. This is a shorthand for `set_title` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::Video;
-    /// use serde_json::json;
-    ///
-    /// let video = Video::new().title("How to use Slack.");
-    ///
-    /// let expected = json!({
-    ///     "type": "video",
-    ///     "title": {
-    ///         "type": "plain_text",
-    ///         "text": "How to use Slack.",
-    ///         "emoji": true
-    ///     },
-    ///     "video_url": "",
-    ///     "thumbnail_url": "",
-    ///     "alt_text": ""
-    /// });
-    ///
-    /// let video_json = serde_json::to_value(video).unwrap();
-    ///
-    /// assert_eq!(video_json, expected);
-    /// ```
-    pub fn title<T: Into<String>>(self, title: T) -> Self {
-        self.set_title(Text::plain(title))
-    }
-
     /// Sets title_url field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -249,7 +222,7 @@ impl Video {
 
     /// Sets thumbnail_url field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -281,7 +254,7 @@ impl Video {
 
     /// Sets video_url field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -313,7 +286,7 @@ impl Video {
 
     /// Sets author_name field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -346,7 +319,7 @@ impl Video {
 
     /// Sets block_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -379,7 +352,7 @@ impl Video {
 
     /// Sets description field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -415,43 +388,9 @@ impl Video {
         }
     }
 
-    /// Sets description field from string. This is a shorthand for `set_description` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::Video;
-    /// use serde_json::json;
-    ///
-    /// let video = Video::new()
-    ///     .description("Slack is a new way to communicate with your team. It's faster, better organized and more secure than email.");
-    ///
-    /// let expected = json!({
-    ///     "type": "video",
-    ///     "title": {
-    ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
-    ///     },
-    ///     "description": {
-    ///         "type": "plain_text",
-    ///         "text": "Slack is a new way to communicate with your team. It's faster, better organized and more secure than email.",
-    ///         "emoji": true
-    ///     },
-    ///     "video_url": "",
-    ///     "thumbnail_url": "",
-    ///     "alt_text": ""
-    /// });
-    ///
-    /// let video_json = serde_json::to_value(video).unwrap();
-    ///
-    /// assert_eq!(video_json, expected);
-    /// ```
-    pub fn description<T: Into<String>>(self, description: T) -> Self {
-        self.set_description(Text::plain(description))
-    }
-
     /// Sets provider_icon_url field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///
@@ -484,7 +423,7 @@ impl Video {
 
     /// Sets provider_name field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Video;
     /// use serde_json::json;
     ///

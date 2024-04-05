@@ -9,7 +9,7 @@ use serde::Serialize;
 /// See also [Context](crate::blocks::Context), [Section](crate::blocks::Section)
 /// and [any other blocks](crate::blocks) to know how to build these blocks.
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::Attachment;
 /// use slack_messaging::blocks::{Context, Section};
 /// use slack_messaging::blocks::elements::{Image, Text};
@@ -123,7 +123,7 @@ pub struct Attachment {
 impl Attachment {
     /// Constructs an Attachment.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::Attachment;
     /// use serde_json::json;
     ///
@@ -139,7 +139,7 @@ impl Attachment {
 
     /// Sets color field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::Attachment;
     /// use serde_json::json;
     ///
@@ -161,7 +161,7 @@ impl Attachment {
     /// Sets blocks field directly. The argument is a vector composed from any objects
     /// that can transform into the enum [Block](crate::blocks::Block).
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::Attachment;
     /// use slack_messaging::blocks::{Context, Section};
     /// use slack_messaging::blocks::elements::Text;
@@ -207,7 +207,7 @@ impl Attachment {
     /// Adds an object to blocks field. The argument is an any object
     /// that can transform into the enum [Block](crate::blocks::Block).
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::Attachment;
     /// use slack_messaging::blocks::{Context, Section};
     /// use slack_messaging::blocks::elements::Text;

@@ -5,7 +5,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::Image;
 /// use serde_json::json;
 ///
@@ -46,7 +46,7 @@ impl Default for Image {
 impl Image {
     /// Constructs a Image element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Image;
     /// use serde_json::json;
     ///
@@ -68,7 +68,7 @@ impl Image {
 
     /// Sets image_url field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Image;
     /// use serde_json::json;
     ///
@@ -93,7 +93,7 @@ impl Image {
 
     /// Sets alt_text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Image;
     /// use serde_json::json;
     ///

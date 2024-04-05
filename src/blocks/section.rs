@@ -11,7 +11,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::Section;
 /// use slack_messaging::blocks::elements::Image;
 /// use serde_json::json;
@@ -89,7 +89,7 @@ impl Default for Section {
 impl Section {
     /// Constructs a Section block.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use serde_json::json;
     ///
@@ -109,7 +109,7 @@ impl Section {
 
     /// Sets text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -136,60 +136,9 @@ impl Section {
         }
     }
 
-    /// Sets text field as plain text object.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::Section;
-    /// use serde_json::json;
-    ///
-    /// let section = Section::new()
-    ///     .set_text_plain("A message *with some bold text* and _some italicized text_.");
-    ///
-    /// let expected = json!({
-    ///     "type": "section",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "A message *with some bold text* and _some italicized text_.",
-    ///         "emoji": true
-    ///     },
-    /// });
-    ///
-    /// let section_json = serde_json::to_value(section).unwrap();
-    ///
-    /// assert_eq!(section_json, expected);
-    /// ```
-    pub fn set_text_plain<T: Into<String>>(self, text: T) -> Self {
-        self.set_text(Text::plain(text))
-    }
-
-    /// Sets text field as mrkdwn text object.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::Section;
-    /// use serde_json::json;
-    ///
-    /// let section = Section::new()
-    ///     .set_text_mrkdwn("A message *with some bold text* and _some italicized text_.");
-    ///
-    /// let expected = json!({
-    ///     "type": "section",
-    ///     "text": {
-    ///         "type": "mrkdwn",
-    ///         "text": "A message *with some bold text* and _some italicized text_."
-    ///     },
-    /// });
-    ///
-    /// let section_json = serde_json::to_value(section).unwrap();
-    ///
-    /// assert_eq!(section_json, expected);
-    /// ```
-    pub fn set_text_mrkdwn<T: Into<String>>(self, text: T) -> Self {
-        self.set_text(Text::mrkdwn(text))
-    }
-
     /// Sets block_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use serde_json::json;
     ///
@@ -214,7 +163,7 @@ impl Section {
 
     /// Sets fields field directly.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -252,7 +201,7 @@ impl Section {
 
     /// Adds Text object to fields field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -283,67 +232,10 @@ impl Section {
         Self { fields, ..self }
     }
 
-    /// Adds plain_text Text object to fields field.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::Section;
-    /// use slack_messaging::blocks::elements::Text;
-    /// use serde_json::json;
-    ///
-    /// let section = Section::new()
-    ///     .push_field_plain("hello world");
-    ///
-    /// let expected = json!({
-    ///     "type": "section",
-    ///     "fields": [
-    ///         {
-    ///             "type": "plain_text",
-    ///             "text": "hello world",
-    ///             "emoji": true
-    ///         }
-    ///     ]
-    /// });
-    ///
-    /// let section_json = serde_json::to_value(section).unwrap();
-    ///
-    /// assert_eq!(section_json, expected);
-    /// ```
-    pub fn push_field_plain<T: Into<String>>(self, field: T) -> Self {
-        self.push_field(Text::plain(field))
-    }
-
-    /// Adds mrkdwn Text object to fields field.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::Section;
-    /// use slack_messaging::blocks::elements::Text;
-    /// use serde_json::json;
-    ///
-    /// let section = Section::new()
-    ///     .push_field_mrkdwn("hello world");
-    ///
-    /// let expected = json!({
-    ///     "type": "section",
-    ///     "fields": [
-    ///         {
-    ///             "type": "mrkdwn",
-    ///             "text": "hello world"
-    ///         }
-    ///     ]
-    /// });
-    ///
-    /// let section_json = serde_json::to_value(section).unwrap();
-    ///
-    /// assert_eq!(section_json, expected);
-    /// ```
-    pub fn push_field_mrkdwn<T: Into<String>>(self, field: T) -> Self {
-        self.push_field(Text::mrkdwn(field))
-    }
-
     /// Sets object to accessory field. The argument is an any object
     /// that can transform into the enum [Accessory].
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Section;
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;

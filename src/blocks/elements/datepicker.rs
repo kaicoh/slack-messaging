@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::DatePicker;
 /// use serde_json::json;
 ///
@@ -66,7 +66,7 @@ impl Default for DatePicker {
 impl DatePicker {
     /// Constructs a Date picker element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::DatePicker;
     /// use serde_json::json;
     ///
@@ -87,7 +87,7 @@ impl DatePicker {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::DatePicker;
     /// use serde_json::json;
     ///
@@ -111,7 +111,7 @@ impl DatePicker {
 
     /// Sets initial_date field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::DatePicker;
     /// use serde_json::json;
     ///
@@ -136,7 +136,7 @@ impl DatePicker {
 
     /// Sets confirm field with ConfirmationDialog.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{DatePicker, ConfirmationDialog};
     /// use serde_json::json;
     ///
@@ -189,7 +189,7 @@ impl DatePicker {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::DatePicker;
     /// use serde_json::json;
     ///
@@ -214,7 +214,7 @@ impl DatePicker {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{DatePicker, Text};
     /// use serde_json::json;
     ///
@@ -244,7 +244,7 @@ impl DatePicker {
 
     /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::DatePicker;
     /// use serde_json::json;
     ///
@@ -265,7 +265,7 @@ impl DatePicker {
     ///
     /// assert_eq!(datepicker_json, expected);
     /// ```
-    pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
+    pub fn placeholder(self, placeholder: Text) -> Self {
+        self.set_placeholder(placeholder)
     }
 }

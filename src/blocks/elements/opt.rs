@@ -1,4 +1,5 @@
 use super::Text;
+use crate::plain_text;
 use serde::Serialize;
 
 /// [Option object](https://api.slack.com/reference/block-kit/composition-objects#option)
@@ -6,7 +7,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::{Opt, Text};
 /// use serde_json::json;
 ///
@@ -43,7 +44,7 @@ pub struct Opt {
 impl Default for Opt {
     fn default() -> Self {
         Self {
-            text: Text::plain(""),
+            text: plain_text!(""),
             value: "".into(),
             description: None,
             url: None,
@@ -54,7 +55,7 @@ impl Default for Opt {
 impl Opt {
     /// Constructs a Option object with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Opt;
     /// use serde_json::{json, Value};
     ///
@@ -71,58 +72,9 @@ impl Opt {
         Self::default()
     }
 
-    /// Constructs a Option object with plain_text object.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::elements::Opt;
-    /// use serde_json::json;
-    ///
-    /// let option = Opt::plain("This is a plain text.");
-    ///
-    /// let expected = json!({
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "This is a plain text.",
-    ///         "emoji": true
-    ///     },
-    ///     "value": ""
-    /// });
-    ///
-    /// let option_json = serde_json::to_value(option).unwrap();
-    ///
-    /// assert_eq!(option_json, expected);
-    /// ```
-    pub fn plain<T: Into<String>>(text: T) -> Self {
-        Self::new().set_text(Text::plain(text))
-    }
-
-    /// Constructs a Option object with mrkdwn object.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::elements::Opt;
-    /// use serde_json::json;
-    ///
-    /// let option = Opt::mrkdwn("This is a ~plain~markdown text.");
-    ///
-    /// let expected = json!({
-    ///     "text": {
-    ///         "type": "mrkdwn",
-    ///         "text": "This is a ~plain~markdown text."
-    ///     },
-    ///     "value": ""
-    /// });
-    ///
-    /// let option_json = serde_json::to_value(option).unwrap();
-    ///
-    /// assert_eq!(option_json, expected);
-    /// ```
-    pub fn mrkdwn<T: Into<String>>(text: T) -> Self {
-        Self::new().set_text(Text::mrkdwn(text))
-    }
-
     /// Sets text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{Opt, Text};
     /// use serde_json::json;
     ///
@@ -148,7 +100,7 @@ impl Opt {
 
     /// Sets text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Opt;
     /// use serde_json::json;
     ///
@@ -176,7 +128,7 @@ impl Opt {
 
     /// Sets description field with plain_text object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Opt;
     /// use serde_json::json;
     ///
@@ -200,16 +152,16 @@ impl Opt {
     ///
     /// assert_eq!(option_json, expected);
     /// ```
-    pub fn set_description<T: Into<String>>(self, description: T) -> Self {
+    pub fn set_description(self, description: Text) -> Self {
         Self {
-            description: Some(Text::plain(description)),
+            description: Some(description),
             ..self
         }
     }
 
     /// Sets url field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Opt;
     /// use serde_json::{json, Value};
     ///

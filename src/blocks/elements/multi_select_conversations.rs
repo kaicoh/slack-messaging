@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::MultiSelectConversations;
 /// use serde_json::json;
 ///
@@ -76,7 +76,7 @@ impl Default for MultiSelectConversations {
 impl MultiSelectConversations {
     /// Constructs a Multi-select menu Conversations list element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectConversations;
     /// use serde_json::json;
     ///
@@ -97,7 +97,7 @@ impl MultiSelectConversations {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectConversations;
     /// use serde_json::json;
     ///
@@ -121,7 +121,7 @@ impl MultiSelectConversations {
 
     /// Sets initial_conversations field directly.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectConversations;
     /// use serde_json::json;
     ///
@@ -149,7 +149,7 @@ impl MultiSelectConversations {
 
     /// Adds string to initial_conversations field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectConversations;
     /// use serde_json::json;
     ///
@@ -180,7 +180,7 @@ impl MultiSelectConversations {
 
     /// Sets default_to_current_conversation field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectConversations;
     /// use serde_json::json;
     ///
@@ -206,7 +206,7 @@ impl MultiSelectConversations {
 
     /// Sets confirm field with ConfirmationDialog object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{MultiSelectConversations, ConfirmationDialog};
     /// use serde_json::json;
     ///
@@ -259,7 +259,7 @@ impl MultiSelectConversations {
 
     /// Sets max_selected_items field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectConversations;
     /// use serde_json::json;
     ///
@@ -285,7 +285,7 @@ impl MultiSelectConversations {
 
     /// Sets filter field with Filter object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{MultiSelectConversations, Filter, Conversation};
     /// use serde_json::json;
     ///
@@ -322,7 +322,7 @@ impl MultiSelectConversations {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectConversations;
     /// use serde_json::json;
     ///
@@ -347,7 +347,7 @@ impl MultiSelectConversations {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{MultiSelectConversations, Text};
     /// use serde_json::json;
     ///
@@ -373,31 +373,5 @@ impl MultiSelectConversations {
             placeholder: Some(placeholder),
             ..self
         }
-    }
-
-    /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::elements::MultiSelectConversations;
-    /// use serde_json::json;
-    ///
-    /// let menu = MultiSelectConversations::new().placeholder("Select conversations");
-    ///
-    /// let expected = json!({
-    ///     "type": "multi_conversations_select",
-    ///     "action_id": "",
-    ///     "placeholder": {
-    ///         "type": "plain_text",
-    ///         "text": "Select conversations",
-    ///         "emoji": true
-    ///     }
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
     }
 }

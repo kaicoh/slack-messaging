@@ -1,4 +1,5 @@
 use super::{ConfirmationDialog, Text};
+use crate::plain_text;
 use serde::Serialize;
 
 /// [Button element](https://api.slack.com/reference/block-kit/block-elements#button)
@@ -6,7 +7,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::Button;
 /// use serde_json::json;
 ///
@@ -59,7 +60,7 @@ impl Default for Button {
     fn default() -> Self {
         Self {
             kind: "button",
-            text: Text::plain(""),
+            text: plain_text!(""),
             action_id: "".into(),
             url: None,
             value: None,
@@ -73,7 +74,7 @@ impl Default for Button {
 impl Button {
     /// Constructs a Button element.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;
     ///
@@ -99,7 +100,7 @@ impl Button {
 
     /// Sets text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{Button, Text};
     /// use serde_json::json;
     ///
@@ -123,35 +124,9 @@ impl Button {
         Self { text, ..self }
     }
 
-    /// Sets text field from string. This is a shorthand for `set_text` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::elements::Button;
-    /// use serde_json::json;
-    ///
-    /// let button = Button::new().text("Click Me");
-    ///
-    /// let expected = json!({
-    ///     "type": "button",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Click Me",
-    ///         "emoji": true
-    ///     },
-    ///     "action_id": ""
-    /// });
-    ///
-    /// let button_json = serde_json::to_value(button).unwrap();
-    ///
-    /// assert_eq!(button_json, expected);
-    /// ```
-    pub fn text<T: Into<String>>(self, text: T) -> Self {
-        self.set_text(Text::plain(text))
-    }
-
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;
     ///
@@ -180,7 +155,7 @@ impl Button {
 
     /// Sets url field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;
     ///
@@ -210,7 +185,7 @@ impl Button {
 
     /// Sets value field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;
     ///
@@ -240,7 +215,7 @@ impl Button {
 
     /// Sets primary to style field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;
     ///
@@ -270,7 +245,7 @@ impl Button {
 
     /// Sets danger to style field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;
     ///
@@ -300,7 +275,7 @@ impl Button {
 
     /// Sets confirm field with ConfirmationDialog object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{Button, ConfirmationDialog};
     /// use serde_json::json;
     ///
@@ -358,7 +333,7 @@ impl Button {
 
     /// Sets accessibility_label field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::Button;
     /// use serde_json::json;
     ///

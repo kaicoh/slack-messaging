@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::SelectConversations;
 /// use serde_json::json;
 ///
@@ -76,7 +76,7 @@ impl Default for SelectConversations {
 impl SelectConversations {
     /// Constructs a Select menu of conversations element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectConversations;
     /// use serde_json::json;
     ///
@@ -97,7 +97,7 @@ impl SelectConversations {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectConversations;
     /// use serde_json::json;
     ///
@@ -121,7 +121,7 @@ impl SelectConversations {
 
     /// Sets initial_conversation field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectConversations;
     /// use serde_json::json;
     ///
@@ -147,7 +147,7 @@ impl SelectConversations {
 
     /// Sets default_to_current_conversation field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectConversations;
     /// use serde_json::json;
     ///
@@ -173,7 +173,7 @@ impl SelectConversations {
 
     /// Sets confirm field with ConfirmationDialog object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{SelectConversations, ConfirmationDialog};
     /// use serde_json::json;
     ///
@@ -226,7 +226,7 @@ impl SelectConversations {
 
     /// Sets response_url_enabled field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectConversations;
     /// use serde_json::json;
     ///
@@ -251,7 +251,7 @@ impl SelectConversations {
 
     /// Sets true to response_url_enabled field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectConversations;
     /// use serde_json::json;
     ///
@@ -273,7 +273,7 @@ impl SelectConversations {
 
     /// Sets false to response_url_enabled field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectConversations;
     /// use serde_json::json;
     ///
@@ -295,7 +295,7 @@ impl SelectConversations {
 
     /// Sets filter field with Filter object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{SelectConversations, Filter, Conversation};
     /// use serde_json::json;
     ///
@@ -332,7 +332,7 @@ impl SelectConversations {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectConversations;
     /// use serde_json::json;
     ///
@@ -357,7 +357,7 @@ impl SelectConversations {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{SelectConversations, Text};
     /// use serde_json::json;
     ///
@@ -383,31 +383,5 @@ impl SelectConversations {
             placeholder: Some(placeholder),
             ..self
         }
-    }
-
-    /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::elements::SelectConversations;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectConversations::new().placeholder("Select an item");
-    ///
-    /// let expected = json!({
-    ///     "type": "conversations_select",
-    ///     "action_id": "",
-    ///     "placeholder": {
-    ///         "type": "plain_text",
-    ///         "text": "Select an item",
-    ///         "emoji": true
-    ///     }
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
     }
 }

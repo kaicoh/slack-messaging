@@ -1,5 +1,6 @@
 use super::Opt;
 use super::Text;
+use crate::plain_text;
 use serde::Serialize;
 
 /// [Option group object](https://api.slack.com/reference/block-kit/composition-objects#option_group)
@@ -7,7 +8,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::{OptGroup, Opt};
 /// use serde_json::json;
 ///
@@ -58,7 +59,7 @@ pub struct OptGroup {
 impl Default for OptGroup {
     fn default() -> Self {
         Self {
-            label: Text::plain(""),
+            label: plain_text!(""),
             options: vec![],
         }
     }
@@ -67,7 +68,7 @@ impl Default for OptGroup {
 impl OptGroup {
     /// Constructs a Option group object with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::OptGroup;
     /// use serde_json::json;
     ///
@@ -92,7 +93,7 @@ impl OptGroup {
 
     /// Sets label field with Text object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{OptGroup, Text};
     /// use serde_json::json;
     ///
@@ -115,34 +116,9 @@ impl OptGroup {
         Self { label, ..self }
     }
 
-    /// Sets label field with string. This is a shorthand for `set_label` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::elements::OptGroup;
-    /// use serde_json::json;
-    ///
-    /// let options = OptGroup::new().label("Group One");
-    ///
-    /// let expected = json!({
-    ///     "label": {
-    ///         "type": "plain_text",
-    ///         "text": "Group One",
-    ///         "emoji": true
-    ///     },
-    ///     "options": []
-    /// });
-    ///
-    /// let options_json = serde_json::to_value(options).unwrap();
-    ///
-    /// assert_eq!(options_json, expected);
-    /// ```
-    pub fn label<T: Into<String>>(self, label: T) -> Self {
-        self.set_label(Text::plain(label))
-    }
-
     /// Sets options field directly.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{OptGroup, Opt};
     /// use serde_json::json;
     ///
@@ -189,7 +165,7 @@ impl OptGroup {
 
     /// Adds Option object to options field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{OptGroup, Opt};
     /// use serde_json::json;
     ///

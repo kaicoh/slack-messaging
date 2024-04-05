@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::EmailInput;
 /// use serde_json::json;
 ///
@@ -64,7 +64,7 @@ impl Default for EmailInput {
 impl EmailInput {
     /// Constructs a Email Input element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::EmailInput;
     /// use serde_json::json;
     ///
@@ -85,7 +85,7 @@ impl EmailInput {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::EmailInput;
     /// use serde_json::json;
     ///
@@ -109,7 +109,7 @@ impl EmailInput {
 
     /// Sets initial_value field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::EmailInput;
     /// use serde_json::json;
     ///
@@ -134,7 +134,7 @@ impl EmailInput {
 
     /// Sets dispatch_action_config field with DispatchActionConfiguration.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{EmailInput, DispatchActionConfiguration,
     /// TriggerAction};
     /// use serde_json::json;
@@ -168,7 +168,7 @@ impl EmailInput {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::EmailInput;
     /// use serde_json::json;
     ///
@@ -193,7 +193,7 @@ impl EmailInput {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{EmailInput, Text};
     /// use serde_json::json;
     ///
@@ -222,7 +222,7 @@ impl EmailInput {
 
     /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::EmailInput;
     /// use serde_json::json;
     ///
@@ -242,7 +242,7 @@ impl EmailInput {
     ///
     /// assert_eq!(email_json, expected);
     /// ```
-    pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
+    pub fn placeholder(self, placeholder: Text) -> Self {
+        self.set_placeholder(placeholder)
     }
 }

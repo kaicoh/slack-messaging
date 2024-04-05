@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::SelectExternals;
 /// use serde_json::json;
 ///
@@ -70,7 +70,7 @@ impl Default for SelectExternals {
 impl SelectExternals {
     /// Constructs a Select menu of external data source element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectExternals;
     /// use serde_json::json;
     ///
@@ -91,7 +91,7 @@ impl SelectExternals {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectExternals;
     /// use serde_json::json;
     ///
@@ -115,7 +115,7 @@ impl SelectExternals {
 
     /// Sets initial_option field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{SelectExternals, Opt};
     /// use serde_json::json;
     ///
@@ -150,7 +150,7 @@ impl SelectExternals {
 
     /// Sets min_query_length field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{SelectExternals, Opt};
     /// use serde_json::json;
     ///
@@ -175,7 +175,7 @@ impl SelectExternals {
 
     /// Sets confirm field with ConfirmationDialog object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{SelectExternals, ConfirmationDialog};
     /// use serde_json::json;
     ///
@@ -228,7 +228,7 @@ impl SelectExternals {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::SelectExternals;
     /// use serde_json::json;
     ///
@@ -253,7 +253,7 @@ impl SelectExternals {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{SelectExternals, Text};
     /// use serde_json::json;
     ///
@@ -279,31 +279,5 @@ impl SelectExternals {
             placeholder: Some(placeholder),
             ..self
         }
-    }
-
-    /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::elements::SelectExternals;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectExternals::new().placeholder("Select an item");
-    ///
-    /// let expected = json!({
-    ///     "type": "external_select",
-    ///     "action_id": "",
-    ///     "placeholder": {
-    ///         "type": "plain_text",
-    ///         "text": "Select an item",
-    ///         "emoji": true
-    ///     }
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
     }
 }

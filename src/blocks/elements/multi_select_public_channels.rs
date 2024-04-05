@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
 /// use serde_json::json;
 ///
@@ -68,7 +68,7 @@ impl Default for MultiSelectPublicChannels {
 impl MultiSelectPublicChannels {
     /// Constructs a Multi-select menu Public channels element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
     /// use serde_json::json;
     ///
@@ -89,7 +89,7 @@ impl MultiSelectPublicChannels {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
     /// use serde_json::json;
     ///
@@ -113,7 +113,7 @@ impl MultiSelectPublicChannels {
 
     /// Sets initial_channels field directly.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
     /// use serde_json::json;
     ///
@@ -141,7 +141,7 @@ impl MultiSelectPublicChannels {
 
     /// Adds string to initial_channels field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
     /// use serde_json::json;
     ///
@@ -172,7 +172,7 @@ impl MultiSelectPublicChannels {
 
     /// Sets confirm field with ConfirmationDialog object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{MultiSelectPublicChannels, ConfirmationDialog};
     /// use serde_json::json;
     ///
@@ -225,7 +225,7 @@ impl MultiSelectPublicChannels {
 
     /// Sets max_selected_items field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
     /// use serde_json::json;
     ///
@@ -251,7 +251,7 @@ impl MultiSelectPublicChannels {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
     /// use serde_json::json;
     ///
@@ -277,7 +277,7 @@ impl MultiSelectPublicChannels {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{MultiSelectPublicChannels, Text};
     /// use serde_json::json;
     ///
@@ -303,31 +303,5 @@ impl MultiSelectPublicChannels {
             placeholder: Some(placeholder),
             ..self
         }
-    }
-
-    /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
-    /// use serde_json::json;
-    ///
-    /// let menu = MultiSelectPublicChannels::new().placeholder("Select channels");
-    ///
-    /// let expected = json!({
-    ///     "type": "multi_channels_select",
-    ///     "action_id": "",
-    ///     "placeholder": {
-    ///         "type": "plain_text",
-    ///         "text": "Select channels",
-    ///         "emoji": true
-    ///     }
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
     }
 }

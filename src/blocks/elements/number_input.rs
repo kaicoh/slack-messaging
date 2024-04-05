@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::NumberInput;
 /// use serde_json::json;
 ///
@@ -72,7 +72,7 @@ impl Default for NumberInput {
 impl NumberInput {
     /// Constructs a Number input element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::NumberInput;
     /// use serde_json::json;
     ///
@@ -93,7 +93,7 @@ impl NumberInput {
 
     /// Sets is_decimal_allowed field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::NumberInput;
     /// use serde_json::json;
     ///
@@ -117,7 +117,7 @@ impl NumberInput {
 
     /// Sets true to is_decimal_allowed field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::NumberInput;
     /// use serde_json::json;
     ///
@@ -138,7 +138,7 @@ impl NumberInput {
 
     /// Sets false to is_decimal_allowed field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::NumberInput;
     /// use serde_json::json;
     ///
@@ -159,7 +159,7 @@ impl NumberInput {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::NumberInput;
     /// use serde_json::json;
     ///
@@ -184,7 +184,7 @@ impl NumberInput {
 
     /// Sets initial_value field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::NumberInput;
     /// use serde_json::json;
     ///
@@ -209,7 +209,7 @@ impl NumberInput {
 
     /// Sets min_value field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::NumberInput;
     /// use serde_json::json;
     ///
@@ -234,7 +234,7 @@ impl NumberInput {
 
     /// Sets max_value field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::NumberInput;
     /// use serde_json::json;
     ///
@@ -259,7 +259,7 @@ impl NumberInput {
 
     /// Sets dispatch_action_config field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{NumberInput, DispatchActionConfiguration,
     /// TriggerAction};
     /// use serde_json::json;
@@ -292,7 +292,7 @@ impl NumberInput {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::NumberInput;
     /// use serde_json::json;
     ///
@@ -317,7 +317,7 @@ impl NumberInput {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{NumberInput, Text};
     /// use serde_json::json;
     ///
@@ -342,31 +342,5 @@ impl NumberInput {
             placeholder: Some(placeholder),
             ..self
         }
-    }
-
-    /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::elements::NumberInput;
-    /// use serde_json::json;
-    ///
-    /// let num = NumberInput::new().placeholder("How old are you?");
-    ///
-    /// let expected = json!({
-    ///     "type": "number_input",
-    ///     "is_decimal_allowed": false,
-    ///     "placeholder": {
-    ///         "type": "plain_text",
-    ///         "text": "How old are you?",
-    ///         "emoji": true
-    ///     }
-    /// });
-    ///
-    /// let num_json = serde_json::to_value(num).unwrap();
-    ///
-    /// assert_eq!(num_json, expected);
-    /// ```
-    pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
     }
 }

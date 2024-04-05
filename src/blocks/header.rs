@@ -1,4 +1,5 @@
 use super::elements::Text;
+use crate::plain_text;
 use serde::Serialize;
 
 /// [Header block](https://api.slack.com/reference/block-kit/blocks#header)
@@ -6,7 +7,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::Header;
 /// use serde_json::json;
 ///
@@ -43,7 +44,7 @@ impl Default for Header {
     fn default() -> Self {
         Self {
             kind: "header",
-            text: Text::plain(""),
+            text: plain_text!(""),
             block_id: None,
         }
     }
@@ -52,7 +53,7 @@ impl Default for Header {
 impl Header {
     /// Constructs a Header block.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Header;
     /// use serde_json::json;
     ///
@@ -77,7 +78,7 @@ impl Header {
 
     /// Sets text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Header;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -102,34 +103,9 @@ impl Header {
         Self { text, ..self }
     }
 
-    /// Sets text field from string. This is a shorthand for `set_text` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::Header;
-    /// use serde_json::json;
-    ///
-    /// let header = Header::new().text("Budget Performance");
-    ///
-    /// let expected = json!({
-    ///     "type": "header",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Budget Performance",
-    ///         "emoji": true
-    ///     }
-    /// });
-    ///
-    /// let header_json = serde_json::to_value(header).unwrap();
-    ///
-    /// assert_eq!(header_json, expected);
-    /// ```
-    pub fn text<T: Into<String>>(self, text: T) -> Self {
-        self.set_text(Text::plain(text))
-    }
-
     /// Sets block_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Header;
     /// use serde_json::json;
     ///

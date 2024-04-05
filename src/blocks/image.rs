@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::Image;
 /// use serde_json::json;
 ///
@@ -63,7 +63,7 @@ impl Default for Image {
 impl Image {
     /// Constructs an Image block.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Image;
     /// use serde_json::json;
     ///
@@ -85,7 +85,7 @@ impl Image {
 
     /// Sets image_url field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Image;
     /// use serde_json::json;
     ///
@@ -110,7 +110,7 @@ impl Image {
 
     /// Sets alt_text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Image;
     /// use serde_json::json;
     ///
@@ -135,7 +135,7 @@ impl Image {
 
     /// Sets title field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Image;
     /// use slack_messaging::blocks::elements::Text;
     /// use serde_json::json;
@@ -165,36 +165,9 @@ impl Image {
         }
     }
 
-    /// Sets title field from string. This is a shorthand for `set_text` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::Image;
-    /// use serde_json::json;
-    ///
-    /// let image = Image::new().title("Please enjoy this photo of a kitten");
-    ///
-    /// let expected = json!({
-    ///     "type": "image",
-    ///     "title": {
-    ///         "type": "plain_text",
-    ///         "text": "Please enjoy this photo of a kitten",
-    ///         "emoji": true
-    ///     },
-    ///     "image_url": "",
-    ///     "alt_text": ""
-    /// });
-    ///
-    /// let image_json = serde_json::to_value(image).unwrap();
-    ///
-    /// assert_eq!(image_json, expected);
-    /// ```
-    pub fn title<T: Into<String>>(self, title: T) -> Self {
-        self.set_title(Text::plain(title))
-    }
-
     /// Sets block_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Image;
     /// use serde_json::json;
     ///

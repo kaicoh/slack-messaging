@@ -138,12 +138,12 @@ struct FormatReplacer {
 }
 
 impl FormatReplacer {
-    const DATE_NUM: &str = "%Y-%m-%d";
-    const DATE: &str = "%B %e, %Y";
-    const DATE_SHORT: &str = "%b %e, %Y";
-    const DATE_LONG: &str = "%A, %B %e, %Y";
-    const TIME: &str = "%l:%M %p";
-    const TIME_SECS: &str = "%l:%M:%S %p";
+    const DATE_NUM: &'static str = "%Y-%m-%d";
+    const DATE: &'static str = "%B %e, %Y";
+    const DATE_SHORT: &'static str = "%b %e, %Y";
+    const DATE_LONG: &'static str = "%A, %B %e, %Y";
+    const TIME: &'static str = "%l:%M %p";
+    const TIME_SECS: &'static str = "%l:%M:%S %p";
 
     fn new<T: Into<String>>(value: T) -> Self {
         Self {

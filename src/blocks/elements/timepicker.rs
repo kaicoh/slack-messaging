@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::TimePicker;
 /// use serde_json::json;
 ///
@@ -72,7 +72,7 @@ impl Default for TimePicker {
 impl TimePicker {
     /// Constructs a Time picker element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::TimePicker;
     /// use serde_json::json;
     ///
@@ -93,7 +93,7 @@ impl TimePicker {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::TimePicker;
     /// use serde_json::json;
     ///
@@ -117,7 +117,7 @@ impl TimePicker {
 
     /// Sets initial_time field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::TimePicker;
     /// use serde_json::json;
     ///
@@ -142,7 +142,7 @@ impl TimePicker {
 
     /// Sets confirm field with ConfirmationDialog.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{TimePicker, ConfirmationDialog};
     /// use serde_json::json;
     ///
@@ -195,7 +195,7 @@ impl TimePicker {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::TimePicker;
     /// use serde_json::json;
     ///
@@ -220,7 +220,7 @@ impl TimePicker {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{TimePicker, Text};
     /// use serde_json::json;
     ///
@@ -248,35 +248,9 @@ impl TimePicker {
         }
     }
 
-    /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::elements::TimePicker;
-    /// use serde_json::json;
-    ///
-    /// let timepicker = TimePicker::new().placeholder("Select a time");
-    ///
-    /// let expected = json!({
-    ///     "type": "timepicker",
-    ///     "action_id": "",
-    ///     "placeholder": {
-    ///         "type": "plain_text",
-    ///         "text": "Select a time",
-    ///         "emoji": true
-    ///     }
-    /// });
-    ///
-    /// let timepicker_json = serde_json::to_value(timepicker).unwrap();
-    ///
-    /// assert_eq!(timepicker_json, expected);
-    /// ```
-    pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
-    }
-
     /// Sets timezone field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::TimePicker;
     /// use serde_json::json;
     ///

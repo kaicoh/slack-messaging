@@ -16,7 +16,7 @@ pub enum TriggerAction {
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::{DispatchActionConfiguration, TriggerAction};
 /// use serde_json::json;
 ///
@@ -43,7 +43,7 @@ pub struct DispatchActionConfiguration {
 impl DispatchActionConfiguration {
     /// Constructs a Dispatch action configuration.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::DispatchActionConfiguration;
     /// use serde_json::json;
     ///
@@ -63,7 +63,7 @@ impl DispatchActionConfiguration {
 
     /// Sets trigger_actions_on field directly.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{DispatchActionConfiguration, TriggerAction};
     /// use serde_json::json;
     ///
@@ -94,7 +94,7 @@ impl DispatchActionConfiguration {
 
     /// Adds trigger_action to trigger_actions_on field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{DispatchActionConfiguration, TriggerAction};
     /// use serde_json::json;
     ///

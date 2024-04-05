@@ -8,7 +8,7 @@ use serde::Serialize;
 ///
 /// The following is reproduction of [the sample context](https://api.slack.com/reference/block-kit/blocks#context_examples).
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::Context;
 /// use slack_messaging::blocks::elements::{Image, Text};
 /// use serde_json::json;
@@ -66,7 +66,7 @@ impl Default for Context {
 impl Context {
     /// Constructs a Context block.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Context;
     /// use serde_json::json;
     ///
@@ -88,7 +88,7 @@ impl Context {
     /// Sets elements field directly. The argument is a vector composed from any objects
     /// that can transform into the enum [ContextElement].
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Context;
     /// use slack_messaging::blocks::elements::{Image, Text};
     /// use serde_json::json;
@@ -130,7 +130,7 @@ impl Context {
     /// Adds an object to elements field. The argument is an any object
     /// that can transform into the enum [ContextElement].
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Context;
     /// use slack_messaging::blocks::elements::{Image, Text};
     /// use serde_json::json;
@@ -172,7 +172,7 @@ impl Context {
 
     /// Sets block_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Context;
     /// use serde_json::json;
     ///

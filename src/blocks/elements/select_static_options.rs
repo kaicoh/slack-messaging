@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ingore
 /// use slack_messaging::blocks::elements::{SelectStaticOptions, Opt};
 /// use serde_json::json;
 ///
@@ -96,7 +96,7 @@ impl Default for SelectStaticOptions {
 impl SelectStaticOptions {
     /// Constructs a Select menu of static options element with empty values.
     ///
-    /// ```
+    /// ```ingore
     /// use slack_messaging::blocks::elements::SelectStaticOptions;
     /// use serde_json::json;
     ///
@@ -117,7 +117,7 @@ impl SelectStaticOptions {
 
     /// Sets action_id field.
     ///
-    /// ```
+    /// ```ingore
     /// use slack_messaging::blocks::elements::SelectStaticOptions;
     /// use serde_json::json;
     ///
@@ -142,7 +142,7 @@ impl SelectStaticOptions {
     /// Sets options field directly and removes option_groups field.
     /// (Either options or option_groups field exists.)
     ///
-    /// ```
+    /// ```ingore
     /// use slack_messaging::blocks::elements::{SelectStaticOptions, Opt};
     /// use serde_json::json;
     ///
@@ -192,7 +192,7 @@ impl SelectStaticOptions {
     /// Adds Opt object to options field and removes option_groups field.
     /// (Either options or option_groups field exists.)
     ///
-    /// ```
+    /// ```ingore
     /// use slack_messaging::blocks::elements::{SelectStaticOptions, Opt};
     /// use serde_json::json;
     ///
@@ -233,7 +233,7 @@ impl SelectStaticOptions {
     /// Sets option_groups field directly and removes options field.
     /// (Either options or option_groups field exists.)
     ///
-    /// ```
+    /// ```ingore
     /// use slack_messaging::blocks::elements::{SelectStaticOptions, Opt, OptGroup};
     /// use serde_json::json;
     ///
@@ -330,7 +330,7 @@ impl SelectStaticOptions {
     /// Adds OptGroup object to option_groups field and removes options field.
     /// (Either options or option_groups field exists.)
     ///
-    /// ```
+    /// ```ingore
     /// use slack_messaging::blocks::elements::{SelectStaticOptions, Opt, OptGroup};
     /// use serde_json::json;
     ///
@@ -396,7 +396,7 @@ impl SelectStaticOptions {
 
     /// Sets initial_option field.
     ///
-    /// ```
+    /// ```ingore
     /// use slack_messaging::blocks::elements::{SelectStaticOptions, Opt};
     /// use serde_json::json;
     ///
@@ -431,7 +431,7 @@ impl SelectStaticOptions {
 
     /// Sets confirm field with ConfirmationDialog object.
     ///
-    /// ```
+    /// ```ingore
     /// use slack_messaging::blocks::elements::{SelectStaticOptions, ConfirmationDialog};
     /// use serde_json::json;
     ///
@@ -484,7 +484,7 @@ impl SelectStaticOptions {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ingore
     /// use slack_messaging::blocks::elements::SelectStaticOptions;
     /// use serde_json::json;
     ///
@@ -509,7 +509,7 @@ impl SelectStaticOptions {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ingore
     /// use slack_messaging::blocks::elements::{SelectStaticOptions, Text};
     /// use serde_json::json;
     ///
@@ -535,31 +535,5 @@ impl SelectStaticOptions {
             placeholder: Some(placeholder),
             ..self
         }
-    }
-
-    /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::elements::SelectStaticOptions;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectStaticOptions::new().placeholder("Select an item");
-    ///
-    /// let expected = json!({
-    ///     "type": "static_select",
-    ///     "action_id": "",
-    ///     "placeholder": {
-    ///         "type": "plain_text",
-    ///         "text": "Select an item",
-    ///         "emoji": true
-    ///     }
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
     }
 }

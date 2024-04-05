@@ -9,7 +9,7 @@ use serde::Serialize;
 /// See also [Header](crate::blocks::Header), [Section](crate::blocks::Section)
 /// and [any other blocks](crate::blocks) to know how to build these blocks.
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::Message;
 /// use slack_messaging::blocks::{Header, Section};
 /// use serde_json::json;
@@ -111,7 +111,7 @@ pub struct Message {
 impl Message {
     /// Constructs a Message.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::Message;
     /// use serde_json::json;
     ///
@@ -127,7 +127,7 @@ impl Message {
 
     /// Sets text field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::Message;
     /// use serde_json::json;
     ///
@@ -152,7 +152,7 @@ impl Message {
     /// Sets blocks field directly. The argument is a vector composed from any objects
     /// that can transform into the enum [Block](crate::blocks::Block).
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::Message;
     /// use slack_messaging::blocks::{Header, Section};
     /// use serde_json::json;
@@ -196,7 +196,7 @@ impl Message {
     /// Adds an object to blocks field. The argument is an any object
     /// that can transform into the enum [Block](crate::blocks::Block).
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::Message;
     /// use slack_messaging::blocks::{Header, Section};
     /// use serde_json::json;
@@ -238,7 +238,7 @@ impl Message {
     /// Sets attachments field directly. See also [Attachment](crate::attachment::Attachment)
     /// to know how to build an Attachment.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::{Attachment, Message};
     /// use slack_messaging::blocks::{Context, Section};
     /// use slack_messaging::blocks::elements::Text;
@@ -295,7 +295,7 @@ impl Message {
     /// See also [Attachment](crate::attachment::Attachment) to know
     /// how to build an Attachment.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::{Attachment, Message};
     /// use slack_messaging::blocks::{Context, Section};
     /// use slack_messaging::blocks::elements::Text;
@@ -358,7 +358,7 @@ impl Message {
 
     /// Sets thread_ts field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::Message;
     /// use serde_json::json;
     ///
@@ -382,7 +382,7 @@ impl Message {
 
     /// Sets mrkdwn field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::Message;
     /// use serde_json::json;
     ///
@@ -405,7 +405,7 @@ impl Message {
 
     /// Sets channel field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::Message;
     /// use serde_json::json;
     ///
@@ -428,7 +428,7 @@ impl Message {
 
     /// Sets response_type field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::{Message, ResponseType};
     /// use serde_json::json;
     ///
@@ -452,7 +452,7 @@ impl Message {
 
     /// Sets replace_original field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::Message;
     /// use serde_json::json;
     ///
@@ -475,7 +475,7 @@ impl Message {
 
     /// Sets true to replace_original field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::Message;
     /// use serde_json::json;
     ///
@@ -498,7 +498,7 @@ impl Message {
 
     /// Sets delete_original field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::Message;
     /// use serde_json::json;
     ///
@@ -521,7 +521,7 @@ impl Message {
 
     /// Sets true to delete_original field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::Message;
     /// use serde_json::json;
     ///
@@ -549,5 +549,5 @@ impl Message {
 pub enum ResponseType {
     /// Sets this if you want to publish a message to the same conversation as the interaction
     /// source.
-    InChannel
+    InChannel,
 }

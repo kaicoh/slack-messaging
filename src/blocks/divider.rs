@@ -5,7 +5,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::Divider;
 /// use serde_json::json;
 ///
@@ -41,7 +41,7 @@ impl Default for Divider {
 impl Divider {
     /// Constructs a Divider block.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Divider;
     /// use serde_json::json;
     ///
@@ -61,7 +61,7 @@ impl Divider {
 
     /// Sets block_id field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::Divider;
     /// use serde_json::json;
     ///

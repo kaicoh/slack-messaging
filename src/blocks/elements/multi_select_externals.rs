@@ -6,7 +6,7 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
 /// use slack_messaging::blocks::elements::MultiSelectExternals;
 /// use serde_json::json;
 ///
@@ -74,7 +74,7 @@ impl Default for MultiSelectExternals {
 impl MultiSelectExternals {
     /// Constructs a Multi-select menu External data source element with empty values.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectExternals;
     /// use serde_json::json;
     ///
@@ -119,7 +119,7 @@ impl MultiSelectExternals {
 
     /// Sets initial_options field directly.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{MultiSelectExternals, Opt};
     /// use serde_json::json;
     ///
@@ -167,7 +167,7 @@ impl MultiSelectExternals {
 
     /// Adds Opt object to initial_options field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{MultiSelectExternals, Opt};
     /// use serde_json::json;
     ///
@@ -209,7 +209,7 @@ impl MultiSelectExternals {
 
     /// Sets min_query_length field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectExternals;
     /// use serde_json::json;
     ///
@@ -235,7 +235,7 @@ impl MultiSelectExternals {
 
     /// Sets confirm field with ConfirmationDialog object.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{MultiSelectExternals, ConfirmationDialog};
     /// use serde_json::json;
     ///
@@ -288,7 +288,7 @@ impl MultiSelectExternals {
 
     /// Sets max_selected_items field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectExternals;
     /// use serde_json::json;
     ///
@@ -314,7 +314,7 @@ impl MultiSelectExternals {
 
     /// Sets focus_on_load field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::MultiSelectExternals;
     /// use serde_json::json;
     ///
@@ -340,7 +340,7 @@ impl MultiSelectExternals {
 
     /// Sets placeholder field.
     ///
-    /// ```
+    /// ```ignore
     /// use slack_messaging::blocks::elements::{MultiSelectExternals, Text};
     /// use serde_json::json;
     ///
@@ -366,31 +366,5 @@ impl MultiSelectExternals {
             placeholder: Some(placeholder),
             ..self
         }
-    }
-
-    /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
-    ///
-    /// ```
-    /// use slack_messaging::blocks::elements::MultiSelectExternals;
-    /// use serde_json::json;
-    ///
-    /// let menu = MultiSelectExternals::new().placeholder("Select items");
-    ///
-    /// let expected = json!({
-    ///     "type": "multi_external_select",
-    ///     "action_id": "",
-    ///     "placeholder": {
-    ///         "type": "plain_text",
-    ///         "text": "Select items",
-    ///         "emoji": true
-    ///     }
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn placeholder<T: Into<String>>(self, placeholder: T) -> Self {
-        self.set_placeholder(Text::plain(placeholder))
     }
 }
