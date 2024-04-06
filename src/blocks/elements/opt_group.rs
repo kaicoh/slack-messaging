@@ -1,6 +1,4 @@
-use super::Opt;
-use super::Text;
-use crate::plain_text;
+use super::{Opt, Text};
 use serde::Serialize;
 
 /// [Option group object](https://api.slack.com/reference/block-kit/composition-objects#option_group)
@@ -8,47 +6,50 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::elements::{OptGroup, Opt};
-/// use serde_json::json;
-///
-/// let options = OptGroup::new()
+/// ```
+/// # use slack_messaging::blocks::elements::{OptGroup, Opt};
+/// let options = OptGroup::builder()
 ///     .label("Group One")
-///     .push_option(
-///         Opt::plain("This is a plain text.").set_value("value-0")
+///     .option(
+///         Opt::builder()
+///             .text("option-0")
+///             .value("value-0")
+///             .build()
 ///     )
-///     .push_option(
-///         Opt::mrkdwn("*This is a mrkdwn text.*").set_value("value-1")
-///     );
+///     .option(
+///         Opt::builder()
+///             .text("option-1")
+///             .value("value-1")
+///             .build()
+///     )
+///     .build();
 ///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "label": {
 ///         "type": "plain_text",
-///         "text": "Group One",
-///         "emoji": true
+///         "text": "Group One"
 ///     },
 ///     "options": [
 ///         {
 ///             "text": {
 ///                 "type": "plain_text",
-///                 "text": "This is a plain text.",
-///                 "emoji": true
+///                 "text": "option-0",
 ///             },
 ///             "value": "value-0"
 ///         },
 ///         {
 ///             "text": {
-///                 "type": "mrkdwn",
-///                 "text": "*This is a mrkdwn text.*"
+///                 "type": "plain_text",
+///                 "text": "option-1"
 ///             },
 ///             "value": "value-1"
 ///         },
 ///     ]
 /// });
 ///
-/// let options_json = serde_json::to_value(options).unwrap();
+/// let json = serde_json::to_value(options).unwrap();
 ///
-/// assert_eq!(options_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct OptGroup {
@@ -56,147 +57,159 @@ pub struct OptGroup {
     options: Vec<Opt>,
 }
 
-impl Default for OptGroup {
-    fn default() -> Self {
-        Self {
-            label: plain_text!(""),
-            options: vec![],
-        }
+impl OptGroup {
+    /// Construct a [`OptGroupBuilder`].
+    pub fn builder() -> OptGroupBuilder {
+        OptGroupBuilder::default()
     }
 }
 
-impl OptGroup {
-    /// Constructs a Option group object with empty values.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::OptGroup;
-    /// use serde_json::json;
-    ///
-    /// let options = OptGroup::new();
-    ///
-    /// let expected = json!({
-    ///     "label": {
-    ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
-    ///     },
-    ///     "options": []
-    /// });
-    ///
-    /// let options_json = serde_json::to_value(options).unwrap();
-    ///
-    /// assert_eq!(options_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
-    }
+/// Builder for [`OptGroup`] object.
+#[derive(Debug, Default)]
+pub struct OptGroupBuilder {
+    label: Option<Text>,
+    options: Vec<Opt>,
+}
 
-    /// Sets label field with Text object.
+impl OptGroupBuilder {
+    /// Set label field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{OptGroup, Text};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::plain_text;
+    /// # use slack_messaging::blocks::elements::OptGroup;
+    /// let text = plain_text!("Group One");
+    /// let options = OptGroup::builder()
+    ///     .set_label(Some(text))
+    ///     .build();
     ///
-    /// let options = OptGroup::new().set_label(Text::plain("Group One"));
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "label": {
     ///         "type": "plain_text",
-    ///         "text": "Group One",
-    ///         "emoji": true
+    ///         "text": "Group One"
     ///     },
     ///     "options": []
     /// });
     ///
-    /// let options_json = serde_json::to_value(options).unwrap();
+    /// let json = serde_json::to_value(options).unwrap();
     ///
-    /// assert_eq!(options_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_label(self, label: Text) -> Self {
+    pub fn set_label(self, label: Option<Text>) -> Self {
         Self { label, ..self }
     }
 
-    /// Sets options field directly.
+    /// Set label field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{OptGroup, Opt};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::OptGroup;
+    /// let options = OptGroup::builder()
+    ///     .label("Group One")
+    ///     .build();
     ///
-    /// let options = OptGroup::new()
-    ///     .set_options(
-    ///         vec![
-    ///             Opt::plain("This is a plain text.").set_value("value-0"),
-    ///             Opt::mrkdwn("*This is a mrkdwn text.*").set_value("value-1"),
-    ///         ]
-    ///     );
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "label": {
     ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
+    ///         "text": "Group One"
+    ///     },
+    ///     "options": []
+    /// });
+    ///
+    /// let json = serde_json::to_value(options).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn label(self, label: impl Into<String>) -> Self {
+        let text = Text::builder()
+            .plain_text(label.into())
+            .build();
+        self.set_label(Some(text))
+    }
+
+    /// Set options field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::{OptGroup, Opt};
+    /// let options = OptGroup::builder()
+    ///     .label("")
+    ///     .set_options(
+    ///         vec![
+    ///             Opt::builder()
+    ///                 .text("option-0")
+    ///                 .value("value-0")
+    ///                 .build(),
+    ///         ]
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "label": {
+    ///         "type": "plain_text",
+    ///         "text": ""
     ///     },
     ///     "options": [
     ///         {
     ///             "text": {
     ///                 "type": "plain_text",
-    ///                 "text": "This is a plain text.",
-    ///                 "emoji": true
+    ///                 "text": "option-0"
     ///             },
     ///             "value": "value-0"
-    ///         },
-    ///         {
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "*This is a mrkdwn text.*"
-    ///             },
-    ///             "value": "value-1"
     ///         }
     ///     ]
     /// });
     ///
-    /// let options_json = serde_json::to_value(options).unwrap();
+    /// let json = serde_json::to_value(options).unwrap();
     ///
-    /// assert_eq!(options_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
     pub fn set_options(self, options: Vec<Opt>) -> Self {
         Self { options, ..self }
     }
 
-    /// Adds Option object to options field.
+    /// Add Option object to options field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{OptGroup, Opt};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::{OptGroup, Opt};
+    /// let options = OptGroup::builder()
+    ///     .label("")
+    ///     .option(
+    ///         Opt::builder()
+    ///             .text("option-0")
+    ///             .value("value-0")
+    ///             .build(),
+    ///     )
+    ///     .build();
     ///
-    /// let options = OptGroup::new()
-    ///     .push_option(Opt::plain("This is a plain text.").set_value("value-0"));
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "label": {
     ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
+    ///         "text": ""
     ///     },
     ///     "options": [
     ///         {
     ///             "text": {
     ///                 "type": "plain_text",
-    ///                 "text": "This is a plain text.",
-    ///                 "emoji": true
+    ///                 "text": "option-0"
     ///             },
     ///             "value": "value-0"
     ///         }
     ///     ]
     /// });
     ///
-    /// let options_json = serde_json::to_value(options).unwrap();
+    /// let json = serde_json::to_value(options).unwrap();
     ///
-    /// assert_eq!(options_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn push_option(self, option: Opt) -> Self {
+    pub fn option(self, option: Opt) -> Self {
         let Self { mut options, .. } = self;
         options.push(option);
         Self { options, ..self }
+    }
+
+    /// Build a [`OptGroup`] object. This method will panic if `label` is not set.
+    pub fn build(self) -> OptGroup {
+        OptGroup {
+            label: self.label.expect("label must be set to OptGroupBuilder"),
+            options: self.options,
+        }
     }
 }

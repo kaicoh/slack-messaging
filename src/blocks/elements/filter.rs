@@ -15,16 +15,15 @@ pub enum Conversation {
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::elements::{Filter, Conversation};
-/// use serde_json::json;
-///
-/// let filter = Filter::new()
+/// ```
+/// # use slack_messaging::blocks::elements::{Filter, Conversation};
+/// let filter = Filter::builder()
 ///     .include(Conversation::Public)
 ///     .include(Conversation::Mpim)
-///     .exclude_bot_users();
+///     .exclude_bot_users(true)
+///     .build();
 ///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "include": [
 ///         "public",
 ///         "mpim"
@@ -32,11 +31,11 @@ pub enum Conversation {
 ///     "exclude_bot_users": true
 /// });
 ///
-/// let filter_json = serde_json::to_value(filter).unwrap();
+/// let json = serde_json::to_value(filter).unwrap();
 ///
-/// assert_eq!(filter_json, expected);
+/// assert_eq!(json, expected);
 /// ```
-#[derive(Debug, Default, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Filter {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     include: Vec<Conversation>,
@@ -49,170 +48,167 @@ pub struct Filter {
 }
 
 impl Filter {
-    /// Constructs a Filter object.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::Filter;
-    /// use serde_json::json;
-    ///
-    /// let filter = Filter::new();
-    ///
-    /// let expected = json!({});
-    ///
-    /// let filter_json = serde_json::to_value(filter).unwrap();
-    ///
-    /// assert_eq!(filter_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
+    /// Construct a [`FilterBuilder`].
+    pub fn builder() -> FilterBuilder {
+        FilterBuilder::default()
     }
+}
 
-    /// Sets include field directly.
+/// Builder for [`Filter`] object.
+#[derive(Debug, Default)]
+pub struct FilterBuilder {
+    include: Vec<Conversation>,
+    exclude_external_shared_channels: Option<bool>,
+    exclude_bot_users: Option<bool>,
+}
+
+impl FilterBuilder {
+    /// Set include field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{Filter, Conversation};
-    /// use serde_json::json;
-    ///
-    /// let filter = Filter::new()
+    /// ```
+    /// # use slack_messaging::blocks::elements::{Filter, Conversation};
+    /// let filter = Filter::builder()
     ///     .set_include(
     ///         vec![
     ///             Conversation::Im,
     ///             Conversation::Private,
     ///         ]
-    ///     );
+    ///     )
+    ///     .build();
     ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "include": [
     ///         "im",
     ///         "private"
     ///     ]
     /// });
     ///
-    /// let filter_json = serde_json::to_value(filter).unwrap();
+    /// let json = serde_json::to_value(filter).unwrap();
     ///
-    /// assert_eq!(filter_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
     pub fn set_include(self, include: Vec<Conversation>) -> Self {
         Self { include, ..self }
     }
 
-    /// Adds conversation to include field.
+    /// Add conversation to include field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{Filter, Conversation};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::{Filter, Conversation};
+    /// let filter = Filter::builder()
+    ///     .include(Conversation::Mpim)
+    ///     .include(Conversation::Public)
+    ///     .build();
     ///
-    /// let filter = Filter::new()
-    ///     .push_include(Conversation::Mpim);
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "include": [
-    ///         "mpim"
+    ///         "mpim",
+    ///         "public"
     ///     ]
     /// });
     ///
-    /// let filter_json = serde_json::to_value(filter).unwrap();
+    /// let json = serde_json::to_value(filter).unwrap();
     ///
-    /// assert_eq!(filter_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn push_include(self, conversation: Conversation) -> Self {
+    pub fn include(self, conversation: Conversation) -> Self {
         let Self { mut include, .. } = self;
         include.push(conversation);
         Self { include, ..self }
     }
 
-    /// Alias for `push_include` method
-    pub fn include(self, conversation: Conversation) -> Self {
-        self.push_include(conversation)
-    }
-
-    /// Sets exclude_external_shared_channels field.
+    /// Set exclude_external_shared_channels field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{Filter, Conversation};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::{Filter, Conversation};
+    /// let filter = Filter::builder()
+    ///     .set_exclude_external_shared_channels(Some(true))
+    ///     .build();
     ///
-    /// let filter = Filter::new()
-    ///     .set_exclude_external_shared_channels(true);
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "exclude_external_shared_channels": true
     /// });
     ///
-    /// let filter_json = serde_json::to_value(filter).unwrap();
+    /// let json = serde_json::to_value(filter).unwrap();
     ///
-    /// assert_eq!(filter_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_exclude_external_shared_channels(self, value: bool) -> Self {
+    pub fn set_exclude_external_shared_channels(self, value: Option<bool>) -> Self {
         Self {
-            exclude_external_shared_channels: Some(value),
+            exclude_external_shared_channels: value,
             ..self
         }
     }
 
-    /// Sets true to exclude_external_shared_channels field.
+    /// Set exclude_external_shared_channels field.
     ///
-    /// ```ignore
+    /// ```
     /// use slack_messaging::blocks::elements::{Filter, Conversation};
-    /// use serde_json::json;
+    /// let filter = Filter::builder()
+    ///     .exclude_external_shared_channels(true)
+    ///     .build();
     ///
-    /// let filter = Filter::new()
-    ///     .exclude_external_shared_channels();
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "exclude_external_shared_channels": true
     /// });
     ///
-    /// let filter_json = serde_json::to_value(filter).unwrap();
+    /// let json = serde_json::to_value(filter).unwrap();
     ///
-    /// assert_eq!(filter_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn exclude_external_shared_channels(self) -> Self {
-        self.set_exclude_external_shared_channels(true)
+    pub fn exclude_external_shared_channels(self, value: bool) -> Self {
+        self.set_exclude_external_shared_channels(Some(value))
     }
 
-    /// Sets exclude_bot_users field.
+    /// Set exclude_bot_users field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{Filter, Conversation};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::{Filter, Conversation};
+    /// let filter = Filter::builder()
+    ///     .set_exclude_bot_users(Some(true))
+    ///     .build();
     ///
-    /// let filter = Filter::new()
-    ///     .set_exclude_bot_users(true);
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "exclude_bot_users": true
     /// });
     ///
-    /// let filter_json = serde_json::to_value(filter).unwrap();
+    /// let json = serde_json::to_value(filter).unwrap();
     ///
-    /// assert_eq!(filter_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_exclude_bot_users(self, value: bool) -> Self {
+    pub fn set_exclude_bot_users(self, value: Option<bool>) -> Self {
         Self {
-            exclude_bot_users: Some(value),
+            exclude_bot_users: value,
             ..self
         }
     }
 
-    /// Sets true to exclude_bot_users field.
+    /// Set exclude_bot_users field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{Filter, Conversation};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::{Filter, Conversation};
+    /// let filter = Filter::builder()
+    ///     .exclude_bot_users(true)
+    ///     .build();
     ///
-    /// let filter = Filter::new()
-    ///     .exclude_bot_users();
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "exclude_bot_users": true
     /// });
     ///
-    /// let filter_json = serde_json::to_value(filter).unwrap();
+    /// let json = serde_json::to_value(filter).unwrap();
     ///
-    /// assert_eq!(filter_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn exclude_bot_users(self) -> Self {
-        self.set_exclude_bot_users(true)
+    pub fn exclude_bot_users(self, value: bool) -> Self {
+        self.set_exclude_bot_users(Some(value))
+    }
+
+    /// Build a [`Filter`] object.
+    pub fn build(self) -> Filter {
+        Filter {
+            include: self.include,
+            exclude_external_shared_channels: self.exclude_external_shared_channels,
+            exclude_bot_users: self.exclude_bot_users,
+        }
     }
 }

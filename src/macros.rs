@@ -5,8 +5,7 @@
 /// # use slack_messaging::blocks::elements::Text;
 /// let text = plain_text!("Hello, World!");
 /// let expected = Text::builder()
-///     .plain_text()
-///     .set_text("Hello, World!")
+///     .plain_text("Hello, World!")
 ///     .build();
 ///
 /// assert_eq!(text, expected);
@@ -17,8 +16,7 @@
 ///
 /// let text = plain_text!("{}, {}!", greet, name);
 /// let expected = Text::builder()
-///     .plain_text()
-///     .set_text("Hi, Tanaka!")
+///     .plain_text("Hi, Tanaka!")
 ///     .build();
 ///
 /// assert_eq!(text, expected);
@@ -27,14 +25,12 @@
 macro_rules! plain_text {
     ($fmt:expr) => {
         $crate::blocks::elements::Text::builder()
-            .plain_text()
-            .set_text(format!($fmt))
+            .plain_text(format!($fmt))
             .build()
     };
     ($fmt:expr, $($arg:tt)+) => {
         $crate::blocks::elements::Text::builder()
-            .plain_text()
-            .set_text(format!($fmt, $($arg)+))
+            .plain_text(format!($fmt, $($arg)+))
             .build()
     };
 }
@@ -46,8 +42,7 @@ macro_rules! plain_text {
 /// # use slack_messaging::blocks::elements::Text;
 /// let text = mrkdwn!("Hello, World!");
 /// let expected = Text::builder()
-///     .mrkdwn()
-///     .set_text("Hello, World!")
+///     .mrkdwn("Hello, World!")
 ///     .build();
 ///
 /// assert_eq!(text, expected);
@@ -58,8 +53,7 @@ macro_rules! plain_text {
 ///
 /// let text = mrkdwn!("{}, {}!", greet, name);
 /// let expected = Text::builder()
-///     .mrkdwn()
-///     .set_text("Hi, Tanaka!")
+///     .mrkdwn("Hi, Tanaka!")
 ///     .build();
 ///
 /// assert_eq!(text, expected);
@@ -68,14 +62,12 @@ macro_rules! plain_text {
 macro_rules! mrkdwn {
     ($fmt:expr) => {
         $crate::blocks::elements::Text::builder()
-            .mrkdwn()
-            .set_text(format!($fmt))
+            .mrkdwn(format!($fmt))
             .build()
     };
     ($fmt:expr, $($arg:tt)+) => {
         $crate::blocks::elements::Text::builder()
-            .mrkdwn()
-            .set_text(format!($fmt, $($arg)+))
+            .mrkdwn(format!($fmt, $($arg)+))
             .build()
     };
 }
@@ -87,10 +79,7 @@ mod tests {
     #[test]
     fn it_works_macro_plain_text_given_expression() {
         let text = plain_text!("Hello, Tanaka!");
-        let expected = Text::builder()
-            .plain_text()
-            .set_text("Hello, Tanaka!")
-            .build();
+        let expected = Text::builder().plain_text("Hello, Tanaka!").build();
         assert_eq!(text, expected);
     }
 
@@ -98,17 +87,14 @@ mod tests {
     fn it_works_macro_plain_text_given_expression_and_tokens() {
         let name = "Tanaka";
         let text = plain_text!("Hello, {}!", name);
-        let expected = Text::builder()
-            .plain_text()
-            .set_text("Hello, Tanaka!")
-            .build();
+        let expected = Text::builder().plain_text("Hello, Tanaka!").build();
         assert_eq!(text, expected);
     }
 
     #[test]
     fn it_works_macro_mrkdwn_given_expression() {
         let text = mrkdwn!("Hello, Tanaka!");
-        let expected = Text::builder().mrkdwn().set_text("Hello, Tanaka!").build();
+        let expected = Text::builder().mrkdwn("Hello, Tanaka!").build();
         assert_eq!(text, expected);
     }
 
@@ -116,7 +102,7 @@ mod tests {
     fn it_works_macro_mrkdwn_given_expression_and_tokens() {
         let name = "Tanaka";
         let text = mrkdwn!("Hello, {}!", name);
-        let expected = Text::builder().mrkdwn().set_text("Hello, Tanaka!").build();
+        let expected = Text::builder().mrkdwn("Hello, Tanaka!").build();
         assert_eq!(text, expected);
     }
 }

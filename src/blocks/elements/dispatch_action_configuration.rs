@@ -16,75 +16,67 @@ pub enum TriggerAction {
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::elements::{DispatchActionConfiguration, TriggerAction};
-/// use serde_json::json;
+/// ```
+/// # use slack_messaging::blocks::elements::{DispatchActionConfiguration, TriggerAction};
+/// let config = DispatchActionConfiguration::builder()
+///     .trigger_action(TriggerAction::OnEnterPressed)
+///     .trigger_action(TriggerAction::OnCharacterEntered)
+///     .build();
 ///
-/// let config = DispatchActionConfiguration::new()
-///     .push_trigger_action(TriggerAction::OnEnterPressed)
-///     .push_trigger_action(TriggerAction::OnCharacterEntered);
-///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "trigger_actions_on": [
 ///         "on_enter_pressed",
 ///         "on_character_entered"
 ///     ]
 /// });
 ///
-/// let config_json = serde_json::to_value(config).unwrap();
+/// let json = serde_json::to_value(config).unwrap();
 ///
-/// assert_eq!(config_json, expected);
+/// assert_eq!(json, expected);
 /// ```
-#[derive(Debug, Default, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct DispatchActionConfiguration {
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     trigger_actions_on: Vec<TriggerAction>,
 }
 
 impl DispatchActionConfiguration {
-    /// Constructs a Dispatch action configuration.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::DispatchActionConfiguration;
-    /// use serde_json::json;
-    ///
-    /// let config = DispatchActionConfiguration::new();
-    ///
-    /// let expected = json!({
-    ///     "trigger_actions_on": []
-    /// });
-    ///
-    /// let config_json = serde_json::to_value(config).unwrap();
-    ///
-    /// assert_eq!(config_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
+    /// Construct a [`DispatchActionConfigurationBuilder`].
+    pub fn builder() -> DispatchActionConfigurationBuilder {
+        DispatchActionConfigurationBuilder::default()
     }
+}
 
-    /// Sets trigger_actions_on field directly.
+/// Builder for [`DispatchActionConfiguration`] object.
+#[derive(Debug, Default)]
+pub struct DispatchActionConfigurationBuilder {
+    trigger_actions_on: Vec<TriggerAction>,
+}
+
+impl DispatchActionConfigurationBuilder {
+    /// Set trigger_actions_on field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{DispatchActionConfiguration, TriggerAction};
-    /// use serde_json::json;
-    ///
-    /// let config = DispatchActionConfiguration::new()
+    /// ```
+    /// # use slack_messaging::blocks::elements::{DispatchActionConfiguration, TriggerAction};
+    /// let config = DispatchActionConfiguration::builder()
     ///     .set_trigger_actions(
     ///         vec![
     ///             TriggerAction::OnEnterPressed,
     ///             TriggerAction::OnCharacterEntered,
     ///         ]
-    ///     );
+    ///     )
+    ///     .build();
     ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "trigger_actions_on": [
     ///         "on_enter_pressed",
     ///         "on_character_entered"
     ///     ]
     /// });
     ///
-    /// let config_json = serde_json::to_value(config).unwrap();
+    /// let json = serde_json::to_value(config).unwrap();
     ///
-    /// assert_eq!(config_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
     pub fn set_trigger_actions(self, actions: Vec<TriggerAction>) -> Self {
         Self {
@@ -92,30 +84,36 @@ impl DispatchActionConfiguration {
         }
     }
 
-    /// Adds trigger_action to trigger_actions_on field.
+    /// Add trigger_action to trigger_actions_on field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{DispatchActionConfiguration, TriggerAction};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::{DispatchActionConfiguration, TriggerAction};
+    /// let config = DispatchActionConfiguration::builder()
+    ///     .trigger_action(TriggerAction::OnEnterPressed)
+    ///     .build();
     ///
-    /// let config = DispatchActionConfiguration::new()
-    ///     .push_trigger_action(TriggerAction::OnEnterPressed);
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "trigger_actions_on": [
     ///         "on_enter_pressed"
     ///     ]
     /// });
     ///
-    /// let config_json = serde_json::to_value(config).unwrap();
+    /// let json = serde_json::to_value(config).unwrap();
     ///
-    /// assert_eq!(config_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn push_trigger_action(self, action: TriggerAction) -> Self {
+    pub fn trigger_action(self, action: TriggerAction) -> Self {
         let Self {
             mut trigger_actions_on,
         } = self;
         trigger_actions_on.push(action);
         Self { trigger_actions_on }
+    }
+
+    /// Build a [`DispatchActionConfiguration`] object.
+    pub fn build(self) -> DispatchActionConfiguration {
+        DispatchActionConfiguration {
+            trigger_actions_on: self.trigger_actions_on,
+        }
     }
 }

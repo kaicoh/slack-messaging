@@ -13,8 +13,7 @@ const TYPE_MRKDWN: &str = "mrkdwn";
 /// ```
 /// # use slack_messaging::blocks::elements::Text;
 /// let text = Text::builder()
-///     .plain_text()
-///     .set_text("Hello, World!")
+///     .plain_text("Hello, World!")
 ///     .build();
 ///
 /// let json = serde_json::to_value(text).unwrap();
@@ -32,8 +31,7 @@ const TYPE_MRKDWN: &str = "mrkdwn";
 /// ```
 /// # use slack_messaging::blocks::elements::Text;
 /// let text = Text::builder()
-///     .mrkdwn()
-///     .set_text("Hello, World!")
+///     .mrkdwn("Hello, World!")
 ///     .build();
 /// let json = serde_json::to_value(text).unwrap();
 ///
@@ -59,7 +57,7 @@ pub struct Text {
 }
 
 impl Text {
-    /// Constructs a [`TextBuilder`].
+    /// Construct a [`TextBuilder`].
     pub fn builder() -> TextBuilder {
         TextBuilder::default()
     }
@@ -79,6 +77,7 @@ impl PartialEq for Text {
     }
 }
 
+/// Builder for [`Text`] object.
 #[derive(Debug, Default)]
 pub struct TextBuilder {
     kind: Option<&'static str>,
@@ -88,14 +87,12 @@ pub struct TextBuilder {
 }
 
 impl TextBuilder {
-    /// Turns self into a `plain_text` text object. Either `plain_text` or `mrkdwn` method must
-    /// be called before the `build` method is called.
+    /// Set plain text.
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::Text;
     /// let text = Text::builder()
-    ///     .plain_text()
-    ///     .set_text("hello world")
+    ///     .plain_text("hello world")
     ///     .build();
     ///
     /// let expected = serde_json::json!({
@@ -106,21 +103,40 @@ impl TextBuilder {
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
     /// ```
-    pub fn plain_text(self) -> Self {
-        Self {
-            kind: Some(TYPE_PLAIN),
-            ..self
-        }
+    pub fn plain_text(self, text: impl Into<String>) -> Self {
+        self.set_plain_text(Some(text.into()))
     }
 
-    /// Turns self into a `mrkdwn` text object. Either `plain_text` or `mrkdwn` method must
-    /// be called before the `build` method is called.
+    /// Set plain text.
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::Text;
     /// let text = Text::builder()
-    ///     .mrkdwn()
-    ///     .set_text("hello world")
+    ///     .set_plain_text(Some("hello world".into()))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "plain_text",
+    ///     "text": "hello world",
+    /// });
+    ///
+    /// let json = serde_json::to_value(text).unwrap();
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_plain_text(self, text: Option<String>) -> Self {
+        Self {
+            kind: Some(TYPE_PLAIN),
+            text,
+            ..self
+        }
+    }
+
+    /// Set markdown text.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::Text;
+    /// let text = Text::builder()
+    ///     .mrkdwn("hello world")
     ///     .build();
     ///
     /// let expected = serde_json::json!({
@@ -131,45 +147,41 @@ impl TextBuilder {
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
     /// ```
-    pub fn mrkdwn(self) -> Self {
-        Self {
-            kind: Some(TYPE_MRKDWN),
-            ..self
-        }
+    pub fn mrkdwn(self, text: impl Into<String>) -> Self {
+        self.set_mrkdwn(Some(text.into()))
     }
 
-    /// Sets text field. This method must be called before the `build` method is called.
+    /// Set markdown text.
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::Text;
     /// let text = Text::builder()
-    ///     .plain_text()
-    ///     .set_text("hello world")
+    ///     .set_mrkdwn(Some("hello world".into()))
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "plain_text",
+    ///     "type": "mrkdwn",
     ///     "text": "hello world",
     /// });
     ///
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_text(self, text: impl Into<String>) -> Self {
+    pub fn set_mrkdwn(self, text: Option<String>) -> Self {
         Self {
-            text: Some(text.into()),
+            kind: Some(TYPE_MRKDWN),
+            text,
             ..self
         }
     }
 
-    /// Sets emoji field.
+    /// Set emoji field.
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::Text;
     /// let text = Text::builder()
-    ///     .plain_text()
-    ///     .set_emoji(true)
-    ///     .set_text("😊")
+    ///     .plain_text("😊")
+    ///     .emoji(true)
     ///     .build();
     ///
     /// let expected = serde_json::json!({
@@ -181,21 +193,39 @@ impl TextBuilder {
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_emoji(self, emoji: bool) -> Self {
-        Self {
-            emoji: Some(emoji),
-            ..self
-        }
+    pub fn emoji(self, emoji: bool) -> Self {
+        self.set_emoji(Some(emoji))
     }
 
-    /// Sets verbatim field.
+    /// Set emoji field.
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::Text;
     /// let text = Text::builder()
-    ///     .mrkdwn()
-    ///     .set_text("hello world")
-    ///     .set_verbatim(true)
+    ///     .plain_text("😊")
+    ///     .set_emoji(Some(true))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///    "type": "plain_text",
+    ///    "text": "😊",
+    ///    "emoji": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(text).unwrap();
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_emoji(self, emoji: Option<bool>) -> Self {
+        Self { emoji, ..self }
+    }
+
+    /// Set verbatim field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::Text;
+    /// let text = Text::builder()
+    ///     .mrkdwn("hello world")
+    ///     .verbatim(true)
     ///     .build();
     ///
     /// let expected = serde_json::json!({
@@ -207,34 +237,37 @@ impl TextBuilder {
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_verbatim(self, verbatim: bool) -> Self {
-        Self {
-            verbatim: Some(verbatim),
-            ..self
-        }
+    pub fn verbatim(self, verbatim: bool) -> Self {
+        self.set_verbatim(Some(verbatim))
     }
 
-    /// Build a [`Text`] object. This method will panic if either `type` of `text` is not set.
+    /// Set verbatim field.
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::Text;
     /// let text = Text::builder()
-    ///     .plain_text()
-    ///     .set_text("hello world")
+    ///     .mrkdwn("hello world")
+    ///     .set_verbatim(Some(true))
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "plain_text",
-    ///     "text": "hello world",
+    ///    "type": "mrkdwn",
+    ///    "text": "hello world",
+    ///    "verbatim": true
     /// });
     ///
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
     /// ```
+    pub fn set_verbatim(self, verbatim: Option<bool>) -> Self {
+        Self { verbatim, ..self }
+    }
+
+    /// Build a [`Text`] object. This method will panic if either `type` of `text` is not set.
     pub fn build(self) -> Text {
         Text {
-            kind: self.kind.expect("text type must be set"),
-            text: self.text.expect("text must be set"),
+            kind: self.kind.expect("text type must be set to TextBuilder"),
+            text: self.text.expect("text must be set to TextBuilder"),
             emoji: self.emoji,
             verbatim: self.verbatim,
         }
@@ -247,13 +280,13 @@ mod tests {
 
     #[test]
     fn it_equals_with_same_type_and_text() {
-        let plain_0 = Text::builder().plain_text().set_text("Hello").build();
-        let plain_1 = Text::builder().plain_text().set_text("Hello").build();
-        let plain_2 = Text::builder().plain_text().set_text("hello").build();
+        let plain_0 = Text::builder().plain_text("Hello").build();
+        let plain_1 = Text::builder().plain_text("Hello").build();
+        let plain_2 = Text::builder().plain_text("hello").build();
 
-        let mrkdwn_0 = Text::builder().mrkdwn().set_text("Hello").build();
-        let mrkdwn_1 = Text::builder().mrkdwn().set_text("Hello").build();
-        let mrkdwn_2 = Text::builder().mrkdwn().set_text("hello").build();
+        let mrkdwn_0 = Text::builder().mrkdwn("Hello").build();
+        let mrkdwn_1 = Text::builder().mrkdwn("Hello").build();
+        let mrkdwn_2 = Text::builder().mrkdwn("hello").build();
 
         assert_eq!(plain_0, plain_1);
         assert_eq!(mrkdwn_0, mrkdwn_1);
@@ -269,50 +302,26 @@ mod tests {
 
     #[test]
     fn it_compares_emoji_field_when_plain_text() {
-        let plain_0 = Text::builder()
-            .plain_text()
-            .set_text("Hello")
-            .set_emoji(false)
-            .build();
-        let plain_1 = Text::builder().plain_text().set_text("Hello").build();
+        let plain_0 = Text::builder().plain_text("Hello").emoji(false).build();
+        let plain_1 = Text::builder().plain_text("Hello").build();
 
         assert_ne!(plain_0, plain_1);
 
-        let plain_0 = Text::builder()
-            .plain_text()
-            .set_text("Hello")
-            .set_emoji(false)
-            .build();
-        let plain_1 = Text::builder()
-            .plain_text()
-            .set_text("Hello")
-            .set_emoji(false)
-            .build();
+        let plain_0 = Text::builder().plain_text("Hello").emoji(false).build();
+        let plain_1 = Text::builder().plain_text("Hello").emoji(false).build();
 
         assert_eq!(plain_0, plain_1);
     }
 
     #[test]
     fn it_compares_verbatim_field_when_mrkdwn() {
-        let mrkdwn_0 = Text::builder()
-            .mrkdwn()
-            .set_text("Hello")
-            .set_verbatim(true)
-            .build();
-        let mrkdwn_1 = Text::builder().mrkdwn().set_text("Hello").build();
+        let mrkdwn_0 = Text::builder().mrkdwn("Hello").verbatim(true).build();
+        let mrkdwn_1 = Text::builder().mrkdwn("Hello").build();
 
         assert_ne!(mrkdwn_0, mrkdwn_1);
 
-        let mrkdwn_0 = Text::builder()
-            .mrkdwn()
-            .set_text("Hello")
-            .set_verbatim(true)
-            .build();
-        let mrkdwn_1 = Text::builder()
-            .mrkdwn()
-            .set_text("Hello")
-            .set_verbatim(true)
-            .build();
+        let mrkdwn_0 = Text::builder().mrkdwn("Hello").verbatim(true).build();
+        let mrkdwn_1 = Text::builder().mrkdwn("Hello").verbatim(true).build();
 
         assert_eq!(mrkdwn_0, mrkdwn_1);
     }
