@@ -136,8 +136,12 @@ impl InputParameterBuilder {
     /// not set.
     pub fn build(self) -> InputParameter {
         InputParameter {
-            name: self.name.expect("name must be set to InputParameterBuilder"),
-            value: self.value.expect("value must be set to InputParameterBuilder"),
+            name: self
+                .name
+                .expect("name must be set to InputParameterBuilder"),
+            value: self
+                .value
+                .expect("value must be set to InputParameterBuilder"),
         }
     }
 }

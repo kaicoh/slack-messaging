@@ -90,7 +90,7 @@ impl WorkflowBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn set_trigger(self, trigger: Option<Trigger>) -> Self {
-        Self { trigger, ..self }
+        Self { trigger }
     }
 
     /// Set trigger field.
@@ -122,7 +122,9 @@ impl WorkflowBuilder {
     /// Build a [`Workflow`] object. This method will panic if `trigger` is not set.
     pub fn build(self) -> Workflow {
         Workflow {
-            trigger: self.trigger.expect("trigger must be set to WorkflowBuilder"),
+            trigger: self
+                .trigger
+                .expect("trigger must be set to WorkflowBuilder"),
         }
     }
 }

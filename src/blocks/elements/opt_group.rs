@@ -119,9 +119,7 @@ impl OptGroupBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn label(self, label: impl Into<String>) -> Self {
-        let text = Text::builder()
-            .plain_text(label.into())
-            .build();
+        let text = Text::builder().plain_text(label.into()).build();
         self.set_label(Some(text))
     }
 

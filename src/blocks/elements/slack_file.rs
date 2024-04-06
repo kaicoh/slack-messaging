@@ -131,7 +131,7 @@ impl SlackFileBuilder {
 
         SlackFile {
             id: self.id,
-            url: self.url
+            url: self.url,
         }
     }
 }

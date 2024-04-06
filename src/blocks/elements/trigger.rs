@@ -139,7 +139,10 @@ impl TriggerBuilder {
         self,
         customizable_input_parameters: Vec<InputParameter>,
     ) -> Self {
-        Self { customizable_input_parameters, ..self }
+        Self {
+            customizable_input_parameters,
+            ..self
+        }
     }
 
     /// Add input parameter object to customizable_input_parameters field.
@@ -174,9 +177,15 @@ impl TriggerBuilder {
         self,
         customizable_input_parameter: InputParameter,
     ) -> Self {
-        let Self { mut customizable_input_parameters, .. } = self;
+        let Self {
+            mut customizable_input_parameters,
+            ..
+        } = self;
         customizable_input_parameters.push(customizable_input_parameter);
-        Self { customizable_input_parameters, ..self }
+        Self {
+            customizable_input_parameters,
+            ..self
+        }
     }
 
     /// Build a [`Trigger`] object. This method will panic if `url` is not set.

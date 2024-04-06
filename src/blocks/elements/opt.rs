@@ -51,7 +51,7 @@ pub struct OptBuilder {
     text: Option<Text>,
     value: Option<String>,
     description: Option<Text>,
-    url: Option<String>
+    url: Option<String>,
 }
 
 impl OptBuilder {
@@ -105,9 +105,7 @@ impl OptBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn text(self, text: impl Into<String>) -> Self {
-        let text = Text::builder()
-            .plain_text(text.into())
-            .build();
+        let text = Text::builder().plain_text(text.into()).build();
         self.set_text(Some(text))
     }
 
@@ -133,10 +131,7 @@ impl OptBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn set_value(self, value: Option<String>) -> Self {
-        Self {
-            value,
-            ..self
-        }
+        Self { value, ..self }
     }
 
     /// Set value field.
@@ -227,9 +222,7 @@ impl OptBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn description(self, description: impl Into<String>) -> Self {
-        let text = Text::builder()
-            .plain_text(description)
-            .build();
+        let text = Text::builder().plain_text(description).build();
         self.set_description(Some(text))
     }
 
@@ -257,10 +250,7 @@ impl OptBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn set_url(self, url: Option<String>) -> Self {
-        Self {
-            url,
-            ..self
-        }
+        Self { url, ..self }
     }
 
     /// Set url field.
