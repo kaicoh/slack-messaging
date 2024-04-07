@@ -6,34 +6,33 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::elements::SelectUsers;
-/// use serde_json::json;
+/// ```
+/// # use slack_messaging::blocks::elements::SelectUsers;
+/// let menu = SelectUsers::builder()
+///     .action_id("text1234")
+///     .placeholder("Select an item")
+///     .build();
 ///
-/// let menu = SelectUsers::new()
-///     .set_action_id("text1234")
-///     .placeholder("Select an item");
-///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "users_select",
 ///     "action_id": "text1234",
 ///     "placeholder": {
 ///         "type": "plain_text",
-///         "text": "Select an item",
-///         "emoji": true
+///         "text": "Select an item"
 ///     }
 /// });
 ///
-/// let menu_json = serde_json::to_value(menu).unwrap();
+/// let json = serde_json::to_value(menu).unwrap();
 ///
-/// assert_eq!(menu_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct SelectUsers {
     #[serde(rename = "type")]
     kind: &'static str,
 
-    action_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    action_id: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     initial_user: Option<String>,
@@ -48,195 +47,309 @@ pub struct SelectUsers {
     placeholder: Option<Text>,
 }
 
-impl Default for SelectUsers {
-    fn default() -> Self {
-        Self {
-            kind: "users_select",
-            action_id: "".into(),
-            initial_user: None,
-            confirm: None,
-            focus_on_load: None,
-            placeholder: None,
-        }
+impl SelectUsers {
+    /// Construct a [`SelectUsersBuilder`].
+    pub fn builder() -> SelectUsersBuilder {
+        SelectUsersBuilder::default()
     }
 }
 
-impl SelectUsers {
-    /// Constructs a Select menu of users element with empty values.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectUsers;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectUsers::new();
-    ///
-    /// let expected = json!({
-    ///     "type": "users_select",
-    ///     "action_id": ""
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
-    }
+/// Builder for [`SelectUsers`] object.
+#[derive(Debug, Default)]
+pub struct SelectUsersBuilder {
+    action_id: Option<String>,
+    initial_user: Option<String>,
+    confirm: Option<ConfirmationDialog>,
+    focus_on_load: Option<bool>,
+    placeholder: Option<Text>,
+}
 
-    /// Sets action_id field.
+impl SelectUsersBuilder {
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectUsers;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectUsers;
+    /// let menu = SelectUsers::builder()
+    ///     .set_action_id(Some("text1234".into()))
+    ///     .build();
     ///
-    /// let menu = SelectUsers::new().set_action_id("text1234");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "users_select",
     ///     "action_id": "text1234"
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self {
-            action_id: action_id.into(),
-            ..self
-        }
+    pub fn set_action_id(self, action_id: Option<String>) -> Self {
+        Self { action_id, ..self }
     }
 
-    /// Sets initial_user field.
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectUsers;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectUsers;
+    /// let menu = SelectUsers::builder()
+    ///     .action_id("text1234")
+    ///     .build();
     ///
-    /// let menu = SelectUsers::new().set_initial_user("user_000");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "users_select",
-    ///     "action_id": "",
+    ///     "action_id": "text1234"
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn action_id(self, action_id: impl Into<String>) -> Self {
+        self.set_action_id(Some(action_id.into()))
+    }
+
+    /// Set initial_user field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectUsers;
+    /// let menu = SelectUsers::builder()
+    ///     .set_initial_user(Some("user_000".into()))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "users_select",
     ///     "initial_user": "user_000"
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_initial_user<T: Into<String>>(self, initial_user: T) -> Self {
+    pub fn set_initial_user(self, initial_user: Option<String>) -> Self {
         Self {
-            initial_user: Some(initial_user.into()),
+            initial_user,
             ..self
         }
     }
 
-    /// Sets confirm field with ConfirmationDialog object.
+    /// Set initial_user field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{SelectUsers, ConfirmationDialog};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectUsers;
+    /// let menu = SelectUsers::builder()
+    ///     .initial_user("user_000")
+    ///     .build();
     ///
-    /// let menu = SelectUsers::new()
-    ///     .set_confirm(
-    ///         ConfirmationDialog::new()
-    ///             .set_title("Are you sure?")
-    ///             .set_text("Wouldn't you prefer a good game of _chess_?")
-    ///             .set_confirm("Do it")
-    ///             .set_deny("Stop, I've changed my mind!")
-    ///     );
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "users_select",
-    ///     "action_id": "",
+    ///     "initial_user": "user_000"
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn initial_user(self, initial_user: impl Into<String>) -> Self {
+        self.set_initial_user(Some(initial_user.into()))
+    }
+
+    /// Sets confirm field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::{SelectUsers, ConfirmationDialog};
+    /// let menu = SelectUsers::builder()
+    ///     .set_confirm(
+    ///         Some(ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build())
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "users_select",
     ///     "confirm": {
     ///         "title": {
     ///             "type": "plain_text",
-    ///             "text": "Are you sure?",
-    ///             "emoji": true
+    ///             "text": "Are you sure?"
     ///         },
     ///         "text": {
     ///             "type": "plain_text",
-    ///             "text": "Wouldn't you prefer a good game of _chess_?",
-    ///             "emoji": true
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
     ///         },
     ///         "confirm": {
     ///             "type": "plain_text",
-    ///             "text": "Do it",
-    ///             "emoji": true
+    ///             "text": "Do it"
     ///         },
     ///         "deny": {
     ///             "type": "plain_text",
-    ///             "text": "Stop, I've changed my mind!",
-    ///             "emoji": true
+    ///             "text": "Stop, I've changed my mind!"
     ///         }
     ///     }
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_confirm(self, confirm: ConfirmationDialog) -> Self {
-        Self {
-            confirm: Some(confirm),
-            ..self
-        }
+    pub fn set_confirm(self, confirm: Option<ConfirmationDialog>) -> Self {
+        Self { confirm, ..self }
     }
 
-    /// Sets focus_on_load field.
+    /// Sets confirm field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectUsers;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectUsers::new().set_focus_on_load(true);
-    ///
-    /// let expected = json!({
-    ///     "type": "users_select",
-    ///     "action_id": "",
-    ///     "focus_on_load": true
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
     /// ```
-    pub fn set_focus_on_load(self, focus_on_load: bool) -> Self {
-        Self {
-            focus_on_load: Some(focus_on_load),
-            ..self
-        }
-    }
-
-    /// Sets placeholder field.
+    /// # use slack_messaging::blocks::elements::{SelectUsers, ConfirmationDialog};
+    /// let menu = SelectUsers::builder()
+    ///     .confirm(
+    ///         ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{SelectUsers, Text};
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectUsers::new()
-    ///     .set_placeholder(Text::plain("Select an item"));
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "users_select",
-    ///     "action_id": "",
-    ///     "placeholder": {
-    ///         "type": "plain_text",
-    ///         "text": "Select an item",
-    ///         "emoji": true
+    ///     "confirm": {
+    ///         "title": {
+    ///             "type": "plain_text",
+    ///             "text": "Are you sure?"
+    ///         },
+    ///         "text": {
+    ///             "type": "plain_text",
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
+    ///         },
+    ///         "confirm": {
+    ///             "type": "plain_text",
+    ///             "text": "Do it"
+    ///         },
+    ///         "deny": {
+    ///             "type": "plain_text",
+    ///             "text": "Stop, I've changed my mind!"
+    ///         }
     ///     }
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn confirm(self, confirm: ConfirmationDialog) -> Self {
+        self.set_confirm(Some(confirm))
+    }
+
+    /// Set focus_on_load field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectUsers;
+    /// let menu = SelectUsers::builder()
+    ///     .set_focus_on_load(Some(true))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "users_select",
+    ///     "focus_on_load": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_focus_on_load(self, focus_on_load: Option<bool>) -> Self {
         Self {
-            placeholder: Some(placeholder),
+            focus_on_load,
             ..self
+        }
+    }
+
+    /// Set focus_on_load field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectUsers;
+    /// let menu = SelectUsers::builder()
+    ///     .focus_on_load(true)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "users_select",
+    ///     "focus_on_load": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn focus_on_load(self, focus_on_load: bool) -> Self {
+        self.set_focus_on_load(Some(focus_on_load))
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::plain_text;
+    /// # use slack_messaging::blocks::elements::SelectUsers;
+    /// let menu = SelectUsers::builder()
+    ///     .set_placeholder(Some(plain_text!("Select an item")))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "users_select",
+    ///     "placeholder": {
+    ///         "type": "plain_text",
+    ///         "text": "Select an item"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
+        Self {
+            placeholder,
+            ..self
+        }
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::plain_text;
+    /// # use slack_messaging::blocks::elements::SelectUsers;
+    /// let menu = SelectUsers::builder()
+    ///     .placeholder("Select an item")
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "users_select",
+    ///     "placeholder": {
+    ///         "type": "plain_text",
+    ///         "text": "Select an item"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
+        let text = Text::builder().plain_text(placeholder.into()).build();
+        self.set_placeholder(Some(text))
+    }
+
+    /// Build a [`SelectUsers`] object.
+    pub fn build(self) -> SelectUsers {
+        SelectUsers {
+            kind: "users_select",
+            action_id: self.action_id,
+            initial_user: self.initial_user,
+            confirm: self.confirm,
+            focus_on_load: self.focus_on_load,
+            placeholder: self.placeholder,
         }
     }
 }

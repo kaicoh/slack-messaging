@@ -6,34 +6,33 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::elements::SelectConversations;
-/// use serde_json::json;
+/// ```
+/// # use slack_messaging::blocks::elements::SelectConversations;
+/// let menu = SelectConversations::builder()
+///     .action_id("text1234")
+///     .placeholder("Select an item")
+///     .build();
 ///
-/// let menu = SelectConversations::new()
-///     .set_action_id("text1234")
-///     .placeholder("Select an item");
-///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "conversations_select",
 ///     "action_id": "text1234",
 ///     "placeholder": {
 ///         "type": "plain_text",
-///         "text": "Select an item",
-///         "emoji": true
+///         "text": "Select an item"
 ///     }
 /// });
 ///
-/// let menu_json = serde_json::to_value(menu).unwrap();
+/// let json = serde_json::to_value(menu).unwrap();
 ///
-/// assert_eq!(menu_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct SelectConversations {
     #[serde(rename = "type")]
     kind: &'static str,
 
-    action_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    action_id: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     initial_conversation: Option<String>,
@@ -57,259 +56,310 @@ pub struct SelectConversations {
     placeholder: Option<Text>,
 }
 
-impl Default for SelectConversations {
-    fn default() -> Self {
-        Self {
-            kind: "conversations_select",
-            action_id: "".into(),
-            initial_conversation: None,
-            default_to_current_conversation: None,
-            confirm: None,
-            response_url_enabled: None,
-            filter: None,
-            focus_on_load: None,
-            placeholder: None,
-        }
+impl SelectConversations {
+    /// Construct a [`SelectConversationsBuilder`].
+    pub fn builder() -> SelectConversationsBuilder {
+        SelectConversationsBuilder::default()
     }
 }
 
-impl SelectConversations {
-    /// Constructs a Select menu of conversations element with empty values.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectConversations;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectConversations::new();
-    ///
-    /// let expected = json!({
-    ///     "type": "conversations_select",
-    ///     "action_id": ""
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
-    }
+/// Builder for [`SelectConversations`] object.
+#[derive(Debug, Default)]
+pub struct SelectConversationsBuilder {
+    action_id: Option<String>,
+    initial_conversation: Option<String>,
+    default_to_current_conversation: Option<bool>,
+    confirm: Option<ConfirmationDialog>,
+    response_url_enabled: Option<bool>,
+    filter: Option<Filter>,
+    focus_on_load: Option<bool>,
+    placeholder: Option<Text>,
+}
 
-    /// Sets action_id field.
+impl SelectConversationsBuilder {
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectConversations;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectConversations;
+    /// let menu = SelectConversations::builder()
+    ///     .set_action_id(Some("text1234".into()))
+    ///     .build();
     ///
-    /// let menu = SelectConversations::new().set_action_id("text1234");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "conversations_select",
     ///     "action_id": "text1234"
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self {
-            action_id: action_id.into(),
-            ..self
-        }
+    pub fn set_action_id(self, action_id: Option<String>) -> Self {
+        Self { action_id, ..self }
     }
 
-    /// Sets initial_conversation field.
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectConversations;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectConversations;
+    /// let menu = SelectConversations::builder()
+    ///     .action_id("text1234")
+    ///     .build();
     ///
-    /// let menu = SelectConversations::new()
-    ///     .set_initial_conversation("conversation_000");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "conversations_select",
-    ///     "action_id": "",
+    ///     "action_id": "text1234"
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn action_id(self, action_id: impl Into<String>) -> Self {
+        self.set_action_id(Some(action_id.into()))
+    }
+
+    /// Set initial_conversation field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectConversations;
+    /// let menu = SelectConversations::builder()
+    ///     .set_initial_conversation(Some("conversation_000".into()))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "conversations_select",
     ///     "initial_conversation": "conversation_000"
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_initial_conversation<T: Into<String>>(self, value: T) -> Self {
+    pub fn set_initial_conversation(self, value: Option<String>) -> Self {
         Self {
-            initial_conversation: Some(value.into()),
+            initial_conversation: value,
             ..self
         }
     }
 
-    /// Sets default_to_current_conversation field.
+    /// Set initial_conversation field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectConversations;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectConversations;
+    /// let menu = SelectConversations::builder()
+    ///     .initial_conversation("conversation_000")
+    ///     .build();
     ///
-    /// let menu = SelectConversations::new()
-    ///     .set_default_to_current_conversation(true);
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "conversations_select",
-    ///     "action_id": "",
+    ///     "initial_conversation": "conversation_000"
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn initial_conversation(self, value: impl Into<String>) -> Self {
+        self.set_initial_conversation(Some(value.into()))
+    }
+
+    /// Set default_to_current_conversation field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectConversations;
+    /// let menu = SelectConversations::builder()
+    ///     .set_default_to_current_conversation(Some(true))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "conversations_select",
     ///     "default_to_current_conversation": true
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_default_to_current_conversation(self, current_conversation: bool) -> Self {
+    pub fn set_default_to_current_conversation(self, value: Option<bool>) -> Self {
         Self {
-            default_to_current_conversation: Some(current_conversation),
+            default_to_current_conversation: value,
             ..self
         }
     }
 
-    /// Sets confirm field with ConfirmationDialog object.
+    /// Set default_to_current_conversation field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{SelectConversations, ConfirmationDialog};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectConversations;
+    /// let menu = SelectConversations::builder()
+    ///     .default_to_current_conversation(true)
+    ///     .build();
     ///
-    /// let menu = SelectConversations::new()
-    ///     .set_confirm(
-    ///         ConfirmationDialog::new()
-    ///             .set_title("Are you sure?")
-    ///             .set_text("Wouldn't you prefer a good game of _chess_?")
-    ///             .set_confirm("Do it")
-    ///             .set_deny("Stop, I've changed my mind!")
-    ///     );
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "conversations_select",
-    ///     "action_id": "",
+    ///     "default_to_current_conversation": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn default_to_current_conversation(self, value: bool) -> Self {
+        self.set_default_to_current_conversation(Some(value))
+    }
+
+    /// Set confirm field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::{SelectConversations, ConfirmationDialog};
+    /// let menu = SelectConversations::builder()
+    ///     .set_confirm(
+    ///         Some(ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build())
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "conversations_select",
     ///     "confirm": {
     ///         "title": {
     ///             "type": "plain_text",
-    ///             "text": "Are you sure?",
-    ///             "emoji": true
+    ///             "text": "Are you sure?"
     ///         },
     ///         "text": {
     ///             "type": "plain_text",
-    ///             "text": "Wouldn't you prefer a good game of _chess_?",
-    ///             "emoji": true
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
     ///         },
     ///         "confirm": {
     ///             "type": "plain_text",
-    ///             "text": "Do it",
-    ///             "emoji": true
+    ///             "text": "Do it"
     ///         },
     ///         "deny": {
     ///             "type": "plain_text",
-    ///             "text": "Stop, I've changed my mind!",
-    ///             "emoji": true
+    ///             "text": "Stop, I've changed my mind!"
     ///         }
     ///     }
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_confirm(self, confirm: ConfirmationDialog) -> Self {
+    pub fn set_confirm(self, confirm: Option<ConfirmationDialog>) -> Self {
+        Self { confirm, ..self }
+    }
+
+    /// Set confirm field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::{SelectConversations, ConfirmationDialog};
+    /// let menu = SelectConversations::builder()
+    ///     .confirm(
+    ///         ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build()
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "conversations_select",
+    ///     "confirm": {
+    ///         "title": {
+    ///             "type": "plain_text",
+    ///             "text": "Are you sure?"
+    ///         },
+    ///         "text": {
+    ///             "type": "plain_text",
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
+    ///         },
+    ///         "confirm": {
+    ///             "type": "plain_text",
+    ///             "text": "Do it"
+    ///         },
+    ///         "deny": {
+    ///             "type": "plain_text",
+    ///             "text": "Stop, I've changed my mind!"
+    ///         }
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn confirm(self, confirm: ConfirmationDialog) -> Self {
+        self.set_confirm(Some(confirm))
+    }
+
+    /// Set response_url_enabled field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectConversations;
+    /// let menu = SelectConversations::builder()
+    ///     .set_response_url_enabled(Some(true))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "conversations_select",
+    ///     "response_url_enabled": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_response_url_enabled(self, enabled: Option<bool>) -> Self {
         Self {
-            confirm: Some(confirm),
+            response_url_enabled: enabled,
             ..self
         }
     }
 
-    /// Sets response_url_enabled field.
+    /// Set response_url_enabled field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectConversations;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectConversations;
+    /// let menu = SelectConversations::builder()
+    ///     .response_url_enabled(true)
+    ///     .build();
     ///
-    /// let menu = SelectConversations::new().set_response_url_enabled(true);
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "conversations_select",
-    ///     "action_id": "",
     ///     "response_url_enabled": true
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_response_url_enabled(self, enabled: bool) -> Self {
-        Self {
-            response_url_enabled: Some(enabled),
-            ..self
-        }
+    pub fn response_url_enabled(self, enabled: bool) -> Self {
+        self.set_response_url_enabled(Some(enabled))
     }
 
-    /// Sets true to response_url_enabled field.
+    /// Set filter field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectConversations;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectConversations::new().response_url_enabled();
-    ///
-    /// let expected = json!({
-    ///     "type": "conversations_select",
-    ///     "action_id": "",
-    ///     "response_url_enabled": true
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
     /// ```
-    pub fn response_url_enabled(self) -> Self {
-        self.set_response_url_enabled(true)
-    }
-
-    /// Sets false to response_url_enabled field.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectConversations;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectConversations::new().response_url_disabled();
-    ///
-    /// let expected = json!({
-    ///     "type": "conversations_select",
-    ///     "action_id": "",
-    ///     "response_url_enabled": false
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn response_url_disabled(self) -> Self {
-        self.set_response_url_enabled(false)
-    }
-
-    /// Sets filter field with Filter object.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{SelectConversations, Filter, Conversation};
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectConversations::new()
+    /// # use slack_messaging::blocks::elements::{SelectConversations, Filter, Conversation};
+    /// let menu = SelectConversations::builder()
     ///     .set_filter(
-    ///         Filter::new()
+    ///         Some(Filter::builder()
     ///             .include(Conversation::Public)
     ///             .include(Conversation::Mpim)
-    ///             .exclude_bot_users()
-    ///     );
+    ///             .exclude_bot_users(true)
+    ///             .build())
+    ///     )
+    ///     .build();
     ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "conversations_select",
-    ///     "action_id": "",
     ///     "filter": {
     ///         "include": [
     ///             "public",
@@ -319,69 +369,157 @@ impl SelectConversations {
     ///     }
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_filter(self, filter: Filter) -> Self {
-        Self {
-            filter: Some(filter),
-            ..self
-        }
+    pub fn set_filter(self, filter: Option<Filter>) -> Self {
+        Self { filter, ..self }
     }
 
-    /// Sets focus_on_load field.
+    /// Set filter field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectConversations;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectConversations::new().set_focus_on_load(true);
-    ///
-    /// let expected = json!({
-    ///     "type": "conversations_select",
-    ///     "action_id": "",
-    ///     "focus_on_load": true
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
     /// ```
-    pub fn set_focus_on_load(self, focus_on_load: bool) -> Self {
-        Self {
-            focus_on_load: Some(focus_on_load),
-            ..self
-        }
-    }
-
-    /// Sets placeholder field.
+    /// # use slack_messaging::blocks::elements::{SelectConversations, Filter, Conversation};
+    /// let menu = SelectConversations::builder()
+    ///     .filter(
+    ///         Filter::builder()
+    ///             .include(Conversation::Public)
+    ///             .include(Conversation::Mpim)
+    ///             .exclude_bot_users(true)
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{SelectConversations, Text};
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectConversations::new()
-    ///     .set_placeholder(Text::plain("Select an item"));
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "conversations_select",
-    ///     "action_id": "",
-    ///     "placeholder": {
-    ///         "type": "plain_text",
-    ///         "text": "Select an item",
-    ///         "emoji": true
+    ///     "filter": {
+    ///         "include": [
+    ///             "public",
+    ///             "mpim"
+    ///         ],
+    ///         "exclude_bot_users": true
     ///     }
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn filter(self, filter: Filter) -> Self {
+        self.set_filter(Some(filter))
+    }
+
+    /// Set focus_on_load field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectConversations;
+    /// let menu = SelectConversations::builder()
+    ///     .set_focus_on_load(Some(true))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "conversations_select",
+    ///     "focus_on_load": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_focus_on_load(self, focus_on_load: Option<bool>) -> Self {
         Self {
-            placeholder: Some(placeholder),
+            focus_on_load,
             ..self
+        }
+    }
+
+    /// Set focus_on_load field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectConversations;
+    /// let menu = SelectConversations::builder()
+    ///     .set_focus_on_load(Some(true))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "conversations_select",
+    ///     "focus_on_load": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn focus_on_load(self, focus_on_load: bool) -> Self {
+        self.set_focus_on_load(Some(focus_on_load))
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::plain_text;
+    /// # use slack_messaging::blocks::elements::SelectConversations;
+    /// let menu = SelectConversations::builder()
+    ///     .set_placeholder(Some(plain_text!("Select an item")))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "conversations_select",
+    ///     "placeholder": {
+    ///         "type": "plain_text",
+    ///         "text": "Select an item"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
+        Self {
+            placeholder,
+            ..self
+        }
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectConversations;
+    /// let menu = SelectConversations::builder()
+    ///     .placeholder("Select an item")
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "conversations_select",
+    ///     "placeholder": {
+    ///         "type": "plain_text",
+    ///         "text": "Select an item"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
+        let text = Text::builder().plain_text(placeholder.into()).build();
+        self.set_placeholder(Some(text))
+    }
+
+    /// Build a [`SelectConversations`] object.
+    pub fn build(self) -> SelectConversations {
+        SelectConversations {
+            kind: "conversations_select",
+            action_id: self.action_id,
+            initial_conversation: self.initial_conversation,
+            default_to_current_conversation: self.default_to_current_conversation,
+            confirm: self.confirm,
+            response_url_enabled: self.response_url_enabled,
+            filter: self.filter,
+            focus_on_load: self.focus_on_load,
+            placeholder: self.placeholder,
         }
     }
 }

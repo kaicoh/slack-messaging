@@ -64,7 +64,7 @@ impl Button {
 /// Builder for [`Button`] object.
 #[derive(Debug, Default)]
 pub struct ButtonBuilder {
-    text: Option<String>,
+    text: Option<Text>,
     action_id: Option<String>,
     url: Option<String>,
     value: Option<String>,
@@ -95,15 +95,17 @@ impl ButtonBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn text(self, text: impl Into<String>) -> Self {
-        self.set_text(Some(text.into()))
+        let text = Text::builder().plain_text(text.into()).build();
+        self.set_text(Some(text))
     }
 
     /// Set text field.
     ///
     /// ```
+    /// # use slack_messaging::plain_text;
     /// # use slack_messaging::blocks::elements::Button;
     /// let button = Button::builder()
-    ///     .set_text(Some("Click Me".into()))
+    ///     .set_text(Some(plain_text!("Click Me")))
     ///     .build();
     ///
     /// let expected = serde_json::json!({
@@ -118,7 +120,7 @@ impl ButtonBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_text(self, text: Option<String>) -> Self {
+    pub fn set_text(self, text: Option<Text>) -> Self {
         Self { text, ..self }
     }
 
@@ -495,9 +497,7 @@ impl ButtonBuilder {
     pub fn build(self) -> Button {
         Button {
             kind: "button",
-            text: Text::builder()
-                .plain_text(self.text.expect("text must be set to ButtonBuilder"))
-                .build(),
+            text: self.text.expect("text must be set to ButtonBuilder"),
             action_id: self.action_id,
             url: self.url,
             value: self.value,

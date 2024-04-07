@@ -6,36 +6,35 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::elements::SelectExternals;
-/// use serde_json::json;
+/// ```
+/// # use slack_messaging::blocks::elements::SelectExternals;
+/// let menu = SelectExternals::builder()
+///     .action_id("text1234")
+///     .min_query_length(3)
+///     .placeholder("Select an item")
+///     .build();
 ///
-/// let menu = SelectExternals::new()
-///     .set_action_id("text1234")
-///     .set_min_query_length(3)
-///     .placeholder("Select an item");
-///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "external_select",
 ///     "action_id": "text1234",
 ///     "min_query_length": 3,
 ///     "placeholder": {
 ///         "type": "plain_text",
-///         "text": "Select an item",
-///         "emoji": true
+///         "text": "Select an item"
 ///     }
 /// });
 ///
-/// let menu_json = serde_json::to_value(menu).unwrap();
+/// let json = serde_json::to_value(menu).unwrap();
 ///
-/// assert_eq!(menu_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct SelectExternals {
     #[serde(rename = "type")]
     kind: &'static str,
 
-    action_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    action_id: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     min_query_length: Option<i64>,
@@ -53,231 +52,377 @@ pub struct SelectExternals {
     placeholder: Option<Text>,
 }
 
-impl Default for SelectExternals {
-    fn default() -> Self {
-        Self {
-            kind: "external_select",
-            action_id: "".into(),
-            min_query_length: None,
-            initial_option: None,
-            confirm: None,
-            focus_on_load: None,
-            placeholder: None,
-        }
+impl SelectExternals {
+    /// Construct a [`SelectExternalsBuilder`].
+    pub fn builder() -> SelectExternalsBuilder {
+        SelectExternalsBuilder::default()
     }
 }
 
-impl SelectExternals {
-    /// Constructs a Select menu of external data source element with empty values.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectExternals;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectExternals::new();
-    ///
-    /// let expected = json!({
-    ///     "type": "external_select",
-    ///     "action_id": ""
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
-    }
+/// Builder for [`SelectExternals`] object.
+#[derive(Debug, Default)]
+pub struct SelectExternalsBuilder {
+    action_id: Option<String>,
+    min_query_length: Option<i64>,
+    initial_option: Option<Opt>,
+    confirm: Option<ConfirmationDialog>,
+    focus_on_load: Option<bool>,
+    placeholder: Option<Text>,
+}
 
-    /// Sets action_id field.
+impl SelectExternalsBuilder {
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectExternals;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectExternals;
+    /// let menu = SelectExternals::builder()
+    ///     .set_action_id(Some("text1234".into()))
+    ///     .build();
     ///
-    /// let menu = SelectExternals::new().set_action_id("text1234");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "external_select",
     ///     "action_id": "text1234"
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self {
-            action_id: action_id.into(),
-            ..self
-        }
+    pub fn set_action_id(self, action_id: Option<String>) -> Self {
+        Self { action_id, ..self }
     }
 
-    /// Sets initial_option field.
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{SelectExternals, Opt};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectExternals;
+    /// let menu = SelectExternals::builder()
+    ///     .action_id("text1234")
+    ///     .build();
     ///
-    /// let menu = SelectExternals::new()
-    ///     .set_initial_option(
-    ///         Opt::plain("option-0").set_value("value-0")
-    ///     );
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "external_select",
-    ///     "action_id": "",
+    ///     "action_id": "text1234"
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn action_id(self, action_id: impl Into<String>) -> Self {
+        self.set_action_id(Some(action_id.into()))
+    }
+
+    /// Set initial_option field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::{SelectExternals, Opt};
+    /// let menu = SelectExternals::builder()
+    ///     .set_initial_option(
+    ///         Some(Opt::builder()
+    ///             .text("option-0")
+    ///             .value("value-0")
+    ///             .build())
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "external_select",
     ///     "initial_option": {
     ///        "text": {
     ///            "type": "plain_text",
-    ///            "text": "option-0",
-    ///            "emoji": true
+    ///            "text": "option-0"
     ///        },
     ///        "value": "value-0"
     ///     }
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_initial_option(self, initial_option: Opt) -> Self {
+    pub fn set_initial_option(self, initial_option: Option<Opt>) -> Self {
         Self {
-            initial_option: Some(initial_option),
+            initial_option,
             ..self
         }
     }
 
-    /// Sets min_query_length field.
+    /// Set initial_option field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{SelectExternals, Opt};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::{SelectExternals, Opt};
+    /// let menu = SelectExternals::builder()
+    ///     .initial_option(
+    ///         Opt::builder()
+    ///             .text("option-0")
+    ///             .value("value-0")
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// let menu = SelectExternals::new().set_min_query_length(3);
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "external_select",
-    ///     "action_id": "",
+    ///     "initial_option": {
+    ///        "text": {
+    ///            "type": "plain_text",
+    ///            "text": "option-0"
+    ///        },
+    ///        "value": "value-0"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn initial_option(self, initial_option: Opt) -> Self {
+        self.set_initial_option(Some(initial_option))
+    }
+
+    /// Set min_query_length field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectExternals;
+    /// let menu = SelectExternals::builder()
+    ///     .set_min_query_length(Some(3))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "external_select",
     ///     "min_query_length": 3
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_min_query_length<T: Into<i64>>(self, length: T) -> Self {
+    pub fn set_min_query_length(self, length: Option<i64>) -> Self {
         Self {
-            min_query_length: Some(length.into()),
+            min_query_length: length,
             ..self
         }
     }
 
-    /// Sets confirm field with ConfirmationDialog object.
+    /// Set min_query_length field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{SelectExternals, ConfirmationDialog};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectExternals;
+    /// let menu = SelectExternals::builder()
+    ///     .min_query_length(3)
+    ///     .build();
     ///
-    /// let menu = SelectExternals::new()
-    ///     .set_confirm(
-    ///         ConfirmationDialog::new()
-    ///             .set_title("Are you sure?")
-    ///             .set_text("Wouldn't you prefer a good game of _chess_?")
-    ///             .set_confirm("Do it")
-    ///             .set_deny("Stop, I've changed my mind!")
-    ///     );
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "external_select",
-    ///     "action_id": "",
+    ///     "min_query_length": 3
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn min_query_length(self, length: impl Into<i64>) -> Self {
+        self.set_min_query_length(Some(length.into()))
+    }
+
+    /// Set confirm field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::{SelectExternals, ConfirmationDialog};
+    /// let menu = SelectExternals::builder()
+    ///     .set_confirm(
+    ///         Some(ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build())
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "external_select",
     ///     "confirm": {
     ///         "title": {
     ///             "type": "plain_text",
-    ///             "text": "Are you sure?",
-    ///             "emoji": true
+    ///             "text": "Are you sure?"
     ///         },
     ///         "text": {
     ///             "type": "plain_text",
-    ///             "text": "Wouldn't you prefer a good game of _chess_?",
-    ///             "emoji": true
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
     ///         },
     ///         "confirm": {
     ///             "type": "plain_text",
-    ///             "text": "Do it",
-    ///             "emoji": true
+    ///             "text": "Do it"
     ///         },
     ///         "deny": {
     ///             "type": "plain_text",
-    ///             "text": "Stop, I've changed my mind!",
-    ///             "emoji": true
+    ///             "text": "Stop, I've changed my mind!"
     ///         }
     ///     }
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_confirm(self, confirm: ConfirmationDialog) -> Self {
-        Self {
-            confirm: Some(confirm),
-            ..self
-        }
+    pub fn set_confirm(self, confirm: Option<ConfirmationDialog>) -> Self {
+        Self { confirm, ..self }
     }
 
-    /// Sets focus_on_load field.
+    /// Set confirm field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectExternals;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectExternals::new().set_focus_on_load(true);
-    ///
-    /// let expected = json!({
-    ///     "type": "external_select",
-    ///     "action_id": "",
-    ///     "focus_on_load": true
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
     /// ```
-    pub fn set_focus_on_load(self, focus_on_load: bool) -> Self {
-        Self {
-            focus_on_load: Some(focus_on_load),
-            ..self
-        }
-    }
-
-    /// Sets placeholder field.
+    /// # use slack_messaging::blocks::elements::{SelectExternals, ConfirmationDialog};
+    /// let menu = SelectExternals::builder()
+    ///     .confirm(
+    ///         ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{SelectExternals, Text};
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectExternals::new()
-    ///     .set_placeholder(Text::plain("Select an item"));
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "external_select",
-    ///     "action_id": "",
-    ///     "placeholder": {
-    ///         "type": "plain_text",
-    ///         "text": "Select an item",
-    ///         "emoji": true
+    ///     "confirm": {
+    ///         "title": {
+    ///             "type": "plain_text",
+    ///             "text": "Are you sure?"
+    ///         },
+    ///         "text": {
+    ///             "type": "plain_text",
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
+    ///         },
+    ///         "confirm": {
+    ///             "type": "plain_text",
+    ///             "text": "Do it"
+    ///         },
+    ///         "deny": {
+    ///             "type": "plain_text",
+    ///             "text": "Stop, I've changed my mind!"
+    ///         }
     ///     }
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn confirm(self, confirm: ConfirmationDialog) -> Self {
+        self.set_confirm(Some(confirm))
+    }
+
+    /// Set focus_on_load field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectExternals;
+    /// let menu = SelectExternals::builder()
+    ///     .set_focus_on_load(Some(true))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "external_select",
+    ///     "focus_on_load": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_focus_on_load(self, focus_on_load: Option<bool>) -> Self {
         Self {
-            placeholder: Some(placeholder),
+            focus_on_load,
             ..self
+        }
+    }
+
+    /// Set focus_on_load field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectExternals;
+    /// let menu = SelectExternals::builder()
+    ///     .focus_on_load(true)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "external_select",
+    ///     "focus_on_load": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn focus_on_load(self, focus_on_load: bool) -> Self {
+        self.set_focus_on_load(Some(focus_on_load))
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::plain_text;
+    /// # use slack_messaging::blocks::elements::SelectExternals;
+    /// let menu = SelectExternals::builder()
+    ///     .set_placeholder(Some(plain_text!("Select an item")))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "external_select",
+    ///     "placeholder": {
+    ///         "type": "plain_text",
+    ///         "text": "Select an item"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
+        Self {
+            placeholder,
+            ..self
+        }
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectExternals;
+    /// let menu = SelectExternals::builder()
+    ///     .placeholder("Select an item")
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "external_select",
+    ///     "placeholder": {
+    ///         "type": "plain_text",
+    ///         "text": "Select an item"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
+        let text = Text::builder().plain_text(placeholder.into()).build();
+        self.set_placeholder(Some(text))
+    }
+
+    /// Build a [`SelectExternals`] object.
+    pub fn build(self) -> SelectExternals {
+        SelectExternals {
+            kind: "external_select",
+            action_id: self.action_id,
+            min_query_length: self.min_query_length,
+            initial_option: self.initial_option,
+            confirm: self.confirm,
+            focus_on_load: self.focus_on_load,
+            placeholder: self.placeholder,
         }
     }
 }

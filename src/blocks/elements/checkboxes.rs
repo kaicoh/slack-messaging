@@ -1,56 +1,56 @@
 use super::{ConfirmationDialog, Opt};
 use serde::Serialize;
 
-/// [Radio buton group element](https://api.slack.com/reference/block-kit/block-elements#radio)
+/// [Checkboxes](https://api.slack.com/reference/block-kit/block-elements#checkboxes)
 /// representation.
 ///
 /// # Example
 ///
 /// ```
-/// # use slack_messaging::blocks::elements::{RadioButtonGroup, Opt};
-/// let radio = RadioButtonGroup::builder()
-///     .action_id("radio_button_group")
+/// # use slack_messaging::blocks::elements::{Checkboxes, Opt};
+/// let checkboxes = Checkboxes::builder()
+///     .action_id("group-0")
 ///     .option(
 ///         Opt::builder()
-///             .text("Radio 1")
-///             .value("A1")
+///             .text("option-0")
+///             .value("value-0")
 ///             .build()
 ///     )
 ///     .option(
 ///         Opt::builder()
-///             .text("Radio 2")
-///             .value("A2")
+///             .text("option-1")
+///             .value("value-1")
 ///             .build()
 ///     )
 ///     .build();
 ///
 /// let expected = serde_json::json!({
-///     "type": "radio_buttons",
-///     "action_id": "radio_button_group",
+///     "type": "checkboxes",
+///     "action_id": "group-0",
 ///     "options": [
 ///         {
-///             "value": "A1",
+///             "value": "value-0",
 ///             "text": {
 ///                 "type": "plain_text",
-///                 "text": "Radio 1"
+///                 "text": "option-0"
 ///             }
 ///         },
 ///         {
-///             "value": "A2",
+///             "value": "value-1",
 ///             "text": {
 ///                 "type": "plain_text",
-///                 "text": "Radio 2"
+///                 "text": "option-1"
 ///             }
 ///         }
 ///     ]
 /// });
 ///
-/// let json = serde_json::to_value(radio).unwrap();
+/// let json = serde_json::to_value(checkboxes).unwrap();
 ///
 /// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
-pub struct RadioButtonGroup {
+pub struct Checkboxes {
     #[serde(rename = "type")]
     kind: &'static str,
 
@@ -59,8 +59,8 @@ pub struct RadioButtonGroup {
 
     options: Vec<Opt>,
 
-    #[serde(skip_serializing_if = "Option::is_none")]
-    initial_option: Option<Opt>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    initial_options: Vec<Opt>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     confirm: Option<ConfirmationDialog>,
@@ -69,39 +69,39 @@ pub struct RadioButtonGroup {
     focus_on_load: Option<bool>,
 }
 
-impl RadioButtonGroup {
-    /// Construct a [`RadioButtonGroupBuilder`].
-    pub fn builder() -> RadioButtonGroupBuilder {
-        RadioButtonGroupBuilder::default()
+impl Checkboxes {
+    /// Construct a [`CheckboxesBuilder`].
+    pub fn builder() -> CheckboxesBuilder {
+        CheckboxesBuilder::default()
     }
 }
 
-/// Builder for [`RadioButtonGroup`] object.
+/// Builder for [`Checkboxes`] object.
 #[derive(Debug, Default)]
-pub struct RadioButtonGroupBuilder {
+pub struct CheckboxesBuilder {
     action_id: Option<String>,
     options: Vec<Opt>,
-    initial_option: Option<Opt>,
+    initial_options: Vec<Opt>,
     confirm: Option<ConfirmationDialog>,
     focus_on_load: Option<bool>,
 }
 
-impl RadioButtonGroupBuilder {
+impl CheckboxesBuilder {
     /// Set action_id field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::RadioButtonGroup;
-    /// let radio = RadioButtonGroup::builder()
-    ///     .set_action_id(Some("radio_button_group".into()))
+    /// # use slack_messaging::blocks::elements::Checkboxes;
+    /// let checkboxes = Checkboxes::builder()
+    ///     .set_action_id(Some("group-0".into()))
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "radio_buttons",
-    ///     "action_id": "radio_button_group",
+    ///     "type": "checkboxes",
+    ///     "action_id": "group-0",
     ///     "options": []
     /// });
     ///
-    /// let json = serde_json::to_value(radio).unwrap();
+    /// let json = serde_json::to_value(checkboxes).unwrap();
     ///
     /// assert_eq!(json, expected);
     /// ```
@@ -112,18 +112,18 @@ impl RadioButtonGroupBuilder {
     /// Set action_id field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::RadioButtonGroup;
-    /// let radio = RadioButtonGroup::builder()
-    ///     .action_id("radio_button_group")
+    /// # use slack_messaging::blocks::elements::Checkboxes;
+    /// let checkboxes = Checkboxes::builder()
+    ///     .action_id("group-0")
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "radio_buttons",
-    ///     "action_id": "radio_button_group",
+    ///     "type": "checkboxes",
+    ///     "action_id": "group-0",
     ///     "options": []
     /// });
     ///
-    /// let json = serde_json::to_value(radio).unwrap();
+    /// let json = serde_json::to_value(checkboxes).unwrap();
     ///
     /// assert_eq!(json, expected);
     /// ```
@@ -134,45 +134,45 @@ impl RadioButtonGroupBuilder {
     /// Set options field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{RadioButtonGroup, Opt};
-    /// let radio = RadioButtonGroup::builder()
+    /// # use slack_messaging::blocks::elements::{Checkboxes, Opt};
+    /// let checkboxes = Checkboxes::builder()
     ///     .set_options(
     ///         vec![
     ///             Opt::builder()
-    ///                 .text("Radio 1")
-    ///                 .value("A1")
+    ///                 .text("option-0")
+    ///                 .value("value-0")
     ///                 .build(),
     ///             Opt::builder()
-    ///                 .text("Radio 2")
-    ///                 .value("A2")
+    ///                 .text("option-1")
+    ///                 .value("value-1")
     ///                 .build(),
     ///         ]
     ///     )
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "radio_buttons",
+    ///     "type": "checkboxes",
     ///     "options": [
     ///         {
-    ///             "value": "A1",
+    ///             "value": "value-0",
     ///             "text": {
     ///                 "type": "plain_text",
-    ///                 "text": "Radio 1"
+    ///                 "text": "option-0"
     ///             }
     ///         },
     ///         {
-    ///             "value": "A2",
+    ///             "value": "value-1",
     ///             "text": {
     ///                 "type": "plain_text",
-    ///                 "text": "Radio 2"
+    ///                 "text": "option-1"
     ///             }
     ///         }
     ///     ]
     /// });
     ///
-    /// let radio_json = serde_json::to_value(radio).unwrap();
+    /// let json = serde_json::to_value(checkboxes).unwrap();
     ///
-    /// assert_eq!(radio_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
     pub fn set_options(self, options: Vec<Opt>) -> Self {
         Self { options, ..self }
@@ -181,30 +181,30 @@ impl RadioButtonGroupBuilder {
     /// Add Opt object to options field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{RadioButtonGroup, Opt};
-    /// let radio = RadioButtonGroup::builder()
+    /// # use slack_messaging::blocks::elements::{Checkboxes, Opt};
+    /// let checkboxes = Checkboxes::builder()
     ///     .option(
     ///         Opt::builder()
-    ///             .text("Radio 1")
-    ///             .value("A1")
-    ///             .build(),
+    ///             .text("option-0")
+    ///             .value("value-0")
+    ///             .build()
     ///     )
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "radio_buttons",
+    ///     "type": "checkboxes",
     ///     "options": [
     ///         {
-    ///             "value": "A1",
+    ///             "value": "value-0",
     ///             "text": {
     ///                 "type": "plain_text",
-    ///                 "text": "Radio 1"
+    ///                 "text": "option-0"
     ///             }
     ///         }
     ///     ]
     /// });
     ///
-    /// let json = serde_json::to_value(radio).unwrap();
+    /// let json = serde_json::to_value(checkboxes).unwrap();
     ///
     /// assert_eq!(json, expected);
     /// ```
@@ -214,80 +214,94 @@ impl RadioButtonGroupBuilder {
         Self { options, ..self }
     }
 
-    /// Set initial_option field.
+    /// Set initial_options field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{RadioButtonGroup, Opt};
-    /// let radio = RadioButtonGroup::builder()
-    ///     .set_initial_option(
-    ///         Some(Opt::builder()
-    ///             .text("Radio 1")
-    ///             .value("A1")
-    ///             .build()),
+    /// # use slack_messaging::blocks::elements::{Checkboxes, Opt};
+    /// let checkboxes = Checkboxes::builder()
+    ///     .set_initial_options(
+    ///         vec![
+    ///             Opt::builder()
+    ///                 .text("option-0")
+    ///                 .value("value-0")
+    ///                 .build(),
+    ///         ]
     ///     )
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "radio_buttons",
+    ///     "type": "checkboxes",
     ///     "options": [],
-    ///     "initial_option": {
-    ///        "value": "A1",
-    ///        "text": {
-    ///            "type": "plain_text",
-    ///            "text": "Radio 1"
-    ///        }
-    ///     }
+    ///     "initial_options": [
+    ///         {
+    ///             "value": "value-0",
+    ///             "text": {
+    ///                 "type": "plain_text",
+    ///                 "text": "option-0"
+    ///             }
+    ///         }
+    ///     ]
     /// });
     ///
-    /// let json = serde_json::to_value(radio).unwrap();
+    /// let json = serde_json::to_value(checkboxes).unwrap();
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_initial_option(self, initial_option: Option<Opt>) -> Self {
+    pub fn set_initial_options(self, initial_options: Vec<Opt>) -> Self {
         Self {
-            initial_option,
+            initial_options,
             ..self
         }
     }
 
-    /// Set initial_option field.
+    /// Add Opt object to initial_options field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{RadioButtonGroup, Opt};
-    /// let radio = RadioButtonGroup::builder()
+    /// # use slack_messaging::blocks::elements::{Checkboxes, Opt};
+    /// let checkboxes = Checkboxes::builder()
     ///     .initial_option(
     ///         Opt::builder()
-    ///             .text("Radio 1")
-    ///             .value("A1")
+    ///             .text("option-0")
+    ///             .value("value-0")
     ///             .build(),
     ///     )
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "radio_buttons",
+    ///     "type": "checkboxes",
     ///     "options": [],
-    ///     "initial_option": {
-    ///        "value": "A1",
-    ///        "text": {
-    ///            "type": "plain_text",
-    ///            "text": "Radio 1"
-    ///        }
-    ///     }
+    ///     "initial_options": [
+    ///         {
+    ///             "value": "value-0",
+    ///             "text": {
+    ///                 "type": "plain_text",
+    ///                 "text": "option-0"
+    ///             }
+    ///         }
+    ///     ]
     /// });
     ///
-    /// let json = serde_json::to_value(radio).unwrap();
+    /// let json = serde_json::to_value(checkboxes).unwrap();
     ///
     /// assert_eq!(json, expected);
     /// ```
     pub fn initial_option(self, initial_option: Opt) -> Self {
-        self.set_initial_option(Some(initial_option))
+        let Self {
+            mut initial_options,
+            ..
+        } = self;
+        initial_options.push(initial_option);
+        Self {
+            initial_options,
+            ..self
+        }
     }
 
     /// Set confirm field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{RadioButtonGroup, ConfirmationDialog};
-    /// let radio = RadioButtonGroup::builder()
+    /// # use slack_messaging::blocks::elements::{Checkboxes, ConfirmationDialog};
+    /// let checkboxes = Checkboxes::builder()
     ///     .set_confirm(
     ///         Some(ConfirmationDialog::builder()
     ///             .title("Are you sure?")
@@ -299,7 +313,7 @@ impl RadioButtonGroupBuilder {
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "radio_buttons",
+    ///     "type": "checkboxes",
     ///     "options": [],
     ///     "confirm": {
     ///         "title": {
@@ -321,7 +335,7 @@ impl RadioButtonGroupBuilder {
     ///     }
     /// });
     ///
-    /// let json = serde_json::to_value(radio).unwrap();
+    /// let json = serde_json::to_value(checkboxes).unwrap();
     ///
     /// assert_eq!(json, expected);
     /// ```
@@ -332,8 +346,8 @@ impl RadioButtonGroupBuilder {
     /// Set confirm field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{RadioButtonGroup, ConfirmationDialog};
-    /// let radio = RadioButtonGroup::builder()
+    /// # use slack_messaging::blocks::elements::{Checkboxes, ConfirmationDialog};
+    /// let checkboxes = Checkboxes::builder()
     ///     .confirm(
     ///         ConfirmationDialog::builder()
     ///             .title("Are you sure?")
@@ -345,7 +359,7 @@ impl RadioButtonGroupBuilder {
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "radio_buttons",
+    ///     "type": "checkboxes",
     ///     "options": [],
     ///     "confirm": {
     ///         "title": {
@@ -367,7 +381,7 @@ impl RadioButtonGroupBuilder {
     ///     }
     /// });
     ///
-    /// let json = serde_json::to_value(radio).unwrap();
+    /// let json = serde_json::to_value(checkboxes).unwrap();
     ///
     /// assert_eq!(json, expected);
     /// ```
@@ -378,18 +392,18 @@ impl RadioButtonGroupBuilder {
     /// Set focus_on_load field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::RadioButtonGroup;
-    /// let radio = RadioButtonGroup::builder()
+    /// # use slack_messaging::blocks::elements::Checkboxes;
+    /// let checkboxes = Checkboxes::builder()
     ///     .set_focus_on_load(Some(true))
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "radio_buttons",
+    ///     "type": "checkboxes",
     ///     "options": [],
     ///     "focus_on_load": true
     /// });
     ///
-    /// let json = serde_json::to_value(radio).unwrap();
+    /// let json = serde_json::to_value(checkboxes).unwrap();
     ///
     /// assert_eq!(json, expected);
     /// ```
@@ -403,18 +417,18 @@ impl RadioButtonGroupBuilder {
     /// Set focus_on_load field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::RadioButtonGroup;
-    /// let radio = RadioButtonGroup::builder()
+    /// # use slack_messaging::blocks::elements::Checkboxes;
+    /// let checkboxes = Checkboxes::builder()
     ///     .focus_on_load(true)
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "radio_buttons",
+    ///     "type": "checkboxes",
     ///     "options": [],
     ///     "focus_on_load": true
     /// });
     ///
-    /// let json = serde_json::to_value(radio).unwrap();
+    /// let json = serde_json::to_value(checkboxes).unwrap();
     ///
     /// assert_eq!(json, expected);
     /// ```
@@ -422,13 +436,13 @@ impl RadioButtonGroupBuilder {
         self.set_focus_on_load(Some(focus_on_load))
     }
 
-    /// Build a [`RadioButtonGroup`] object.
-    pub fn build(self) -> RadioButtonGroup {
-        RadioButtonGroup {
-            kind: "radio_buttons",
+    /// Build a [`Checkboxes`] object.
+    pub fn build(self) -> Checkboxes {
+        Checkboxes {
+            kind: "checkboxes",
             action_id: self.action_id,
             options: self.options,
-            initial_option: self.initial_option,
+            initial_options: self.initial_options,
             confirm: self.confirm,
             focus_on_load: self.focus_on_load,
         }

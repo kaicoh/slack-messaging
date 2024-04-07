@@ -6,23 +6,22 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::elements::NumberInput;
-/// use serde_json::json;
+/// ```
+/// # use slack_messaging::blocks::elements::NumberInput;
+/// let num = NumberInput::builder()
+///     .action_id("input_number")
+///     .is_decimal_allowed(true)
+///     .build();
 ///
-/// let num = NumberInput::new()
-///     .set_action_id("input_number")
-///     .decimal_allowed();
-///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "number_input",
 ///     "action_id": "input_number",
 ///     "is_decimal_allowed": true
 /// });
 ///
-/// let num_json = serde_json::to_value(num).unwrap();
+/// let json = serde_json::to_value(num).unwrap();
 ///
-/// assert_eq!(num_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct NumberInput {
@@ -53,225 +52,276 @@ pub struct NumberInput {
     placeholder: Option<Text>,
 }
 
-impl Default for NumberInput {
-    fn default() -> Self {
-        Self {
-            kind: "number_input",
-            is_decimal_allowed: false,
-            action_id: None,
-            initial_value: None,
-            min_value: None,
-            max_value: None,
-            dispatch_action_config: None,
-            focus_on_load: None,
-            placeholder: None,
-        }
+impl NumberInput {
+    /// Construct a [`NumberInputBuilder`].
+    pub fn builder() -> NumberInputBuilder {
+        NumberInputBuilder::default()
     }
 }
 
-impl NumberInput {
-    /// Constructs a Number input element with empty values.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::NumberInput;
-    /// use serde_json::json;
-    ///
-    /// let num = NumberInput::new();
-    ///
-    /// let expected = json!({
-    ///     "type": "number_input",
-    ///     "is_decimal_allowed": false
-    /// });
-    ///
-    /// let num_json = serde_json::to_value(num).unwrap();
-    ///
-    /// assert_eq!(num_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
-    }
+/// Builder for [`NumberInput`] object.
+#[derive(Debug, Default)]
+pub struct NumberInputBuilder {
+    is_decimal_allowed: Option<bool>,
+    action_id: Option<String>,
+    initial_value: Option<String>,
+    min_value: Option<String>,
+    max_value: Option<String>,
+    dispatch_action_config: Option<DispatchActionConfiguration>,
+    focus_on_load: Option<bool>,
+    placeholder: Option<Text>,
+}
 
-    /// Sets is_decimal_allowed field.
+impl NumberInputBuilder {
+    /// Set is_decimal_allowed field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::NumberInput;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::NumberInput;
+    /// let num = NumberInput::builder()
+    ///     .set_is_decimal_allowed(Some(true))
+    ///     .build();
     ///
-    /// let num = NumberInput::new().set_is_decimal_allowed(true);
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "number_input",
     ///     "is_decimal_allowed": true
     /// });
     ///
-    /// let num_json = serde_json::to_value(num).unwrap();
+    /// let json = serde_json::to_value(num).unwrap();
     ///
-    /// assert_eq!(num_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_is_decimal_allowed(self, is_decimal_allowed: bool) -> Self {
+    pub fn set_is_decimal_allowed(self, is_decimal_allowed: Option<bool>) -> Self {
         Self {
             is_decimal_allowed,
             ..self
         }
     }
 
-    /// Sets true to is_decimal_allowed field.
+    /// Set is_decimal_allowed field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::NumberInput;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::NumberInput;
+    /// let num = NumberInput::builder()
+    ///     .is_decimal_allowed(true)
+    ///     .build();
     ///
-    /// let num = NumberInput::new().decimal_allowed();
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "number_input",
     ///     "is_decimal_allowed": true
     /// });
     ///
-    /// let num_json = serde_json::to_value(num).unwrap();
+    /// let json = serde_json::to_value(num).unwrap();
     ///
-    /// assert_eq!(num_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn decimal_allowed(self) -> Self {
-        self.set_is_decimal_allowed(true)
+    #[allow(clippy::wrong_self_convention)]
+    pub fn is_decimal_allowed(self, is_decimal_allowed: bool) -> Self {
+        self.set_is_decimal_allowed(Some(is_decimal_allowed))
     }
 
-    /// Sets false to is_decimal_allowed field.
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::NumberInput;
-    /// use serde_json::json;
-    ///
-    /// let num = NumberInput::new().decimal_disallowed();
-    ///
-    /// let expected = json!({
-    ///     "type": "number_input",
-    ///     "is_decimal_allowed": false
-    /// });
-    ///
-    /// let num_json = serde_json::to_value(num).unwrap();
-    ///
-    /// assert_eq!(num_json, expected);
     /// ```
-    pub fn decimal_disallowed(self) -> Self {
-        self.set_is_decimal_allowed(false)
-    }
-
-    /// Sets action_id field.
+    /// # use slack_messaging::blocks::elements::NumberInput;
+    /// let num = NumberInput::builder()
+    ///     .set_action_id(Some("input_number".into()))
+    ///     .is_decimal_allowed(false)
+    ///     .build();
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::NumberInput;
-    /// use serde_json::json;
-    ///
-    /// let num = NumberInput::new().set_action_id("input_number");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "number_input",
     ///     "action_id": "input_number",
     ///     "is_decimal_allowed": false
     /// });
     ///
-    /// let num_json = serde_json::to_value(num).unwrap();
+    /// let json = serde_json::to_value(num).unwrap();
     ///
-    /// assert_eq!(num_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_action_id<T: Into<String>>(self, value: T) -> Self {
-        Self {
-            action_id: Some(value.into()),
-            ..self
-        }
+    pub fn set_action_id(self, action_id: Option<String>) -> Self {
+        Self { action_id, ..self }
     }
 
-    /// Sets initial_value field.
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::NumberInput;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::NumberInput;
+    /// let num = NumberInput::builder()
+    ///     .action_id("input_number")
+    ///     .is_decimal_allowed(false)
+    ///     .build();
     ///
-    /// let num = NumberInput::new().set_initial_value("7");
+    /// let expected = serde_json::json!({
+    ///     "type": "number_input",
+    ///     "action_id": "input_number",
+    ///     "is_decimal_allowed": false
+    /// });
     ///
-    /// let expected = json!({
+    /// let json = serde_json::to_value(num).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn action_id(self, action_id: impl Into<String>) -> Self {
+        self.set_action_id(Some(action_id.into()))
+    }
+
+    /// Set initial_value field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::NumberInput;
+    /// let num = NumberInput::builder()
+    ///     .set_initial_value(Some("7".into()))
+    ///     .is_decimal_allowed(false)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
     ///     "type": "number_input",
     ///     "is_decimal_allowed": false,
     ///     "initial_value": "7"
     /// });
     ///
-    /// let num_json = serde_json::to_value(num).unwrap();
+    /// let json = serde_json::to_value(num).unwrap();
     ///
-    /// assert_eq!(num_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_initial_value<T: Into<String>>(self, value: T) -> Self {
+    pub fn set_initial_value(self, initial_value: Option<String>) -> Self {
         Self {
-            initial_value: Some(value.into()),
+            initial_value,
             ..self
         }
     }
 
-    /// Sets min_value field.
+    /// Set initial_value field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::NumberInput;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::NumberInput;
+    /// let num = NumberInput::builder()
+    ///     .initial_value("7")
+    ///     .is_decimal_allowed(false)
+    ///     .build();
     ///
-    /// let num = NumberInput::new().set_min_value("5");
+    /// let expected = serde_json::json!({
+    ///     "type": "number_input",
+    ///     "is_decimal_allowed": false,
+    ///     "initial_value": "7"
+    /// });
     ///
-    /// let expected = json!({
+    /// let json = serde_json::to_value(num).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn initial_value(self, initial_value: impl Into<String>) -> Self {
+        self.set_initial_value(Some(initial_value.into()))
+    }
+
+    /// Set min_value field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::NumberInput;
+    /// let num = NumberInput::builder()
+    ///     .set_min_value(Some("5".into()))
+    ///     .is_decimal_allowed(false)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
     ///     "type": "number_input",
     ///     "is_decimal_allowed": false,
     ///     "min_value": "5"
     /// });
     ///
-    /// let num_json = serde_json::to_value(num).unwrap();
+    /// let json = serde_json::to_value(num).unwrap();
     ///
-    /// assert_eq!(num_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_min_value<T: Into<String>>(self, value: T) -> Self {
-        Self {
-            min_value: Some(value.into()),
-            ..self
-        }
+    pub fn set_min_value(self, min_value: Option<String>) -> Self {
+        Self { min_value, ..self }
     }
 
-    /// Sets max_value field.
+    /// Set min_value field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::NumberInput;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::NumberInput;
+    /// let num = NumberInput::builder()
+    ///     .min_value("5")
+    ///     .is_decimal_allowed(false)
+    ///     .build();
     ///
-    /// let num = NumberInput::new().set_max_value("10");
+    /// let expected = serde_json::json!({
+    ///     "type": "number_input",
+    ///     "is_decimal_allowed": false,
+    ///     "min_value": "5"
+    /// });
     ///
-    /// let expected = json!({
+    /// let json = serde_json::to_value(num).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn min_value(self, min_value: impl Into<String>) -> Self {
+        self.set_min_value(Some(min_value.into()))
+    }
+
+    /// Set max_value field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::NumberInput;
+    /// let num = NumberInput::builder()
+    ///     .set_max_value(Some("10".into()))
+    ///     .is_decimal_allowed(false)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
     ///     "type": "number_input",
     ///     "is_decimal_allowed": false,
     ///     "max_value": "10"
     /// });
     ///
-    /// let num_json = serde_json::to_value(num).unwrap();
+    /// let json = serde_json::to_value(num).unwrap();
     ///
-    /// assert_eq!(num_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_max_value<T: Into<String>>(self, value: T) -> Self {
-        Self {
-            max_value: Some(value.into()),
-            ..self
-        }
+    pub fn set_max_value(self, max_value: Option<String>) -> Self {
+        Self { max_value, ..self }
     }
 
-    /// Sets dispatch_action_config field.
+    /// Set max_value field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{NumberInput, DispatchActionConfiguration,
+    /// ```
+    /// # use slack_messaging::blocks::elements::NumberInput;
+    /// let num = NumberInput::builder()
+    ///     .max_value("10")
+    ///     .is_decimal_allowed(false)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "number_input",
+    ///     "is_decimal_allowed": false,
+    ///     "max_value": "10"
+    /// });
+    ///
+    /// let json = serde_json::to_value(num).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn max_value(self, max_value: impl Into<String>) -> Self {
+        self.set_max_value(Some(max_value.into()))
+    }
+
+    /// Set dispatch_action_config field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::{NumberInput, DispatchActionConfiguration,
     /// TriggerAction};
-    /// use serde_json::json;
-    ///
-    /// let num = NumberInput::new()
+    /// let num = NumberInput::builder()
     ///     .set_dispatch_action_config(
-    ///         DispatchActionConfiguration::new()
-    ///             .push_trigger_action(TriggerAction::OnCharacterEntered)
-    ///             .push_trigger_action(TriggerAction::OnEnterPressed)
-    ///     );
+    ///         Some(DispatchActionConfiguration::builder()
+    ///             .trigger_action(TriggerAction::OnCharacterEntered)
+    ///             .trigger_action(TriggerAction::OnEnterPressed)
+    ///             .build())
+    ///     )
+    ///     .is_decimal_allowed(false)
+    ///     .build();
     ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "number_input",
     ///     "is_decimal_allowed": false,
     ///     "dispatch_action_config": {
@@ -279,68 +329,168 @@ impl NumberInput {
     ///     }
     /// });
     ///
-    /// let num_json = serde_json::to_value(num).unwrap();
+    /// let json = serde_json::to_value(num).unwrap();
     ///
-    /// assert_eq!(num_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_dispatch_action_config(self, config: DispatchActionConfiguration) -> Self {
+    pub fn set_dispatch_action_config(self, config: Option<DispatchActionConfiguration>) -> Self {
         Self {
-            dispatch_action_config: Some(config),
+            dispatch_action_config: config,
             ..self
         }
     }
 
-    /// Sets focus_on_load field.
+    /// Set dispatch_action_config field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::NumberInput;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::{NumberInput, DispatchActionConfiguration,
+    /// TriggerAction};
+    /// let num = NumberInput::builder()
+    ///     .dispatch_action_config(
+    ///         DispatchActionConfiguration::builder()
+    ///             .trigger_action(TriggerAction::OnCharacterEntered)
+    ///             .trigger_action(TriggerAction::OnEnterPressed)
+    ///             .build()
+    ///     )
+    ///     .is_decimal_allowed(false)
+    ///     .build();
     ///
-    /// let num = NumberInput::new().set_focus_on_load(true);
+    /// let expected = serde_json::json!({
+    ///     "type": "number_input",
+    ///     "is_decimal_allowed": false,
+    ///     "dispatch_action_config": {
+    ///         "trigger_actions_on": ["on_character_entered", "on_enter_pressed"]
+    ///     }
+    /// });
     ///
-    /// let expected = json!({
+    /// let json = serde_json::to_value(num).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn dispatch_action_config(self, config: DispatchActionConfiguration) -> Self {
+        self.set_dispatch_action_config(Some(config))
+    }
+
+    /// Set focus_on_load field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::NumberInput;
+    /// let num = NumberInput::builder()
+    ///     .set_focus_on_load(Some(true))
+    ///     .is_decimal_allowed(false)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
     ///     "type": "number_input",
     ///     "is_decimal_allowed": false,
     ///     "focus_on_load": true
     /// });
     ///
-    /// let num_json = serde_json::to_value(num).unwrap();
+    /// let json = serde_json::to_value(num).unwrap();
     ///
-    /// assert_eq!(num_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_focus_on_load(self, focus_on_load: bool) -> Self {
+    pub fn set_focus_on_load(self, focus_on_load: Option<bool>) -> Self {
         Self {
-            focus_on_load: Some(focus_on_load),
+            focus_on_load,
             ..self
         }
     }
 
-    /// Sets placeholder field.
+    /// Set focus_on_load field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{NumberInput, Text};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::NumberInput;
+    /// let num = NumberInput::builder()
+    ///     .focus_on_load(true)
+    ///     .is_decimal_allowed(false)
+    ///     .build();
     ///
-    /// let num = NumberInput::new().set_placeholder(Text::plain("How old are you?"));
+    /// let expected = serde_json::json!({
+    ///     "type": "number_input",
+    ///     "is_decimal_allowed": false,
+    ///     "focus_on_load": true
+    /// });
     ///
-    /// let expected = json!({
+    /// let json = serde_json::to_value(num).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn focus_on_load(self, focus_on_load: bool) -> Self {
+        self.set_focus_on_load(Some(focus_on_load))
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::plain_text;
+    /// # use slack_messaging::blocks::elements::NumberInput;
+    /// let num = NumberInput::builder()
+    ///     .set_placeholder(Some(plain_text!("How old are you?")))
+    ///     .is_decimal_allowed(false)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
     ///     "type": "number_input",
     ///     "is_decimal_allowed": false,
     ///     "placeholder": {
     ///         "type": "plain_text",
-    ///         "text": "How old are you?",
-    ///         "emoji": true
+    ///         "text": "How old are you?"
     ///     }
     /// });
     ///
-    /// let num_json = serde_json::to_value(num).unwrap();
+    /// let json = serde_json::to_value(num).unwrap();
     ///
-    /// assert_eq!(num_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
         Self {
-            placeholder: Some(placeholder),
+            placeholder,
             ..self
+        }
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::NumberInput;
+    /// let num = NumberInput::builder()
+    ///     .placeholder("How old are you?")
+    ///     .is_decimal_allowed(false)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "number_input",
+    ///     "is_decimal_allowed": false,
+    ///     "placeholder": {
+    ///         "type": "plain_text",
+    ///         "text": "How old are you?"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(num).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
+        let text = Text::builder().plain_text(placeholder.into()).build();
+        self.set_placeholder(Some(text))
+    }
+
+    /// Build a [`NumberInput`] object. This method will panic if `is_decimal_allowed` is not set.
+    pub fn build(self) -> NumberInput {
+        NumberInput {
+            kind: "number_input",
+            is_decimal_allowed: self
+                .is_decimal_allowed
+                .expect("is_decimal_allowed must be set to NumberInputBuilder"),
+            action_id: self.action_id,
+            initial_value: self.initial_value,
+            min_value: self.min_value,
+            max_value: self.max_value,
+            dispatch_action_config: self.dispatch_action_config,
+            focus_on_load: self.focus_on_load,
+            placeholder: self.placeholder,
         }
     }
 }

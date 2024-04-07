@@ -3,37 +3,43 @@
 //! This is a library to support building messages for [slack messaging api](https://api.slack.com/messaging/managing).
 //! Using this, you can build any messages in type-safe way like following.
 //!
-//! ```ignore
-//! use slack_messaging::Message;
+//! ```
+//! use slack_messaging::{mrkdwn, Message};
 //! use slack_messaging::blocks::{elements::Button, Actions, Section};
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let message = Message::new()
-//!         .push_block(
-//!             Section::new()
-//!                 .set_text_mrkdwn("You have a new request:\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*")
+//!     let message = Message::builder()
+//!         .block(
+//!             Section::builder()
+//!                 .text(mrkdwn!("You have a new request:\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*"))
+//!                 .build()
 //!         )
-//!         .push_block(
-//!             Section::new()
-//!                 .push_field_mrkdwn("*Type:*\nComputer (laptop)")
-//!                 .push_field_mrkdwn("*When:*\nSubmitted Aut 10")
+//!         .block(
+//!             Section::builder()
+//!                 .field(mrkdwn!("*Type:*\nComputer (laptop)"))
+//!                 .field(mrkdwn!("*When:*\nSubmitted Aug 10"))
+//!                 .build()
 //!         )
-//!         .push_block(
-//!             Actions::new()
-//!                 .push_element(
-//!                     Button::new()
+//!         .block(
+//!             Actions::builder()
+//!                 .element(
+//!                     Button::builder()
 //!                         .text("Approve")
-//!                         .set_value("approve")
-//!                         .set_primary()
+//!                         .value("approve")
+//!                         .primary()
+//!                         .build()
 //!                 )
-//!                 .push_element(
-//!                     Button::new()
+//!                 .element(
+//!                     Button::builder()
 //!                         .text("Deny")
-//!                         .set_value("deny")
-//!                         .set_danger()
+//!                         .value("deny")
+//!                         .danger()
+//!                         .build()
 //!                 )
-//!         );
+//!                 .build()
+//!         )
+//!         .build();
 //!
 //!     let req = reqwest::Client::new()
 //!         .post("https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX")
@@ -77,8 +83,7 @@
 //!                     "type": "button",
 //!                     "text": {
 //!                         "type": "plain_text",
-//!                         "text": "Approve",
-//!                         "emoji": true
+//!                         "text": "Approve"
 //!                     },
 //!                     "value": "approve",
 //!                     "style": "primary"
@@ -87,8 +92,7 @@
 //!                     "type": "button",
 //!                     "text": {
 //!                         "type": "plain_text",
-//!                         "text": "Deny",
-//!                         "emoji": true
+//!                         "text": "Deny"
 //!                     },
 //!                     "value": "deny",
 //!                     "style": "danger"
@@ -105,7 +109,6 @@
 //!
 //! - **fmt** : Enable [fmt] module.
 
-mod attachment;
 /// Objects from that the [Message] and the [Attachment] are composed.
 pub mod blocks;
 /// Format text for slack app. Require `fmt` feature.
@@ -115,5 +118,4 @@ pub mod fmt;
 mod macros;
 mod message;
 
-pub use attachment::Attachment;
-pub use message::{Message, ResponseType};
+pub use message::Message;

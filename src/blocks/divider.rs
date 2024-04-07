@@ -5,20 +5,20 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::Divider;
-/// use serde_json::json;
+/// ```
+/// # use slack_messaging::blocks::Divider;
+/// let divider = Divider::builder()
+///     .block_id("divider_block")
+///     .build();
 ///
-/// let divider = Divider::new().set_block_id("divider_block");
-///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "divider",
 ///     "block_id": "divider_block"
 /// });
 ///
-/// let divider_json = serde_json::to_value(divider).unwrap();
+/// let json = serde_json::to_value(divider).unwrap();
 ///
-/// assert_eq!(divider_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct Divider {
@@ -29,57 +29,67 @@ pub struct Divider {
     block_id: Option<String>,
 }
 
-impl Default for Divider {
-    fn default() -> Self {
-        Self {
-            kind: "divider",
-            block_id: None,
-        }
+impl Divider {
+    /// Construct a [`DividerBuilder`].
+    pub fn builder() -> DividerBuilder {
+        DividerBuilder::default()
     }
 }
 
-impl Divider {
-    /// Constructs a Divider block.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Divider;
-    /// use serde_json::json;
-    ///
-    /// let divider = Divider::new();
-    ///
-    /// let expected = json!({
-    ///     "type": "divider"
-    /// });
-    ///
-    /// let divider_json = serde_json::to_value(divider).unwrap();
-    ///
-    /// assert_eq!(divider_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
-    }
+/// Builder for [`Divider`] object.
+#[derive(Debug, Default)]
+pub struct DividerBuilder {
+    block_id: Option<String>,
+}
 
-    /// Sets block_id field.
+impl DividerBuilder {
+    /// Set block_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Divider;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::Divider;
+    /// let divider = Divider::builder()
+    ///     .set_block_id(Some("divider_block".into()))
+    ///     .build();
     ///
-    /// let divider = Divider::new().set_block_id("divider_block");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "divider",
     ///     "block_id": "divider_block"
     /// });
     ///
-    /// let divider_json = serde_json::to_value(divider).unwrap();
+    /// let json = serde_json::to_value(divider).unwrap();
     ///
-    /// assert_eq!(divider_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_block_id<T: Into<String>>(self, block_id: T) -> Self {
-        Self {
-            block_id: Some(block_id.into()),
-            ..self
+    pub fn set_block_id(self, block_id: Option<String>) -> Self {
+        Self { block_id }
+    }
+
+    /// Set block_id field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Divider;
+    /// let divider = Divider::builder()
+    ///     .block_id("divider_block")
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "divider",
+    ///     "block_id": "divider_block"
+    /// });
+    ///
+    /// let json = serde_json::to_value(divider).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn block_id(self, block_id: impl Into<String>) -> Self {
+        self.set_block_id(Some(block_id.into()))
+    }
+
+    /// Build a [`Divider`] object.
+    pub fn build(self) -> Divider {
+        Divider {
+            kind: "divider",
+            block_id: self.block_id,
         }
     }
 }

@@ -6,58 +6,61 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt};
-/// use serde_json::json;
-///
-/// let menu = MultiSelectStaticOptions::new()
-///     .set_action_id("text1234")
-///     .push_option(
-///         Opt::plain("option-0").set_value("value-0")
+/// ```
+/// # use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt};
+/// let menu = MultiSelectStaticOptions::builder()
+///     .action_id("text1234")
+///     .option(
+///         Opt::builder()
+///             .text("option-0")
+///             .value("value-0")
+///             .build()
 ///     )
-///     .push_option(
-///         Opt::plain("option-1").set_value("value-1")
+///     .option(
+///         Opt::builder()
+///             .text("option-1")
+///             .value("value-1")
+///             .build()
 ///     )
-///     .placeholder("Select items");
+///     .placeholder("Select items")
+///     .build();
 ///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "multi_static_select",
 ///     "action_id": "text1234",
 ///     "options": [
 ///         {
 ///             "text": {
 ///                 "type": "plain_text",
-///                 "text": "option-0",
-///                 "emoji": true
+///                 "text": "option-0"
 ///             },
 ///             "value": "value-0"
 ///         },
 ///         {
 ///             "text": {
 ///                 "type": "plain_text",
-///                 "text": "option-1",
-///                 "emoji": true
+///                 "text": "option-1"
 ///             },
 ///             "value": "value-1"
 ///         }
 ///     ],
 ///     "placeholder": {
 ///         "type": "plain_text",
-///         "text": "Select items",
-///         "emoji": true
+///         "text": "Select items"
 ///     }
 /// });
 ///
-/// let menu_json = serde_json::to_value(menu).unwrap();
+/// let json = serde_json::to_value(menu).unwrap();
 ///
-/// assert_eq!(menu_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct MultiSelectStaticOptions {
     #[serde(rename = "type")]
     kind: &'static str,
 
-    action_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    action_id: Option<String>,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
     options: Vec<Opt>,
@@ -81,110 +84,112 @@ pub struct MultiSelectStaticOptions {
     placeholder: Option<Text>,
 }
 
-impl Default for MultiSelectStaticOptions {
-    fn default() -> Self {
-        Self {
-            kind: "multi_static_select",
-            action_id: "".into(),
-            options: vec![],
-            option_groups: vec![],
-            initial_options: vec![],
-            confirm: None,
-            max_selected_items: None,
-            focus_on_load: None,
-            placeholder: None,
-        }
+impl MultiSelectStaticOptions {
+    /// Construct a [`MultiSelectStaticOptionsBuilder`].
+    pub fn builder() -> MultiSelectStaticOptionsBuilder {
+        MultiSelectStaticOptionsBuilder::default()
     }
 }
 
-impl MultiSelectStaticOptions {
-    /// Constructs a Multi-select menu Static options element with empty values.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt};
-    /// use serde_json::json;
-    ///
-    /// let menu = MultiSelectStaticOptions::new();
-    ///
-    /// let expected = json!({
-    ///     "type": "multi_static_select",
-    ///     "action_id": "",
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
-    }
+/// Builder for [`MultiSelectStaticOptions`] object.
+#[derive(Debug, Default)]
+pub struct MultiSelectStaticOptionsBuilder {
+    action_id: Option<String>,
+    options: Vec<Opt>,
+    option_groups: Vec<OptGroup>,
+    initial_options: Vec<Opt>,
+    confirm: Option<ConfirmationDialog>,
+    max_selected_items: Option<i64>,
+    focus_on_load: Option<bool>,
+    placeholder: Option<Text>,
+}
 
-    /// Sets action_id field.
+impl MultiSelectStaticOptionsBuilder {
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
+    /// let menu = MultiSelectStaticOptions::builder()
+    ///     .set_action_id(Some("text1234".into()))
+    ///     .build();
     ///
-    /// let menu = MultiSelectStaticOptions::new()
-    ///     .set_action_id("text1234");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "multi_static_select",
     ///     "action_id": "text1234",
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self {
-            action_id: action_id.into(),
-            ..self
-        }
+    pub fn set_action_id(self, action_id: Option<String>) -> Self {
+        Self { action_id, ..self }
     }
 
-    /// Sets options field directly and removes option_groups field.
-    /// (Either options or option_groups field exists.)
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
+    /// let menu = MultiSelectStaticOptions::builder()
+    ///     .action_id("text1234")
+    ///     .build();
     ///
-    /// let menu = MultiSelectStaticOptions::new()
+    /// let expected = serde_json::json!({
+    ///     "type": "multi_static_select",
+    ///     "action_id": "text1234",
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn action_id(self, action_id: impl Into<String>) -> Self {
+        self.set_action_id(Some(action_id.into()))
+    }
+
+    /// Set options field and remove option_groups field.
+    /// (Either options or option_groups field should exist.)
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt};
+    /// let menu = MultiSelectStaticOptions::builder()
     ///     .set_options(
     ///         vec![
-    ///             Opt::plain("option-0").set_value("value-0"),
-    ///             Opt::plain("option-1").set_value("value-1")
+    ///             Opt::builder()
+    ///                 .text("option-0")
+    ///                 .value("value-0")
+    ///                 .build(),
+    ///             Opt::builder()
+    ///                 .text("option-1")
+    ///                 .value("value-1")
+    ///                 .build(),
     ///         ]
-    ///     );
+    ///     )
+    ///     .build();
     ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "multi_static_select",
-    ///     "action_id": "",
     ///     "options": [
     ///         {
     ///             "text": {
     ///                 "type": "plain_text",
-    ///                 "text": "option-0",
-    ///                 "emoji": true
+    ///                 "text": "option-0"
     ///             },
     ///             "value": "value-0"
     ///         },
     ///         {
     ///             "text": {
     ///                 "type": "plain_text",
-    ///                 "text": "option-1",
-    ///                 "emoji": true
+    ///                 "text": "option-1"
     ///             },
     ///             "value": "value-1"
     ///         }
     ///     ]
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
     pub fn set_options(self, options: Vec<Opt>) -> Self {
         Self {
@@ -194,38 +199,38 @@ impl MultiSelectStaticOptions {
         }
     }
 
-    /// Adds Opt object to options field and removes option_groups field.
-    /// (Either options or option_groups field exists.)
+    /// Add Opt object to options field and remove option_groups field.
+    /// (Either options or option_groups field should exist.)
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt};
+    /// let menu = MultiSelectStaticOptions::builder()
+    ///     .option(
+    ///         Opt::builder()
+    ///             .text("option-0")
+    ///             .value("value-0")
+    ///             .build(),
+    ///     )
+    ///     .build();
     ///
-    /// let menu = MultiSelectStaticOptions::new()
-    ///     .push_option(
-    ///         Opt::plain("option-0").set_value("value-0"),
-    ///     );
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "multi_static_select",
-    ///     "action_id": "",
     ///     "options": [
     ///         {
     ///             "text": {
     ///                 "type": "plain_text",
-    ///                 "text": "option-0",
-    ///                 "emoji": true
+    ///                 "text": "option-0"
     ///             },
     ///             "value": "value-0"
     ///         }
     ///     ]
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn push_option(self, option: Opt) -> Self {
+    pub fn option(self, option: Opt) -> Self {
         let Self { mut options, .. } = self;
         options.push(option);
         Self {
@@ -235,58 +240,67 @@ impl MultiSelectStaticOptions {
         }
     }
 
-    /// Sets option_groups field directly and removes options field.
-    /// (Either options or option_groups field exists.)
+    /// Set option_groups field and removes options field.
+    /// (Either options or option_groups field should exist.)
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt, OptGroup};
-    /// use serde_json::json;
-    ///
-    /// let group_0 = OptGroup::new()
+    /// ```
+    /// # use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt, OptGroup};
+    /// let group_0 = OptGroup::builder()
     ///     .label("Group Zero")
-    ///     .push_option(
-    ///         Opt::plain("option-00").set_value("value-00")
+    ///     .set_options(
+    ///         vec![
+    ///             Opt::builder()
+    ///                 .text("option-00")
+    ///                 .value("value-00")
+    ///                 .build(),
+    ///             Opt::builder()
+    ///                 .text("option-01")
+    ///                 .value("value-01")
+    ///                 .build(),
+    ///         ]
     ///     )
-    ///     .push_option(
-    ///         Opt::plain("option-01").set_value("value-01")
-    ///     );
+    ///     .build();
     ///
-    /// let group_1 = OptGroup::new()
+    /// let group_1 = OptGroup::builder()
     ///     .label("Group One")
-    ///     .push_option(
-    ///         Opt::plain("option-10").set_value("value-10")
+    ///     .set_options(
+    ///         vec![
+    ///             Opt::builder()
+    ///                 .text("option-10")
+    ///                 .value("value-10")
+    ///                 .build(),
+    ///             Opt::builder()
+    ///                 .text("option-11")
+    ///                 .value("value-11")
+    ///                 .build(),
+    ///         ]
     ///     )
-    ///     .push_option(
-    ///         Opt::plain("option-11").set_value("value-11")
-    ///     );
+    ///     .build();
     ///
-    /// let menu = MultiSelectStaticOptions::new()
-    ///     .set_option_groups(vec![group_0, group_1]);
+    /// let menu = MultiSelectStaticOptions::builder()
+    ///     .set_option_groups(vec![group_0, group_1])
+    ///     .build();
     ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "multi_static_select",
-    ///     "action_id": "",
     ///     "option_groups": [
     ///         {
     ///             "label": {
     ///                 "type": "plain_text",
-    ///                 "text": "Group Zero",
-    ///                 "emoji": true
+    ///                 "text": "Group Zero"
     ///             },
     ///             "options": [
     ///                 {
     ///                     "text": {
     ///                         "type": "plain_text",
-    ///                         "text": "option-00",
-    ///                         "emoji": true
+    ///                         "text": "option-00"
     ///                     },
     ///                     "value": "value-00"
     ///                 },
     ///                 {
     ///                     "text": {
     ///                         "type": "plain_text",
-    ///                         "text": "option-01",
-    ///                         "emoji": true
+    ///                         "text": "option-01"
     ///                     },
     ///                     "value": "value-01"
     ///                 },
@@ -295,23 +309,20 @@ impl MultiSelectStaticOptions {
     ///         {
     ///             "label": {
     ///                 "type": "plain_text",
-    ///                 "text": "Group One",
-    ///                 "emoji": true
+    ///                 "text": "Group One"
     ///             },
     ///             "options": [
     ///                 {
     ///                     "text": {
     ///                         "type": "plain_text",
-    ///                         "text": "option-10",
-    ///                         "emoji": true
+    ///                         "text": "option-10"
     ///                     },
     ///                     "value": "value-10"
     ///                 },
     ///                 {
     ///                     "text": {
     ///                         "type": "plain_text",
-    ///                         "text": "option-11",
-    ///                         "emoji": true
+    ///                         "text": "option-11"
     ///                     },
     ///                     "value": "value-11"
     ///                 },
@@ -320,9 +331,9 @@ impl MultiSelectStaticOptions {
     ///     ]
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
     pub fn set_option_groups(self, option_groups: Vec<OptGroup>) -> Self {
         Self {
@@ -332,49 +343,51 @@ impl MultiSelectStaticOptions {
         }
     }
 
-    /// Adds OptGroup object to option_groups field and removes options field.
-    /// (Either options or option_groups field exists.)
+    /// Add OptGroup object to option_groups field and removes options field.
+    /// (Either options or option_groups field should exist.)
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt, OptGroup};
-    /// use serde_json::json;
-    ///
-    /// let menu = MultiSelectStaticOptions::new()
-    ///     .push_option_group(
-    ///         OptGroup::new()
+    /// ```
+    /// # use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt, OptGroup};
+    /// let menu = MultiSelectStaticOptions::builder()
+    ///     .option_group(
+    ///         OptGroup::builder()
     ///             .label("Group Zero")
-    ///             .push_option(
-    ///                 Opt::plain("option-00").set_value("value-00")
+    ///             .option(
+    ///                 Opt::builder()
+    ///                     .text("option-00")
+    ///                     .value("value-00")
+    ///                     .build()
     ///             )
-    ///             .push_option(
-    ///                 Opt::plain("option-01").set_value("value-01")
+    ///             .option(
+    ///                 Opt::builder()
+    ///                     .text("option-01")
+    ///                     .value("value-01")
+    ///                     .build()
     ///             )
-    ///     );
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "multi_static_select",
-    ///     "action_id": "",
     ///     "option_groups": [
     ///         {
     ///             "label": {
     ///                 "type": "plain_text",
-    ///                 "text": "Group Zero",
-    ///                 "emoji": true
+    ///                 "text": "Group Zero"
     ///             },
     ///             "options": [
     ///                 {
     ///                     "text": {
     ///                         "type": "plain_text",
-    ///                         "text": "option-00",
-    ///                         "emoji": true
+    ///                         "text": "option-00"
     ///                     },
     ///                     "value": "value-00"
     ///                 },
     ///                 {
     ///                     "text": {
     ///                         "type": "plain_text",
-    ///                         "text": "option-01",
-    ///                         "emoji": true
+    ///                         "text": "option-01"
     ///                     },
     ///                     "value": "value-01"
     ///                 },
@@ -383,11 +396,11 @@ impl MultiSelectStaticOptions {
     ///     ]
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn push_option_group(self, option_group: OptGroup) -> Self {
+    pub fn option_group(self, option_group: OptGroup) -> Self {
         let Self {
             mut option_groups, ..
         } = self;
@@ -399,46 +412,48 @@ impl MultiSelectStaticOptions {
         }
     }
 
-    /// Sets initial_options field directly.
+    /// Set initial_options field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt};
-    /// use serde_json::json;
-    ///
-    /// let menu = MultiSelectStaticOptions::new()
+    /// ```
+    /// # use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt};
+    /// let menu = MultiSelectStaticOptions::builder()
     ///     .set_initial_options(
     ///         vec![
-    ///             Opt::plain("option-0").set_value("value-0"),
-    ///             Opt::plain("option-1").set_value("value-1")
+    ///             Opt::builder()
+    ///                 .text("option-0")
+    ///                 .value("value-0")
+    ///                 .build(),
+    ///             Opt::builder()
+    ///                 .text("option-1")
+    ///                 .value("value-1")
+    ///                 .build(),
     ///         ]
-    ///     );
+    ///     )
+    ///     .build();
     ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "multi_static_select",
-    ///     "action_id": "",
     ///     "initial_options": [
     ///         {
     ///             "text": {
     ///                 "type": "plain_text",
-    ///                 "text": "option-0",
-    ///                 "emoji": true
+    ///                 "text": "option-0"
     ///             },
     ///             "value": "value-0"
     ///         },
     ///         {
     ///             "text": {
     ///                 "type": "plain_text",
-    ///                 "text": "option-1",
-    ///                 "emoji": true
+    ///                 "text": "option-1"
     ///             },
     ///             "value": "value-1"
     ///         }
     ///     ]
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
     pub fn set_initial_options(self, initial_options: Vec<Opt>) -> Self {
         Self {
@@ -447,37 +462,37 @@ impl MultiSelectStaticOptions {
         }
     }
 
-    /// Adds Opt object to initial_options field.
+    /// Add Opt object to initial_options field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Opt};
+    /// let menu = MultiSelectStaticOptions::builder()
+    ///     .initial_option(
+    ///         Opt::builder()
+    ///             .text("option-0")
+    ///             .value("value-0")
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// let menu = MultiSelectStaticOptions::new()
-    ///     .push_initial_option(
-    ///         Opt::plain("option-0").set_value("value-0"),
-    ///     );
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "multi_static_select",
-    ///     "action_id": "",
     ///     "initial_options": [
     ///         {
     ///             "text": {
     ///                 "type": "plain_text",
-    ///                 "text": "option-0",
-    ///                 "emoji": true
+    ///                 "text": "option-0"
     ///             },
     ///             "value": "value-0"
     ///         }
     ///     ]
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn push_initial_option(self, initial_option: Opt) -> Self {
+    pub fn initial_option(self, initial_option: Opt) -> Self {
         let Self {
             mut initial_options,
             ..
@@ -489,137 +504,251 @@ impl MultiSelectStaticOptions {
         }
     }
 
-    /// Sets confirm field with ConfirmationDialog.
+    /// Set confirm field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{MultiSelectStaticOptions, ConfirmationDialog};
-    /// use serde_json::json;
-    ///
-    /// let menu = MultiSelectStaticOptions::new()
+    /// ```
+    /// # use slack_messaging::blocks::elements::{MultiSelectStaticOptions, ConfirmationDialog};
+    /// let menu = MultiSelectStaticOptions::builder()
     ///     .set_confirm(
-    ///         ConfirmationDialog::new()
-    ///             .set_title("Are you sure?")
-    ///             .set_text("Wouldn't you prefer a good game of _chess_?")
-    ///             .set_confirm("Do it")
-    ///             .set_deny("Stop, I've changed my mind!")
-    ///     );
+    ///         Some(ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build())
+    ///     )
+    ///     .build();
     ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "multi_static_select",
-    ///     "action_id": "",
     ///     "confirm": {
     ///         "title": {
     ///             "type": "plain_text",
-    ///             "text": "Are you sure?",
-    ///             "emoji": true
+    ///             "text": "Are you sure?"
     ///         },
     ///         "text": {
     ///             "type": "plain_text",
-    ///             "text": "Wouldn't you prefer a good game of _chess_?",
-    ///             "emoji": true
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
     ///         },
     ///         "confirm": {
     ///             "type": "plain_text",
-    ///             "text": "Do it",
-    ///             "emoji": true
+    ///             "text": "Do it"
     ///         },
     ///         "deny": {
     ///             "type": "plain_text",
-    ///             "text": "Stop, I've changed my mind!",
-    ///             "emoji": true
+    ///             "text": "Stop, I've changed my mind!"
     ///         }
     ///     }
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_confirm(self, confirm: ConfirmationDialog) -> Self {
-        Self {
-            confirm: Some(confirm),
-            ..self
-        }
+    pub fn set_confirm(self, confirm: Option<ConfirmationDialog>) -> Self {
+        Self { confirm, ..self }
     }
 
-    /// Sets max_selected_items field.
+    /// Set confirm field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::MultiSelectStaticOptions;
-    /// use serde_json::json;
-    ///
-    /// let menu = MultiSelectStaticOptions::new()
-    ///     .set_max_selected_items(30);
-    ///
-    /// let expected = json!({
-    ///     "type": "multi_static_select",
-    ///     "action_id": "",
-    ///     "max_selected_items": 30
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
     /// ```
-    pub fn set_max_selected_items<T: Into<i64>>(self, items: T) -> Self {
-        Self {
-            max_selected_items: Some(items.into()),
-            ..self
-        }
-    }
-
-    /// Sets focus_on_load field.
+    /// # use slack_messaging::blocks::elements::{MultiSelectStaticOptions, ConfirmationDialog};
+    /// let menu = MultiSelectStaticOptions::builder()
+    ///     .confirm(
+    ///         ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::MultiSelectStaticOptions;
-    /// use serde_json::json;
-    ///
-    /// let menu = MultiSelectStaticOptions::new().set_focus_on_load(true);
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "multi_static_select",
-    ///     "action_id": "",
-    ///     "focus_on_load": true
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn set_focus_on_load(self, focus_on_load: bool) -> Self {
-        Self {
-            focus_on_load: Some(focus_on_load),
-            ..self
-        }
-    }
-
-    /// Sets placeholder field.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{MultiSelectStaticOptions, Text};
-    /// use serde_json::json;
-    ///
-    /// let menu = MultiSelectStaticOptions::new()
-    ///     .set_placeholder(Text::plain("Select items"));
-    ///
-    /// let expected = json!({
-    ///     "type": "multi_static_select",
-    ///     "action_id": "",
-    ///     "placeholder": {
-    ///         "type": "plain_text",
-    ///         "text": "Select items",
-    ///         "emoji": true
+    ///     "confirm": {
+    ///         "title": {
+    ///             "type": "plain_text",
+    ///             "text": "Are you sure?"
+    ///         },
+    ///         "text": {
+    ///             "type": "plain_text",
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
+    ///         },
+    ///         "confirm": {
+    ///             "type": "plain_text",
+    ///             "text": "Do it"
+    ///         },
+    ///         "deny": {
+    ///             "type": "plain_text",
+    ///             "text": "Stop, I've changed my mind!"
+    ///         }
     ///     }
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn confirm(self, confirm: ConfirmationDialog) -> Self {
+        self.set_confirm(Some(confirm))
+    }
+
+    /// Set max_selected_items field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
+    /// let menu = MultiSelectStaticOptions::builder()
+    ///     .set_max_selected_items(Some(30))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "multi_static_select",
+    ///     "max_selected_items": 30
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_max_selected_items(self, items: Option<i64>) -> Self {
         Self {
-            placeholder: Some(placeholder),
+            max_selected_items: items,
             ..self
+        }
+    }
+
+    /// Set max_selected_items field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
+    /// let menu = MultiSelectStaticOptions::builder()
+    ///     .max_selected_items(30)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "multi_static_select",
+    ///     "max_selected_items": 30
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn max_selected_items(self, items: impl Into<i64>) -> Self {
+        self.set_max_selected_items(Some(items.into()))
+    }
+
+    /// Set focus_on_load field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
+    /// let menu = MultiSelectStaticOptions::builder()
+    ///     .set_focus_on_load(Some(true))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "multi_static_select",
+    ///     "focus_on_load": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_focus_on_load(self, focus_on_load: Option<bool>) -> Self {
+        Self {
+            focus_on_load,
+            ..self
+        }
+    }
+
+    /// Set focus_on_load field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
+    /// let menu = MultiSelectStaticOptions::builder()
+    ///     .focus_on_load(true)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "multi_static_select",
+    ///     "focus_on_load": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn focus_on_load(self, focus_on_load: bool) -> Self {
+        self.set_focus_on_load(Some(focus_on_load))
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::plain_text;
+    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
+    /// let menu = MultiSelectStaticOptions::builder()
+    ///     .set_placeholder(Some(plain_text!("Select items")))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "multi_static_select",
+    ///     "placeholder": {
+    ///         "type": "plain_text",
+    ///         "text": "Select items"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
+        Self {
+            placeholder,
+            ..self
+        }
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
+    /// let menu = MultiSelectStaticOptions::builder()
+    ///     .placeholder("Select items")
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "multi_static_select",
+    ///     "placeholder": {
+    ///         "type": "plain_text",
+    ///         "text": "Select items"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
+        let text = Text::builder().plain_text(placeholder.into()).build();
+        self.set_placeholder(Some(text))
+    }
+
+    /// Build a [`MultiSelectStaticOptions`] object.
+    pub fn build(self) -> MultiSelectStaticOptions {
+        MultiSelectStaticOptions {
+            kind: "multi_static_select",
+            action_id: self.action_id,
+            options: self.options,
+            option_groups: self.option_groups,
+            initial_options: self.initial_options,
+            confirm: self.confirm,
+            max_selected_items: self.max_selected_items,
+            focus_on_load: self.focus_on_load,
+            placeholder: self.placeholder,
         }
     }
 }

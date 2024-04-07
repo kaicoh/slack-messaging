@@ -6,34 +6,33 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::elements::EmailInput;
-/// use serde_json::json;
+/// ```
+/// # use slack_messaging::blocks::elements::EmailInput;
+/// let email = EmailInput::builder()
+///     .action_id("input_email")
+///     .placeholder("Enter an email")
+///     .build();
 ///
-/// let email = EmailInput::new()
-///     .set_action_id("input_email")
-///     .placeholder("Enter an email");
-///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "email_text_input",
 ///     "action_id": "input_email",
 ///     "placeholder": {
 ///         "type": "plain_text",
-///         "text": "Enter an email",
-///         "emoji": true
+///         "text": "Enter an email"
 ///     }
 /// });
 ///
-/// let email_json = serde_json::to_value(email).unwrap();
+/// let json = serde_json::to_value(email).unwrap();
 ///
-/// assert_eq!(email_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct EmailInput {
     #[serde(rename = "type")]
     kind: &'static str,
 
-    action_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    action_id: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     initial_value: Option<String>,
@@ -48,106 +47,126 @@ pub struct EmailInput {
     placeholder: Option<Text>,
 }
 
-impl Default for EmailInput {
-    fn default() -> Self {
-        Self {
-            kind: "email_text_input",
-            action_id: "".into(),
-            initial_value: None,
-            dispatch_action_config: None,
-            focus_on_load: None,
-            placeholder: None,
-        }
+impl EmailInput {
+    /// Construct a [`EmailInputBuilder`].
+    pub fn builder() -> EmailInputBuilder {
+        EmailInputBuilder::default()
     }
 }
 
-impl EmailInput {
-    /// Constructs a Email Input element with empty values.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::EmailInput;
-    /// use serde_json::json;
-    ///
-    /// let email = EmailInput::new();
-    ///
-    /// let expected = json!({
-    ///     "type": "email_text_input",
-    ///     "action_id": ""
-    /// });
-    ///
-    /// let email_json = serde_json::to_value(email).unwrap();
-    ///
-    /// assert_eq!(email_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
-    }
+/// Builder for [`EmailInput`] object.
+#[derive(Debug, Default)]
+pub struct EmailInputBuilder {
+    action_id: Option<String>,
+    initial_value: Option<String>,
+    dispatch_action_config: Option<DispatchActionConfiguration>,
+    focus_on_load: Option<bool>,
+    placeholder: Option<Text>,
+}
 
-    /// Sets action_id field.
+impl EmailInputBuilder {
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::EmailInput;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::EmailInput;
+    /// let email = EmailInput::builder()
+    ///     .set_action_id(Some("input_email".into()))
+    ///     .build();
     ///
-    /// let email = EmailInput::new().set_action_id("input_email");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "email_text_input",
     ///     "action_id": "input_email"
     /// });
     ///
-    /// let email_json = serde_json::to_value(email).unwrap();
+    /// let json = serde_json::to_value(email).unwrap();
     ///
-    /// assert_eq!(email_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self {
-            action_id: action_id.into(),
-            ..self
-        }
+    pub fn set_action_id(self, action_id: Option<String>) -> Self {
+        Self { action_id, ..self }
     }
 
-    /// Sets initial_value field.
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::EmailInput;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::EmailInput;
+    /// let email = EmailInput::builder()
+    ///     .action_id("input_email")
+    ///     .build();
     ///
-    /// let email = EmailInput::new().set_initial_value("tanaka@gmail.com");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "email_text_input",
-    ///     "action_id": "",
+    ///     "action_id": "input_email"
+    /// });
+    ///
+    /// let json = serde_json::to_value(email).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn action_id(self, action_id: impl Into<String>) -> Self {
+        self.set_action_id(Some(action_id.into()))
+    }
+
+    /// Set initial_value field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::EmailInput;
+    /// let email = EmailInput::builder()
+    ///     .set_initial_value(Some("tanaka@gmail.com".into()))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "email_text_input",
     ///     "initial_value": "tanaka@gmail.com"
     /// });
     ///
-    /// let email_json = serde_json::to_value(email).unwrap();
+    /// let json = serde_json::to_value(email).unwrap();
     ///
-    /// assert_eq!(email_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_initial_value<T: Into<String>>(self, value: T) -> Self {
+    pub fn set_initial_value(self, initial_value: Option<String>) -> Self {
         Self {
-            initial_value: Some(value.into()),
+            initial_value,
             ..self
         }
     }
 
-    /// Sets dispatch_action_config field with DispatchActionConfiguration.
+    /// Set initial_value field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{EmailInput, DispatchActionConfiguration,
-    /// TriggerAction};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::EmailInput;
+    /// let email = EmailInput::builder()
+    ///     .initial_value("tanaka@gmail.com")
+    ///     .build();
     ///
-    /// let email = EmailInput::new()
-    ///     .set_dispatch_action_config(
-    ///         DispatchActionConfiguration::new()
-    ///             .push_trigger_action(TriggerAction::OnEnterPressed)
-    ///     );
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "email_text_input",
-    ///     "action_id": "",
+    ///     "initial_value": "tanaka@gmail.com"
+    /// });
+    ///
+    /// let json = serde_json::to_value(email).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn initial_value(self, initial_value: impl Into<String>) -> Self {
+        self.set_initial_value(Some(initial_value.into()))
+    }
+
+    /// Set dispatch_action_config field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::{EmailInput, DispatchActionConfiguration,
+    /// TriggerAction};
+    /// let email = EmailInput::builder()
+    ///     .set_dispatch_action_config(
+    ///         Some(DispatchActionConfiguration::builder()
+    ///             .trigger_action(TriggerAction::OnEnterPressed)
+    ///             .build())
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "email_text_input",
     ///     "dispatch_action_config": {
     ///         "trigger_actions_on": [
     ///             "on_enter_pressed"
@@ -155,94 +174,154 @@ impl EmailInput {
     ///     }
     /// });
     ///
-    /// let email_json = serde_json::to_value(email).unwrap();
+    /// let json = serde_json::to_value(email).unwrap();
     ///
-    /// assert_eq!(email_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_dispatch_action_config(self, config: DispatchActionConfiguration) -> Self {
+    pub fn set_dispatch_action_config(self, config: Option<DispatchActionConfiguration>) -> Self {
         Self {
-            dispatch_action_config: Some(config),
+            dispatch_action_config: config,
             ..self
         }
     }
 
-    /// Sets focus_on_load field.
+    /// Set dispatch_action_config field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::EmailInput;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::{EmailInput, DispatchActionConfiguration,
+    /// TriggerAction};
+    /// let email = EmailInput::builder()
+    ///     .dispatch_action_config(
+    ///         DispatchActionConfiguration::builder()
+    ///             .trigger_action(TriggerAction::OnEnterPressed)
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// let email = EmailInput::new().set_focus_on_load(true);
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "email_text_input",
-    ///     "action_id": "",
+    ///     "dispatch_action_config": {
+    ///         "trigger_actions_on": [
+    ///             "on_enter_pressed"
+    ///         ]
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(email).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn dispatch_action_config(self, config: DispatchActionConfiguration) -> Self {
+        self.set_dispatch_action_config(Some(config))
+    }
+
+    /// Set focus_on_load field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::EmailInput;
+    /// let email = EmailInput::builder()
+    ///     .set_focus_on_load(Some(true))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "email_text_input",
     ///     "focus_on_load": true
     /// });
     ///
-    /// let email_json = serde_json::to_value(email).unwrap();
+    /// let json = serde_json::to_value(email).unwrap();
     ///
-    /// assert_eq!(email_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_focus_on_load(self, focus_on_load: bool) -> Self {
+    pub fn set_focus_on_load(self, focus_on_load: Option<bool>) -> Self {
         Self {
-            focus_on_load: Some(focus_on_load),
+            focus_on_load,
             ..self
         }
     }
 
-    /// Sets placeholder field.
+    /// Set focus_on_load field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{EmailInput, Text};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::EmailInput;
+    /// let email = EmailInput::builder()
+    ///     .focus_on_load(true)
+    ///     .build();
     ///
-    /// let email = EmailInput::new().set_placeholder(Text::plain("Enter your email."));
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "email_text_input",
-    ///     "action_id": "",
+    ///     "focus_on_load": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(email).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn focus_on_load(self, focus_on_load: bool) -> Self {
+        self.set_focus_on_load(Some(focus_on_load))
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::plain_text;
+    /// # use slack_messaging::blocks::elements::EmailInput;
+    /// let email = EmailInput::builder()
+    ///     .set_placeholder(Some(plain_text!("Enter your email.")))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "email_text_input",
     ///     "placeholder": {
     ///         "type": "plain_text",
-    ///         "text": "Enter your email.",
-    ///         "emoji": true
+    ///         "text": "Enter your email."
     ///     }
     /// });
     ///
-    /// let email_json = serde_json::to_value(email).unwrap();
+    /// let json = serde_json::to_value(email).unwrap();
     ///
-    /// assert_eq!(email_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
         Self {
-            placeholder: Some(placeholder),
+            placeholder,
             ..self
         }
     }
 
-    /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
+    /// Set placeholder field.
     ///
-    /// ```ignore
+    /// ```
     /// use slack_messaging::blocks::elements::EmailInput;
-    /// use serde_json::json;
+    /// let email = EmailInput::builder()
+    ///     .placeholder("Enter your email.")
+    ///     .build();
     ///
-    /// let email = EmailInput::new().placeholder("Enter your email.");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "email_text_input",
-    ///     "action_id": "",
     ///     "placeholder": {
     ///         "type": "plain_text",
-    ///         "text": "Enter your email.",
-    ///         "emoji": true
+    ///         "text": "Enter your email."
     ///     }
     /// });
     ///
-    /// let email_json = serde_json::to_value(email).unwrap();
+    /// let json = serde_json::to_value(email).unwrap();
     ///
-    /// assert_eq!(email_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn placeholder(self, placeholder: Text) -> Self {
-        self.set_placeholder(placeholder)
+    pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
+        let text = Text::builder().plain_text(placeholder.into()).build();
+        self.set_placeholder(Some(text))
+    }
+
+    /// Build a [`EmailInput`] object.
+    pub fn build(self) -> EmailInput {
+        EmailInput {
+            kind: "email_text_input",
+            action_id: self.action_id,
+            initial_value: self.initial_value,
+            dispatch_action_config: self.dispatch_action_config,
+            focus_on_load: self.focus_on_load,
+            placeholder: self.placeholder,
+        }
     }
 }

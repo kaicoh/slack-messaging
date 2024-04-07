@@ -1,5 +1,4 @@
 use super::elements::Text;
-use crate::plain_text;
 use serde::Serialize;
 
 /// [Header block](https://api.slack.com/reference/block-kit/blocks#header)
@@ -7,27 +6,25 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::Header;
-/// use serde_json::json;
-///
-/// let header = Header::new()
+/// ```
+/// # use slack_messaging::blocks::Header;
+/// let header = Header::builder()
 ///     .text("Budget Performance")
-///     .set_block_id("header_1");
+///     .block_id("header_1")
+///     .build();
 ///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "header",
 ///     "block_id": "header_1",
 ///     "text": {
 ///         "type": "plain_text",
-///         "text": "Budget Performance",
-///         "emoji": true
+///         "text": "Budget Performance"
 ///     }
 /// });
 ///
-/// let header_json = serde_json::to_value(header).unwrap();
+/// let json = serde_json::to_value(header).unwrap();
 ///
-/// assert_eq!(header_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct Header {
@@ -40,96 +37,130 @@ pub struct Header {
     block_id: Option<String>,
 }
 
-impl Default for Header {
-    fn default() -> Self {
-        Self {
-            kind: "header",
-            text: plain_text!(""),
-            block_id: None,
-        }
+impl Header {
+    /// Construct a [`HeaderBuilder`].
+    pub fn builder() -> HeaderBuilder {
+        HeaderBuilder::default()
     }
 }
 
-impl Header {
-    /// Constructs a Header block.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Header;
-    /// use serde_json::json;
-    ///
-    /// let header = Header::new();
-    ///
-    /// let expected = json!({
-    ///     "type": "header",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
-    ///     }
-    /// });
-    ///
-    /// let header_json = serde_json::to_value(header).unwrap();
-    ///
-    /// assert_eq!(header_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
-    }
+/// Builder for [`Header`] object.
+#[derive(Debug, Default)]
+pub struct HeaderBuilder {
+    text: Option<Text>,
+    block_id: Option<String>,
+}
 
-    /// Sets text field.
+impl HeaderBuilder {
+    /// Set text field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Header;
-    /// use slack_messaging::blocks::elements::Text;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::Header;
+    /// # use slack_messaging::blocks::elements::Text;
+    /// let header = Header::builder()
+    ///     .set_text(Some(Text::builder().plain_text("Budget Performance").build()))
+    ///     .build();
     ///
-    /// let header = Header::new()
-    ///     .set_text(Text::plain("Budget Performance"));
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "header",
     ///     "text": {
     ///         "type": "plain_text",
-    ///         "text": "Budget Performance",
-    ///         "emoji": true
+    ///         "text": "Budget Performance"
     ///     }
     /// });
     ///
-    /// let header_json = serde_json::to_value(header).unwrap();
+    /// let json = serde_json::to_value(header).unwrap();
     ///
-    /// assert_eq!(header_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_text(self, text: Text) -> Self {
+    pub fn set_text(self, text: Option<Text>) -> Self {
         Self { text, ..self }
     }
 
-    /// Sets block_id field.
+    /// Set text field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Header;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::Header;
+    /// # use slack_messaging::blocks::elements::Text;
+    /// let header = Header::builder()
+    ///     .text("Budget Performance")
+    ///     .build();
     ///
-    /// let header = Header::new()
-    ///     .set_block_id("header_1");
+    /// let expected = serde_json::json!({
+    ///     "type": "header",
+    ///     "text": {
+    ///         "type": "plain_text",
+    ///         "text": "Budget Performance"
+    ///     }
+    /// });
     ///
-    /// let expected = json!({
+    /// let json = serde_json::to_value(header).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn text(self, text: impl Into<String>) -> Self {
+        let text = Text::builder().plain_text(text).build();
+        self.set_text(Some(text))
+    }
+
+    /// Set block_id field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Header;
+    /// let header = Header::builder()
+    ///     .text("")
+    ///     .set_block_id(Some("header_1".into()))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
     ///     "type": "header",
     ///     "block_id": "header_1",
     ///     "text": {
     ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
+    ///         "text": ""
     ///     }
     /// });
     ///
-    /// let header_json = serde_json::to_value(header).unwrap();
+    /// let json = serde_json::to_value(header).unwrap();
     ///
-    /// assert_eq!(header_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_block_id<T: Into<String>>(self, block_id: T) -> Self {
-        Self {
-            block_id: Some(block_id.into()),
-            ..self
+    pub fn set_block_id(self, block_id: Option<String>) -> Self {
+        Self { block_id, ..self }
+    }
+
+    /// Set block_id field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Header;
+    /// let header = Header::builder()
+    ///     .text("")
+    ///     .block_id("header_1")
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "header",
+    ///     "block_id": "header_1",
+    ///     "text": {
+    ///         "type": "plain_text",
+    ///         "text": ""
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(header).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn block_id(self, block_id: impl Into<String>) -> Self {
+        self.set_block_id(Some(block_id.into()))
+    }
+
+    /// Build a [`Header`] object. This method will panic if text is not set.
+    pub fn build(self) -> Header {
+        Header {
+            kind: "header",
+            block_id: self.block_id,
+            text: self.text.expect("text must be set to HeaderBuilder"),
         }
     }
 }

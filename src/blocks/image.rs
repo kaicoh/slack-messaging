@@ -1,4 +1,4 @@
-use super::elements::Text;
+use super::elements::{SlackFile, Text};
 use serde::Serialize;
 
 /// [Image block](https://api.slack.com/reference/block-kit/blocks#image)
@@ -6,188 +6,346 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::Image;
-/// use serde_json::json;
-///
-/// let image = Image::new()
-///     .set_block_id("image4")
+/// ```
+/// # use slack_messaging::blocks::Image;
+/// let image = Image::builder()
+///     .block_id("image4")
 ///     .title("Please enjoy this photo of a kitten")
-///     .set_image_url("http://placekitten.com/500/500")
-///     .set_alt_text("An incredibly cute kitten.");
+///     .image_url("http://placekitten.com/500/500")
+///     .alt_text("An incredibly cute kitten.")
+///     .build();
 ///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "image",
 ///     "block_id": "image4",
 ///     "title": {
 ///         "type": "plain_text",
-///         "text": "Please enjoy this photo of a kitten",
-///         "emoji": true
+///         "text": "Please enjoy this photo of a kitten"
 ///     },
 ///     "image_url": "http://placekitten.com/500/500",
 ///     "alt_text": "An incredibly cute kitten."
 /// });
 ///
-/// let image_json = serde_json::to_value(image).unwrap();
+/// let json = serde_json::to_value(image).unwrap();
 ///
-/// assert_eq!(image_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct Image {
     #[serde(rename = "type")]
     kind: &'static str,
 
-    image_url: String,
-
     alt_text: String,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    image_url: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     title: Option<Text>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     block_id: Option<String>,
-}
 
-impl Default for Image {
-    fn default() -> Self {
-        Self {
-            kind: "image",
-            image_url: "".to_string(),
-            alt_text: "".to_string(),
-            title: None,
-            block_id: None,
-        }
-    }
+    #[serde(skip_serializing_if = "Option::is_none")]
+    slack_file: Option<SlackFile>,
 }
 
 impl Image {
-    /// Constructs an Image block.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Image;
-    /// use serde_json::json;
-    ///
-    /// let image = Image::new();
-    ///
-    /// let expected = json!({
-    ///     "type": "image",
-    ///     "image_url": "",
-    ///     "alt_text": ""
-    /// });
-    ///
-    /// let image_json = serde_json::to_value(image).unwrap();
-    ///
-    /// assert_eq!(image_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
+    /// Construct an [`ImageBuilder`].
+    pub fn builder() -> ImageBuilder {
+        ImageBuilder::default()
     }
+}
 
-    /// Sets image_url field.
+/// Builder for [`Image`] object.
+#[derive(Debug, Default)]
+pub struct ImageBuilder {
+    alt_text: Option<String>,
+    image_url: Option<String>,
+    title: Option<Text>,
+    block_id: Option<String>,
+    slack_file: Option<SlackFile>,
+}
+
+impl ImageBuilder {
+    /// Set image_url field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Image;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::Image;
+    /// let image = Image::builder()
+    ///     .alt_text("")
+    ///     .set_image_url(Some("http://placekitten.com/500/500".into()))
+    ///     .build();
     ///
-    /// let image = Image::new().set_image_url("http://placekitten.com/500/500");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "image",
     ///     "image_url": "http://placekitten.com/500/500",
     ///     "alt_text": ""
     /// });
     ///
-    /// let image_json = serde_json::to_value(image).unwrap();
+    /// let json = serde_json::to_value(image).unwrap();
     ///
-    /// assert_eq!(image_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_image_url<T: Into<String>>(self, url: T) -> Self {
-        Self {
-            image_url: url.into(),
-            ..self
-        }
+    pub fn set_image_url(self, image_url: Option<String>) -> Self {
+        Self { image_url, ..self }
     }
 
-    /// Sets alt_text field.
+    /// Set image_url field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Image;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::Image;
+    /// let image = Image::builder()
+    ///     .alt_text("")
+    ///     .image_url("http://placekitten.com/500/500")
+    ///     .build();
     ///
-    /// let image = Image::new().set_alt_text("An incredibly cute kitten.");
+    /// let expected = serde_json::json!({
+    ///     "type": "image",
+    ///     "image_url": "http://placekitten.com/500/500",
+    ///     "alt_text": ""
+    /// });
     ///
-    /// let expected = json!({
+    /// let json = serde_json::to_value(image).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn image_url(self, image_url: impl Into<String>) -> Self {
+        self.set_image_url(Some(image_url.into()))
+    }
+
+    /// Set alt_text field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Image;
+    /// let image = Image::builder()
+    ///     .set_alt_text(Some("An incredibly cute kitten.".into()))
+    ///     .image_url("")
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
     ///     "type": "image",
     ///     "image_url": "",
     ///     "alt_text": "An incredibly cute kitten."
     /// });
     ///
-    /// let image_json = serde_json::to_value(image).unwrap();
+    /// let json = serde_json::to_value(image).unwrap();
     ///
-    /// assert_eq!(image_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_alt_text<T: Into<String>>(self, alt: T) -> Self {
-        Self {
-            alt_text: alt.into(),
-            ..self
-        }
+    pub fn set_alt_text(self, alt_text: Option<String>) -> Self {
+        Self { alt_text, ..self }
     }
 
-    /// Sets title field.
+    /// Set alt_text field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Image;
-    /// use slack_messaging::blocks::elements::Text;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::Image;
+    /// let image = Image::builder()
+    ///     .alt_text("An incredibly cute kitten.")
+    ///     .image_url("")
+    ///     .build();
     ///
-    /// let image = Image::new()
-    ///     .set_title(Text::plain("Please enjoy this photo of a kitten"));
+    /// let expected = serde_json::json!({
+    ///     "type": "image",
+    ///     "image_url": "",
+    ///     "alt_text": "An incredibly cute kitten."
+    /// });
     ///
-    /// let expected = json!({
+    /// let json = serde_json::to_value(image).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn alt_text(self, alt_text: impl Into<String>) -> Self {
+        self.set_alt_text(Some(alt_text.into()))
+    }
+
+    /// Set title field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Image;
+    /// # use slack_messaging::blocks::elements::Text;
+    /// let image = Image::builder()
+    ///     .image_url("")
+    ///     .alt_text("")
+    ///     .set_title(
+    ///         Some(Text::builder()
+    ///             .plain_text("Please enjoy this photo of a kitten")
+    ///             .build())
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
     ///     "type": "image",
     ///     "title": {
     ///         "type": "plain_text",
-    ///         "text": "Please enjoy this photo of a kitten",
-    ///         "emoji": true
+    ///         "text": "Please enjoy this photo of a kitten"
     ///     },
     ///     "image_url": "",
     ///     "alt_text": ""
     /// });
     ///
-    /// let image_json = serde_json::to_value(image).unwrap();
+    /// let json = serde_json::to_value(image).unwrap();
     ///
-    /// assert_eq!(image_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_title(self, text: Text) -> Self {
-        Self {
-            title: Some(text),
-            ..self
-        }
+    pub fn set_title(self, title: Option<Text>) -> Self {
+        Self { title, ..self }
     }
 
-    /// Sets block_id field.
+    /// Set title field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Image;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::Image;
+    /// # use slack_messaging::blocks::elements::Text;
+    /// let image = Image::builder()
+    ///     .image_url("")
+    ///     .alt_text("")
+    ///     .title("Please enjoy this photo of a kitten")
+    ///     .build();
     ///
-    /// let image = Image::new().set_block_id("image4");
+    /// let expected = serde_json::json!({
+    ///     "type": "image",
+    ///     "title": {
+    ///         "type": "plain_text",
+    ///         "text": "Please enjoy this photo of a kitten"
+    ///     },
+    ///     "image_url": "",
+    ///     "alt_text": ""
+    /// });
     ///
-    /// let expected = json!({
+    /// let json = serde_json::to_value(image).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn title(self, title: impl Into<String>) -> Self {
+        let text = Text::builder().plain_text(title).build();
+        self.set_title(Some(text))
+    }
+
+    /// Set block_id field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Image;
+    /// let image = Image::builder()
+    ///     .image_url("")
+    ///     .alt_text("")
+    ///     .set_block_id(Some("image4".into()))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
     ///     "type": "image",
     ///     "block_id": "image4",
     ///     "image_url": "",
     ///     "alt_text": ""
     /// });
     ///
-    /// let image_json = serde_json::to_value(image).unwrap();
+    /// let json = serde_json::to_value(image).unwrap();
     ///
-    /// assert_eq!(image_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_block_id<T: Into<String>>(self, block_id: T) -> Self {
-        Self {
-            block_id: Some(block_id.into()),
-            ..self
+    pub fn set_block_id(self, block_id: Option<String>) -> Self {
+        Self { block_id, ..self }
+    }
+
+    /// Set block_id field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Image;
+    /// let image = Image::builder()
+    ///     .image_url("")
+    ///     .alt_text("")
+    ///     .block_id("image4")
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "image",
+    ///     "block_id": "image4",
+    ///     "image_url": "",
+    ///     "alt_text": ""
+    /// });
+    ///
+    /// let json = serde_json::to_value(image).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn block_id(self, block_id: impl Into<String>) -> Self {
+        self.set_block_id(Some(block_id.into()))
+    }
+
+    /// Set slack_file field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Image;
+    /// # use slack_messaging::blocks::elements::SlackFile;
+    /// let image = Image::builder()
+    ///     .alt_text("")
+    ///     .set_slack_file(
+    ///         Some(SlackFile::builder()
+    ///             .id("F0123456")
+    ///             .build())
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "image",
+    ///     "alt_text": "",
+    ///     "slack_file": {
+    ///         "id": "F0123456"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(image).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_slack_file(self, slack_file: Option<SlackFile>) -> Self {
+        Self { slack_file, ..self }
+    }
+
+    /// Set slack_file field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Image;
+    /// # use slack_messaging::blocks::elements::SlackFile;
+    /// let image = Image::builder()
+    ///     .alt_text("")
+    ///     .slack_file(
+    ///         SlackFile::builder()
+    ///             .id("F0123456")
+    ///             .build()
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "image",
+    ///     "alt_text": "",
+    ///     "slack_file": {
+    ///         "id": "F0123456"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(image).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn slack_file(self, slack_file: SlackFile) -> Self {
+        self.set_slack_file(Some(slack_file))
+    }
+
+    /// Build an [`Image`] object.
+    pub fn build(self) -> Image {
+        if self.image_url.is_none() && self.slack_file.is_none() {
+            panic!("Either image_url or slack_file must be set to ImageBuilder");
+        }
+
+        Image {
+            kind: "image",
+            alt_text: self.alt_text.expect("alt_text must be set to ImageBuilder"),
+            image_url: self.image_url,
+            title: self.title,
+            block_id: self.block_id,
+            slack_file: self.slack_file,
         }
     }
 }

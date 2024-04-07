@@ -6,34 +6,33 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::elements::SelectPublicChannels;
-/// use serde_json::json;
+/// ```
+/// # use slack_messaging::blocks::elements::SelectPublicChannels;
+/// let menu = SelectPublicChannels::builder()
+///     .action_id("text1234")
+///     .placeholder("Select an item")
+///     .build();
 ///
-/// let menu = SelectPublicChannels::new()
-///     .set_action_id("text1234")
-///     .placeholder("Select an item");
-///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "channels_select",
 ///     "action_id": "text1234",
 ///     "placeholder": {
 ///         "type": "plain_text",
-///         "text": "Select an item",
-///         "emoji": true
+///         "text": "Select an item"
 ///     }
 /// });
 ///
-/// let menu_json = serde_json::to_value(menu).unwrap();
+/// let json = serde_json::to_value(menu).unwrap();
 ///
-/// assert_eq!(menu_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct SelectPublicChannels {
     #[serde(rename = "type")]
     kind: &'static str,
 
-    action_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    action_id: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     initial_channel: Option<String>,
@@ -51,265 +50,355 @@ pub struct SelectPublicChannels {
     placeholder: Option<Text>,
 }
 
-impl Default for SelectPublicChannels {
-    fn default() -> Self {
-        Self {
-            kind: "channels_select",
-            action_id: "".into(),
-            initial_channel: None,
-            confirm: None,
-            response_url_enabled: None,
-            focus_on_load: None,
-            placeholder: None,
-        }
+impl SelectPublicChannels {
+    /// Construct a [`SelectPublicChannelsBuilder`].
+    pub fn builder() -> SelectPublicChannelsBuilder {
+        SelectPublicChannelsBuilder::default()
     }
 }
 
-impl SelectPublicChannels {
-    /// Constructs a Select menu of public channels element with empty values.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectPublicChannels;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectPublicChannels::new();
-    ///
-    /// let expected = json!({
-    ///     "type": "channels_select",
-    ///     "action_id": ""
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
-    }
+/// Builder for [`SelectPublicChannels`] object.
+#[derive(Debug, Default)]
+pub struct SelectPublicChannelsBuilder {
+    action_id: Option<String>,
+    initial_channel: Option<String>,
+    confirm: Option<ConfirmationDialog>,
+    response_url_enabled: Option<bool>,
+    focus_on_load: Option<bool>,
+    placeholder: Option<Text>,
+}
 
-    /// Sets action_id field.
+impl SelectPublicChannelsBuilder {
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectPublicChannels;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
+    /// let menu = SelectPublicChannels::builder()
+    ///     .set_action_id(Some("text1234".into()))
+    ///     .build();
     ///
-    /// let menu = SelectPublicChannels::new().set_action_id("text1234");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "channels_select",
     ///     "action_id": "text1234"
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self {
-            action_id: action_id.into(),
-            ..self
-        }
+    pub fn set_action_id(self, action_id: Option<String>) -> Self {
+        Self { action_id, ..self }
     }
 
-    /// Sets initial_channel field.
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectPublicChannels;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
+    /// let menu = SelectPublicChannels::builder()
+    ///     .action_id("text1234")
+    ///     .build();
     ///
-    /// let menu = SelectPublicChannels::new().set_initial_channel("channel_0");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "channels_select",
-    ///     "action_id": "",
+    ///     "action_id": "text1234"
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn action_id(self, action_id: impl Into<String>) -> Self {
+        self.set_action_id(Some(action_id.into()))
+    }
+
+    /// Set initial_channel field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
+    /// let menu = SelectPublicChannels::builder()
+    ///     .set_initial_channel(Some("channel_0".into()))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "channels_select",
     ///     "initial_channel": "channel_0"
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_initial_channel<T: Into<String>>(self, value: T) -> Self {
+    pub fn set_initial_channel(self, initial_channel: Option<String>) -> Self {
         Self {
-            initial_channel: Some(value.into()),
+            initial_channel,
             ..self
         }
     }
 
-    /// Sets confirm field with ConfirmationDialog object.
+    /// Set initial_channel field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{SelectPublicChannels, ConfirmationDialog};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
+    /// let menu = SelectPublicChannels::builder()
+    ///     .initial_channel("channel_0")
+    ///     .build();
     ///
-    /// let menu = SelectPublicChannels::new()
-    ///     .set_confirm(
-    ///         ConfirmationDialog::new()
-    ///             .set_title("Are you sure?")
-    ///             .set_text("Wouldn't you prefer a good game of _chess_?")
-    ///             .set_confirm("Do it")
-    ///             .set_deny("Stop, I've changed my mind!")
-    ///     );
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "channels_select",
-    ///     "action_id": "",
+    ///     "initial_channel": "channel_0"
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn initial_channel(self, initial_channel: impl Into<String>) -> Self {
+        self.set_initial_channel(Some(initial_channel.into()))
+    }
+
+    /// Sets confirm field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::{SelectPublicChannels, ConfirmationDialog};
+    /// let menu = SelectPublicChannels::builder()
+    ///     .set_confirm(
+    ///         Some(ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build())
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "channels_select",
     ///     "confirm": {
     ///         "title": {
     ///             "type": "plain_text",
-    ///             "text": "Are you sure?",
-    ///             "emoji": true
+    ///             "text": "Are you sure?"
     ///         },
     ///         "text": {
     ///             "type": "plain_text",
-    ///             "text": "Wouldn't you prefer a good game of _chess_?",
-    ///             "emoji": true
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
     ///         },
     ///         "confirm": {
     ///             "type": "plain_text",
-    ///             "text": "Do it",
-    ///             "emoji": true
+    ///             "text": "Do it"
     ///         },
     ///         "deny": {
     ///             "type": "plain_text",
-    ///             "text": "Stop, I've changed my mind!",
-    ///             "emoji": true
+    ///             "text": "Stop, I've changed my mind!"
     ///         }
     ///     }
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_confirm(self, confirm: ConfirmationDialog) -> Self {
-        Self {
-            confirm: Some(confirm),
-            ..self
-        }
+    pub fn set_confirm(self, confirm: Option<ConfirmationDialog>) -> Self {
+        Self { confirm, ..self }
     }
 
-    /// Sets response_url_enabled field.
+    /// Sets confirm field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectPublicChannels;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectPublicChannels::new().set_response_url_enabled(true);
-    ///
-    /// let expected = json!({
-    ///     "type": "channels_select",
-    ///     "action_id": "",
-    ///     "response_url_enabled": true
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
     /// ```
-    pub fn set_response_url_enabled(self, enabled: bool) -> Self {
-        Self {
-            response_url_enabled: Some(enabled),
-            ..self
-        }
-    }
-
-    /// Sets true to response_url_enabled field.
+    /// # use slack_messaging::blocks::elements::{SelectPublicChannels, ConfirmationDialog};
+    /// let menu = SelectPublicChannels::builder()
+    ///     .confirm(
+    ///         ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectPublicChannels;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectPublicChannels::new().response_url_enabled();
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "channels_select",
-    ///     "action_id": "",
-    ///     "response_url_enabled": true
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn response_url_enabled(self) -> Self {
-        self.set_response_url_enabled(true)
-    }
-
-    /// Sets false to response_url_enabled field.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectPublicChannels;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectPublicChannels::new().response_url_disabled();
-    ///
-    /// let expected = json!({
-    ///     "type": "channels_select",
-    ///     "action_id": "",
-    ///     "response_url_enabled": false
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn response_url_disabled(self) -> Self {
-        self.set_response_url_enabled(false)
-    }
-
-    /// Sets focus_on_load field.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::SelectPublicChannels;
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectPublicChannels::new().set_focus_on_load(true);
-    ///
-    /// let expected = json!({
-    ///     "type": "channels_select",
-    ///     "action_id": "",
-    ///     "focus_on_load": true
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn set_focus_on_load(self, focus_on_load: bool) -> Self {
-        Self {
-            focus_on_load: Some(focus_on_load),
-            ..self
-        }
-    }
-
-    /// Sets placeholder field.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{SelectPublicChannels, Text};
-    /// use serde_json::json;
-    ///
-    /// let menu = SelectPublicChannels::new()
-    ///     .set_placeholder(Text::plain("Select an item"));
-    ///
-    /// let expected = json!({
-    ///     "type": "channels_select",
-    ///     "action_id": "",
-    ///     "placeholder": {
-    ///         "type": "plain_text",
-    ///         "text": "Select an item",
-    ///         "emoji": true
+    ///     "confirm": {
+    ///         "title": {
+    ///             "type": "plain_text",
+    ///             "text": "Are you sure?"
+    ///         },
+    ///         "text": {
+    ///             "type": "plain_text",
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
+    ///         },
+    ///         "confirm": {
+    ///             "type": "plain_text",
+    ///             "text": "Do it"
+    ///         },
+    ///         "deny": {
+    ///             "type": "plain_text",
+    ///             "text": "Stop, I've changed my mind!"
+    ///         }
     ///     }
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn confirm(self, confirm: ConfirmationDialog) -> Self {
+        self.set_confirm(Some(confirm))
+    }
+
+    /// Set response_url_enabled field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
+    /// let menu = SelectPublicChannels::builder()
+    ///     .set_response_url_enabled(Some(true))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "channels_select",
+    ///     "response_url_enabled": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_response_url_enabled(self, enabled: Option<bool>) -> Self {
         Self {
-            placeholder: Some(placeholder),
+            response_url_enabled: enabled,
             ..self
+        }
+    }
+
+    /// Set response_url_enabled field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
+    /// let menu = SelectPublicChannels::builder()
+    ///     .response_url_enabled(true)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "channels_select",
+    ///     "response_url_enabled": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn response_url_enabled(self, enabled: bool) -> Self {
+        self.set_response_url_enabled(Some(enabled))
+    }
+
+    /// Set focus_on_load field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
+    /// let menu = SelectPublicChannels::builder()
+    ///     .set_focus_on_load(Some(true))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "channels_select",
+    ///     "focus_on_load": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_focus_on_load(self, focus_on_load: Option<bool>) -> Self {
+        Self {
+            focus_on_load,
+            ..self
+        }
+    }
+
+    /// Set focus_on_load field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
+    /// let menu = SelectPublicChannels::builder()
+    ///     .focus_on_load(true)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "channels_select",
+    ///     "focus_on_load": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn focus_on_load(self, focus_on_load: bool) -> Self {
+        self.set_focus_on_load(Some(focus_on_load))
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::plain_text;
+    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
+    /// let menu = SelectPublicChannels::builder()
+    ///     .set_placeholder(Some(plain_text!("Select an item")))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "channels_select",
+    ///     "placeholder": {
+    ///         "type": "plain_text",
+    ///         "text": "Select an item"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
+        Self {
+            placeholder,
+            ..self
+        }
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
+    /// let menu = SelectPublicChannels::builder()
+    ///     .placeholder("Select an item")
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "channels_select",
+    ///     "placeholder": {
+    ///         "type": "plain_text",
+    ///         "text": "Select an item"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
+        let text = Text::builder().plain_text(placeholder.into()).build();
+        self.set_placeholder(Some(text))
+    }
+
+    /// Build a [`SelectPublicChannels`] object.
+    pub fn build(self) -> SelectPublicChannels {
+        SelectPublicChannels {
+            kind: "channels_select",
+            action_id: self.action_id,
+            initial_channel: self.initial_channel,
+            response_url_enabled: self.response_url_enabled,
+            confirm: self.confirm,
+            focus_on_load: self.focus_on_load,
+            placeholder: self.placeholder,
         }
     }
 }

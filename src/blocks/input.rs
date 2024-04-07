@@ -1,10 +1,10 @@
 use super::elements::{
-    CheckboxGroup, DatePicker, DatetimePicker, EmailInput, MultiSelectConversations,
+    Checkboxes, DatePicker, DatetimePicker, EmailInput, FileInput, MultiSelectConversations,
     MultiSelectExternals, MultiSelectPublicChannels, MultiSelectStaticOptions, MultiSelectUsers,
-    NumberInput, PlainTextInput, RadioButtonGroup, SelectConversations, SelectExternals,
-    SelectPublicChannels, SelectStaticOptions, SelectUsers, Text, TimePicker, UrlInput,
+    NumberInput, PlainTextInput, RadioButtonGroup, RichTextInput, SelectConversations,
+    SelectExternals, SelectPublicChannels, SelectStaticOptions, SelectUsers, Text, TimePicker,
+    UrlInput,
 };
-use crate::plain_text;
 use serde::Serialize;
 
 /// [Input block](https://api.slack.com/reference/block-kit/blocks#input)
@@ -12,29 +12,28 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::Input;
-/// use slack_messaging::blocks::elements::PlainTextInput;
-/// use serde_json::json;
-///
-/// let input = Input::new()
-///     .set_block_id("input_1")
+/// ```
+/// # use slack_messaging::blocks::Input;
+/// # use slack_messaging::blocks::elements::PlainTextInput;
+/// let input = Input::builder()
+///     .block_id("input_1")
 ///     .label("label text")
-///     .set_element(
-///         PlainTextInput::new()
-///             .set_action_id("text_area_1")
-///             .multiline()
+///     .element(
+///         PlainTextInput::builder()
+///             .action_id("text_area_1")
+///             .multiline(true)
 ///             .placeholder("Enter some plain text.")
+///             .build()
 ///     )
-///     .optional();
+///     .optional(true)
+///     .build();
 ///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "input",
 ///     "block_id": "input_1",
 ///     "label": {
 ///         "type": "plain_text",
-///         "text": "label text",
-///         "emoji": true
+///         "text": "label text"
 ///     },
 ///     "element": {
 ///         "type": "plain_text_input",
@@ -42,16 +41,15 @@ use serde::Serialize;
 ///         "multiline": true,
 ///         "placeholder": {
 ///             "type": "plain_text",
-///             "text": "Enter some plain text.",
-///             "emoji": true
+///             "text": "Enter some plain text."
 ///         }
 ///     },
 ///     "optional": true
 /// });
 ///
-/// let input_json = serde_json::to_value(input).unwrap();
+/// let json = serde_json::to_value(input).unwrap();
 ///
-/// assert_eq!(input_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct Input {
@@ -60,7 +58,7 @@ pub struct Input {
 
     label: Text,
 
-    element: Option<InputElement>,
+    element: InputElement,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     dispatch_action: Option<bool>,
@@ -75,318 +73,518 @@ pub struct Input {
     optional: Option<bool>,
 }
 
-impl Default for Input {
-    fn default() -> Self {
-        Self {
-            kind: "input",
-            label: plain_text!(""),
-            element: None,
-            dispatch_action: None,
-            block_id: None,
-            hint: None,
-            optional: None,
-        }
+impl Input {
+    /// Construct an [`InputBuilder`].
+    pub fn builder() -> InputBuilder {
+        InputBuilder::default()
     }
 }
 
-impl Input {
-    /// Constructs an Input block.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Input;
-    /// use serde_json::json;
-    ///
-    /// let input = Input::new();
-    ///
-    /// let expected = json!({
-    ///     "type": "input",
-    ///     "label": {
-    ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
-    ///     },
-    ///     "element": null
-    /// });
-    ///
-    /// let input_json = serde_json::to_value(input).unwrap();
-    ///
-    /// assert_eq!(input_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
-    }
+/// Builder for [`Input`] object.
+#[derive(Debug, Default)]
+pub struct InputBuilder {
+    label: Option<Text>,
+    element: Option<InputElement>,
+    dispatch_action: Option<bool>,
+    block_id: Option<String>,
+    hint: Option<Text>,
+    optional: Option<bool>,
+}
 
-    /// Sets label field.
+impl InputBuilder {
+    /// Set label field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Input;
-    /// use slack_messaging::blocks::elements::Text;
-    /// use serde_json::json;
-    ///
-    /// let input = Input::new()
-    ///     .set_label(Text::plain("label text"));
-    ///
-    /// let expected = json!({
-    ///     "type": "input",
-    ///     "label": {
-    ///         "type": "plain_text",
-    ///         "text": "label text",
-    ///         "emoji": true
-    ///     },
-    ///     "element": null
-    /// });
-    ///
-    /// let input_json = serde_json::to_value(input).unwrap();
-    ///
-    /// assert_eq!(input_json, expected);
     /// ```
-    pub fn set_label(self, label: Text) -> Self {
-        Self { label, ..self }
-    }
-
-    /// Sets an object to element field. The argument is an any object
-    /// that can transform into the enum [InputElement].
+    /// # use slack_messaging::blocks::Input;
+    /// # use slack_messaging::blocks::elements::{PlainTextInput, Text};
+    /// let input = Input::builder()
+    ///     .set_label(
+    ///         Some(Text::builder()
+    ///             .plain_text("label text")
+    ///             .build())
+    ///     )
+    ///     .element(
+    ///         PlainTextInput::builder()
+    ///             .placeholder("Enter some plain text.")
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Input;
-    /// use slack_messaging::blocks::elements::PlainTextInput;
-    /// use serde_json::json;
-    ///
-    /// let input = Input::new()
-    ///     .set_element(
-    ///         PlainTextInput::new().set_action_id("input_1")
-    ///     );
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "input",
     ///     "label": {
     ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
+    ///         "text": "label text"
     ///     },
     ///     "element": {
     ///         "type": "plain_text_input",
-    ///         "action_id": "input_1"
+    ///         "placeholder": {
+    ///             "type": "plain_text",
+    ///             "text": "Enter some plain text."
+    ///         }
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(input).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_label(self, label: Option<Text>) -> Self {
+        Self { label, ..self }
+    }
+
+    /// Set label field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Input;
+    /// # use slack_messaging::blocks::elements::PlainTextInput;
+    /// let input = Input::builder()
+    ///     .label("label text")
+    ///     .element(
+    ///         PlainTextInput::builder()
+    ///             .placeholder("Enter some plain text.")
+    ///             .build()
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "input",
+    ///     "label": {
+    ///         "type": "plain_text",
+    ///         "text": "label text"
+    ///     },
+    ///     "element": {
+    ///         "type": "plain_text_input",
+    ///         "placeholder": {
+    ///             "type": "plain_text",
+    ///             "text": "Enter some plain text."
+    ///         }
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(input).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn label(self, label: impl Into<String>) -> Self {
+        let text = Text::builder().plain_text(label).build();
+        self.set_label(Some(text))
+    }
+
+    /// Set element field. The argument is an any object
+    /// that can transform into the enum [InputElement].
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Input;
+    /// # use slack_messaging::blocks::elements::PlainTextInput;
+    /// let input = Input::builder()
+    ///     .label("label text")
+    ///     .set_element(
+    ///         Some(PlainTextInput::builder()
+    ///             .placeholder("Enter some plain text.")
+    ///             .build()
+    ///             .into())
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "input",
+    ///     "label": {
+    ///         "type": "plain_text",
+    ///         "text": "label text"
+    ///     },
+    ///     "element": {
+    ///         "type": "plain_text_input",
+    ///         "placeholder": {
+    ///             "type": "plain_text",
+    ///             "text": "Enter some plain text."
+    ///         }
     ///     },
     /// });
     ///
-    /// let input_json = serde_json::to_value(input).unwrap();
+    /// let json = serde_json::to_value(input).unwrap();
     ///
-    /// assert_eq!(input_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_element<T: Into<InputElement>>(self, element: T) -> Self {
+    pub fn set_element(self, element: Option<InputElement>) -> Self {
+        Self { element, ..self }
+    }
+
+    /// Set element field. The argument is an any object
+    /// that can transform into the enum [InputElement].
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Input;
+    /// # use slack_messaging::blocks::elements::PlainTextInput;
+    /// let input = Input::builder()
+    ///     .label("label text")
+    ///     .element(
+    ///         PlainTextInput::builder()
+    ///             .placeholder("Enter some plain text.")
+    ///             .build()
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "input",
+    ///     "label": {
+    ///         "type": "plain_text",
+    ///         "text": "label text"
+    ///     },
+    ///     "element": {
+    ///         "type": "plain_text_input",
+    ///         "placeholder": {
+    ///             "type": "plain_text",
+    ///             "text": "Enter some plain text."
+    ///         }
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(input).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn element(self, element: impl Into<InputElement>) -> Self {
+        self.set_element(Some(element.into()))
+    }
+
+    /// Set dispatch_action field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Input;
+    /// # use slack_messaging::blocks::elements::PlainTextInput;
+    /// let input = Input::builder()
+    ///     .set_dispatch_action(Some(true))
+    ///     .label("label text")
+    ///     .element(
+    ///         PlainTextInput::builder()
+    ///             .placeholder("Enter some plain text.")
+    ///             .build()
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "input",
+    ///     "label": {
+    ///         "type": "plain_text",
+    ///         "text": "label text"
+    ///     },
+    ///     "element": {
+    ///         "type": "plain_text_input",
+    ///         "placeholder": {
+    ///             "type": "plain_text",
+    ///             "text": "Enter some plain text."
+    ///         }
+    ///     },
+    ///     "dispatch_action": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(input).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_dispatch_action(self, dispatch_action: Option<bool>) -> Self {
         Self {
-            element: Some(element.into()),
+            dispatch_action,
             ..self
         }
     }
 
-    /// Sets dispatch_action field.
+    /// Set dispatch_action field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Input;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::Input;
+    /// # use slack_messaging::blocks::elements::PlainTextInput;
+    /// let input = Input::builder()
+    ///     .dispatch_action(true)
+    ///     .label("label text")
+    ///     .element(
+    ///         PlainTextInput::builder()
+    ///             .placeholder("Enter some plain text.")
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// let input = Input::new()
-    ///     .set_dispatch_action(true);
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "input",
     ///     "label": {
     ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
+    ///         "text": "label text"
     ///     },
-    ///     "element": null,
+    ///     "element": {
+    ///         "type": "plain_text_input",
+    ///         "placeholder": {
+    ///             "type": "plain_text",
+    ///             "text": "Enter some plain text."
+    ///         }
+    ///     },
     ///     "dispatch_action": true
     /// });
     ///
-    /// let input_json = serde_json::to_value(input).unwrap();
+    /// let json = serde_json::to_value(input).unwrap();
     ///
-    /// assert_eq!(input_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_dispatch_action(self, dispatch_action: bool) -> Self {
-        Self {
-            dispatch_action: Some(dispatch_action),
-            ..self
-        }
+    pub fn dispatch_action(self, dispatch_action: bool) -> Self {
+        self.set_dispatch_action(Some(dispatch_action))
     }
 
-    /// Sets true to dispatch_action field.
+    /// Set block_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Input;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::Input;
+    /// # use slack_messaging::blocks::elements::PlainTextInput;
+    /// let input = Input::builder()
+    ///     .set_block_id(Some("input_1".into()))
+    ///     .label("label text")
+    ///     .element(
+    ///         PlainTextInput::builder()
+    ///             .placeholder("Enter some plain text.")
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// let input = Input::new().dispatch_action();
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "input",
     ///     "label": {
     ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
+    ///         "text": "label text"
     ///     },
-    ///     "element": null,
-    ///     "dispatch_action": true
-    /// });
-    ///
-    /// let input_json = serde_json::to_value(input).unwrap();
-    ///
-    /// assert_eq!(input_json, expected);
-    /// ```
-    pub fn dispatch_action(self) -> Self {
-        self.set_dispatch_action(true)
-    }
-
-    /// Sets block_id field.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Input;
-    /// use serde_json::json;
-    ///
-    /// let input = Input::new().set_block_id("input_1");
-    ///
-    /// let expected = json!({
-    ///     "type": "input",
-    ///     "label": {
-    ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
+    ///     "element": {
+    ///         "type": "plain_text_input",
+    ///         "placeholder": {
+    ///             "type": "plain_text",
+    ///             "text": "Enter some plain text."
+    ///         }
     ///     },
-    ///     "element": null,
     ///     "block_id": "input_1"
     /// });
     ///
-    /// let input_json = serde_json::to_value(input).unwrap();
+    /// let json = serde_json::to_value(input).unwrap();
     ///
-    /// assert_eq!(input_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_block_id<T: Into<String>>(self, block_id: T) -> Self {
-        Self {
-            block_id: Some(block_id.into()),
-            ..self
-        }
+    pub fn set_block_id(self, block_id: Option<String>) -> Self {
+        Self { block_id, ..self }
     }
 
-    /// Sets hint field.
+    /// Set block_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Input;
-    /// use slack_messaging::blocks::elements::Text;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::Input;
+    /// # use slack_messaging::blocks::elements::PlainTextInput;
+    /// let input = Input::builder()
+    ///     .block_id("input_1")
+    ///     .label("label text")
+    ///     .element(
+    ///         PlainTextInput::builder()
+    ///             .placeholder("Enter some plain text.")
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// let input = Input::new()
-    ///     .set_hint(Text::plain("Some hints for input"));
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "input",
     ///     "label": {
     ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
+    ///         "text": "label text"
     ///     },
-    ///     "element": null,
+    ///     "element": {
+    ///         "type": "plain_text_input",
+    ///         "placeholder": {
+    ///             "type": "plain_text",
+    ///             "text": "Enter some plain text."
+    ///         }
+    ///     },
+    ///     "block_id": "input_1"
+    /// });
+    ///
+    /// let json = serde_json::to_value(input).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn block_id(self, block_id: impl Into<String>) -> Self {
+        self.set_block_id(Some(block_id.into()))
+    }
+
+    /// Set hint field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Input;
+    /// # use slack_messaging::blocks::elements::{PlainTextInput, Text};
+    /// let input = Input::builder()
+    ///     .set_hint(
+    ///         Some(Text::builder()
+    ///             .plain_text("Some hints for input")
+    ///             .build())
+    ///     )
+    ///     .label("label text")
+    ///     .element(
+    ///         PlainTextInput::builder()
+    ///             .placeholder("Enter some plain text.")
+    ///             .build()
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "input",
+    ///     "label": {
+    ///         "type": "plain_text",
+    ///         "text": "label text"
+    ///     },
+    ///     "element": {
+    ///         "type": "plain_text_input",
+    ///         "placeholder": {
+    ///             "type": "plain_text",
+    ///             "text": "Enter some plain text."
+    ///         }
+    ///     },
     ///     "hint": {
     ///         "type": "plain_text",
-    ///         "text": "Some hints for input",
-    ///         "emoji": true
+    ///         "text": "Some hints for input"
     ///     },
     /// });
     ///
-    /// let input_json = serde_json::to_value(input).unwrap();
+    /// let json = serde_json::to_value(input).unwrap();
     ///
-    /// assert_eq!(input_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_hint(self, hint: Text) -> Self {
-        Self {
-            hint: Some(hint),
-            ..self
-        }
+    pub fn set_hint(self, hint: Option<Text>) -> Self {
+        Self { hint, ..self }
     }
 
-    /// Sets optional field.
+    /// Set hint field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Input;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::Input;
+    /// # use slack_messaging::blocks::elements::{PlainTextInput, Text};
+    /// let input = Input::builder()
+    ///     .hint("Some hints for input")
+    ///     .label("label text")
+    ///     .element(
+    ///         PlainTextInput::builder()
+    ///             .placeholder("Enter some plain text.")
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// let input = Input::new().set_optional(true);
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "input",
     ///     "label": {
     ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
+    ///         "text": "label text"
     ///     },
-    ///     "element": null,
+    ///     "element": {
+    ///         "type": "plain_text_input",
+    ///         "placeholder": {
+    ///             "type": "plain_text",
+    ///             "text": "Enter some plain text."
+    ///         }
+    ///     },
+    ///     "hint": {
+    ///         "type": "plain_text",
+    ///         "text": "Some hints for input"
+    ///     },
+    /// });
+    ///
+    /// let json = serde_json::to_value(input).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn hint(self, hint: impl Into<String>) -> Self {
+        let text = Text::builder().plain_text(hint).build();
+        self.set_hint(Some(text))
+    }
+
+    /// Set optional field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Input;
+    /// # use slack_messaging::blocks::elements::{PlainTextInput, Text};
+    /// let input = Input::builder()
+    ///     .set_optional(Some(true))
+    ///     .label("label text")
+    ///     .element(
+    ///         PlainTextInput::builder()
+    ///             .placeholder("Enter some plain text.")
+    ///             .build()
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "input",
+    ///     "label": {
+    ///         "type": "plain_text",
+    ///         "text": "label text"
+    ///     },
+    ///     "element": {
+    ///         "type": "plain_text_input",
+    ///         "placeholder": {
+    ///             "type": "plain_text",
+    ///             "text": "Enter some plain text."
+    ///         }
+    ///     },
     ///     "optional": true
     /// });
     ///
-    /// let input_json = serde_json::to_value(input).unwrap();
+    /// let json = serde_json::to_value(input).unwrap();
     ///
-    /// assert_eq!(input_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_optional(self, optional: bool) -> Self {
-        Self {
-            optional: Some(optional),
-            ..self
-        }
+    pub fn set_optional(self, optional: Option<bool>) -> Self {
+        Self { optional, ..self }
     }
 
-    /// Sets true to optional field.
+    /// Set optional field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Input;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::Input;
+    /// # use slack_messaging::blocks::elements::{PlainTextInput, Text};
+    /// let input = Input::builder()
+    ///     .optional(true)
+    ///     .label("label text")
+    ///     .element(
+    ///         PlainTextInput::builder()
+    ///             .placeholder("Enter some plain text.")
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// let input = Input::new().optional();
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "input",
     ///     "label": {
     ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
+    ///         "text": "label text"
     ///     },
-    ///     "element": null,
+    ///     "element": {
+    ///         "type": "plain_text_input",
+    ///         "placeholder": {
+    ///             "type": "plain_text",
+    ///             "text": "Enter some plain text."
+    ///         }
+    ///     },
     ///     "optional": true
     /// });
     ///
-    /// let input_json = serde_json::to_value(input).unwrap();
+    /// let json = serde_json::to_value(input).unwrap();
     ///
-    /// assert_eq!(input_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn optional(self) -> Self {
-        self.set_optional(true)
+    pub fn optional(self, optional: bool) -> Self {
+        self.set_optional(Some(optional))
     }
 
-    /// Sets false to optional field.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Input;
-    /// use serde_json::json;
-    ///
-    /// let input = Input::new().required();
-    ///
-    /// let expected = json!({
-    ///     "type": "input",
-    ///     "label": {
-    ///         "type": "plain_text",
-    ///         "text": "",
-    ///         "emoji": true
-    ///     },
-    ///     "element": null,
-    ///     "optional": false
-    /// });
-    ///
-    /// let input_json = serde_json::to_value(input).unwrap();
-    ///
-    /// assert_eq!(input_json, expected);
-    /// ```
-    pub fn required(self) -> Self {
-        self.set_optional(false)
+    /// Build an [`Input`] object. This method will panic if label and element are not set.
+    pub fn build(self) -> Input {
+        Input {
+            kind: "input",
+            label: self.label.expect("label must be set to InputBuilder"),
+            element: self.element.expect("element must be set to InputBuilder"),
+            dispatch_action: self.dispatch_action,
+            block_id: self.block_id,
+            hint: self.hint,
+            optional: self.optional,
+        }
     }
 }
 
@@ -396,7 +594,7 @@ impl Input {
 pub enum InputElement {
     /// [Checkbox group](https://api.slack.com/reference/block-kit/block-elements#checkboxes)
     /// representation
-    CheckboxGroup(Box<CheckboxGroup>),
+    Checkboxes(Box<Checkboxes>),
 
     /// [Date picker element](https://api.slack.com/reference/block-kit/block-elements#datepicker)
     /// representation
@@ -409,6 +607,10 @@ pub enum InputElement {
     /// [Email input element](https://api.slack.com/reference/block-kit/block-elements#email)
     /// representation
     EmailInput(Box<EmailInput>),
+
+    /// [File input element](https://api.slack.com/reference/block-kit/block-elements#file_input)
+    /// representation
+    FileInput(Box<FileInput>),
 
     /// [Multi-select menu Conversations list element](https://api.slack.com/reference/block-kit/block-elements#conversation_multi_select)
     /// representation
@@ -442,6 +644,10 @@ pub enum InputElement {
     /// representation
     RadioButtonGroup(Box<RadioButtonGroup>),
 
+    /// [Rich text input element](https://api.slack.com/reference/block-kit/block-elements#rich_text_input)
+    /// representation
+    RichTextInput(Box<RichTextInput>),
+
     /// [Select menu of conversations element](https://api.slack.com/reference/block-kit/block-elements#conversations_select)
     /// representation
     SelectConversations(Box<SelectConversations>),
@@ -471,116 +677,38 @@ pub enum InputElement {
     UrlInput(Box<UrlInput>),
 }
 
-impl From<CheckboxGroup> for InputElement {
-    fn from(value: CheckboxGroup) -> Self {
-        Self::CheckboxGroup(Box::new(value))
+macro_rules! input_from {
+    ($($ty:ident),*) => {
+        $(
+            impl From<$ty> for InputElement {
+                fn from(value: $ty) -> Self {
+                    Self::$ty(Box::new(value))
+                }
+            }
+         )*
     }
 }
 
-impl From<DatePicker> for InputElement {
-    fn from(value: DatePicker) -> Self {
-        Self::DatePicker(Box::new(value))
-    }
-}
-
-impl From<DatetimePicker> for InputElement {
-    fn from(value: DatetimePicker) -> Self {
-        Self::DatetimePicker(Box::new(value))
-    }
-}
-
-impl From<EmailInput> for InputElement {
-    fn from(value: EmailInput) -> Self {
-        Self::EmailInput(Box::new(value))
-    }
-}
-
-impl From<MultiSelectConversations> for InputElement {
-    fn from(value: MultiSelectConversations) -> Self {
-        Self::MultiSelectConversations(Box::new(value))
-    }
-}
-
-impl From<MultiSelectExternals> for InputElement {
-    fn from(value: MultiSelectExternals) -> Self {
-        Self::MultiSelectExternals(Box::new(value))
-    }
-}
-
-impl From<MultiSelectPublicChannels> for InputElement {
-    fn from(value: MultiSelectPublicChannels) -> Self {
-        Self::MultiSelectPublicChannels(Box::new(value))
-    }
-}
-
-impl From<MultiSelectStaticOptions> for InputElement {
-    fn from(value: MultiSelectStaticOptions) -> Self {
-        Self::MultiSelectStaticOptions(Box::new(value))
-    }
-}
-
-impl From<MultiSelectUsers> for InputElement {
-    fn from(value: MultiSelectUsers) -> Self {
-        Self::MultiSelectUsers(Box::new(value))
-    }
-}
-
-impl From<NumberInput> for InputElement {
-    fn from(value: NumberInput) -> Self {
-        Self::NumberInput(Box::new(value))
-    }
-}
-
-impl From<PlainTextInput> for InputElement {
-    fn from(value: PlainTextInput) -> Self {
-        Self::PlainTextInput(Box::new(value))
-    }
-}
-
-impl From<RadioButtonGroup> for InputElement {
-    fn from(value: RadioButtonGroup) -> Self {
-        Self::RadioButtonGroup(Box::new(value))
-    }
-}
-
-impl From<SelectConversations> for InputElement {
-    fn from(value: SelectConversations) -> Self {
-        Self::SelectConversations(Box::new(value))
-    }
-}
-
-impl From<SelectExternals> for InputElement {
-    fn from(value: SelectExternals) -> Self {
-        Self::SelectExternals(Box::new(value))
-    }
-}
-
-impl From<SelectPublicChannels> for InputElement {
-    fn from(value: SelectPublicChannels) -> Self {
-        Self::SelectPublicChannels(Box::new(value))
-    }
-}
-
-impl From<SelectStaticOptions> for InputElement {
-    fn from(value: SelectStaticOptions) -> Self {
-        Self::SelectStaticOptions(Box::new(value))
-    }
-}
-
-impl From<SelectUsers> for InputElement {
-    fn from(value: SelectUsers) -> Self {
-        Self::SelectUsers(Box::new(value))
-    }
-}
-
-impl From<TimePicker> for InputElement {
-    fn from(value: TimePicker) -> Self {
-        Self::TimePicker(Box::new(value))
-    }
-}
-
-impl From<UrlInput> for InputElement {
-    fn from(value: UrlInput) -> Self {
-        Self::UrlInput(Box::new(value))
-    }
+input_from! {
+    Checkboxes,
+    DatePicker,
+    DatetimePicker,
+    EmailInput,
+    FileInput,
+    MultiSelectConversations,
+    MultiSelectExternals,
+    MultiSelectPublicChannels,
+    MultiSelectStaticOptions,
+    MultiSelectUsers,
+    NumberInput,
+    PlainTextInput,
+    RadioButtonGroup,
+    RichTextInput,
+    SelectConversations,
+    SelectExternals,
+    SelectPublicChannels,
+    SelectStaticOptions,
+    SelectUsers,
+    TimePicker,
+    UrlInput
 }

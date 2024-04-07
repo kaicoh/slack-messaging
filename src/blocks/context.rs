@@ -8,22 +8,21 @@ use serde::Serialize;
 ///
 /// The following is reproduction of [the sample context](https://api.slack.com/reference/block-kit/blocks#context_examples).
 ///
-/// ```ignore
-/// use slack_messaging::blocks::Context;
-/// use slack_messaging::blocks::elements::{Image, Text};
-/// use serde_json::json;
-///
-/// let context = Context::new()
-///     .push_element(
-///         Image::new()
-///             .set_image_url("https://image.freepik.com/free-photo/red-drawing-pin_1156-445.jpg")
-///             .set_alt_text("images")
+/// ```
+/// # use slack_messaging::mrkdwn;
+/// # use slack_messaging::blocks::Context;
+/// # use slack_messaging::blocks::elements::Image;
+/// let context = Context::builder()
+///     .element(
+///         Image::builder()
+///             .image_url("https://image.freepik.com/free-photo/red-drawing-pin_1156-445.jpg")
+///             .alt_text("images")
+///             .build()
 ///     )
-///     .push_element(
-///         Text::mrkdwn("Location: **Dogpatch**")
-///     );
+///     .element(mrkdwn!("Location: **Dogpatch**"))
+///     .build();
 ///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "context",
 ///     "elements": [
 ///         {
@@ -38,9 +37,9 @@ use serde::Serialize;
 ///     ]
 /// });
 ///
-/// let context_json = serde_json::to_value(context).unwrap();
+/// let json = serde_json::to_value(context).unwrap();
 ///
-/// assert_eq!(context_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct Context {
@@ -53,58 +52,44 @@ pub struct Context {
     block_id: Option<String>,
 }
 
-impl Default for Context {
-    fn default() -> Self {
-        Self {
-            kind: "context",
-            elements: vec![],
-            block_id: None,
-        }
+impl Context {
+    /// Construct a [`ContextBuilder`].
+    pub fn builder() -> ContextBuilder {
+        ContextBuilder::default()
     }
 }
 
-impl Context {
-    /// Constructs a Context block.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Context;
-    /// use serde_json::json;
-    ///
-    /// let context = Context::new();
-    ///
-    /// let expected = json!({
-    ///     "type": "context",
-    ///     "elements": []
-    /// });
-    ///
-    /// let context_json = serde_json::to_value(context).unwrap();
-    ///
-    /// assert_eq!(context_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
-    }
+/// Builder for [`Context`] object.
+#[derive(Debug, Default)]
+pub struct ContextBuilder {
+    elements: Vec<ContextElement>,
+    block_id: Option<String>,
+}
 
-    /// Sets elements field directly. The argument is a vector composed from any objects
+impl ContextBuilder {
+    /// Set elements field. The argument is a vector composed from any objects
     /// that can transform into the enum [ContextElement].
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Context;
-    /// use slack_messaging::blocks::elements::{Image, Text};
-    /// use serde_json::json;
-    ///
-    /// let context = Context::new()
+    /// ```
+    /// # use slack_messaging::blocks::Context;
+    /// # use slack_messaging::blocks::elements::{Image, Text};
+    /// let context = Context::builder()
     ///     .set_elements(
     ///         vec![
-    ///             Image::new()
-    ///                 .set_image_url("https://image.freepik.com/free-photo/red-drawing-pin_1156-445.jpg")
-    ///                 .set_alt_text("images")
+    ///             Image::builder()
+    ///                 .image_url("https://image.freepik.com/free-photo/red-drawing-pin_1156-445.jpg")
+    ///                 .alt_text("images")
+    ///                 .build()
     ///                 .into(),
-    ///             Text::mrkdwn("Location: **Dogpatch**").into()
+    ///             Text::builder()
+    ///                 .mrkdwn("Location: **Dogpatch**")
+    ///                 .build()
+    ///                 .into(),
     ///         ]
-    ///     );
+    ///     )
+    ///     .build();
     ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "context",
     ///     "elements": [
     ///         {
@@ -119,33 +104,35 @@ impl Context {
     ///     ]
     /// });
     ///
-    /// let context_json = serde_json::to_value(context).unwrap();
+    /// let json = serde_json::to_value(context).unwrap();
     ///
-    /// assert_eq!(context_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
     pub fn set_elements(self, elements: Vec<ContextElement>) -> Self {
         Self { elements, ..self }
     }
 
-    /// Adds an object to elements field. The argument is an any object
+    /// Add an element to elements field. The argument is an any object
     /// that can transform into the enum [ContextElement].
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Context;
-    /// use slack_messaging::blocks::elements::{Image, Text};
-    /// use serde_json::json;
-    ///
-    /// let context = Context::new()
-    ///     .push_element(
-    ///         Image::new()
-    ///             .set_image_url("https://image.freepik.com/free-photo/red-drawing-pin_1156-445.jpg")
-    ///             .set_alt_text("images")
+    /// ```
+    /// # use slack_messaging::blocks::Context;
+    /// # use slack_messaging::blocks::elements::{Image, Text};
+    /// let context = Context::builder()
+    ///     .element(
+    ///         Image::builder()
+    ///             .image_url("https://image.freepik.com/free-photo/red-drawing-pin_1156-445.jpg")
+    ///             .alt_text("images")
+    ///             .build()
     ///     )
-    ///     .push_element(
-    ///         Text::mrkdwn("Location: **Dogpatch**")
-    ///     );
+    ///     .element(
+    ///         Text::builder()
+    ///             .mrkdwn("Location: **Dogpatch**")
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "context",
     ///     "elements": [
     ///         {
@@ -160,38 +147,66 @@ impl Context {
     ///     ]
     /// });
     ///
-    /// let context_json = serde_json::to_value(context).unwrap();
+    /// let json = serde_json::to_value(context).unwrap();
     ///
-    /// assert_eq!(context_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn push_element<T: Into<ContextElement>>(self, element: T) -> Self {
+    pub fn element(self, element: impl Into<ContextElement>) -> Self {
         let mut elements = self.elements;
         elements.push(element.into());
         Self { elements, ..self }
     }
 
-    /// Sets block_id field.
+    /// Set block_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::Context;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::Context;
+    /// let context = Context::builder()
+    ///     .set_block_id(Some("context_block_1".into()))
+    ///     .build();
     ///
-    /// let context = Context::new().set_block_id("context_block_1");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "context",
     ///     "elements": [],
     ///     "block_id": "context_block_1"
     /// });
     ///
-    /// let context_json = serde_json::to_value(context).unwrap();
+    /// let json = serde_json::to_value(context).unwrap();
     ///
-    /// assert_eq!(context_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_block_id<T: Into<String>>(self, block_id: T) -> Self {
-        Self {
-            block_id: Some(block_id.into()),
-            ..self
+    pub fn set_block_id(self, block_id: Option<String>) -> Self {
+        Self { block_id, ..self }
+    }
+
+    /// Set block_id field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::Context;
+    /// let context = Context::builder()
+    ///     .block_id("context_block_1")
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "context",
+    ///     "elements": [],
+    ///     "block_id": "context_block_1"
+    /// });
+    ///
+    /// let json = serde_json::to_value(context).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn block_id(self, block_id: impl Into<String>) -> Self {
+        self.set_block_id(Some(block_id.into()))
+    }
+
+    /// Build a [`Context`] object
+    pub fn build(self) -> Context {
+        Context {
+            kind: "context",
+            elements: self.elements,
+            block_id: self.block_id,
         }
     }
 }

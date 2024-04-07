@@ -6,36 +6,35 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::elements::DatePicker;
-/// use serde_json::json;
+/// ```
+/// # use slack_messaging::blocks::elements::DatePicker;
+/// let datepicker = DatePicker::builder()
+///     .action_id("datepicker-123")
+///     .initial_date("1990-04-28")
+///     .placeholder("Select a date")
+///     .build();
 ///
-/// let datepicker = DatePicker::new()
-///     .set_action_id("datepicker-123")
-///     .set_initial_date("1990-04-28")
-///     .placeholder("Select a date");
-///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "datepicker",
 ///     "action_id": "datepicker-123",
 ///     "initial_date": "1990-04-28",
 ///     "placeholder": {
 ///         "type": "plain_text",
-///         "text": "Select a date",
-///         "emoji": true
+///         "text": "Select a date"
 ///     }
 /// });
 ///
-/// let datepicker_json = serde_json::to_value(datepicker).unwrap();
+/// let json = serde_json::to_value(datepicker).unwrap();
 ///
-/// assert_eq!(datepicker_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct DatePicker {
     #[serde(rename = "type")]
     kind: &'static str,
 
-    action_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    action_id: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     initial_date: Option<String>,
@@ -50,222 +49,307 @@ pub struct DatePicker {
     placeholder: Option<Text>,
 }
 
-impl Default for DatePicker {
-    fn default() -> Self {
-        Self {
-            kind: "datepicker",
-            action_id: "".into(),
-            initial_date: None,
-            confirm: None,
-            focus_on_load: None,
-            placeholder: None,
-        }
+impl DatePicker {
+    /// Construct a [`DatePickerBuilder`].
+    pub fn builder() -> DatePickerBuilder {
+        DatePickerBuilder::default()
     }
 }
 
-impl DatePicker {
-    /// Constructs a Date picker element with empty values.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::DatePicker;
-    /// use serde_json::json;
-    ///
-    /// let datepicker = DatePicker::new();
-    ///
-    /// let expected = json!({
-    ///     "type": "datepicker",
-    ///     "action_id": ""
-    /// });
-    ///
-    /// let datepicker_json = serde_json::to_value(datepicker).unwrap();
-    ///
-    /// assert_eq!(datepicker_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
-    }
+#[derive(Debug, Default)]
+pub struct DatePickerBuilder {
+    action_id: Option<String>,
+    initial_date: Option<String>,
+    confirm: Option<ConfirmationDialog>,
+    focus_on_load: Option<bool>,
+    placeholder: Option<Text>,
+}
 
-    /// Sets action_id field.
+impl DatePickerBuilder {
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::DatePicker;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::DatePicker;
+    /// let datepicker = DatePicker::builder()
+    ///     .set_action_id(Some("datepicker-123".into()))
+    ///     .build();
     ///
-    /// let datepicker = DatePicker::new().set_action_id("datepicker-123");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "datepicker",
     ///     "action_id": "datepicker-123"
     /// });
     ///
-    /// let datepicker_json = serde_json::to_value(datepicker).unwrap();
+    /// let json = serde_json::to_value(datepicker).unwrap();
     ///
-    /// assert_eq!(datepicker_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self {
-            action_id: action_id.into(),
-            ..self
-        }
+    pub fn set_action_id(self, action_id: Option<String>) -> Self {
+        Self { action_id, ..self }
     }
 
-    /// Sets initial_date field.
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::DatePicker;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::DatePicker;
+    /// let datepicker = DatePicker::builder()
+    ///     .action_id("datepicker-123")
+    ///     .build();
     ///
-    /// let datepicker = DatePicker::new().set_initial_date("1990-04-28");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "datepicker",
-    ///     "action_id": "",
+    ///     "action_id": "datepicker-123"
+    /// });
+    ///
+    /// let json = serde_json::to_value(datepicker).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn action_id(self, action_id: impl Into<String>) -> Self {
+        self.set_action_id(Some(action_id.into()))
+    }
+
+    /// Set initial_date field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::DatePicker;
+    /// let datepicker = DatePicker::builder()
+    ///     .set_initial_date(Some("1990-04-28".into()))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "datepicker",
     ///     "initial_date": "1990-04-28"
     /// });
     ///
-    /// let datepicker_json = serde_json::to_value(datepicker).unwrap();
+    /// let json = serde_json::to_value(datepicker).unwrap();
     ///
-    /// assert_eq!(datepicker_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_initial_date<T: Into<String>>(self, initial_date: T) -> Self {
+    pub fn set_initial_date(self, initial_date: Option<String>) -> Self {
         Self {
-            initial_date: Some(initial_date.into()),
+            initial_date,
             ..self
         }
     }
 
-    /// Sets confirm field with ConfirmationDialog.
+    /// Set initial_date field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{DatePicker, ConfirmationDialog};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::DatePicker;
+    /// let datepicker = DatePicker::builder()
+    ///     .initial_date("1990-04-28")
+    ///     .build();
     ///
-    /// let datepicker = DatePicker::new()
-    ///     .set_confirm(
-    ///         ConfirmationDialog::new()
-    ///             .set_title("Are you sure?")
-    ///             .set_text("Wouldn't you prefer a good game of _chess_?")
-    ///             .set_confirm("Do it")
-    ///             .set_deny("Stop, I've changed my mind!")
-    ///     );
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "datepicker",
-    ///     "action_id": "",
+    ///     "initial_date": "1990-04-28"
+    /// });
+    ///
+    /// let json = serde_json::to_value(datepicker).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn initial_date(self, initial_date: impl Into<String>) -> Self {
+        self.set_initial_date(Some(initial_date.into()))
+    }
+
+    /// Set confirm field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::{DatePicker, ConfirmationDialog};
+    /// let datepicker = DatePicker::builder()
+    ///     .set_confirm(
+    ///         Some(ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build())
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "datepicker",
     ///     "confirm": {
     ///         "title": {
     ///             "type": "plain_text",
-    ///             "text": "Are you sure?",
-    ///             "emoji": true
+    ///             "text": "Are you sure?"
     ///         },
     ///         "text": {
     ///             "type": "plain_text",
-    ///             "text": "Wouldn't you prefer a good game of _chess_?",
-    ///             "emoji": true
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
     ///         },
     ///         "confirm": {
     ///             "type": "plain_text",
-    ///             "text": "Do it",
-    ///             "emoji": true
+    ///             "text": "Do it"
     ///         },
     ///         "deny": {
     ///             "type": "plain_text",
-    ///             "text": "Stop, I've changed my mind!",
-    ///             "emoji": true
+    ///             "text": "Stop, I've changed my mind!"
     ///         }
     ///     }
     /// });
     ///
-    /// let datepicker_json = serde_json::to_value(datepicker).unwrap();
+    /// let json = serde_json::to_value(datepicker).unwrap();
     ///
-    /// assert_eq!(datepicker_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_confirm(self, confirm: ConfirmationDialog) -> Self {
-        Self {
-            confirm: Some(confirm),
-            ..self
-        }
+    pub fn set_confirm(self, confirm: Option<ConfirmationDialog>) -> Self {
+        Self { confirm, ..self }
     }
 
-    /// Sets focus_on_load field.
+    /// Set confirm field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::DatePicker;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::{DatePicker, ConfirmationDialog};
+    /// let datepicker = DatePicker::builder()
+    ///     .confirm(
+    ///         ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// let datepicker = DatePicker::new().set_focus_on_load(true);
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "datepicker",
-    ///     "action_id": "",
+    ///     "confirm": {
+    ///         "title": {
+    ///             "type": "plain_text",
+    ///             "text": "Are you sure?"
+    ///         },
+    ///         "text": {
+    ///             "type": "plain_text",
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
+    ///         },
+    ///         "confirm": {
+    ///             "type": "plain_text",
+    ///             "text": "Do it"
+    ///         },
+    ///         "deny": {
+    ///             "type": "plain_text",
+    ///             "text": "Stop, I've changed my mind!"
+    ///         }
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(datepicker).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn confirm(self, confirm: ConfirmationDialog) -> Self {
+        self.set_confirm(Some(confirm))
+    }
+
+    /// Set focus_on_load field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::DatePicker;
+    /// let datepicker = DatePicker::builder()
+    ///     .set_focus_on_load(Some(true))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "datepicker",
     ///     "focus_on_load": true
     /// });
     ///
-    /// let datepicker_json = serde_json::to_value(datepicker).unwrap();
+    /// let json = serde_json::to_value(datepicker).unwrap();
     ///
-    /// assert_eq!(datepicker_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_focus_on_load(self, focus_on_load: bool) -> Self {
+    pub fn set_focus_on_load(self, focus_on_load: Option<bool>) -> Self {
         Self {
-            focus_on_load: Some(focus_on_load),
+            focus_on_load,
             ..self
         }
     }
 
-    /// Sets placeholder field.
+    /// Set focus_on_load field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{DatePicker, Text};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::DatePicker;
+    /// let datepicker = DatePicker::builder()
+    ///     .focus_on_load(true)
+    ///     .build();
     ///
-    /// let datepicker = DatePicker::new()
-    ///     .set_placeholder(Text::plain("Select a date"));
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "datepicker",
-    ///     "action_id": "",
+    ///     "focus_on_load": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(datepicker).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn focus_on_load(self, focus_on_load: bool) -> Self {
+        self.set_focus_on_load(Some(focus_on_load))
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::plain_text;
+    /// # use slack_messaging::blocks::elements::DatePicker;
+    /// let datepicker = DatePicker::builder()
+    ///     .set_placeholder(Some(plain_text!("Select a date")))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "datepicker",
     ///     "placeholder": {
     ///         "type": "plain_text",
-    ///         "text": "Select a date",
-    ///         "emoji": true
+    ///         "text": "Select a date"
     ///     }
     /// });
     ///
-    /// let datepicker_json = serde_json::to_value(datepicker).unwrap();
+    /// let json = serde_json::to_value(datepicker).unwrap();
     ///
-    /// assert_eq!(datepicker_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
         Self {
-            placeholder: Some(placeholder),
+            placeholder,
             ..self
         }
     }
 
-    /// Sets placeholder field from string. This is a shorthand for `set_placeholder` method.
+    /// Set placeholder field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::DatePicker;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::DatePicker;
+    /// let datepicker = DatePicker::builder()
+    ///     .placeholder("Select a date")
+    ///     .build();
     ///
-    /// let datepicker = DatePicker::new()
-    ///     .placeholder("Select a date");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "datepicker",
-    ///     "action_id": "",
     ///     "placeholder": {
     ///         "type": "plain_text",
-    ///         "text": "Select a date",
-    ///         "emoji": true
+    ///         "text": "Select a date"
     ///     }
     /// });
     ///
-    /// let datepicker_json = serde_json::to_value(datepicker).unwrap();
+    /// let json = serde_json::to_value(datepicker).unwrap();
     ///
-    /// assert_eq!(datepicker_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn placeholder(self, placeholder: Text) -> Self {
-        self.set_placeholder(placeholder)
+    pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
+        let text = Text::builder().plain_text(placeholder.into()).build();
+        self.set_placeholder(Some(text))
+    }
+
+    /// Build a [`DatePicker`] object.
+    pub fn build(self) -> DatePicker {
+        DatePicker {
+            kind: "datepicker",
+            action_id: self.action_id,
+            initial_date: self.initial_date,
+            confirm: self.confirm,
+            focus_on_load: self.focus_on_load,
+            placeholder: self.placeholder,
+        }
     }
 }

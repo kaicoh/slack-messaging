@@ -6,246 +6,305 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::elements::{OverflowMenu, Opt};
-/// use serde_json::json;
-///
-/// let overflow = OverflowMenu::new()
-///     .set_action_id("overflow_0")
-///     .push_option(
-///         Opt::plain("option-0").set_value("value-0")
+/// ```
+/// # use slack_messaging::blocks::elements::{OverflowMenu, Opt};
+/// let overflow = OverflowMenu::builder()
+///     .action_id("overflow_0")
+///     .option(
+///         Opt::builder()
+///             .text("option-0")
+///             .value("value-0")
+///             .build()
 ///     )
-///     .push_option(
-///         Opt::plain("option-1").set_value("value-1")
-///     );
+///     .option(
+///         Opt::builder()
+///             .text("option-1")
+///             .value("value-1")
+///             .build()
+///     )
+///     .build();
 ///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "overflow",
 ///     "action_id": "overflow_0",
 ///     "options": [
 ///         {
 ///             "text": {
 ///                 "type": "plain_text",
-///                 "text": "option-0",
-///                 "emoji": true
+///                 "text": "option-0"
 ///             },
 ///             "value": "value-0"
 ///         },
 ///         {
 ///             "text": {
 ///                 "type": "plain_text",
-///                 "text": "option-1",
-///                 "emoji": true
+///                 "text": "option-1"
 ///             },
 ///             "value": "value-1"
 ///         }
 ///     ]
 /// });
 ///
-/// let overflow_json = serde_json::to_value(overflow).unwrap();
+/// let json = serde_json::to_value(overflow).unwrap();
 ///
-/// assert_eq!(overflow_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct OverflowMenu {
     #[serde(rename = "type")]
     kind: &'static str,
 
-    action_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    action_id: Option<String>,
 
-    #[serde(skip_serializing_if = "Vec::is_empty")]
     options: Vec<Opt>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     confirm: Option<ConfirmationDialog>,
 }
 
-impl Default for OverflowMenu {
-    fn default() -> Self {
-        Self {
-            kind: "overflow",
-            action_id: "".into(),
-            options: vec![],
-            confirm: None,
-        }
+impl OverflowMenu {
+    /// Construct a [`OverflowMenuBuilder`].
+    pub fn builder() -> OverflowMenuBuilder {
+        OverflowMenuBuilder::default()
     }
 }
 
-impl OverflowMenu {
-    /// Constructs a Overflow menu element with empty values.
+/// Builder for [`OverflowMenu`] object.
+#[derive(Debug, Default)]
+pub struct OverflowMenuBuilder {
+    action_id: Option<String>,
+    options: Vec<Opt>,
+    confirm: Option<ConfirmationDialog>,
+}
+
+impl OverflowMenuBuilder {
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::OverflowMenu;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::OverflowMenu;
+    /// let overflow = OverflowMenu::builder()
+    ///     .set_action_id(Some("overflow_0".into()))
+    ///     .build();
     ///
-    /// let overflow = OverflowMenu::new();
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "overflow",
-    ///     "action_id": ""
+    ///     "action_id": "overflow_0",
+    ///     "options": []
     /// });
     ///
-    /// let overflow_json = serde_json::to_value(overflow).unwrap();
+    /// let json = serde_json::to_value(overflow).unwrap();
     ///
-    /// assert_eq!(overflow_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn new() -> Self {
-        Self::default()
+    pub fn set_action_id(self, action_id: Option<String>) -> Self {
+        Self { action_id, ..self }
     }
 
-    /// Sets action_id field.
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::OverflowMenu;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::OverflowMenu;
+    /// let overflow = OverflowMenu::builder()
+    ///     .action_id("overflow_0")
+    ///     .build();
     ///
-    /// let overflow = OverflowMenu::new().set_action_id("overflow_0");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "overflow",
-    ///     "action_id": "overflow_0"
+    ///     "action_id": "overflow_0",
+    ///     "options": []
     /// });
     ///
-    /// let overflow_json = serde_json::to_value(overflow).unwrap();
+    /// let json = serde_json::to_value(overflow).unwrap();
     ///
-    /// assert_eq!(overflow_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self {
-            action_id: action_id.into(),
-            ..self
-        }
+    pub fn action_id(self, action_id: impl Into<String>) -> Self {
+        self.set_action_id(Some(action_id.into()))
     }
 
-    /// Sets options field directly.
+    /// Set options field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{OverflowMenu, Opt};
-    /// use serde_json::json;
-    ///
-    /// let overflow = OverflowMenu::new()
+    /// ```
+    /// # use slack_messaging::blocks::elements::{OverflowMenu, Opt};
+    /// let overflow = OverflowMenu::builder()
     ///     .set_options(
     ///         vec![
-    ///             Opt::plain("option-0").set_value("value-0"),
-    ///             Opt::plain("option-1").set_value("value-1")
+    ///             Opt::builder()
+    ///                 .text("option-0")
+    ///                 .value("value-0")
+    ///                 .build(),
+    ///             Opt::builder()
+    ///                 .text("option-1")
+    ///                 .value("value-1")
+    ///                 .build(),
     ///         ]
-    ///     );
+    ///     )
+    ///     .build();
     ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "overflow",
-    ///     "action_id": "",
     ///     "options": [
     ///         {
     ///             "text": {
     ///                 "type": "plain_text",
-    ///                 "text": "option-0",
-    ///                 "emoji": true
+    ///                 "text": "option-0"
     ///             },
     ///             "value": "value-0"
     ///         },
     ///         {
     ///             "text": {
     ///                 "type": "plain_text",
-    ///                 "text": "option-1",
-    ///                 "emoji": true
+    ///                 "text": "option-1"
     ///             },
     ///             "value": "value-1"
     ///         }
     ///     ]
     /// });
     ///
-    /// let overflow_json = serde_json::to_value(overflow).unwrap();
+    /// let json = serde_json::to_value(overflow).unwrap();
     ///
-    /// assert_eq!(overflow_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
     pub fn set_options(self, options: Vec<Opt>) -> Self {
         Self { options, ..self }
     }
 
-    /// Adds Opt object to options field.
+    /// Add Opt object to options field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{OverflowMenu, Opt};
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::{OverflowMenu, Opt};
+    /// let overflow = OverflowMenu::builder()
+    ///     .option(
+    ///         Opt::builder()
+    ///             .text("option-0")
+    ///             .value("value-0")
+    ///             .build(),
+    ///     )
+    ///     .build();
     ///
-    /// let overflow = OverflowMenu::new()
-    ///     .push_option(Opt::plain("option-0").set_value("value-0"));
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "overflow",
-    ///     "action_id": "",
     ///     "options": [
     ///         {
     ///             "text": {
     ///                 "type": "plain_text",
-    ///                 "text": "option-0",
-    ///                 "emoji": true
+    ///                 "text": "option-0"
     ///             },
     ///             "value": "value-0"
     ///         }
     ///     ]
     /// });
     ///
-    /// let overflow_json = serde_json::to_value(overflow).unwrap();
+    /// let json = serde_json::to_value(overflow).unwrap();
     ///
-    /// assert_eq!(overflow_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn push_option(self, option: Opt) -> Self {
+    pub fn option(self, option: Opt) -> Self {
         let Self { mut options, .. } = self;
         options.push(option);
         Self { options, ..self }
     }
 
-    /// Sets confirm field with ConfirmationDialog object.
+    /// Set confirm field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{OverflowMenu, ConfirmationDialog};
-    /// use serde_json::json;
-    ///
-    /// let overflow = OverflowMenu::new()
+    /// ```
+    /// # use slack_messaging::blocks::elements::{OverflowMenu, ConfirmationDialog};
+    /// let overflow = OverflowMenu::builder()
     ///     .set_confirm(
-    ///         ConfirmationDialog::new()
-    ///             .set_title("Are you sure?")
-    ///             .set_text("Wouldn't you prefer a good game of _chess_?")
-    ///             .set_confirm("Do it")
-    ///             .set_deny("Stop, I've changed my mind!")
-    ///     );
+    ///         Some(ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build())
+    ///     )
+    ///     .build();
     ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "overflow",
-    ///     "action_id": "",
     ///     "confirm": {
     ///         "title": {
     ///             "type": "plain_text",
-    ///             "text": "Are you sure?",
-    ///             "emoji": true
+    ///             "text": "Are you sure?"
     ///         },
     ///         "text": {
     ///             "type": "plain_text",
-    ///             "text": "Wouldn't you prefer a good game of _chess_?",
-    ///             "emoji": true
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
     ///         },
     ///         "confirm": {
     ///             "type": "plain_text",
-    ///             "text": "Do it",
-    ///             "emoji": true
+    ///             "text": "Do it"
     ///         },
     ///         "deny": {
     ///             "type": "plain_text",
-    ///             "text": "Stop, I've changed my mind!",
-    ///             "emoji": true
+    ///             "text": "Stop, I've changed my mind!"
     ///         }
-    ///     }
+    ///     },
+    ///     "options": []
     /// });
     ///
-    /// let overflow_json = serde_json::to_value(overflow).unwrap();
+    /// let json = serde_json::to_value(overflow).unwrap();
     ///
-    /// assert_eq!(overflow_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_confirm(self, confirm: ConfirmationDialog) -> Self {
-        Self {
-            confirm: Some(confirm),
-            ..self
+    pub fn set_confirm(self, confirm: Option<ConfirmationDialog>) -> Self {
+        Self { confirm, ..self }
+    }
+
+    /// Set confirm field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::{OverflowMenu, ConfirmationDialog};
+    /// let overflow = OverflowMenu::builder()
+    ///     .confirm(
+    ///         ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build()
+    ///     )
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "overflow",
+    ///     "confirm": {
+    ///         "title": {
+    ///             "type": "plain_text",
+    ///             "text": "Are you sure?"
+    ///         },
+    ///         "text": {
+    ///             "type": "plain_text",
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
+    ///         },
+    ///         "confirm": {
+    ///             "type": "plain_text",
+    ///             "text": "Do it"
+    ///         },
+    ///         "deny": {
+    ///             "type": "plain_text",
+    ///             "text": "Stop, I've changed my mind!"
+    ///         }
+    ///     },
+    ///     "options": []
+    /// });
+    ///
+    /// let json = serde_json::to_value(overflow).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn confirm(self, confirm: ConfirmationDialog) -> Self {
+        self.set_confirm(Some(confirm))
+    }
+
+    /// Build a [`OverflowMenu`] object.
+    pub fn build(self) -> OverflowMenu {
+        OverflowMenu {
+            kind: "overflow",
+            action_id: self.action_id,
+            options: self.options,
+            confirm: self.confirm,
         }
     }
 }

@@ -6,34 +6,33 @@ use serde::Serialize;
 ///
 /// # Example
 ///
-/// ```ignore
-/// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
-/// use serde_json::json;
+/// ```
+/// # use slack_messaging::blocks::elements::MultiSelectPublicChannels;
+/// let menu = MultiSelectPublicChannels::builder()
+///     .action_id("text1234")
+///     .placeholder("Select channels")
+///     .build();
 ///
-/// let menu = MultiSelectPublicChannels::new()
-///     .set_action_id("text1234")
-///     .placeholder("Select channels");
-///
-/// let expected = json!({
+/// let expected = serde_json::json!({
 ///     "type": "multi_channels_select",
 ///     "action_id": "text1234",
 ///     "placeholder": {
 ///         "type": "plain_text",
-///         "text": "Select channels",
-///         "emoji": true
+///         "text": "Select channels"
 ///     }
 /// });
 ///
-/// let menu_json = serde_json::to_value(menu).unwrap();
+/// let json = serde_json::to_value(menu).unwrap();
 ///
-/// assert_eq!(menu_json, expected);
+/// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct MultiSelectPublicChannels {
     #[serde(rename = "type")]
     kind: &'static str,
 
-    action_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    action_id: Option<String>,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
     initial_channels: Vec<String>,
@@ -51,86 +50,85 @@ pub struct MultiSelectPublicChannels {
     placeholder: Option<Text>,
 }
 
-impl Default for MultiSelectPublicChannels {
-    fn default() -> Self {
-        Self {
-            kind: "multi_channels_select",
-            action_id: "".into(),
-            initial_channels: vec![],
-            confirm: None,
-            max_selected_items: None,
-            focus_on_load: None,
-            placeholder: None,
-        }
+impl MultiSelectPublicChannels {
+    /// Construct a [`MultiSelectPublicChannelsBuilder`].
+    pub fn builder() -> MultiSelectPublicChannelsBuilder {
+        MultiSelectPublicChannelsBuilder::default()
     }
 }
 
-impl MultiSelectPublicChannels {
-    /// Constructs a Multi-select menu Public channels element with empty values.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
-    /// use serde_json::json;
-    ///
-    /// let menu = MultiSelectPublicChannels::new();
-    ///
-    /// let expected = json!({
-    ///     "type": "multi_channels_select",
-    ///     "action_id": ""
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn new() -> Self {
-        Self::default()
-    }
+/// Builder for [`MultiSelectPublicChannels`] object.
+#[derive(Debug, Default)]
+pub struct MultiSelectPublicChannelsBuilder {
+    action_id: Option<String>,
+    initial_channels: Vec<String>,
+    confirm: Option<ConfirmationDialog>,
+    max_selected_items: Option<i64>,
+    focus_on_load: Option<bool>,
+    placeholder: Option<Text>,
+}
 
-    /// Sets action_id field.
+impl MultiSelectPublicChannelsBuilder {
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectPublicChannels;
+    /// let menu = MultiSelectPublicChannels::builder()
+    ///     .set_action_id(Some("text1234".into()))
+    ///     .build();
     ///
-    /// let menu = MultiSelectPublicChannels::new().set_action_id("text1234");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "multi_channels_select",
     ///     "action_id": "text1234"
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_action_id<T: Into<String>>(self, action_id: T) -> Self {
-        Self {
-            action_id: action_id.into(),
-            ..self
-        }
+    pub fn set_action_id(self, action_id: Option<String>) -> Self {
+        Self { action_id, ..self }
     }
 
-    /// Sets initial_channels field directly.
+    /// Set action_id field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectPublicChannels;
+    /// let menu = MultiSelectPublicChannels::builder()
+    ///     .action_id("text1234")
+    ///     .build();
     ///
-    /// let menu = MultiSelectPublicChannels::new()
+    /// let expected = serde_json::json!({
+    ///     "type": "multi_channels_select",
+    ///     "action_id": "text1234"
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn action_id(self, action_id: impl Into<String>) -> Self {
+        self.set_action_id(Some(action_id.into()))
+    }
+
+    /// Set initial_channels field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectPublicChannels;
+    /// let menu = MultiSelectPublicChannels::builder()
     ///     .set_initial_channels(
     ///         vec!["channel_0".to_string(), "channel_1".to_string()]
-    ///     );
+    ///     )
+    ///     .build();
     ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "multi_channels_select",
-    ///     "action_id": "",
     ///     "initial_channels": ["channel_0", "channel_1"]
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
     pub fn set_initial_channels(self, initial_channels: Vec<String>) -> Self {
         Self {
@@ -139,26 +137,25 @@ impl MultiSelectPublicChannels {
         }
     }
 
-    /// Adds string to initial_channels field.
+    /// Add channel id to initial_channels field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
-    /// use serde_json::json;
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectPublicChannels;
+    /// let menu = MultiSelectPublicChannels::builder()
+    ///     .initial_channel("channel_0")
+    ///     .initial_channel("channel_1")
+    ///     .build();
     ///
-    /// let menu = MultiSelectPublicChannels::new()
-    ///     .push_initial_channel("channel_0");
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "multi_channels_select",
-    ///     "action_id": "",
-    ///     "initial_channels": ["channel_0"]
+    ///     "initial_channels": ["channel_0", "channel_1"]
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn push_initial_channel<T: Into<String>>(self, channel: T) -> Self {
+    pub fn initial_channel(self, channel: impl Into<String>) -> Self {
         let Self {
             mut initial_channels,
             ..
@@ -170,138 +167,249 @@ impl MultiSelectPublicChannels {
         }
     }
 
-    /// Sets confirm field with ConfirmationDialog object.
+    /// Set confirm field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{MultiSelectPublicChannels, ConfirmationDialog};
-    /// use serde_json::json;
-    ///
-    /// let menu = MultiSelectPublicChannels::new()
+    /// ```
+    /// # use slack_messaging::blocks::elements::{MultiSelectPublicChannels, ConfirmationDialog};
+    /// let menu = MultiSelectPublicChannels::builder()
     ///     .set_confirm(
-    ///         ConfirmationDialog::new()
-    ///             .set_title("Are you sure?")
-    ///             .set_text("Wouldn't you prefer a good game of _chess_?")
-    ///             .set_confirm("Do it")
-    ///             .set_deny("Stop, I've changed my mind!")
-    ///     );
+    ///         Some(ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build())
+    ///     )
+    ///     .build();
     ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "multi_channels_select",
-    ///     "action_id": "",
     ///     "confirm": {
     ///         "title": {
     ///             "type": "plain_text",
-    ///             "text": "Are you sure?",
-    ///             "emoji": true
+    ///             "text": "Are you sure?"
     ///         },
     ///         "text": {
     ///             "type": "plain_text",
-    ///             "text": "Wouldn't you prefer a good game of _chess_?",
-    ///             "emoji": true
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
     ///         },
     ///         "confirm": {
     ///             "type": "plain_text",
-    ///             "text": "Do it",
-    ///             "emoji": true
+    ///             "text": "Do it"
     ///         },
     ///         "deny": {
     ///             "type": "plain_text",
-    ///             "text": "Stop, I've changed my mind!",
-    ///             "emoji": true
+    ///             "text": "Stop, I've changed my mind!"
     ///         }
     ///     }
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_confirm(self, confirm: ConfirmationDialog) -> Self {
-        Self {
-            confirm: Some(confirm),
-            ..self
-        }
+    pub fn set_confirm(self, confirm: Option<ConfirmationDialog>) -> Self {
+        Self { confirm, ..self }
     }
 
-    /// Sets max_selected_items field.
+    /// Set confirm field.
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
-    /// use serde_json::json;
-    ///
-    /// let menu = MultiSelectPublicChannels::new()
-    ///     .set_max_selected_items(3);
-    ///
-    /// let expected = json!({
-    ///     "type": "multi_channels_select",
-    ///     "action_id": "",
-    ///     "max_selected_items": 3
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
     /// ```
-    pub fn set_max_selected_items<T: Into<i64>>(self, items: T) -> Self {
-        Self {
-            max_selected_items: Some(items.into()),
-            ..self
-        }
-    }
-
-    /// Sets focus_on_load field.
+    /// # use slack_messaging::blocks::elements::{MultiSelectPublicChannels, ConfirmationDialog};
+    /// let menu = MultiSelectPublicChannels::builder()
+    ///     .confirm(
+    ///         ConfirmationDialog::builder()
+    ///             .title("Are you sure?")
+    ///             .text("Wouldn't you prefer a good game of _chess_?")
+    ///             .confirm("Do it")
+    ///             .deny("Stop, I've changed my mind!")
+    ///             .build()
+    ///     )
+    ///     .build();
     ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::MultiSelectPublicChannels;
-    /// use serde_json::json;
-    ///
-    /// let menu = MultiSelectPublicChannels::new()
-    ///     .set_focus_on_load(true);
-    ///
-    /// let expected = json!({
+    /// let expected = serde_json::json!({
     ///     "type": "multi_channels_select",
-    ///     "action_id": "",
-    ///     "focus_on_load": true
-    /// });
-    ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
-    ///
-    /// assert_eq!(menu_json, expected);
-    /// ```
-    pub fn set_focus_on_load(self, focus_on_load: bool) -> Self {
-        Self {
-            focus_on_load: Some(focus_on_load),
-            ..self
-        }
-    }
-
-    /// Sets placeholder field.
-    ///
-    /// ```ignore
-    /// use slack_messaging::blocks::elements::{MultiSelectPublicChannels, Text};
-    /// use serde_json::json;
-    ///
-    /// let menu = MultiSelectPublicChannels::new()
-    ///     .set_placeholder(Text::plain("Select channels"));
-    ///
-    /// let expected = json!({
-    ///     "type": "multi_channels_select",
-    ///     "action_id": "",
-    ///     "placeholder": {
-    ///         "type": "plain_text",
-    ///         "text": "Select channels",
-    ///         "emoji": true
+    ///     "confirm": {
+    ///         "title": {
+    ///             "type": "plain_text",
+    ///             "text": "Are you sure?"
+    ///         },
+    ///         "text": {
+    ///             "type": "plain_text",
+    ///             "text": "Wouldn't you prefer a good game of _chess_?"
+    ///         },
+    ///         "confirm": {
+    ///             "type": "plain_text",
+    ///             "text": "Do it"
+    ///         },
+    ///         "deny": {
+    ///             "type": "plain_text",
+    ///             "text": "Stop, I've changed my mind!"
+    ///         }
     ///     }
     /// });
     ///
-    /// let menu_json = serde_json::to_value(menu).unwrap();
+    /// let json = serde_json::to_value(menu).unwrap();
     ///
-    /// assert_eq!(menu_json, expected);
+    /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Text) -> Self {
+    pub fn confirm(self, confirm: ConfirmationDialog) -> Self {
+        self.set_confirm(Some(confirm))
+    }
+
+    /// Set max_selected_items field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectPublicChannels;
+    /// let menu = MultiSelectPublicChannels::builder()
+    ///     .set_max_selected_items(Some(3))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "multi_channels_select",
+    ///     "max_selected_items": 3
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_max_selected_items(self, items: Option<i64>) -> Self {
         Self {
-            placeholder: Some(placeholder),
+            max_selected_items: items,
             ..self
+        }
+    }
+
+    /// Set max_selected_items field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectPublicChannels;
+    /// let menu = MultiSelectPublicChannels::builder()
+    ///     .max_selected_items(3)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "multi_channels_select",
+    ///     "max_selected_items": 3
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn max_selected_items(self, items: impl Into<i64>) -> Self {
+        self.set_max_selected_items(Some(items.into()))
+    }
+
+    /// Set focus_on_load field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectPublicChannels;
+    /// let menu = MultiSelectPublicChannels::builder()
+    ///     .set_focus_on_load(Some(true))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "multi_channels_select",
+    ///     "focus_on_load": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_focus_on_load(self, focus_on_load: Option<bool>) -> Self {
+        Self {
+            focus_on_load,
+            ..self
+        }
+    }
+
+    /// Set focus_on_load field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectPublicChannels;
+    /// let menu = MultiSelectPublicChannels::builder()
+    ///     .focus_on_load(true)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "multi_channels_select",
+    ///     "focus_on_load": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn focus_on_load(self, focus_on_load: bool) -> Self {
+        self.set_focus_on_load(Some(focus_on_load))
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::plain_text;
+    /// # use slack_messaging::blocks::elements::MultiSelectPublicChannels;
+    /// let menu = MultiSelectPublicChannels::builder()
+    ///     .set_placeholder(Some(plain_text!("Select channels")))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "multi_channels_select",
+    ///     "placeholder": {
+    ///         "type": "plain_text",
+    ///         "text": "Select channels"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
+        Self {
+            placeholder,
+            ..self
+        }
+    }
+
+    /// Set placeholder field.
+    ///
+    /// ```
+    /// # use slack_messaging::blocks::elements::MultiSelectPublicChannels;
+    /// let menu = MultiSelectPublicChannels::builder()
+    ///     .placeholder("Select channels")
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "multi_channels_select",
+    ///     "placeholder": {
+    ///         "type": "plain_text",
+    ///         "text": "Select channels"
+    ///     }
+    /// });
+    ///
+    /// let json = serde_json::to_value(menu).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
+        let text = Text::builder().plain_text(placeholder.into()).build();
+        self.set_placeholder(Some(text))
+    }
+
+    /// Build a [`MultiSelectPublicChannels`] object.
+    pub fn build(self) -> MultiSelectPublicChannels {
+        MultiSelectPublicChannels {
+            kind: "multi_channels_select",
+            action_id: self.action_id,
+            initial_channels: self.initial_channels,
+            confirm: self.confirm,
+            max_selected_items: self.max_selected_items,
+            focus_on_load: self.focus_on_load,
+            placeholder: self.placeholder,
         }
     }
 }
