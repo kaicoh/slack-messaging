@@ -1,6 +1,6 @@
 [package]
 name = "slack-messaging"
-version = "0.2.2"
+version = "0.3.0"
 authors = ["kaicoh <sumireminami@gmail.com>"]
 edition = "2021"
 keywords = ["slack", "messaging", "webhook"]
@@ -17,10 +17,10 @@ all-features = true
 chrono = { version = "0.4", optional = true }
 regex = { version = "1.7", optional = true }
 serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 
 [dev-dependencies]
 reqwest = { version = "0.11", features = ["json"] }
-serde_json = "1.0"
 tokio = { version = "1", features = ["full"] }
 
 [features]

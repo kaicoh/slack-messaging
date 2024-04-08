@@ -8,36 +8,42 @@ This is a library for [Rust](https://www.rust-lang.org/) to support building mes
 Using this, you can build any messages in type-safe way like following.
 
 ```rust
-use slack_messaging::Message;
+use slack_messaging::{mrkdwn, Message};
 use slack_messaging::blocks::{elements::Button, Actions, Section};
 
 #[tokio::main]
 async fn main() {
-    let message = Message::new()
-        .push_block(
-            Section::new()
-                .set_text_mrkdwn("You have a new request:\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*")
+    let message = Message::builder()
+        .block(
+            Section::builder()
+                .text(mrkdwn!("You have a new request:\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*"))
+                .build()
         )
-        .push_block(
-            Section::new()
-                .push_field_mrkdwn("*Type:*\nComputer (laptop)")
-                .push_field_mrkdwn("*When:*\nSubmitted Aut 10")
+        .block(
+            Section::builder()
+                .field(mrkdwn!("*Type:*\nComputer (laptop)"))
+                .field(mrkdwn!("*When:*\nSubmitted Aug 10"))
+                .build()
         )
-        .push_block(
-            Actions::new()
-                .push_element(
-                    Button::new()
+        .block(
+            Actions::builder()
+                .element(
+                    Button::builder()
                         .text("Approve")
-                        .set_value("approve")
-                        .set_primary()
+                        .value("approve")
+                        .primary()
+                        .build()
                 )
-                .push_element(
-                    Button::new()
+                .element(
+                    Button::builder()
                         .text("Deny")
-                        .set_value("deny")
-                        .set_danger()
+                        .value("deny")
+                        .danger()
+                        .build()
                 )
-        );
+                .build()
+        )
+        .build();
 
     let req = reqwest::Client::new()
         .post("https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX")
@@ -70,7 +76,7 @@ The message payload of the above example is following.
                 },
                 {
                     "type": "mrkdwn",
-                    "text": "*When:*\nSubmitted Aut 10"
+                    "text": "*When:*\nSubmitted Aug 10"
                 }
             ]
         },
@@ -81,8 +87,7 @@ The message payload of the above example is following.
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "Approve",
-                        "emoji": true
+                        "text": "Approve"
                     },
                     "value": "approve",
                     "style": "primary"
@@ -91,8 +96,7 @@ The message payload of the above example is following.
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "Deny",
-                        "emoji": true
+                        "text": "Deny"
                     },
                     "value": "deny",
                     "style": "danger"
