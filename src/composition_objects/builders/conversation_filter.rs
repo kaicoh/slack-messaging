@@ -1,73 +1,26 @@
-use serde::Serialize;
+use super::{Conversation, ConversationFilter};
 
-/// Type of conversation to set into [Filter object](https://api.slack.com/reference/block-kit/composition-objects#filter_conversations)
-#[derive(Debug, Clone, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub enum Conversation {
-    Im,
-    Mpim,
-    Private,
-    Public,
-}
-
-/// [Filter object](https://api.slack.com/reference/block-kit/composition-objects#filter_conversations)
-/// representation.
-///
-/// # Example
-///
-/// ```
-/// # use slack_messaging::blocks::elements::{Filter, Conversation};
-/// let filter = Filter::builder()
-///     .include(Conversation::Public)
-///     .include(Conversation::Mpim)
-///     .exclude_bot_users(true)
-///     .build();
-///
-/// let expected = serde_json::json!({
-///     "include": [
-///         "public",
-///         "mpim"
-///     ],
-///     "exclude_bot_users": true
-/// });
-///
-/// let json = serde_json::to_value(filter).unwrap();
-///
-/// assert_eq!(json, expected);
-/// ```
-#[derive(Debug, Clone, Serialize)]
-pub struct Filter {
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    include: Vec<Conversation>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    exclude_external_shared_channels: Option<bool>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    exclude_bot_users: Option<bool>,
-}
-
-impl Filter {
-    /// Construct a [`FilterBuilder`].
-    pub fn builder() -> FilterBuilder {
-        FilterBuilder::default()
+impl ConversationFilter {
+    /// Construct a [`ConversationFilterBuilder`].
+    pub fn builder() -> ConversationFilterBuilder {
+        ConversationFilterBuilder::default()
     }
 }
 
 /// Builder for [`Filter`] object.
 #[derive(Debug, Default)]
-pub struct FilterBuilder {
+pub struct ConversationFilterBuilder {
     include: Vec<Conversation>,
     exclude_external_shared_channels: Option<bool>,
     exclude_bot_users: Option<bool>,
 }
 
-impl FilterBuilder {
+impl ConversationFilterBuilder {
     /// Set include field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{Filter, Conversation};
-    /// let filter = Filter::builder()
+    /// # use slack_messaging::composition_objects::{Conversation, ConversationFilter};
+    /// let filter = ConversationFilter::builder()
     ///     .set_include(
     ///         vec![
     ///             Conversation::Im,
@@ -94,8 +47,8 @@ impl FilterBuilder {
     /// Add conversation to include field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{Filter, Conversation};
-    /// let filter = Filter::builder()
+    /// # use slack_messaging::composition_objects::{Conversation, ConversationFilter};
+    /// let filter = ConversationFilter::builder()
     ///     .include(Conversation::Mpim)
     ///     .include(Conversation::Public)
     ///     .build();
@@ -120,8 +73,8 @@ impl FilterBuilder {
     /// Set exclude_external_shared_channels field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{Filter, Conversation};
-    /// let filter = Filter::builder()
+    /// # use slack_messaging::composition_objects::{Conversation, ConversationFilter};
+    /// let filter = ConversationFilter::builder()
     ///     .set_exclude_external_shared_channels(Some(true))
     ///     .build();
     ///
@@ -143,8 +96,8 @@ impl FilterBuilder {
     /// Set exclude_external_shared_channels field.
     ///
     /// ```
-    /// use slack_messaging::blocks::elements::{Filter, Conversation};
-    /// let filter = Filter::builder()
+    /// # use slack_messaging::composition_objects::{Conversation, ConversationFilter};
+    /// let filter = ConversationFilter::builder()
     ///     .exclude_external_shared_channels(true)
     ///     .build();
     ///
@@ -163,8 +116,8 @@ impl FilterBuilder {
     /// Set exclude_bot_users field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{Filter, Conversation};
-    /// let filter = Filter::builder()
+    /// # use slack_messaging::composition_objects::{Conversation, ConversationFilter};
+    /// let filter = ConversationFilter::builder()
     ///     .set_exclude_bot_users(Some(true))
     ///     .build();
     ///
@@ -186,8 +139,8 @@ impl FilterBuilder {
     /// Set exclude_bot_users field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{Filter, Conversation};
-    /// let filter = Filter::builder()
+    /// # use slack_messaging::composition_objects::{Conversation, ConversationFilter};
+    /// let filter = ConversationFilter::builder()
     ///     .exclude_bot_users(true)
     ///     .build();
     ///
@@ -203,9 +156,9 @@ impl FilterBuilder {
         self.set_exclude_bot_users(Some(value))
     }
 
-    /// Build a [`Filter`] object.
-    pub fn build(self) -> Filter {
-        Filter {
+    /// Build a [`ConversationFilter`] object.
+    pub fn build(self) -> ConversationFilter {
+        ConversationFilter {
             include: self.include,
             exclude_external_shared_channels: self.exclude_external_shared_channels,
             exclude_bot_users: self.exclude_bot_users,

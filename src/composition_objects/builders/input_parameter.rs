@@ -1,31 +1,5 @@
-use serde::Serialize;
+use super::InputParameter;
 use serde_json::Value;
-
-/// [Input parameter object](https://api.slack.com/reference/block-kit/composition-objects#input_parameter) representation.
-///
-/// # Example
-///
-/// ```
-/// # use slack_messaging::blocks::elements::InputParameter;
-/// let param = InputParameter::builder()
-///     .name("input_parameter_a")
-///     .value("Value for input param A")
-///     .build();
-///
-/// let expected = serde_json::json!({
-///     "name": "input_parameter_a",
-///     "value": "Value for input param A"
-/// });
-///
-/// let json = serde_json::to_value(param).unwrap();
-///
-/// assert_eq!(json, expected);
-/// ```
-#[derive(Debug, Clone, Serialize)]
-pub struct InputParameter {
-    name: String,
-    value: Value,
-}
 
 impl InputParameter {
     /// Construct a [`InputParameterBuilder`].
@@ -45,7 +19,7 @@ impl InputParameterBuilder {
     /// Set name field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::InputParameter;
+    /// # use slack_messaging::composition_objects::InputParameter;
     /// let param = InputParameter::builder()
     ///     .set_name(Some("input_parameter_a".into()))
     ///     .value("")
@@ -67,7 +41,7 @@ impl InputParameterBuilder {
     /// Set name field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::InputParameter;
+    /// # use slack_messaging::composition_objects::InputParameter;
     /// let param = InputParameter::builder()
     ///     .name("input_parameter_a")
     ///     .value("")
@@ -89,7 +63,7 @@ impl InputParameterBuilder {
     /// Set value field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::InputParameter;
+    /// # use slack_messaging::composition_objects::InputParameter;
     /// use serde_json::Value;
     ///
     /// let param = InputParameter::builder()
@@ -113,7 +87,7 @@ impl InputParameterBuilder {
     /// Set value field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::InputParameter;
+    /// # use slack_messaging::composition_objects::InputParameter;
     /// let param = InputParameter::builder()
     ///     .name("")
     ///     .value("Value for input param A")
@@ -143,5 +117,15 @@ impl InputParameterBuilder {
                 .value
                 .expect("value must be set to InputParameterBuilder"),
         }
+    }
+
+    /// Get name value.
+    pub fn get_name(&self) -> &Option<String> {
+        &self.name
+    }
+
+    /// Get value value.
+    pub fn get_value(&self) -> &Option<Value> {
+        &self.value
     }
 }

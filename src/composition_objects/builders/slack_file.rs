@@ -1,32 +1,4 @@
-use serde::Serialize;
-
-/// [Slack file object](https://api.slack.com/reference/block-kit/composition-objects#slack_file)
-/// representation.
-///
-/// # Example
-///
-/// ```
-/// # use slack_messaging::blocks::elements::SlackFile;
-/// let file = SlackFile::builder()
-///     .id("F0123456")
-///     .build();
-///
-/// let expected = serde_json::json!({
-///     "id": "F0123456"
-/// });
-///
-/// let json = serde_json::to_value(file).unwrap();
-///
-/// assert_eq!(json, expected);
-/// ```
-#[derive(Debug, Clone, Serialize)]
-pub struct SlackFile {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    id: Option<String>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    url: Option<String>,
-}
+use super::SlackFile;
 
 impl SlackFile {
     /// Construct a [`SlackFileBuilder`].
@@ -46,7 +18,7 @@ impl SlackFileBuilder {
     /// Set id field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SlackFile;
+    /// # use slack_messaging::composition_objects::SlackFile;
     /// let file = SlackFile::builder()
     ///     .set_id(Some("F0123456".into()))
     ///     .build();
@@ -66,7 +38,7 @@ impl SlackFileBuilder {
     /// Set id field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SlackFile;
+    /// # use slack_messaging::composition_objects::SlackFile;
     /// let file = SlackFile::builder()
     ///     .id("F0123456")
     ///     .build();
@@ -86,7 +58,7 @@ impl SlackFileBuilder {
     /// Set url field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SlackFile;
+    /// # use slack_messaging::composition_objects::SlackFile;
     /// let file = SlackFile::builder()
     ///     .set_url(Some("https://files.slack.com/files-pri/T0123456-F0123456/xyz.png".into()))
     ///     .build();
@@ -106,7 +78,7 @@ impl SlackFileBuilder {
     /// Set url field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SlackFile;
+    /// # use slack_messaging::composition_objects::SlackFile;
     /// let file = SlackFile::builder()
     ///     .url("https://files.slack.com/files-pri/T0123456-F0123456/xyz.png")
     ///     .build();
@@ -133,5 +105,15 @@ impl SlackFileBuilder {
             id: self.id,
             url: self.url,
         }
+    }
+
+    /// Get id value.
+    pub fn get_id(&self) -> &Option<String> {
+        &self.id
+    }
+
+    /// Get url value.
+    pub fn get_url(&self) -> &Option<String> {
+        &self.url
     }
 }

@@ -1,79 +1,9 @@
-use serde::Serialize;
-
-const TYPE_PLAIN: &str = "plain_text";
-const TYPE_MRKDWN: &str = "mrkdwn";
-
-/// [Text object](https://api.slack.com/reference/block-kit/composition-objects#text)
-/// representation.
-///
-/// # Example
-///
-/// ## type plain_text
-///
-/// ```
-/// # use slack_messaging::blocks::elements::Text;
-/// let text = Text::builder()
-///     .plain_text("Hello, World!")
-///     .build();
-///
-/// let json = serde_json::to_value(text).unwrap();
-///
-/// let expected = serde_json::json!({
-///     "type": "plain_text",
-///     "text": "Hello, World!"
-/// });
-///
-/// assert_eq!(json, expected);
-/// ```
-///
-/// ## type mrkdwn
-///
-/// ```
-/// # use slack_messaging::blocks::elements::Text;
-/// let text = Text::builder()
-///     .mrkdwn("Hello, World!")
-///     .build();
-/// let json = serde_json::to_value(text).unwrap();
-///
-/// let expected = serde_json::json!({
-///     "type": "mrkdwn",
-///     "text": "Hello, World!",
-/// });
-///
-/// assert_eq!(json, expected);
-/// ```
-#[derive(Debug, Clone, Serialize)]
-pub struct Text {
-    #[serde(rename = "type")]
-    kind: &'static str,
-
-    text: String,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    emoji: Option<bool>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    verbatim: Option<bool>,
-}
+use super::{Text, TYPE_MRKDWN, TYPE_PLAIN};
 
 impl Text {
     /// Construct a [`TextBuilder`].
     pub fn builder() -> TextBuilder {
         TextBuilder::default()
-    }
-}
-
-impl PartialEq for Text {
-    fn eq(&self, other: &Self) -> bool {
-        if self.kind != other.kind || self.text.as_str() != other.text.as_str() {
-            return false;
-        }
-
-        match self.kind {
-            TYPE_PLAIN => self.emoji == other.emoji,
-            TYPE_MRKDWN => self.verbatim == other.verbatim,
-            _ => false,
-        }
     }
 }
 
@@ -90,7 +20,7 @@ impl TextBuilder {
     /// Set plain text.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::Text;
+    /// # use slack_messaging::composition_objects::Text;
     /// let text = Text::builder()
     ///     .plain_text("hello world")
     ///     .build();
@@ -110,7 +40,7 @@ impl TextBuilder {
     /// Set plain text.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::Text;
+    /// # use slack_messaging::composition_objects::Text;
     /// let text = Text::builder()
     ///     .set_plain_text(Some("hello world".into()))
     ///     .build();
@@ -134,7 +64,7 @@ impl TextBuilder {
     /// Set markdown text.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::Text;
+    /// # use slack_messaging::composition_objects::Text;
     /// let text = Text::builder()
     ///     .mrkdwn("hello world")
     ///     .build();
@@ -154,7 +84,7 @@ impl TextBuilder {
     /// Set markdown text.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::Text;
+    /// # use slack_messaging::composition_objects::Text;
     /// let text = Text::builder()
     ///     .set_mrkdwn(Some("hello world".into()))
     ///     .build();
@@ -178,7 +108,7 @@ impl TextBuilder {
     /// Set emoji field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::Text;
+    /// # use slack_messaging::composition_objects::Text;
     /// let text = Text::builder()
     ///     .plain_text("😊")
     ///     .emoji(true)
@@ -200,7 +130,7 @@ impl TextBuilder {
     /// Set emoji field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::Text;
+    /// # use slack_messaging::composition_objects::Text;
     /// let text = Text::builder()
     ///     .plain_text("😊")
     ///     .set_emoji(Some(true))
@@ -222,7 +152,7 @@ impl TextBuilder {
     /// Set verbatim field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::Text;
+    /// # use slack_messaging::composition_objects::Text;
     /// let text = Text::builder()
     ///     .mrkdwn("hello world")
     ///     .verbatim(true)
@@ -244,7 +174,7 @@ impl TextBuilder {
     /// Set verbatim field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::Text;
+    /// # use slack_messaging::composition_objects::Text;
     /// let text = Text::builder()
     ///     .mrkdwn("hello world")
     ///     .set_verbatim(Some(true))
@@ -272,57 +202,24 @@ impl TextBuilder {
             verbatim: self.verbatim,
         }
     }
-}
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_equals_with_same_type_and_text() {
-        let plain_0 = Text::builder().plain_text("Hello").build();
-        let plain_1 = Text::builder().plain_text("Hello").build();
-        let plain_2 = Text::builder().plain_text("hello").build();
-
-        let mrkdwn_0 = Text::builder().mrkdwn("Hello").build();
-        let mrkdwn_1 = Text::builder().mrkdwn("Hello").build();
-        let mrkdwn_2 = Text::builder().mrkdwn("hello").build();
-
-        assert_eq!(plain_0, plain_1);
-        assert_eq!(mrkdwn_0, mrkdwn_1);
-
-        assert_ne!(plain_0, mrkdwn_0);
-        assert_ne!(plain_0, mrkdwn_1);
-        assert_ne!(plain_1, mrkdwn_0);
-        assert_ne!(plain_1, mrkdwn_1);
-
-        assert_ne!(plain_0, plain_2);
-        assert_ne!(mrkdwn_0, mrkdwn_2);
+    /// Get type value.
+    pub fn get_type(&self) -> &Option<&'static str> {
+        &self.kind
     }
 
-    #[test]
-    fn it_compares_emoji_field_when_plain_text() {
-        let plain_0 = Text::builder().plain_text("Hello").emoji(false).build();
-        let plain_1 = Text::builder().plain_text("Hello").build();
-
-        assert_ne!(plain_0, plain_1);
-
-        let plain_0 = Text::builder().plain_text("Hello").emoji(false).build();
-        let plain_1 = Text::builder().plain_text("Hello").emoji(false).build();
-
-        assert_eq!(plain_0, plain_1);
+    /// Get text value.
+    pub fn get_text(&self) -> &Option<String> {
+        &self.text
     }
 
-    #[test]
-    fn it_compares_verbatim_field_when_mrkdwn() {
-        let mrkdwn_0 = Text::builder().mrkdwn("Hello").verbatim(true).build();
-        let mrkdwn_1 = Text::builder().mrkdwn("Hello").build();
+    /// Get emoji value.
+    pub fn get_emoji(&self) -> &Option<bool> {
+        &self.emoji
+    }
 
-        assert_ne!(mrkdwn_0, mrkdwn_1);
-
-        let mrkdwn_0 = Text::builder().mrkdwn("Hello").verbatim(true).build();
-        let mrkdwn_1 = Text::builder().mrkdwn("Hello").verbatim(true).build();
-
-        assert_eq!(mrkdwn_0, mrkdwn_1);
+    /// Get verbatim value.
+    pub fn get_verbatim(&self) -> &Option<bool> {
+        &self.verbatim
     }
 }

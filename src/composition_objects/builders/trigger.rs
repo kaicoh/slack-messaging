@@ -1,54 +1,4 @@
-use super::InputParameter;
-use serde::Serialize;
-
-/// [Trigger object](https://api.slack.com/reference/block-kit/composition-objects#trigger)
-/// representation.
-///
-/// # Example
-///
-/// ```
-/// # use slack_messaging::blocks::elements::{InputParameter, Trigger};
-/// let trigger = Trigger::builder()
-///     .url("https://slack.com/shortcuts/Ft0123ABC456/123...xyz")
-///     .customizable_input_parameter(
-///         InputParameter::builder()
-///             .name("input_parameter_a")
-///             .value("Value for input param A")
-///             .build()
-///     )
-///     .customizable_input_parameter(
-///         InputParameter::builder()
-///             .name("input_parameter_b")
-///             .value("Value for input param B")
-///             .build()
-///     )
-///     .build();
-///
-/// let expected = serde_json::json!({
-///     "url": "https://slack.com/shortcuts/Ft0123ABC456/123...xyz",
-///     "customizable_input_parameters": [
-///         {
-///             "name": "input_parameter_a",
-///             "value": "Value for input param A"
-///         },
-///         {
-///             "name": "input_parameter_b",
-///             "value": "Value for input param B"
-///         }
-///     ]
-/// });
-///
-/// let json = serde_json::to_value(trigger).unwrap();
-///
-/// assert_eq!(json, expected);
-/// ```
-#[derive(Debug, Clone, Serialize)]
-pub struct Trigger {
-    url: String,
-
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    customizable_input_parameters: Vec<InputParameter>,
-}
+use super::{InputParameter, Trigger};
 
 impl Trigger {
     /// Construct a [`TriggerBuilder`].
@@ -68,7 +18,7 @@ impl TriggerBuilder {
     /// Set url field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{InputParameter, Trigger};
+    /// # use slack_messaging::composition_objects::{InputParameter, Trigger};
     /// let trigger = Trigger::builder()
     ///     .set_url(Some("https://slack.com/shortcuts/Ft0123ABC456/123...xyz".into()))
     ///     .build();
@@ -88,7 +38,7 @@ impl TriggerBuilder {
     /// Set url field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{InputParameter, Trigger};
+    /// # use slack_messaging::composition_objects::{InputParameter, Trigger};
     /// let trigger = Trigger::builder()
     ///     .url("https://slack.com/shortcuts/Ft0123ABC456/123...xyz")
     ///     .build();
@@ -108,7 +58,7 @@ impl TriggerBuilder {
     /// Set customizable_input_parameters field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{InputParameter, Trigger};
+    /// # use slack_messaging::composition_objects::{InputParameter, Trigger};
     /// let trigger = Trigger::builder()
     ///     .url("")
     ///     .set_customizable_input_parameters(
@@ -148,7 +98,7 @@ impl TriggerBuilder {
     /// Add input parameter object to customizable_input_parameters field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{InputParameter, Trigger};
+    /// # use slack_messaging::composition_objects::{InputParameter, Trigger};
     /// let trigger = Trigger::builder()
     ///     .url("")
     ///     .customizable_input_parameter(
@@ -194,5 +144,15 @@ impl TriggerBuilder {
             url: self.url.expect("url must be set to TriggerBuilder"),
             customizable_input_parameters: self.customizable_input_parameters,
         }
+    }
+
+    /// Get url value.
+    pub fn get_url(&self) -> &Option<String> {
+        &self.url
+    }
+
+    /// Get customizable_input_parameters value.
+    pub fn get_customizable_input_parameters(&self) -> &[InputParameter] {
+        &self.customizable_input_parameters
     }
 }

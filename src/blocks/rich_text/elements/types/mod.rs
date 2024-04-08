@@ -1,13 +1,15 @@
 use serde::Serialize;
 
-pub mod channel;
-pub mod emoji;
-pub mod link;
-/// style objects for Rich text element types.
-pub mod styles;
-pub mod text;
-pub mod user;
-pub mod usergroup;
+/// Builder objects.
+pub mod builders;
+
+mod channel;
+mod emoji;
+mod link;
+mod styles;
+mod text;
+mod user;
+mod usergroup;
 
 pub use channel::RichTextElementTypeChannel;
 pub use emoji::RichTextElementTypeEmoji;

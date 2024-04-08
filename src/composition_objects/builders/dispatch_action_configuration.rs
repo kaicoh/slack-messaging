@@ -1,44 +1,4 @@
-use serde::Serialize;
-
-/// Interaction type to set into [Dispatch action configuration](https://api.slack.com/reference/block-kit/composition-objects#dispatch_action_config)
-#[derive(Debug, Clone, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub enum TriggerAction {
-    /// Represents `on_enter_pressed`.
-    OnEnterPressed,
-
-    /// Represents `on_character_entered`.
-    OnCharacterEntered,
-}
-
-/// [Dispatch action configuration](https://api.slack.com/reference/block-kit/composition-objects#dispatch_action_config)
-/// representation.
-///
-/// # Example
-///
-/// ```
-/// # use slack_messaging::blocks::elements::{DispatchActionConfiguration, TriggerAction};
-/// let config = DispatchActionConfiguration::builder()
-///     .trigger_action(TriggerAction::OnEnterPressed)
-///     .trigger_action(TriggerAction::OnCharacterEntered)
-///     .build();
-///
-/// let expected = serde_json::json!({
-///     "trigger_actions_on": [
-///         "on_enter_pressed",
-///         "on_character_entered"
-///     ]
-/// });
-///
-/// let json = serde_json::to_value(config).unwrap();
-///
-/// assert_eq!(json, expected);
-/// ```
-#[derive(Debug, Clone, Serialize)]
-pub struct DispatchActionConfiguration {
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    trigger_actions_on: Vec<TriggerAction>,
-}
+use super::{DispatchActionConfiguration, TriggerAction};
 
 impl DispatchActionConfiguration {
     /// Construct a [`DispatchActionConfigurationBuilder`].
@@ -57,7 +17,7 @@ impl DispatchActionConfigurationBuilder {
     /// Set trigger_actions_on field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{DispatchActionConfiguration, TriggerAction};
+    /// # use slack_messaging::composition_objects::{DispatchActionConfiguration, TriggerAction};
     /// let config = DispatchActionConfiguration::builder()
     ///     .set_trigger_actions(
     ///         vec![
@@ -87,7 +47,7 @@ impl DispatchActionConfigurationBuilder {
     /// Add trigger_action to trigger_actions_on field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::{DispatchActionConfiguration, TriggerAction};
+    /// # use slack_messaging::composition_objects::{DispatchActionConfiguration, TriggerAction};
     /// let config = DispatchActionConfiguration::builder()
     ///     .trigger_action(TriggerAction::OnEnterPressed)
     ///     .build();
@@ -115,5 +75,10 @@ impl DispatchActionConfigurationBuilder {
         DispatchActionConfiguration {
             trigger_actions_on: self.trigger_actions_on,
         }
+    }
+
+    /// Get trigger_actions value.
+    pub fn get_trigger_actions(&self) -> &[TriggerAction] {
+        &self.trigger_actions_on
     }
 }

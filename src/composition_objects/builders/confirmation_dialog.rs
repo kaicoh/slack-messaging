@@ -1,56 +1,4 @@
-use super::Text;
-use serde::Serialize;
-
-/// [Confirmation dialog object](https://api.slack.com/reference/block-kit/composition-objects#confirm)
-/// representation.
-///
-/// # Example
-///
-/// ```
-/// # use slack_messaging::blocks::elements::ConfirmationDialog;
-/// let dialog = ConfirmationDialog::builder()
-///     .title("Are you sure?")
-///     .text("Wouldn't you prefer a good game of _chess_?")
-///     .confirm("Do it")
-///     .deny("Stop, I've changed my mind!")
-///     .build();
-///
-/// let expected = serde_json::json!({
-///     "title": {
-///         "type": "plain_text",
-///         "text": "Are you sure?"
-///     },
-///     "text": {
-///         "type": "plain_text",
-///         "text": "Wouldn't you prefer a good game of _chess_?"
-///     },
-///     "confirm": {
-///         "type": "plain_text",
-///         "text": "Do it"
-///     },
-///     "deny": {
-///         "type": "plain_text",
-///         "text": "Stop, I've changed my mind!"
-///     }
-/// });
-///
-/// let json = serde_json::to_value(dialog).unwrap();
-///
-/// assert_eq!(json, expected);
-/// ```
-#[derive(Debug, Clone, Serialize)]
-pub struct ConfirmationDialog {
-    title: Text,
-
-    text: Text,
-
-    confirm: Text,
-
-    deny: Text,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    style: Option<&'static str>,
-}
+use super::{ConfirmationDialog, Text};
 
 impl ConfirmationDialog {
     /// Construct a [`ConfirmationDialogBuilder`].
@@ -62,10 +10,10 @@ impl ConfirmationDialog {
 /// Builder for [`ConfirmationDialog`] object.
 #[derive(Debug, Default)]
 pub struct ConfirmationDialogBuilder {
-    title: Option<String>,
-    text: Option<String>,
-    confirm: Option<String>,
-    deny: Option<String>,
+    title: Option<Text>,
+    text: Option<Text>,
+    confirm: Option<Text>,
+    deny: Option<Text>,
     style: Option<&'static str>,
 }
 
@@ -73,7 +21,7 @@ impl ConfirmationDialogBuilder {
     /// Set title field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::ConfirmationDialog;
+    /// # use slack_messaging::composition_objects::ConfirmationDialog;
     /// use serde_json::Value;
     ///
     /// let dialog = ConfirmationDialog::builder()
@@ -89,17 +37,20 @@ impl ConfirmationDialogBuilder {
     /// assert_eq!(json["title"]["text"], expected);
     /// ```
     pub fn title(self, title: impl Into<String>) -> Self {
-        self.set_title(Some(title.into()))
+        let text = Text::builder().plain_text(title).build();
+        self.set_title(Some(text))
     }
 
     /// Set title field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::ConfirmationDialog;
+    /// # use slack_messaging::composition_objects::{ConfirmationDialog, Text};
     /// use serde_json::Value;
     ///
     /// let dialog = ConfirmationDialog::builder()
-    ///     .set_title(Some("Are you sure?".into()))
+    ///     .set_title(
+    ///         Some(Text::builder().plain_text("Are you sure?").build())
+    ///     )
     ///     .text("")
     ///     .confirm("")
     ///     .deny("")
@@ -110,14 +61,14 @@ impl ConfirmationDialogBuilder {
     ///
     /// assert_eq!(json["title"]["text"], expected);
     /// ```
-    pub fn set_title(self, title: Option<String>) -> Self {
+    pub fn set_title(self, title: Option<Text>) -> Self {
         Self { title, ..self }
     }
 
     /// Set text field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::ConfirmationDialog;
+    /// # use slack_messaging::composition_objects::ConfirmationDialog;
     /// use serde_json::Value;
     ///
     /// let dialog = ConfirmationDialog::builder()
@@ -133,18 +84,23 @@ impl ConfirmationDialogBuilder {
     /// assert_eq!(json["text"]["text"], expected);
     /// ```
     pub fn text(self, text: impl Into<String>) -> Self {
-        self.set_text(Some(text.into()))
+        let text = Text::builder().plain_text(text).build();
+        self.set_text(Some(text))
     }
 
     /// Set text field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::ConfirmationDialog;
+    /// # use slack_messaging::composition_objects::{ConfirmationDialog, Text};
     /// use serde_json::Value;
     ///
     /// let dialog = ConfirmationDialog::builder()
     ///     .title("")
-    ///     .set_text(Some("Wouldn't you prefer a good game of _chess_?".into()))
+    ///     .set_text(
+    ///         Some(Text::builder()
+    ///            .plain_text("Wouldn't you prefer a good game of _chess_?")
+    ///            .build())
+    ///     )
     ///     .confirm("")
     ///     .deny("")
     ///     .build();
@@ -154,14 +110,14 @@ impl ConfirmationDialogBuilder {
     ///
     /// assert_eq!(json["text"]["text"], expected);
     /// ```
-    pub fn set_text(self, text: Option<String>) -> Self {
+    pub fn set_text(self, text: Option<Text>) -> Self {
         Self { text, ..self }
     }
 
     /// Set confirm field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::ConfirmationDialog;
+    /// # use slack_messaging::composition_objects::ConfirmationDialog;
     /// use serde_json::Value;
     ///
     /// let dialog = ConfirmationDialog::builder()
@@ -177,19 +133,20 @@ impl ConfirmationDialogBuilder {
     /// assert_eq!(json["confirm"]["text"], expected);
     /// ```
     pub fn confirm(self, confirm: impl Into<String>) -> Self {
-        self.set_confirm(Some(confirm.into()))
+        let text = Text::builder().plain_text(confirm).build();
+        self.set_confirm(Some(text))
     }
 
     /// Set confirm field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::ConfirmationDialog;
+    /// # use slack_messaging::composition_objects::{ConfirmationDialog, Text};
     /// use serde_json::Value;
     ///
     /// let dialog = ConfirmationDialog::builder()
     ///     .title("")
     ///     .text("")
-    ///     .set_confirm(Some("Do it".into()))
+    ///     .set_confirm(Some(Text::builder().plain_text("Do it").build()))
     ///     .deny("")
     ///     .build();
     ///
@@ -198,14 +155,14 @@ impl ConfirmationDialogBuilder {
     ///
     /// assert_eq!(json["confirm"]["text"], expected);
     /// ```
-    pub fn set_confirm(self, confirm: Option<String>) -> Self {
+    pub fn set_confirm(self, confirm: Option<Text>) -> Self {
         Self { confirm, ..self }
     }
 
     /// Set deny field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::ConfirmationDialog;
+    /// # use slack_messaging::composition_objects::ConfirmationDialog;
     /// use serde_json::Value;
     ///
     /// let dialog = ConfirmationDialog::builder()
@@ -221,20 +178,23 @@ impl ConfirmationDialogBuilder {
     /// assert_eq!(json["deny"]["text"], expected);
     /// ```
     pub fn deny(self, deny: impl Into<String>) -> Self {
-        self.set_deny(Some(deny.into()))
+        let text = Text::builder().plain_text(deny).build();
+        self.set_deny(Some(text))
     }
 
     /// Set deny field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::ConfirmationDialog;
+    /// # use slack_messaging::composition_objects::{ConfirmationDialog, Text};
     /// use serde_json::Value;
     ///
     /// let dialog = ConfirmationDialog::builder()
     ///     .title("")
     ///     .text("")
     ///     .confirm("")
-    ///     .set_deny(Some("Stop, I've changed my mind!".into()))
+    ///     .set_deny(
+    ///         Some(Text::builder().plain_text("Stop, I've changed my mind!").build())
+    ///     )
     ///     .build();
     ///
     /// let json = serde_json::to_value(dialog).unwrap();
@@ -242,14 +202,14 @@ impl ConfirmationDialogBuilder {
     ///
     /// assert_eq!(json["deny"]["text"], expected);
     /// ```
-    pub fn set_deny(self, deny: Option<String>) -> Self {
+    pub fn set_deny(self, deny: Option<Text>) -> Self {
         Self { deny, ..self }
     }
 
     /// Set "primary" to style field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::ConfirmationDialog;
+    /// # use slack_messaging::composition_objects::ConfirmationDialog;
     /// use serde_json::Value;
     ///
     /// let dialog = ConfirmationDialog::builder()
@@ -275,7 +235,7 @@ impl ConfirmationDialogBuilder {
     /// Set "danger" to style field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::ConfirmationDialog;
+    /// # use slack_messaging::composition_objects::ConfirmationDialog;
     /// use serde_json::Value;
     ///
     /// let dialog = ConfirmationDialog::builder()
@@ -302,31 +262,44 @@ impl ConfirmationDialogBuilder {
     /// the `title`, `text`, `confirm` and `deny` is not set.
     pub fn build(self) -> ConfirmationDialog {
         ConfirmationDialog {
-            title: Text::builder()
-                .plain_text(
-                    self.title
-                        .expect("title must be set to ConfirmationDialogBuilder"),
-                )
-                .build(),
-            text: Text::builder()
-                .plain_text(
-                    self.text
-                        .expect("text must be set to ConfirmationDialogBuilder"),
-                )
-                .build(),
-            confirm: Text::builder()
-                .plain_text(
-                    self.confirm
-                        .expect("confirm must be set to ConfirmationDialogBuilder"),
-                )
-                .build(),
-            deny: Text::builder()
-                .plain_text(
-                    self.deny
-                        .expect("deny must be set to ConfirmationDialogBuilder"),
-                )
-                .build(),
+            title: self
+                .title
+                .expect("title must be set to ConfirmationDialogBuilder"),
+            text: self
+                .text
+                .expect("text must be set to ConfirmationDialogBuilder"),
+            confirm: self
+                .confirm
+                .expect("confirm must be set to ConfirmationDialogBuilder"),
+            deny: self
+                .deny
+                .expect("deny must be set to ConfirmationDialogBuilder"),
             style: self.style,
         }
+    }
+
+    /// Get title value.
+    pub fn get_title(&self) -> &Option<Text> {
+        &self.title
+    }
+
+    /// Get text value.
+    pub fn get_text(&self) -> &Option<Text> {
+        &self.text
+    }
+
+    /// Get confirm value.
+    pub fn get_confirm(&self) -> &Option<Text> {
+        &self.confirm
+    }
+
+    /// Get deny value.
+    pub fn get_deny(&self) -> &Option<Text> {
+        &self.deny
+    }
+
+    /// Get style value.
+    pub fn get_style(&self) -> &Option<&'static str> {
+        &self.style
     }
 }

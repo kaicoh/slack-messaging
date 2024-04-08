@@ -1,8 +1,8 @@
-/// Constructs `plain_text` [Text](crate::blocks::elements::Text).
+/// Constructs `plain_text` [Text](crate::composition_objects::Text).
 ///
 /// ```
 /// # use slack_messaging::plain_text;
-/// # use slack_messaging::blocks::elements::Text;
+/// # use slack_messaging::composition_objects::Text;
 /// let text = plain_text!("Hello, World!");
 /// let expected = Text::builder()
 ///     .plain_text("Hello, World!")
@@ -24,22 +24,22 @@
 #[macro_export]
 macro_rules! plain_text {
     ($fmt:expr) => {
-        $crate::blocks::elements::Text::builder()
+        $crate::composition_objects::Text::builder()
             .plain_text(format!($fmt))
             .build()
     };
     ($fmt:expr, $($arg:tt)+) => {
-        $crate::blocks::elements::Text::builder()
+        $crate::composition_objects::Text::builder()
             .plain_text(format!($fmt, $($arg)+))
             .build()
     };
 }
 
-/// Constructs `mrkdwn` [Text](crate::blocks::elements::Text).
+/// Constructs `mrkdwn` [Text](crate::composition_objects::Text).
 ///
 /// ```
 /// # use slack_messaging::mrkdwn;
-/// # use slack_messaging::blocks::elements::Text;
+/// # use slack_messaging::composition_objects::Text;
 /// let text = mrkdwn!("Hello, World!");
 /// let expected = Text::builder()
 ///     .mrkdwn("Hello, World!")
@@ -61,12 +61,12 @@ macro_rules! plain_text {
 #[macro_export]
 macro_rules! mrkdwn {
     ($fmt:expr) => {
-        $crate::blocks::elements::Text::builder()
+        $crate::composition_objects::Text::builder()
             .mrkdwn(format!($fmt))
             .build()
     };
     ($fmt:expr, $($arg:tt)+) => {
-        $crate::blocks::elements::Text::builder()
+        $crate::composition_objects::Text::builder()
             .mrkdwn(format!($fmt, $($arg)+))
             .build()
     };
@@ -74,7 +74,7 @@ macro_rules! mrkdwn {
 
 #[cfg(test)]
 mod tests {
-    use crate::blocks::elements::Text;
+    use crate::composition_objects::Text;
 
     #[test]
     fn it_works_macro_plain_text_given_expression() {

@@ -1,42 +1,4 @@
-use super::Text;
-use serde::Serialize;
-
-/// [Option object](https://api.slack.com/reference/block-kit/composition-objects#option)
-/// representation.
-///
-/// # Example
-///
-/// ```
-/// # use slack_messaging::blocks::elements::{Opt, Text};
-/// let option = Opt::builder()
-///     .text("Maru")
-///     .value("maru")
-///     .build();
-///
-/// let expected = serde_json::json!({
-///     "text": {
-///         "type": "plain_text",
-///         "text": "Maru"
-///     },
-///     "value": "maru"
-/// });
-///
-/// let json = serde_json::to_value(option).unwrap();
-///
-/// assert_eq!(json, expected);
-/// ```
-#[derive(Debug, Clone, Serialize)]
-pub struct Opt {
-    text: Text,
-
-    value: String,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<Text>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    url: Option<String>,
-}
+use super::{Opt, Text};
 
 impl Opt {
     /// Construct a [`OptBuilder`].
@@ -58,11 +20,13 @@ impl OptBuilder {
     /// Set text field.
     ///
     /// ```
-    /// # use slack_messaging::plain_text;
-    /// # use slack_messaging::blocks::elements::Opt;
-    /// let text = plain_text!("This is a plain text.");
+    /// # use slack_messaging::composition_objects::{Opt, Text};
     /// let option = Opt::builder()
-    ///     .set_text(Some(text))
+    ///     .set_text(
+    ///         Some(Text::builder()
+    ///             .plain_text("This is a plain text.")
+    ///             .build())
+    ///     )
     ///     .value("")
     ///     .build();
     ///
@@ -86,7 +50,7 @@ impl OptBuilder {
     /// If you want to set markdown text object, use `set_text` method instead.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::Opt;
+    /// # use slack_messaging::composition_objects::Opt;
     /// let option = Opt::builder()
     ///     .text("This is a plain text.")
     ///     .value("")
@@ -112,7 +76,7 @@ impl OptBuilder {
     /// Set value field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::Opt;
+    /// # use slack_messaging::composition_objects::Opt;
     /// let option = Opt::builder()
     ///     .text("")
     ///     .set_value(Some("valueeeeeee".into()))
@@ -137,7 +101,7 @@ impl OptBuilder {
     /// Set value field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::Opt;
+    /// # use slack_messaging::composition_objects::Opt;
     /// let option = Opt::builder()
     ///     .text("")
     ///     .value("valueeeeeee")
@@ -162,13 +126,15 @@ impl OptBuilder {
     /// Set description field.
     ///
     /// ```
-    /// # use slack_messaging::plain_text;
-    /// # use slack_messaging::blocks::elements::Opt;
-    /// let text = plain_text!("This is a description.");
+    /// # use slack_messaging::composition_objects::{Opt, Text};
     /// let option = Opt::builder()
     ///     .text("")
     ///     .value("")
-    ///     .set_description(Some(text))
+    ///     .set_description(
+    ///         Some(Text::builder()
+    ///             .plain_text("This is a description.")
+    ///             .build())
+    ///     )
     ///     .build();
     ///
     /// let expected = serde_json::json!({
@@ -198,7 +164,7 @@ impl OptBuilder {
     /// If you want to set markdown text object, use `set_text` method instead.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::Opt;
+    /// # use slack_messaging::composition_objects::Opt;
     /// let option = Opt::builder()
     ///     .text("")
     ///     .value("")
@@ -229,7 +195,7 @@ impl OptBuilder {
     /// Set url field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::Opt;
+    /// # use slack_messaging::composition_objects::Opt;
     /// let option = Opt::builder()
     ///     .text("")
     ///     .value("")
@@ -256,7 +222,7 @@ impl OptBuilder {
     /// Set url field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::Opt;
+    /// # use slack_messaging::composition_objects::Opt;
     /// let option = Opt::builder()
     ///     .text("")
     ///     .value("")
@@ -289,5 +255,25 @@ impl OptBuilder {
             description: self.description,
             url: self.url,
         }
+    }
+
+    /// Get text value.
+    pub fn get_text(&self) -> &Option<Text> {
+        &self.text
+    }
+
+    /// Get value value.
+    pub fn get_value(&self) -> &Option<String> {
+        &self.value
+    }
+
+    /// Get description value.
+    pub fn get_description(&self) -> &Option<Text> {
+        &self.description
+    }
+
+    /// Get url value.
+    pub fn get_url(&self) -> &Option<String> {
+        &self.url
     }
 }

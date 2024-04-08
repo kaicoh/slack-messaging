@@ -1,3 +1,6 @@
+/// Builder objects.
+pub mod builders;
+
 /// Objects from that the blocks are composed.
 pub mod elements;
 
@@ -8,10 +11,12 @@ mod file;
 mod header;
 mod image;
 mod input;
+/// Types from which Rich text composed of
 pub mod rich_text;
 mod section;
 mod video;
 
+use super::composition_objects;
 use serde::Serialize;
 
 pub use actions::{Actions, ActionsElement};
@@ -25,7 +30,7 @@ pub use rich_text::RichText;
 pub use section::{Accessory, Section};
 pub use video::Video;
 
-/// Objects that can be set to blocks in [Message](crate::message::Message) or [Attachment](crate::attachment::Attachment).
+/// Objects that can be set to blocks in [Message](crate::message::Message).
 #[derive(Debug, Clone, Serialize)]
 #[serde(untagged)]
 pub enum Block {

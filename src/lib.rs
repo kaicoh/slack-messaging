@@ -109,8 +109,10 @@
 //!
 //! - **fmt** : Enable [fmt] module.
 
-/// Objects from that the [Message] and the [Attachment] are composed.
+/// Objects from that [Message] is composed.
 pub mod blocks;
+/// Objects can be used inside of block elements.
+pub mod composition_objects;
 /// Format text for slack app. Require `fmt` feature.
 #[cfg(feature = "fmt")]
 pub mod fmt;

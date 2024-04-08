@@ -1,5 +1,8 @@
 use serde::Serialize;
 
+/// Builder objects.
+pub mod builders;
+
 pub mod list;
 pub mod preformatted;
 pub mod quote;
@@ -11,6 +14,11 @@ pub use list::{RichTextList, RichTextListStyle};
 pub use preformatted::RichTextPreformatted;
 pub use quote::RichTextQuote;
 pub use section::RichTextSection;
+pub use types::{
+    CodableStyle, HighlightableStyle, RichTextElementType, RichTextElementTypeChannel,
+    RichTextElementTypeEmoji, RichTextElementTypeLink, RichTextElementTypeText,
+    RichTextElementTypeUser, RichTextElementTypeUserGroup,
+};
 
 /// Rich text object.
 #[derive(Debug, Clone, Serialize)]
