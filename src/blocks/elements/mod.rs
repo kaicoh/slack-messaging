@@ -1,6 +1,6 @@
 use super::{composition_objects, RichText};
 
-/// Builder objects
+/// Builder objects for Block elements.
 pub mod builders;
 
 mod button;

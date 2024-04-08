@@ -21,7 +21,7 @@ impl RichTextListBuilder {
     /// Set style field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::{RichTextList, RichTextListStyle};
+    /// # use slack_messaging::rich_text_elements::{RichTextList, RichTextListStyle};
     /// let list = RichTextList::builder()
     ///     .set_style(Some(RichTextListStyle::Bullet))
     ///     .build();
@@ -43,7 +43,7 @@ impl RichTextListBuilder {
     /// Set style field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::{RichTextList, RichTextListStyle};
+    /// # use slack_messaging::rich_text_elements::{RichTextList, RichTextListStyle};
     /// let list = RichTextList::builder()
     ///     .style(RichTextListStyle::Bullet)
     ///     .build();
@@ -65,7 +65,7 @@ impl RichTextListBuilder {
     /// Set elements field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::{RichTextList, RichTextListStyle,
+    /// # use slack_messaging::rich_text_elements::{RichTextList, RichTextListStyle,
     /// RichTextSection, RichTextElementTypeText};
     /// let list = RichTextList::builder()
     ///     .set_elements(
@@ -125,7 +125,7 @@ impl RichTextListBuilder {
     /// Add RichTextElementType object to elements field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::{RichTextList, RichTextListStyle,
+    /// # use slack_messaging::rich_text_elements::{RichTextList, RichTextListStyle,
     /// RichTextSection, RichTextElementTypeText};
     ///
     /// let list = RichTextList::builder()
@@ -188,7 +188,7 @@ impl RichTextListBuilder {
     /// Set indent field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::{RichTextList, RichTextListStyle};
+    /// # use slack_messaging::rich_text_elements::{RichTextList, RichTextListStyle};
     /// let list = RichTextList::builder()
     ///     .style(RichTextListStyle::Bullet)
     ///     .set_indent(Some(0))
@@ -212,7 +212,7 @@ impl RichTextListBuilder {
     /// Set indent field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::{RichTextList, RichTextListStyle};
+    /// # use slack_messaging::rich_text_elements::{RichTextList, RichTextListStyle};
     /// let list = RichTextList::builder()
     ///     .style(RichTextListStyle::Bullet)
     ///     .indent(0)
@@ -236,7 +236,7 @@ impl RichTextListBuilder {
     /// Set offset field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::{RichTextList, RichTextListStyle};
+    /// # use slack_messaging::rich_text_elements::{RichTextList, RichTextListStyle};
     /// let list = RichTextList::builder()
     ///     .style(RichTextListStyle::Bullet)
     ///     .set_offset(Some(2))
@@ -260,7 +260,7 @@ impl RichTextListBuilder {
     /// Set offset field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::{RichTextList, RichTextListStyle};
+    /// # use slack_messaging::rich_text_elements::{RichTextList, RichTextListStyle};
     /// let list = RichTextList::builder()
     ///     .style(RichTextListStyle::Bullet)
     ///     .offset(2)
@@ -284,7 +284,7 @@ impl RichTextListBuilder {
     /// Set border field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::{RichTextList, RichTextListStyle};
+    /// # use slack_messaging::rich_text_elements::{RichTextList, RichTextListStyle};
     /// let list = RichTextList::builder()
     ///     .style(RichTextListStyle::Bullet)
     ///     .set_border(Some(1))
@@ -308,7 +308,7 @@ impl RichTextListBuilder {
     /// Set border field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::{RichTextList, RichTextListStyle};
+    /// # use slack_messaging::rich_text_elements::{RichTextList, RichTextListStyle};
     /// let list = RichTextList::builder()
     ///     .style(RichTextListStyle::Bullet)
     ///     .border(1)

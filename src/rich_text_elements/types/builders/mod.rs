@@ -14,3 +14,4 @@ pub use link::RichTextElementTypeLinkBuilder;
 pub use styles::{CodableStyleBuilder, HighlightableStyleBuilder};
 pub use text::RichTextElementTypeTextBuilder;
 pub use user::RichTextElementTypeUserBuilder;
+pub use usergroup::RichTextElementTypeUserGroupBuilder;

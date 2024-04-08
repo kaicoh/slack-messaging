@@ -18,7 +18,7 @@ impl RichTextElementTypeChannelBuilder {
     /// Set channel_id field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeChannel;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeChannel;
     /// let channel = RichTextElementTypeChannel::builder()
     ///     .set_channel_id(Some("channel-0".into()))
     ///     .build();
@@ -39,7 +39,7 @@ impl RichTextElementTypeChannelBuilder {
     /// Set channel_id field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeChannel;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeChannel;
     /// let channel = RichTextElementTypeChannel::builder()
     ///     .channel_id("channel-0")
     ///     .build();
@@ -60,7 +60,7 @@ impl RichTextElementTypeChannelBuilder {
     /// Set style field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::{RichTextElementTypeChannel,
+    /// # use slack_messaging::rich_text_elements::types::{RichTextElementTypeChannel,
     /// HighlightableStyle};
     /// let channel = RichTextElementTypeChannel::builder()
     ///     .channel_id("")
@@ -90,7 +90,7 @@ impl RichTextElementTypeChannelBuilder {
     /// Set style field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::{RichTextElementTypeChannel,
+    /// # use slack_messaging::rich_text_elements::types::{RichTextElementTypeChannel,
     /// HighlightableStyle};
     /// let channel = RichTextElementTypeChannel::builder()
     ///     .channel_id("")

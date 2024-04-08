@@ -17,7 +17,7 @@ impl RichTextElementTypeEmojiBuilder {
     /// Set name field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeEmoji;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeEmoji;
     /// let emoji = RichTextElementTypeEmoji::builder()
     ///     .set_name(Some("emoji-0".into()))
     ///     .build();
@@ -38,7 +38,7 @@ impl RichTextElementTypeEmojiBuilder {
     /// Set name field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeEmoji;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeEmoji;
     /// let emoji = RichTextElementTypeEmoji::builder()
     ///     .name("emoji-0")
     ///     .build();

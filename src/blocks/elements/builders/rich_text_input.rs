@@ -68,8 +68,7 @@ impl RichTextInputBuilder {
     /// ```
     /// # use slack_messaging::blocks::RichText;
     /// # use slack_messaging::blocks::elements::RichTextInput;
-    /// # use slack_messaging::blocks::rich_text::elements::RichTextSection;
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeText;
+    /// # use slack_messaging::rich_text_elements::{RichTextSection, RichTextElementTypeText};
     /// let rich_text = RichTextInput::builder()
     ///     .set_initial_value(
     ///         Some(RichText::builder()
@@ -120,8 +119,7 @@ impl RichTextInputBuilder {
     /// ```
     /// # use slack_messaging::blocks::RichText;
     /// # use slack_messaging::blocks::elements::RichTextInput;
-    /// # use slack_messaging::blocks::rich_text::elements::RichTextSection;
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeText;
+    /// # use slack_messaging::rich_text_elements::{RichTextSection, RichTextElementTypeText};
     /// let rich_text = RichTextInput::builder()
     ///     .initial_value(
     ///         RichText::builder()

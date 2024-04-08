@@ -1,7 +1,7 @@
-/// Builder objects.
+/// Builder objects for Blocks.
 pub mod builders;
 
-/// Objects from that the blocks are composed.
+/// Objects from which blocks are composed.
 pub mod elements;
 
 mod actions;
@@ -11,12 +11,11 @@ mod file;
 mod header;
 mod image;
 mod input;
-/// Types from which Rich text composed of
-pub mod rich_text;
+mod rich_text;
 mod section;
 mod video;
 
-use super::composition_objects;
+use super::{composition_objects, rich_text_elements};
 use serde::Serialize;
 
 pub use actions::{Actions, ActionsElement};
@@ -26,7 +25,7 @@ pub use file::{File, FileSource};
 pub use header::Header;
 pub use image::Image;
 pub use input::{Input, InputElement};
-pub use rich_text::RichText;
+pub use rich_text::{RichText, RichTextElement};
 pub use section::{Accessory, Section};
 pub use video::Video;
 

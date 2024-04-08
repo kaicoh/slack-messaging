@@ -18,7 +18,7 @@ impl RichTextElementTypeUserBuilder {
     /// Set user_id field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeUser;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeUser;
     /// let user = RichTextElementTypeUser::builder()
     ///     .set_user_id(Some("user-0".into()))
     ///     .build();
@@ -39,7 +39,7 @@ impl RichTextElementTypeUserBuilder {
     /// Set user_id field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeUser;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeUser;
     /// let user = RichTextElementTypeUser::builder()
     ///     .user_id("user-0")
     ///     .build();
@@ -60,7 +60,7 @@ impl RichTextElementTypeUserBuilder {
     /// Set style field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::{RichTextElementTypeUser,
+    /// # use slack_messaging::rich_text_elements::types::{RichTextElementTypeUser,
     /// HighlightableStyle};
     /// let user = RichTextElementTypeUser::builder()
     ///     .user_id("")
@@ -90,7 +90,7 @@ impl RichTextElementTypeUserBuilder {
     /// Set style field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::{RichTextElementTypeUser,
+    /// # use slack_messaging::rich_text_elements::types::{RichTextElementTypeUser,
     /// HighlightableStyle};
     /// let user = RichTextElementTypeUser::builder()
     ///     .user_id("")

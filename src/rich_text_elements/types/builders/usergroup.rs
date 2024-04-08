@@ -18,7 +18,7 @@ impl RichTextElementTypeUserGroupBuilder {
     /// Set usergroup_id field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeUserGroup;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeUserGroup;
     /// let usergroup = RichTextElementTypeUserGroup::builder()
     ///     .set_usergroup_id(Some("usergroup-0".into()))
     ///     .build();
@@ -42,7 +42,7 @@ impl RichTextElementTypeUserGroupBuilder {
     /// Set usergroup_id field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeUserGroup;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeUserGroup;
     /// let usergroup = RichTextElementTypeUserGroup::builder()
     ///     .usergroup_id("usergroup-0")
     ///     .build();
@@ -63,7 +63,7 @@ impl RichTextElementTypeUserGroupBuilder {
     /// Set style field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::{RichTextElementTypeUserGroup,
+    /// # use slack_messaging::rich_text_elements::types::{RichTextElementTypeUserGroup,
     /// HighlightableStyle};
     /// let usergroup = RichTextElementTypeUserGroup::builder()
     ///     .usergroup_id("")
@@ -93,7 +93,7 @@ impl RichTextElementTypeUserGroupBuilder {
     /// Set style field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::{RichTextElementTypeUserGroup,
+    /// # use slack_messaging::rich_text_elements::types::{RichTextElementTypeUserGroup,
     /// HighlightableStyle};
     /// let usergroup = RichTextElementTypeUserGroup::builder()
     ///     .usergroup_id("")

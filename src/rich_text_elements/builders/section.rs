@@ -17,7 +17,7 @@ impl RichTextSectionBuilder {
     /// Set elements field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::{RichTextSection,
+    /// # use slack_messaging::rich_text_elements::{RichTextSection,
     /// RichTextElementTypeText, CodableStyle};
     /// let section = RichTextSection::builder()
     ///     .set_elements(
@@ -67,7 +67,7 @@ impl RichTextSectionBuilder {
     /// Add RichTextElementType object to elements field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::{RichTextSection,
+    /// # use slack_messaging::rich_text_elements::{RichTextSection,
     /// RichTextElementTypeText, CodableStyle};
     /// let section = RichTextSection::builder()
     ///     .element(

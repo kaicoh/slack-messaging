@@ -7,7 +7,7 @@ impl ConversationFilter {
     }
 }
 
-/// Builder for [`Filter`] object.
+/// Builder for [`ConversationFilter`] object.
 #[derive(Debug, Default)]
 pub struct ConversationFilterBuilder {
     include: Vec<Conversation>,

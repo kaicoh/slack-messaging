@@ -18,7 +18,7 @@ impl RichTextElementTypeTextBuilder {
     /// Set text field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeText;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeText;
     /// let text = RichTextElementTypeText::builder()
     ///     .set_text(Some("hello".into()))
     ///     .build();
@@ -39,7 +39,7 @@ impl RichTextElementTypeTextBuilder {
     /// Set text field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeText;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeText;
     /// let text = RichTextElementTypeText::builder()
     ///     .text("hello")
     ///     .build();
@@ -60,7 +60,7 @@ impl RichTextElementTypeTextBuilder {
     /// Set style field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::{RichTextElementTypeText,
+    /// # use slack_messaging::rich_text_elements::types::{RichTextElementTypeText,
     /// CodableStyle};
     /// let text = RichTextElementTypeText::builder()
     ///     .text("")
@@ -90,7 +90,7 @@ impl RichTextElementTypeTextBuilder {
     /// Set style field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::{RichTextElementTypeText,
+    /// # use slack_messaging::rich_text_elements::types::{RichTextElementTypeText,
     /// CodableStyle};
     /// let text = RichTextElementTypeText::builder()
     ///     .text("")

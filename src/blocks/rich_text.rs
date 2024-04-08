@@ -1,10 +1,6 @@
-/// Builder object.
-pub mod builder;
-
-/// Rich text elements
-pub mod elements;
-
-use elements::RichTextElement;
+use super::rich_text_elements::{
+    RichTextList, RichTextPreformatted, RichTextQuote, RichTextSection,
+};
 use serde::Serialize;
 
 /// [Rich text block](https://api.slack.com/reference/block-kit/blocks#rich_text) representation.
@@ -13,7 +9,7 @@ use serde::Serialize;
 ///
 /// ```
 /// # use slack_messaging::blocks::RichText;
-/// # use slack_messaging::blocks::rich_text::elements::{RichTextSection, RichTextElementTypeText, CodableStyle};
+/// # use slack_messaging::rich_text_elements::{RichTextSection, RichTextElementTypeText, CodableStyle};
 /// let rich_text = RichText::builder()
 ///     .block_id("block-0")
 ///     .element(
@@ -73,4 +69,49 @@ pub struct RichText {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(super) block_id: Option<String>,
+}
+
+/// Objects that can be an element of the [RichText]’s elements field.
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum RichTextElement {
+    /// [Section element](https://api.slack.com/reference/block-kit/blocks#rich_text_section)
+    /// representation
+    Section(Box<RichTextSection>),
+
+    /// [List element](https://api.slack.com/reference/block-kit/blocks#rich_text_list)
+    /// representation
+    List(Box<RichTextList>),
+
+    /// [Preformatted element](https://api.slack.com/reference/block-kit/blocks#rich_text_preformatted)
+    /// representation
+    Preformatted(Box<RichTextPreformatted>),
+
+    /// [Quote element](https://api.slack.com/reference/block-kit/blocks#rich_text_quote)
+    /// representation
+    Quote(Box<RichTextQuote>),
+}
+
+impl From<RichTextSection> for RichTextElement {
+    fn from(value: RichTextSection) -> Self {
+        Self::Section(Box::new(value))
+    }
+}
+
+impl From<RichTextList> for RichTextElement {
+    fn from(value: RichTextList) -> Self {
+        Self::List(Box::new(value))
+    }
+}
+
+impl From<RichTextPreformatted> for RichTextElement {
+    fn from(value: RichTextPreformatted) -> Self {
+        Self::Preformatted(Box::new(value))
+    }
+}
+
+impl From<RichTextQuote> for RichTextElement {
+    fn from(value: RichTextQuote) -> Self {
+        Self::Quote(Box::new(value))
+    }
 }

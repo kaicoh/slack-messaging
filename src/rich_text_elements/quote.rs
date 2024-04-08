@@ -1,39 +1,39 @@
 use super::RichTextElementType;
 use serde::Serialize;
 
-/// [Rich text preformatted element](https://api.slack.com/reference/block-kit/blocks#rich_text_preformatted)
+/// [Rich text quote element](https://api.slack.com/reference/block-kit/blocks#rich_text_quote)
 /// representation.
 ///
 /// # Example
 ///
 /// ```
-/// # use slack_messaging::blocks::rich_text::elements::{RichTextPreformatted, RichTextElementTypeText};
-/// let preformatted = RichTextPreformatted::builder()
+/// # use slack_messaging::rich_text_elements::{RichTextQuote, RichTextElementTypeText};
+/// let quote = RichTextQuote::builder()
 ///     .element(
 ///         RichTextElementTypeText::builder()
-///             .text("{\n  \"object\": {\n    \"description\": \"this is an example of a json object\"\n  }\n}")
+///             .text("What we need is good examples in our documentation.")
 ///             .build()
 ///     )
 ///     .border(0)
 ///     .build();
 ///
 /// let expected = serde_json::json!({
-///     "type": "rich_text_preformatted",
+///     "type": "rich_text_quote",
 ///     "elements": [
 ///         {
 ///             "type": "text",
-///             "text": "{\n  \"object\": {\n    \"description\": \"this is an example of a json object\"\n  }\n}"
+///             "text": "What we need is good examples in our documentation."
 ///         }
 ///     ],
 ///     "border": 0
 /// });
 ///
-/// let json = serde_json::to_value(preformatted).unwrap();
+/// let json = serde_json::to_value(quote).unwrap();
 ///
 /// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
-pub struct RichTextPreformatted {
+pub struct RichTextQuote {
     #[serde(rename = "type")]
     pub(super) kind: &'static str,
 

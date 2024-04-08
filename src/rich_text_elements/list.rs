@@ -7,7 +7,7 @@ use serde::Serialize;
 /// # Example
 ///
 /// ```
-/// # use slack_messaging::blocks::rich_text::elements::{RichTextList,
+/// # use slack_messaging::rich_text_elements::{RichTextList,
 /// RichTextListStyle, RichTextSection, RichTextElementTypeText};
 /// let list = RichTextList::builder()
 ///     .element(

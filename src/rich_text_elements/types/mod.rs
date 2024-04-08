@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-/// Builder objects.
+/// Builder objects for Rich text element types.
 pub mod builders;
 
 mod channel;

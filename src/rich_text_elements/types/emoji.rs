@@ -6,7 +6,7 @@ use serde::Serialize;
 /// # Example
 ///
 /// ```
-/// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeEmoji;
+/// # use slack_messaging::rich_text_elements::types::RichTextElementTypeEmoji;
 /// let emoji = RichTextElementTypeEmoji::builder()
 ///     .name("wave")
 ///     .build();

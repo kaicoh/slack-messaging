@@ -1,15 +1,15 @@
 use super::HighlightableStyle;
 use serde::Serialize;
 
-/// [**user**](https://api.slack.com/reference/block-kit/blocks#user-element-type)
+/// [**channel**](https://api.slack.com/reference/block-kit/blocks#channel-element-type)
 /// type of [Rich text element types](https://api.slack.com/reference/block-kit/blocks#element-types)
 ///
 /// # Example
 ///
 /// ```
-/// # use slack_messaging::blocks::rich_text::elements::types::{RichTextElementTypeUser, HighlightableStyle};
-/// let user = RichTextElementTypeUser::builder()
-///     .user_id("user-0")
+/// # use slack_messaging::rich_text_elements::types::{RichTextElementTypeChannel, HighlightableStyle};
+/// let channel = RichTextElementTypeChannel::builder()
+///     .channel_id("channel-0")
 ///     .style(
 ///         HighlightableStyle::builder()
 ///             .bold(true)
@@ -18,23 +18,23 @@ use serde::Serialize;
 ///     .build();
 ///
 /// let expected = serde_json::json!({
-///     "type": "user",
-///     "user_id": "user-0",
+///     "type": "channel",
+///     "channel_id": "channel-0",
 ///     "style": {
 ///         "bold": true
 ///     }
 /// });
 ///
-/// let json = serde_json::to_value(user).unwrap();
+/// let json = serde_json::to_value(channel).unwrap();
 ///
 /// assert_eq!(json, expected);
 /// ```
 #[derive(Debug, Clone, Serialize)]
-pub struct RichTextElementTypeUser {
+pub struct RichTextElementTypeChannel {
     #[serde(rename = "type")]
     pub(super) kind: &'static str,
 
-    pub(super) user_id: String,
+    pub(super) channel_id: String,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(super) style: Option<HighlightableStyle>,

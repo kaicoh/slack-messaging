@@ -5,7 +5,7 @@ use serde::Serialize;
 /// # Example
 ///
 /// ```
-/// # use slack_messaging::blocks::rich_text::elements::types::CodableStyle;
+/// # use slack_messaging::rich_text_elements::types::CodableStyle;
 /// let style = CodableStyle::builder()
 ///     .bold(true)
 ///     .code(true)
@@ -40,7 +40,7 @@ pub struct CodableStyle {
 /// # Example
 ///
 /// ```
-/// # use slack_messaging::blocks::rich_text::elements::types::HighlightableStyle;
+/// # use slack_messaging::rich_text_elements::types::HighlightableStyle;
 /// let style = HighlightableStyle::builder()
 ///     .bold(true)
 ///     .highlight(true)

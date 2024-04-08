@@ -1,4 +1,4 @@
-/// Builder object.
+/// Builder object for Message.
 pub mod builder;
 
 use super::blocks::Block;

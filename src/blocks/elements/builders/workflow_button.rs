@@ -10,7 +10,7 @@ impl WorkflowButton {
     }
 }
 
-/// Builder for [`Button`] object.
+/// Builder for [`WorkflowButton`] object.
 #[derive(Debug, Default)]
 pub struct WorkflowButtonBuilder {
     text: Option<Text>,

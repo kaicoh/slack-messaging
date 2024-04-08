@@ -1,4 +1,4 @@
-/// Builder objects.
+/// Builder objects for Composition objects.
 pub mod builders;
 
 mod confirmation_dialog;

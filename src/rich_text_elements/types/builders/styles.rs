@@ -20,7 +20,7 @@ impl CodableStyleBuilder {
     /// Set bold field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::CodableStyle;
+    /// # use slack_messaging::rich_text_elements::types::CodableStyle;
     /// let style = CodableStyle::builder()
     ///     .set_bold(Some(true))
     ///     .build();
@@ -40,7 +40,7 @@ impl CodableStyleBuilder {
     /// Set bold field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::CodableStyle;
+    /// # use slack_messaging::rich_text_elements::types::CodableStyle;
     /// let style = CodableStyle::builder()
     ///     .bold(true)
     ///     .build();
@@ -60,7 +60,7 @@ impl CodableStyleBuilder {
     /// Set italic field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::CodableStyle;
+    /// # use slack_messaging::rich_text_elements::types::CodableStyle;
     /// let style = CodableStyle::builder()
     ///     .set_italic(Some(true))
     ///     .build();
@@ -80,7 +80,7 @@ impl CodableStyleBuilder {
     /// Set italic field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::CodableStyle;
+    /// # use slack_messaging::rich_text_elements::types::CodableStyle;
     /// let style = CodableStyle::builder()
     ///     .italic(true)
     ///     .build();
@@ -100,7 +100,7 @@ impl CodableStyleBuilder {
     /// Set strike field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::CodableStyle;
+    /// # use slack_messaging::rich_text_elements::types::CodableStyle;
     /// let style = CodableStyle::builder()
     ///     .set_strike(Some(true))
     ///     .build();
@@ -120,7 +120,7 @@ impl CodableStyleBuilder {
     /// Set strike field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::CodableStyle;
+    /// # use slack_messaging::rich_text_elements::types::CodableStyle;
     /// let style = CodableStyle::builder()
     ///     .strike(true)
     ///     .build();
@@ -140,7 +140,7 @@ impl CodableStyleBuilder {
     /// Set code field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::CodableStyle;
+    /// # use slack_messaging::rich_text_elements::types::CodableStyle;
     /// let style = CodableStyle::builder()
     ///     .set_code(Some(true))
     ///     .build();
@@ -160,7 +160,7 @@ impl CodableStyleBuilder {
     /// Set code field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::CodableStyle;
+    /// # use slack_messaging::rich_text_elements::types::CodableStyle;
     /// let style = CodableStyle::builder()
     ///     .code(true)
     ///     .build();
@@ -230,7 +230,7 @@ impl HighlightableStyleBuilder {
     /// Set bold field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::HighlightableStyle;
+    /// # use slack_messaging::rich_text_elements::types::HighlightableStyle;
     /// let style = HighlightableStyle::builder()
     ///     .set_bold(Some(true))
     ///     .build();
@@ -250,7 +250,7 @@ impl HighlightableStyleBuilder {
     /// Set bold field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::HighlightableStyle;
+    /// # use slack_messaging::rich_text_elements::types::HighlightableStyle;
     /// let style = HighlightableStyle::builder()
     ///     .bold(true)
     ///     .build();
@@ -270,7 +270,7 @@ impl HighlightableStyleBuilder {
     /// Set italic field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::HighlightableStyle;
+    /// # use slack_messaging::rich_text_elements::types::HighlightableStyle;
     /// let style = HighlightableStyle::builder()
     ///     .set_italic(Some(true))
     ///     .build();
@@ -290,7 +290,7 @@ impl HighlightableStyleBuilder {
     /// Set italic field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::HighlightableStyle;
+    /// # use slack_messaging::rich_text_elements::types::HighlightableStyle;
     /// let style = HighlightableStyle::builder()
     ///     .italic(true)
     ///     .build();
@@ -310,7 +310,7 @@ impl HighlightableStyleBuilder {
     /// Set strike field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::HighlightableStyle;
+    /// # use slack_messaging::rich_text_elements::types::HighlightableStyle;
     /// let style = HighlightableStyle::builder()
     ///     .set_strike(Some(true))
     ///     .build();
@@ -330,7 +330,7 @@ impl HighlightableStyleBuilder {
     /// Set strike field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::HighlightableStyle;
+    /// # use slack_messaging::rich_text_elements::types::HighlightableStyle;
     /// let style = HighlightableStyle::builder()
     ///     .strike(true)
     ///     .build();
@@ -350,7 +350,7 @@ impl HighlightableStyleBuilder {
     /// Set highlight field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::HighlightableStyle;
+    /// # use slack_messaging::rich_text_elements::types::HighlightableStyle;
     /// let style = HighlightableStyle::builder()
     ///     .set_highlight(Some(true))
     ///     .build();
@@ -370,7 +370,7 @@ impl HighlightableStyleBuilder {
     /// Set highlight field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::HighlightableStyle;
+    /// # use slack_messaging::rich_text_elements::types::HighlightableStyle;
     /// let style = HighlightableStyle::builder()
     ///     .highlight(true)
     ///     .build();
@@ -390,7 +390,7 @@ impl HighlightableStyleBuilder {
     /// Set client_highlight field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::HighlightableStyle;
+    /// # use slack_messaging::rich_text_elements::types::HighlightableStyle;
     /// let style = HighlightableStyle::builder()
     ///     .set_client_highlight(Some(true))
     ///     .build();
@@ -413,7 +413,7 @@ impl HighlightableStyleBuilder {
     /// Set client_highlight field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::HighlightableStyle;
+    /// # use slack_messaging::rich_text_elements::types::HighlightableStyle;
     /// let style = HighlightableStyle::builder()
     ///     .client_highlight(true)
     ///     .build();
@@ -433,7 +433,7 @@ impl HighlightableStyleBuilder {
     /// Set unlink field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::HighlightableStyle;
+    /// # use slack_messaging::rich_text_elements::types::HighlightableStyle;
     /// let style = HighlightableStyle::builder()
     ///     .set_unlink(Some(true))
     ///     .build();
@@ -453,7 +453,7 @@ impl HighlightableStyleBuilder {
     /// Set unlink field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::HighlightableStyle;
+    /// # use slack_messaging::rich_text_elements::types::HighlightableStyle;
     /// let style = HighlightableStyle::builder()
     ///     .unlink(true)
     ///     .build();

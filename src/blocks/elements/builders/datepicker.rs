@@ -10,6 +10,7 @@ impl DatePicker {
     }
 }
 
+/// Builder for [`DatePicker`] object.
 #[derive(Debug, Default)]
 pub struct DatePickerBuilder {
     action_id: Option<String>,

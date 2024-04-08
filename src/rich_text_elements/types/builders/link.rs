@@ -20,7 +20,7 @@ impl RichTextElementTypeLinkBuilder {
     /// Set url field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeLink;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeLink;
     /// let link = RichTextElementTypeLink::builder()
     ///     .set_url(Some("https://google.com".into()))
     ///     .build();
@@ -41,7 +41,7 @@ impl RichTextElementTypeLinkBuilder {
     /// Set url field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeLink;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeLink;
     /// let link = RichTextElementTypeLink::builder()
     ///     .url("https://google.com")
     ///     .build();
@@ -62,7 +62,7 @@ impl RichTextElementTypeLinkBuilder {
     /// Set text field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeLink;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeLink;
     /// let link = RichTextElementTypeLink::builder()
     ///     .url("")
     ///     .set_text(Some("Google".into()))
@@ -85,7 +85,7 @@ impl RichTextElementTypeLinkBuilder {
     /// Set text field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeLink;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeLink;
     /// let link = RichTextElementTypeLink::builder()
     ///     .url("")
     ///     .text("Google")
@@ -108,7 +108,7 @@ impl RichTextElementTypeLinkBuilder {
     /// Set r#unsafe field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeLink;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeLink;
     /// let link = RichTextElementTypeLink::builder()
     ///     .url("")
     ///     .set_unsafe(Some(true))
@@ -131,7 +131,7 @@ impl RichTextElementTypeLinkBuilder {
     /// Set r#unsafe field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::RichTextElementTypeLink;
+    /// # use slack_messaging::rich_text_elements::types::RichTextElementTypeLink;
     /// let link = RichTextElementTypeLink::builder()
     ///     .url("")
     ///     .r#unsafe(true)
@@ -154,7 +154,7 @@ impl RichTextElementTypeLinkBuilder {
     /// Set style field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::{RichTextElementTypeLink,
+    /// # use slack_messaging::rich_text_elements::types::{RichTextElementTypeLink,
     /// CodableStyle};
     /// let link = RichTextElementTypeLink::builder()
     ///     .url("")
@@ -184,7 +184,7 @@ impl RichTextElementTypeLinkBuilder {
     /// Set style field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::types::{RichTextElementTypeLink,
+    /// # use slack_messaging::rich_text_elements::types::{RichTextElementTypeLink,
     /// CodableStyle};
     /// let link = RichTextElementTypeLink::builder()
     ///     .url("")

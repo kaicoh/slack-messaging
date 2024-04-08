@@ -7,7 +7,7 @@ use serde::Serialize;
 /// # Example
 ///
 /// ```
-/// # use slack_messaging::blocks::rich_text::elements::types::{RichTextElementTypeUserGroup, HighlightableStyle};
+/// # use slack_messaging::rich_text_elements::types::{RichTextElementTypeUserGroup, HighlightableStyle};
 /// let usergroup = RichTextElementTypeUserGroup::builder()
 ///     .usergroup_id("usergroup-0")
 ///     .style(

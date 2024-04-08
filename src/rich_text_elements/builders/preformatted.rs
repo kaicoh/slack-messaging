@@ -1,29 +1,29 @@
-use super::{RichTextElementType, RichTextQuote};
+use super::{RichTextElementType, RichTextPreformatted};
 
-impl RichTextQuote {
-    /// Construct a [`RichTextQuoteBuilder`].
-    pub fn builder() -> RichTextQuoteBuilder {
-        RichTextQuoteBuilder::default()
+impl RichTextPreformatted {
+    /// Construct a [`RichTextPreformattedBuilder`].
+    pub fn builder() -> RichTextPreformattedBuilder {
+        RichTextPreformattedBuilder::default()
     }
 }
 
-/// Builder for [`RichTextQuote`] object.
+/// Builder for [`RichTextPreformatted`] object.
 #[derive(Debug, Default)]
-pub struct RichTextQuoteBuilder {
+pub struct RichTextPreformattedBuilder {
     elements: Vec<RichTextElementType>,
     border: Option<i64>,
 }
 
-impl RichTextQuoteBuilder {
+impl RichTextPreformattedBuilder {
     /// Set elements field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::{RichTextQuote, RichTextElementTypeText};
-    /// let quote = RichTextQuote::builder()
+    /// # use slack_messaging::rich_text_elements::{RichTextPreformatted, RichTextElementTypeText};
+    /// let preformatted = RichTextPreformatted::builder()
     ///     .set_elements(
     ///         vec![
     ///             RichTextElementTypeText::builder()
-    ///                 .text("What we need is good examples in our documentation.")
+    ///                 .text("{\n  \"object\": {\n    \"description\": \"this is an example of a json object\"\n  }\n}")
     ///                 .build()
     ///                 .into()
     ///         ]
@@ -31,16 +31,16 @@ impl RichTextQuoteBuilder {
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "rich_text_quote",
+    ///     "type": "rich_text_preformatted",
     ///     "elements": [
     ///         {
     ///             "type": "text",
-    ///             "text": "What we need is good examples in our documentation."
+    ///             "text": "{\n  \"object\": {\n    \"description\": \"this is an example of a json object\"\n  }\n}"
     ///         }
     ///     ]
     /// });
     ///
-    /// let json = serde_json::to_value(quote).unwrap();
+    /// let json = serde_json::to_value(preformatted).unwrap();
     ///
     /// assert_eq!(json, expected);
     /// ```
@@ -51,26 +51,26 @@ impl RichTextQuoteBuilder {
     /// Add RichTextElementType object to elements field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::{RichTextQuote, RichTextElementTypeText};
-    /// let quote = RichTextQuote::builder()
+    /// # use slack_messaging::rich_text_elements::{RichTextPreformatted, RichTextElementTypeText};
+    /// let preformatted = RichTextPreformatted::builder()
     ///     .element(
     ///         RichTextElementTypeText::builder()
-    ///             .text("What we need is good examples in our documentation.")
+    ///             .text("{\n  \"object\": {\n    \"description\": \"this is an example of a json object\"\n  }\n}")
     ///             .build()
     ///     )
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "rich_text_quote",
+    ///     "type": "rich_text_preformatted",
     ///     "elements": [
     ///         {
     ///             "type": "text",
-    ///             "text": "What we need is good examples in our documentation."
+    ///             "text": "{\n  \"object\": {\n    \"description\": \"this is an example of a json object\"\n  }\n}"
     ///         }
     ///     ]
     /// });
     ///
-    /// let json = serde_json::to_value(quote).unwrap();
+    /// let json = serde_json::to_value(preformatted).unwrap();
     ///
     /// assert_eq!(json, expected);
     /// ```
@@ -83,18 +83,18 @@ impl RichTextQuoteBuilder {
     /// Set border field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::RichTextQuote;
-    /// let quote = RichTextQuote::builder()
+    /// # use slack_messaging::rich_text_elements::RichTextPreformatted;
+    /// let preformatted = RichTextPreformatted::builder()
     ///     .set_border(Some(0))
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "rich_text_quote",
+    ///     "type": "rich_text_preformatted",
     ///     "elements": [],
     ///     "border": 0
     /// });
     ///
-    /// let json = serde_json::to_value(quote).unwrap();
+    /// let json = serde_json::to_value(preformatted).unwrap();
     ///
     /// assert_eq!(json, expected);
     /// ```
@@ -105,18 +105,18 @@ impl RichTextQuoteBuilder {
     /// Set border field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::rich_text::elements::RichTextQuote;
-    /// let quote = RichTextQuote::builder()
+    /// # use slack_messaging::rich_text_elements::RichTextPreformatted;
+    /// let preformatted = RichTextPreformatted::builder()
     ///     .border(0)
     ///     .build();
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "rich_text_quote",
+    ///     "type": "rich_text_preformatted",
     ///     "elements": [],
     ///     "border": 0
     /// });
     ///
-    /// let json = serde_json::to_value(quote).unwrap();
+    /// let json = serde_json::to_value(preformatted).unwrap();
     ///
     /// assert_eq!(json, expected);
     /// ```
@@ -124,10 +124,10 @@ impl RichTextQuoteBuilder {
         self.set_border(Some(border.into()))
     }
 
-    /// Build a [`RichTextQuote`] object.
-    pub fn build(self) -> RichTextQuote {
-        RichTextQuote {
-            kind: "rich_text_quote",
+    /// Build a [`RichTextPreformatted`] object.
+    pub fn build(self) -> RichTextPreformatted {
+        RichTextPreformatted {
+            kind: "rich_text_preformatted",
             elements: self.elements,
             border: self.border,
         }

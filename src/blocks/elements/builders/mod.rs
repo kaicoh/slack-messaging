@@ -50,3 +50,4 @@ pub use select_static_options::SelectStaticOptionsBuilder;
 pub use select_users::SelectUsersBuilder;
 pub use timepicker::TimePickerBuilder;
 pub use url_input::UrlInputBuilder;
+pub use workflow_button::WorkflowButtonBuilder;
