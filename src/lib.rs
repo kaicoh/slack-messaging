@@ -72,7 +72,7 @@
 //!                 },
 //!                 {
 //!                     "type": "mrkdwn",
-//!                     "text": "*When:*\nSubmitted Aut 10"
+//!                     "text": "*When:*\nSubmitted Aug 10"
 //!                 }
 //!             ]
 //!         },
