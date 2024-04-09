@@ -117,14 +117,36 @@ Enable `fmt` module and format messages in [this way](https://api.slack.com/refe
 
 ```rust
 use chrono::prelude::*;
-use slack_messaging::fmt::DateFormat;
+use slack_messaging::fmt::DateFormatter;
+
+// Formatter without optional link.
+let f = DateFormatter::builder()
+    .token("{date_short} at {time}")
+    .build();
 
 let dt = DateTime::parse_from_rfc3339("2023-02-27T12:34:56+09:00").unwrap();
-let f = DateFormat::new(dt).token("{date_short} at {time}");
 
 assert_eq!(
-    format!("{f}"),
+    f.format(&dt),
     "<!date^1677468896^{date_short} at {time}|Feb 27, 2023 at 12:34 PM>"
+);
+
+// You can also set optional link when formatting.
+assert_eq!(
+    f.format_with_link(&dt, "https://example.com"),
+    "<!date^1677468896^{date_short} at {time}^https://example.com|Feb 27, 2023 at 12:34 PM>"
+);
+
+// Formatter with optional link.
+let f = DateFormatter::builder()
+    .token("{date_short} at {time}")
+    .link("https://example.com")
+    .build();
+
+// This time, format method returns text with link set to the formatter.
+assert_eq!(
+    f.format(&dt),
+    "<!date^1677468896^{date_short} at {time}^https://example.com|Feb 27, 2023 at 12:34 PM>"
 );
 ```
 

@@ -1,208 +1,255 @@
-use chrono::prelude::*;
+use chrono::{DateTime, FixedOffset};
+use once_cell::sync::Lazy;
 use regex::Regex;
-use std::fmt;
 
 const DEFAULT_TOKEN: &str = "{date} {time}";
 
-/// A Builder for slack [Date Format](https://api.slack.com/reference/surfaces/formatting#date-formatting).
-/// This turns [chrono](https://docs.rs/chrono/0.4.23/chrono/)'s [DateTime](https://docs.rs/chrono/0.4.23/chrono/struct.DateTime.html) into `<!date^timestamp^token_string^optional_link|fallback_text>` (slack Date Format).
+const F_DATE_NUM: (&str, &str) = ("%Y-%m-%d", r"\{date_num\}");
+const F_DATE: (&str, &str) = ("%B %e, %Y", r"\{date\}");
+const F_DATE_SHORT: (&str, &str) = ("%b %e, %Y", r"\{date_short\}");
+const F_DATE_LONG: (&str, &str) = ("%A, %B %e, %Y", r"\{date_long\}");
+const F_DATE_PRETTY: (&str, &str) = ("%B %e, %Y", r"\{date_pretty\}");
+const F_DATE_SHORT_PRETTY: (&str, &str) = ("%b %e, %Y", r"\{date_short_pretty\}");
+const F_DATE_LONG_PRETTY: (&str, &str) = ("%A, %B %e, %Y", r"\{date_long_pretty\}");
+const F_TIME: (&str, &str) = ("%l:%M %p", r"\{time\}");
+const F_TIME_SECS: (&str, &str) = ("%l:%M:%S %p", r"\{time_secs\}");
+
+static DATE_FORMATS: Lazy<Vec<DateFormat>> = Lazy::new(|| {
+    let formats = [
+        F_DATE_NUM,
+        F_DATE,
+        F_DATE_SHORT,
+        F_DATE_LONG,
+        F_DATE_PRETTY,
+        F_DATE_SHORT_PRETTY,
+        F_DATE_LONG_PRETTY,
+        F_TIME,
+        F_TIME_SECS,
+    ];
+    formats.into_iter().map(DateFormat::new).collect()
+});
+
+#[derive(Debug)]
+struct DateFormat {
+    strf: &'static str,
+    reg: Regex,
+}
+
+impl DateFormat {
+    fn new((strf, re): (&'static str, &str)) -> Self {
+        Self {
+            strf,
+            reg: Regex::new(re).unwrap(),
+        }
+    }
+
+    fn replace_all(&self, haystack: &str) -> String {
+        self.reg.replace_all(haystack, self.strf).into_owned()
+    }
+}
+
+fn parse_to_strf(text: &str) -> String {
+    DATE_FORMATS
+        .iter()
+        .fold(text.to_string(), |acc, r| r.replace_all(&acc))
+}
+
+/// A Formatter from chrono's [DateTime](https://docs.rs/chrono/0.4.23/chrono/struct.DateTime.html) to [slack's Date Format](https://api.slack.com/reference/surfaces/formatting#date-formatting).
 ///
 /// # Example
 ///
 /// ```
 /// use chrono::prelude::*;
-/// use slack_messaging::fmt::DateFormat;
+/// use slack_messaging::fmt::DateFormatter;
+///
+/// // Formatter without optional link.
+/// let f = DateFormatter::builder()
+///     .token("{date_short} at {time}")
+///     .build();
 ///
 /// let dt = DateTime::parse_from_rfc3339("2023-02-27T12:34:56+09:00").unwrap();
-/// let f = DateFormat::new(dt).token("{date_short} at {time}");
 ///
-/// // without optional_link
 /// assert_eq!(
-///     format!("{f}"),
+///     f.format(&dt),
 ///     "<!date^1677468896^{date_short} at {time}|Feb 27, 2023 at 12:34 PM>"
 /// );
 ///
-/// // with optional_link
+/// // You can also set optional link when formatting.
 /// assert_eq!(
-///     format!("{}", f.optional_link("https://example.com")),
+///     f.format_with_link(&dt, "https://example.com"),
+///     "<!date^1677468896^{date_short} at {time}^https://example.com|Feb 27, 2023 at 12:34 PM>"
+/// );
+///
+/// // Formatter with optional link.
+/// let f = DateFormatter::builder()
+///     .token("{date_short} at {time}")
+///     .link("https://example.com")
+///     .build();
+///
+/// // This time, format method returns text with link set to the formatter.
+/// assert_eq!(
+///     f.format(&dt),
 ///     "<!date^1677468896^{date_short} at {time}^https://example.com|Feb 27, 2023 at 12:34 PM>"
 /// );
 /// ```
 #[derive(Debug, Clone)]
-pub struct DateFormat<'a> {
-    value: DateTime<FixedOffset>,
-    token_string: &'a str,
-    optional_link: Option<&'a str>,
+pub struct DateFormatter {
+    token: String,
+    link: Option<String>,
 }
 
-impl<'a> DateFormat<'a> {
-    /// Constructs a DateFormat from [DateTime](https://docs.rs/chrono/0.4.23/chrono/struct.DateTime.html)
-    /// with default token_string `{date} {time}`.
+impl Default for DateFormatter {
+    /// This returns DateFormatter with token string `{date} {time}` and without link.
     ///
     /// ```
-    /// use chrono::prelude::*;
-    /// use slack_messaging::fmt::DateFormat;
-    ///
+    /// # use chrono::prelude::*;
+    /// # use slack_messaging::fmt::DateFormatter;
+    /// let f = DateFormatter::default();
     /// let dt = DateTime::parse_from_rfc3339("2023-02-27T12:34:56+09:00").unwrap();
-    /// let f = DateFormat::new(dt);
     ///
     /// assert_eq!(
-    ///     format!("{f}"),
-    ///     "<!date^1677468896^{date} {time}|February 27, 2023 12:34 PM>"
+    ///     f.format(&dt),
+    ///     "<!date^1677468896^{date} {time}|February 27, 2023 12:34 PM>",
     /// );
     /// ```
-    pub fn new(value: DateTime<FixedOffset>) -> Self {
+    fn default() -> Self {
         Self {
-            value,
-            token_string: DEFAULT_TOKEN,
-            optional_link: None,
-        }
-    }
-
-    /// Sets `token_string` to format. For more info about `token_string`, see [slack doc](https://api.slack.com/reference/surfaces/formatting#date-formatting).
-    pub fn set_token(self, token_string: &'a str) -> Self {
-        Self {
-            token_string,
-            ..self
-        }
-    }
-
-    /// Alias of [set_token](crate::fmt::DateFormat::set_token) method.
-    pub fn token(self, token: &'a str) -> Self {
-        self.set_token(token)
-    }
-
-    /// Sets `optional_link` to format. For more info about `optional_link`, see [slack doc](https://api.slack.com/reference/surfaces/formatting#date-formatting).
-    pub fn set_optional_link(self, link: &'a str) -> Self {
-        Self {
-            optional_link: Some(link),
-            ..self
-        }
-    }
-
-    /// Alias of [set_optional_link](crate::fmt::DateFormat::set_optional_link) method.
-    pub fn optional_link(self, link: &'a str) -> Self {
-        self.set_optional_link(link)
-    }
-
-    /// Returns `fallback_text` from given `token_string`.
-    ///
-    /// ```
-    /// use chrono::prelude::*;
-    /// use slack_messaging::fmt::DateFormat;
-    ///
-    /// let dt = DateTime::parse_from_rfc3339("2023-02-27T12:34:56+09:00").unwrap();
-    /// let f = DateFormat::new(dt);
-    ///
-    /// assert_eq!(
-    ///     f.token("Updated At {date_num} {time_secs}.").fallback_text(),
-    ///     "Updated At 2023-02-27 12:34:56 PM."
-    /// );
-    /// ```
-    pub fn fallback_text(&self) -> String {
-        let strf = FormatReplacer::new(self.token_string).replaced_value();
-        self.value.format(&strf).to_string()
-    }
-
-    fn optional_link_text(&self) -> String {
-        if let Some(link) = self.optional_link {
-            format!("^{link}")
-        } else {
-            "".to_string()
+            token: DEFAULT_TOKEN.into(),
+            link: None,
         }
     }
 }
 
-impl<'a> fmt::Display for DateFormat<'a> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
+impl DateFormatter {
+    /// Construct a [`DateFormatterBuilder`]
+    pub fn builder() -> DateFormatterBuilder {
+        DateFormatterBuilder::default()
+    }
+
+    /// Return formatted string.
+    ///
+    /// ```
+    /// # use chrono::prelude::*;
+    /// # use slack_messaging::fmt::DateFormatter;
+    /// // If formatter doesn't have a link, this method returns string without optional link.
+    /// let f = DateFormatter::builder()
+    ///     .token("{date_pretty} at {time}")
+    ///     .build();
+    /// let dt = DateTime::parse_from_rfc3339("2023-02-27T12:34:56+09:00").unwrap();
+    ///
+    /// assert_eq!(
+    ///     f.format(&dt),
+    ///     "<!date^1677468896^{date_pretty} at {time}|February 27, 2023 at 12:34 PM>",
+    /// );
+    ///
+    /// // If formatter has a link, this method returns string with it.
+    /// let f = DateFormatter::builder()
+    ///     .token("{date} at {time}")
+    ///     .link("https://google.com")
+    ///     .build();
+    ///
+    /// assert_eq!(
+    ///     f.format(&dt),
+    ///     "<!date^1677468896^{date} at {time}^https://google.com|February 27, 2023 at 12:34 PM>",
+    /// );
+    /// ```
+    pub fn format(&self, dt: &DateTime<FixedOffset>) -> String {
+        self.fmt(dt, self.link.as_deref())
+    }
+
+    /// Return formatted string with optional link.
+    ///
+    /// ```
+    /// # use chrono::prelude::*;
+    /// # use slack_messaging::fmt::DateFormatter;
+    /// // If formatter doesn't have a link, this method returns string with link given as an argument.
+    /// let f = DateFormatter::builder()
+    ///     .token("{date_pretty} at {time}")
+    ///     .build();
+    /// let dt = DateTime::parse_from_rfc3339("2023-02-27T12:34:56+09:00").unwrap();
+    ///
+    /// assert_eq!(
+    ///     f.format_with_link(&dt, "https://amazon.com"),
+    ///     "<!date^1677468896^{date_pretty} at {time}^https://amazon.com|February 27, 2023 at 12:34 PM>",
+    /// );
+    ///
+    /// // Even if formatter has a link, this method also returns string with link given as an argument.
+    /// let f = DateFormatter::builder()
+    ///     .token("{date} at {time}")
+    ///     .link("https://google.com")
+    ///     .build();
+    ///
+    /// assert_eq!(
+    ///     f.format_with_link(&dt, "https://amazon.com"),
+    ///     "<!date^1677468896^{date} at {time}^https://amazon.com|February 27, 2023 at 12:34 PM>",
+    /// );
+    /// ```
+    pub fn format_with_link(&self, dt: &DateTime<FixedOffset>, link: &str) -> String {
+        self.fmt(dt, Some(link))
+    }
+
+    fn fmt(&self, dt: &DateTime<FixedOffset>, link: Option<&str>) -> String {
+        let link = match link {
+            Some(link) => format!("^{link}"),
+            None => "".into(),
+        };
+
+        format!(
             "<!date^{}^{}{}|{}>",
-            self.value.timestamp(),
-            self.token_string,
-            self.optional_link_text(),
-            self.fallback_text(),
+            dt.timestamp(),
+            self.token,
+            link,
+            dt.format(&parse_to_strf(&self.token)),
         )
     }
 }
 
-impl<'a> From<DateFormat<'a>> for String {
-    fn from(dt: DateFormat<'a>) -> String {
-        format!("{dt}")
+/// Builder for [`DateFormatter`] object.
+#[derive(Debug, Default)]
+pub struct DateFormatterBuilder {
+    token: Option<String>,
+    link: Option<String>,
+}
+
+impl DateFormatterBuilder {
+    /// Set token string to format timestamp.
+    pub fn set_token(self, token: Option<String>) -> Self {
+        Self { token, ..self }
     }
-}
 
-#[derive(Debug)]
-struct FormatReplacer {
-    value: String,
-}
+    /// Set token string to format timestamp.
+    pub fn token(self, token: impl Into<String>) -> Self {
+        self.set_token(Some(token.into()))
+    }
 
-impl FormatReplacer {
-    const DATE_NUM: &'static str = "%Y-%m-%d";
-    const DATE: &'static str = "%B %e, %Y";
-    const DATE_SHORT: &'static str = "%b %e, %Y";
-    const DATE_LONG: &'static str = "%A, %B %e, %Y";
-    const TIME: &'static str = "%l:%M %p";
-    const TIME_SECS: &'static str = "%l:%M:%S %p";
+    /// Set optional link.
+    pub fn set_link(self, link: Option<String>) -> Self {
+        Self { link, ..self }
+    }
 
-    fn new<T: Into<String>>(value: T) -> Self {
-        Self {
-            value: value.into(),
+    /// Set optional link.
+    pub fn link(self, link: impl Into<String>) -> Self {
+        self.set_link(Some(link.into()))
+    }
+
+    /// Build a [`DateFormatter`] object. This method panics if token is not set.
+    pub fn build(self) -> DateFormatter {
+        DateFormatter {
+            token: self
+                .token
+                .expect("token must be set to DateFormatterBuilder"),
+            link: self.link,
         }
     }
 
-    fn replace_date_num(self) -> Self {
-        self.replace(r"\{date_num\}", Self::DATE_NUM)
+    /// Get token string.
+    pub fn get_token(&self) -> &Option<String> {
+        &self.token
     }
 
-    fn replace_date(self) -> Self {
-        self.replace(r"\{date\}", Self::DATE)
-    }
-
-    fn replace_date_short(self) -> Self {
-        self.replace(r"\{date_short\}", Self::DATE_SHORT)
-    }
-
-    fn replace_date_long(self) -> Self {
-        self.replace(r"\{date_long\}", Self::DATE_LONG)
-    }
-
-    fn replace_date_pretty(self) -> Self {
-        self.replace(r"\{date_pretty\}", Self::DATE)
-    }
-
-    fn replace_date_short_pretty(self) -> Self {
-        self.replace(r"\{date_short_pretty\}", Self::DATE_SHORT)
-    }
-
-    fn replace_date_long_pretty(self) -> Self {
-        self.replace(r"\{date_long_pretty\}", Self::DATE_LONG)
-    }
-
-    fn replace_time(self) -> Self {
-        self.replace(r"\{time\}", Self::TIME)
-    }
-
-    fn replace_time_secs(self) -> Self {
-        self.replace(r"\{time_secs\}", Self::TIME_SECS)
-    }
-
-    fn replace(self, re: &str, rep: &str) -> Self {
-        let re = Regex::new(re).unwrap();
-        Self::new(re.replace_all(&self.value, rep))
-    }
-
-    fn replaced_value(self) -> String {
-        self.replace_date_num()
-            .replace_date()
-            .replace_date_short()
-            .replace_date_long()
-            .replace_date_pretty()
-            .replace_date_short_pretty()
-            .replace_date_long_pretty()
-            .replace_time()
-            .replace_time_secs()
-            .value
+    /// Get token optional link.
+    pub fn get_link(&self) -> &Option<String> {
+        &self.link
     }
 }
 
@@ -212,167 +259,194 @@ mod tests {
 
     #[test]
     fn it_replaces_format_date_num() {
-        let result = FormatReplacer::new("Posted {date_num}.")
-            .replace_date_num()
-            .value;
-        assert_eq!(result, "Posted %Y-%m-%d.");
+        let f = DateFormat::new(F_DATE_NUM);
+        assert_eq!(f.replace_all("{date_num}"), "%Y-%m-%d");
     }
 
     #[test]
     fn it_replaces_format_date() {
-        let result = FormatReplacer::new("Posted {date}.").replace_date().value;
-        assert_eq!(result, "Posted %B %e, %Y.");
+        let f = DateFormat::new(F_DATE);
+        assert_eq!(f.replace_all("{date}"), "%B %e, %Y");
     }
 
     #[test]
     fn it_replaces_format_date_short() {
-        let result = FormatReplacer::new("Posted {date_short}.")
-            .replace_date_short()
-            .value;
-        assert_eq!(result, "Posted %b %e, %Y.");
+        let f = DateFormat::new(F_DATE_SHORT);
+        assert_eq!(f.replace_all("{date_short}"), "%b %e, %Y");
     }
 
     #[test]
     fn it_replaces_format_date_long() {
-        let result = FormatReplacer::new("Posted {date_long}.")
-            .replace_date_long()
-            .value;
-        assert_eq!(result, "Posted %A, %B %e, %Y.");
+        let f = DateFormat::new(F_DATE_LONG);
+        assert_eq!(f.replace_all("{date_long}"), "%A, %B %e, %Y");
     }
 
     #[test]
     fn it_replaces_format_date_pretty() {
-        let result = FormatReplacer::new("Posted {date_pretty}.")
-            .replace_date_pretty()
-            .value;
-        assert_eq!(result, "Posted %B %e, %Y.");
+        let f = DateFormat::new(F_DATE_PRETTY);
+        assert_eq!(f.replace_all("{date_pretty}"), "%B %e, %Y");
     }
 
     #[test]
     fn it_replaces_format_date_short_pretty() {
-        let result = FormatReplacer::new("Posted {date_short_pretty}.")
-            .replace_date_short_pretty()
-            .value;
-        assert_eq!(result, "Posted %b %e, %Y.");
+        let f = DateFormat::new(F_DATE_SHORT_PRETTY);
+        assert_eq!(f.replace_all("{date_short_pretty}"), "%b %e, %Y");
     }
 
     #[test]
     fn it_replaces_format_date_long_pretty() {
-        let result = FormatReplacer::new("Posted {date_long_pretty}.")
-            .replace_date_long_pretty()
-            .value;
-        assert_eq!(result, "Posted %A, %B %e, %Y.");
+        let f = DateFormat::new(F_DATE_LONG_PRETTY);
+        assert_eq!(f.replace_all("{date_long_pretty}"), "%A, %B %e, %Y");
     }
 
     #[test]
     fn it_replaces_format_time() {
-        let result = FormatReplacer::new("Posted {time}.").replace_time().value;
-        assert_eq!(result, "Posted %l:%M %p.");
+        let f = DateFormat::new(F_TIME);
+        assert_eq!(f.replace_all("{time}"), "%l:%M %p");
     }
 
     #[test]
     fn it_replaces_format_time_secs() {
-        let result = FormatReplacer::new("Posted {time_secs}.")
-            .replace_time_secs()
-            .value;
-        assert_eq!(result, "Posted %l:%M:%S %p.");
+        let f = DateFormat::new(F_TIME_SECS);
+        assert_eq!(f.replace_all("{time_secs}"), "%l:%M:%S %p");
+    }
+
+    #[test]
+    fn it_parses_multiple_formats() {
+        let input = "{date} {time}";
+        assert_eq!(parse_to_strf(input), "%B %e, %Y %l:%M %p");
     }
 
     #[test]
     fn it_formats_with_default() {
-        let f = sample();
+        let f = DateFormatter::default();
         assert_eq!(
-            format!("{f}"),
+            f.format(&dt()),
             "<!date^1677468896^{date} {time}|February 27, 2023 12:34 PM>"
         );
     }
 
     #[test]
     fn it_formats_with_date_num() {
-        let f = sample().token("{date_num} at {time}");
+        let f = DateFormatter::builder()
+            .token("{date_num} at {time}")
+            .build();
+
         assert_eq!(
-            format!("{f}"),
+            f.format(&dt()),
             "<!date^1677468896^{date_num} at {time}|2023-02-27 at 12:34 PM>"
         );
     }
 
     #[test]
     fn it_formats_with_date_and_time() {
-        let f = sample().token("{date} at {time}");
+        let f = DateFormatter::builder().token("{date} at {time}").build();
+
         assert_eq!(
-            format!("{f}"),
+            f.format(&dt()),
             "<!date^1677468896^{date} at {time}|February 27, 2023 at 12:34 PM>"
         );
     }
 
     #[test]
     fn it_formats_with_date_short() {
-        let f = sample().token("{date_short} at {time}");
+        let f = DateFormatter::builder()
+            .token("{date_short} at {time}")
+            .build();
+
         assert_eq!(
-            format!("{f}"),
+            f.format(&dt()),
             "<!date^1677468896^{date_short} at {time}|Feb 27, 2023 at 12:34 PM>"
         );
     }
 
     #[test]
     fn it_formats_with_date_long() {
-        let f = sample().token("{date_long} at {time}");
+        let f = DateFormatter::builder()
+            .token("{date_long} at {time}")
+            .build();
+
         assert_eq!(
-            format!("{f}"),
+            f.format(&dt()),
             "<!date^1677468896^{date_long} at {time}|Monday, February 27, 2023 at 12:34 PM>"
         );
     }
 
     #[test]
     fn it_formats_with_date_pretty() {
-        let f = sample().token("{date_pretty} at {time}");
+        let f = DateFormatter::builder()
+            .token("{date_pretty} at {time}")
+            .build();
+
         assert_eq!(
-            format!("{f}"),
+            f.format(&dt()),
             "<!date^1677468896^{date_pretty} at {time}|February 27, 2023 at 12:34 PM>"
         );
     }
 
     #[test]
     fn it_formats_with_date_short_pretty() {
-        let f = sample().token("{date_short_pretty} at {time}");
+        let f = DateFormatter::builder()
+            .token("{date_short_pretty} at {time}")
+            .build();
+
         assert_eq!(
-            format!("{f}"),
+            f.format(&dt()),
             "<!date^1677468896^{date_short_pretty} at {time}|Feb 27, 2023 at 12:34 PM>"
         );
     }
 
     #[test]
     fn it_formats_with_date_long_pretty() {
-        let f = sample().token("{date_long_pretty} at {time}");
+        let f = DateFormatter::builder()
+            .token("{date_long_pretty} at {time}")
+            .build();
+
         assert_eq!(
-            format!("{f}"),
+            f.format(&dt()),
             "<!date^1677468896^{date_long_pretty} at {time}|Monday, February 27, 2023 at 12:34 PM>"
         );
     }
 
     #[test]
     fn it_formats_with_time_secs() {
-        let f = sample().token("{date} at {time_secs}");
+        let f = DateFormatter::builder()
+            .token("{date} at {time_secs}")
+            .build();
+
         assert_eq!(
-            format!("{f}"),
+            f.format(&dt()),
             "<!date^1677468896^{date} at {time_secs}|February 27, 2023 at 12:34:56 PM>"
         );
     }
 
     #[test]
     fn it_formats_with_optional_link() {
-        let f = sample()
+        let f = DateFormatter::builder()
             .token("{date} at {time}")
-            .optional_link("https://google.com");
+            .link("https://google.com")
+            .build();
+
         assert_eq!(
-            format!("{f}"),
+            f.format(&dt()),
             "<!date^1677468896^{date} at {time}^https://google.com|February 27, 2023 at 12:34 PM>"
+        );
+
+        assert_eq!(
+            f.format_with_link(&dt(), "https://amazon.com"),
+            "<!date^1677468896^{date} at {time}^https://amazon.com|February 27, 2023 at 12:34 PM>"
+        );
+
+        let f = DateFormatter::builder().token("{date} at {time}").build();
+
+        assert_eq!(
+            f.format_with_link(&dt(), "https://amazon.com"),
+            "<!date^1677468896^{date} at {time}^https://amazon.com|February 27, 2023 at 12:34 PM>"
         );
     }
 
-    fn sample() -> DateFormat<'static> {
+    fn dt() -> DateTime<FixedOffset> {
         // unix timestamp: 1677468896
-        let dt = DateTime::parse_from_rfc3339("2023-02-27T12:34:56+09:00").unwrap();
-        DateFormat::new(dt)
+        DateTime::parse_from_rfc3339("2023-02-27T12:34:56+09:00").unwrap()
     }
 }
