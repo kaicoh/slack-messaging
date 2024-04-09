@@ -4,15 +4,15 @@ use regex::Regex;
 
 const DEFAULT_TOKEN: &str = "{date} {time}";
 
-const F_DATE_NUM: (&'static str, &str) = ("%Y-%m-%d", r"\{date_num\}");
-const F_DATE: (&'static str, &str) = ("%B %e, %Y", r"\{date\}");
-const F_DATE_SHORT: (&'static str, &str) = ("%b %e, %Y", r"\{date_short\}");
-const F_DATE_LONG: (&'static str, &str) = ("%A, %B %e, %Y", r"\{date_long\}");
-const F_DATE_PRETTY: (&'static str, &str) = ("%B %e, %Y", r"\{date_pretty\}");
-const F_DATE_SHORT_PRETTY: (&'static str, &str) = ("%b %e, %Y", r"\{date_short_pretty\}");
-const F_DATE_LONG_PRETTY: (&'static str, &str) = ("%A, %B %e, %Y", r"\{date_long_pretty\}");
-const F_TIME: (&'static str, &str) = ("%l:%M %p", r"\{time\}");
-const F_TIME_SECS: (&'static str, &str) = ("%l:%M:%S %p", r"\{time_secs\}");
+const F_DATE_NUM: (&str, &str) = ("%Y-%m-%d", r"\{date_num\}");
+const F_DATE: (&str, &str) = ("%B %e, %Y", r"\{date\}");
+const F_DATE_SHORT: (&str, &str) = ("%b %e, %Y", r"\{date_short\}");
+const F_DATE_LONG: (&str, &str) = ("%A, %B %e, %Y", r"\{date_long\}");
+const F_DATE_PRETTY: (&str, &str) = ("%B %e, %Y", r"\{date_pretty\}");
+const F_DATE_SHORT_PRETTY: (&str, &str) = ("%b %e, %Y", r"\{date_short_pretty\}");
+const F_DATE_LONG_PRETTY: (&str, &str) = ("%A, %B %e, %Y", r"\{date_long_pretty\}");
+const F_TIME: (&str, &str) = ("%l:%M %p", r"\{time\}");
+const F_TIME_SECS: (&str, &str) = ("%l:%M:%S %p", r"\{time_secs\}");
 
 static DATE_FORMATS: Lazy<Vec<DateFormat>> = Lazy::new(|| {
     let formats = [
