@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.1][] - 2024-04-10
+
+- https://github.com/kaicoh/slack-messaging/pull/10 Improve date formatting.
+
 ## [0.3.0][] - 2024-04-09
 
 - https://github.com/kaicoh/slack-messaging/pull/8 Builder pattern.
@@ -22,6 +26,7 @@
 
 - pre-release
 
+[0.3.1]: https://github.com/kaicoh/slack-messaging/releases/v0.3.1
 [0.3.0]: https://github.com/kaicoh/slack-messaging/releases/v0.3.0
 [0.2.2]: https://github.com/kaicoh/slack-messaging/releases/v0.2.2
 [0.2.1]: https://github.com/kaicoh/slack-messaging/releases/v0.2.1
