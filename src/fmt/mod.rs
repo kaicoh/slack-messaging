@@ -1,3 +1,3 @@
 mod date;
 
-pub use date::DateFormat;
+pub use date::{DateFormatter, DateFormatterBuilder};
