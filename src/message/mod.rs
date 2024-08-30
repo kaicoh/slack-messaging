@@ -99,4 +99,13 @@ pub struct Message {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(super) mrkdwn: Option<bool>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(super) response_type: Option<String>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(super) replace_original: Option<bool>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(super) delete_original: Option<bool>,
 }
