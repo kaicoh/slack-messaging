@@ -14,7 +14,8 @@ pub use preformatted::RichTextPreformatted;
 pub use quote::RichTextQuote;
 pub use section::RichTextSection;
 pub use types::{
-    CodableStyle, HighlightableStyle, RichTextElementType, RichTextElementTypeChannel,
+    CodableStyle, HighlightableStyle, RichTextElementType, RichTextElementTypeBroadcast,
+    RichTextElementTypeChannel, RichTextElementTypeColor, RichTextElementTypeDate,
     RichTextElementTypeEmoji, RichTextElementTypeLink, RichTextElementTypeText,
     RichTextElementTypeUser, RichTextElementTypeUserGroup,
 };
