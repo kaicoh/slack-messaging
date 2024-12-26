@@ -28,6 +28,7 @@ pub struct RichTextElementTypeBroadcast {
     pub(super) range: BroadcastRange,
 }
 
+/// values to be set to [RichTextElementTypeBroadcast]'s range field
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum BroadcastRange {
