@@ -27,12 +27,8 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v3
 
-      - name: Setup rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
+      - name: Install stable toolchain
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Publish
         run: cargo publish --all-features --token ${{ secrets.CARGO_TOKEN }}
