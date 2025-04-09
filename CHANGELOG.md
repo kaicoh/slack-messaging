@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.0][] - 2025-04-09
+
+- Rust 2024.
+
 ## [0.3.3][] - 2024-12-26
 
 - https://github.com/kaicoh/slack-messaging/pull/12 Add support for the latest rich text element.
@@ -34,6 +38,7 @@
 
 - pre-release
 
+[0.4.0]: https://github.com/kaicoh/slack-messaging/releases/v0.4.0
 [0.3.3]: https://github.com/kaicoh/slack-messaging/releases/v0.3.3
 [0.3.2]: https://github.com/kaicoh/slack-messaging/releases/v0.3.2
 [0.3.1]: https://github.com/kaicoh/slack-messaging/releases/v0.3.1
