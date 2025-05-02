@@ -1,6 +1,6 @@
 [package]
 name = "slack-messaging"
-version = "0.4.0"
+version = "0.4.1"
 authors = ["kaicoh <sumireminami@gmail.com>"]
 edition = "2024"
 keywords = ["slack", "messaging", "webhook"]
