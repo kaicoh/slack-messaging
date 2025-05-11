@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.1][] - 2025-05-11
+
+- Support [Markdown block](https://docs.slack.dev/reference/block-kit/blocks/markdown-block).
+- Renew links to the slack docments.
+- Restruct Rich text block.
+
 ## [0.4.0][] - 2025-04-09
 
 - Rust 2024.
@@ -38,6 +44,7 @@
 
 - pre-release
 
+[0.4.1]: https://github.com/kaicoh/slack-messaging/releases/v0.4.1
 [0.4.0]: https://github.com/kaicoh/slack-messaging/releases/v0.4.0
 [0.3.3]: https://github.com/kaicoh/slack-messaging/releases/v0.3.3
 [0.3.2]: https://github.com/kaicoh/slack-messaging/releases/v0.3.2
