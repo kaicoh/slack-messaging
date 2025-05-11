@@ -1,6 +1,6 @@
 //! # Slack Messaging
 //!
-//! This is a library to support building [slack block kit messages](https://docs.slack.dev/reference/block-kit).
+//! This is a library to support building [Slack Block Kit messages](https://docs.slack.dev/reference/block-kit).
 //! Using this, you can build any messages in type-safe way like following.
 //!
 //! ```

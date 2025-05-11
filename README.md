@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/crates/l/slack-messaging)](LICENSE)
 [![Test](https://img.shields.io/github/actions/workflow/status/kaicoh/slack-messaging/test.yml)](https://github.com/kaicoh/slack-messaging/actions/workflows/test.yml)
 
-This is a library for [Rust](https://www.rust-lang.org/) to support building [slack block kit messages](https://docs.slack.dev/reference/block-kit).
+This is a library for [Rust](https://www.rust-lang.org/) to support building [Slack Block Kit messages](https://docs.slack.dev/reference/block-kit).
 Using this, you can build any messages in type-safe way like following.
 
 ```rust

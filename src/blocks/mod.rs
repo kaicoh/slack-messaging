@@ -11,6 +11,7 @@ mod file;
 mod header;
 mod image;
 mod input;
+mod markdown;
 mod section;
 mod video;
 
@@ -25,6 +26,7 @@ pub use file::{File, FileSource};
 pub use header::Header;
 pub use image::Image;
 pub use input::{Input, InputElement};
+pub use markdown::Markdown;
 pub use rich_text::{RichText, RichTextElement};
 pub use section::{Accessory, Section};
 pub use video::Video;
@@ -53,6 +55,9 @@ pub enum Block {
 
     /// [Input block](https://docs.slack.dev/reference/block-kit/blocks/input-block) representation
     Input(Box<Input>),
+
+    /// [Markdown block](https://docs.slack.dev/reference/block-kit/blocks/markdown-block) representation
+    Markdown(Box<Markdown>),
 
     /// [Rich text block](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block) representation
     RichText(Box<RichText>),
@@ -84,6 +89,7 @@ block_from! {
     Header,
     Image,
     Input,
+    Markdown,
     RichText,
     Section,
     Video
