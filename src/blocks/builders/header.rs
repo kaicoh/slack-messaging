@@ -1,4 +1,4 @@
-use super::{composition_objects::Text, Header};
+use super::{Header, composition_objects::Text};
 
 impl Header {
     /// Construct a [`HeaderBuilder`].

@@ -1,6 +1,6 @@
 use super::{
-    composition_objects::{ConfirmationDialog, Text},
     SelectPublicChannels,
+    composition_objects::{ConfirmationDialog, Text},
 };
 
 impl SelectPublicChannels {

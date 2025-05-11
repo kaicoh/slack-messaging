@@ -1,6 +1,6 @@
 use super::{
-    composition_objects::{ConfirmationDialog, Opt},
     Checkboxes,
+    composition_objects::{ConfirmationDialog, Opt},
 };
 
 impl Checkboxes {

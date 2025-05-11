@@ -1,6 +1,6 @@
 //! # Slack Messaging
 //!
-//! This is a library to support building messages for [slack messaging api](https://api.slack.com/messaging/managing).
+//! This is a library to support building [Slack Block Kit messages](https://docs.slack.dev/reference/block-kit).
 //! Using this, you can build any messages in type-safe way like following.
 //!
 //! ```
@@ -46,7 +46,7 @@
 //!         .json(&message);
 //!
 //!     if let Err(err) = req.send().await {
-//!         eprintln!("{}", err);
+//!         eprintln!("{err}");
 //!     }
 //! }
 //! ```
@@ -116,10 +116,8 @@ pub mod composition_objects;
 /// Format text for slack app. Require `fmt` feature.
 #[cfg(feature = "fmt")]
 pub mod fmt;
-/// Objects can be used inside of Rich text block.
-pub mod rich_text_elements;
 #[macro_use]
 mod macros;
 mod message;
 
-pub use message::{builder::MessageBuilder, Message};
+pub use message::{Message, builder::MessageBuilder};

@@ -1,7 +1,7 @@
 use super::composition_objects::{ConfirmationDialog, Opt, Text};
 use serde::Serialize;
 
-/// [Multi-select menu External data source element](https://api.slack.com/reference/block-kit/block-elements#external_multi_select)
+/// [Multi-select menu External data source element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#external_multi_select)
 /// representation.
 ///
 /// # Example

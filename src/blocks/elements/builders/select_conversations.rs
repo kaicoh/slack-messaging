@@ -1,6 +1,6 @@
 use super::{
-    composition_objects::{ConfirmationDialog, ConversationFilter, Text},
     SelectConversations,
+    composition_objects::{ConfirmationDialog, ConversationFilter, Text},
 };
 
 impl SelectConversations {

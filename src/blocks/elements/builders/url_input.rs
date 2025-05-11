@@ -1,6 +1,6 @@
 use super::{
-    composition_objects::{DispatchActionConfiguration, Text},
     UrlInput,
+    composition_objects::{DispatchActionConfiguration, Text},
 };
 
 impl UrlInput {

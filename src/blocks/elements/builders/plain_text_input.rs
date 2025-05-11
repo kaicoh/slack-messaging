@@ -1,6 +1,6 @@
 use super::{
-    composition_objects::{DispatchActionConfiguration, Text},
     PlainTextInput,
+    composition_objects::{DispatchActionConfiguration, Text},
 };
 
 impl PlainTextInput {

@@ -1,7 +1,7 @@
 use super::composition_objects::{Text, Workflow};
 use serde::Serialize;
 
-/// [Workflow button element](https://api.slack.com/reference/block-kit/block-elements#workflow_button)
+/// [Workflow button element](https://docs.slack.dev/reference/block-kit/block-elements/workflow-button-element)
 /// representation.
 ///
 /// # Example

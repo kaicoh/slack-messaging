@@ -1,4 +1,4 @@
-use super::{Text, TYPE_MRKDWN, TYPE_PLAIN};
+use super::{TYPE_MRKDWN, TYPE_PLAIN, Text};
 
 impl Text {
     /// Construct a [`TextBuilder`].

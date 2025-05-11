@@ -1,6 +1,6 @@
 use super::{
-    composition_objects::{ConfirmationDialog, Opt, OptGroup, Text},
     SelectStaticOptions,
+    composition_objects::{ConfirmationDialog, Opt, OptGroup, Text},
 };
 
 impl SelectStaticOptions {

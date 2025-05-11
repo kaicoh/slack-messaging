@@ -1,7 +1,7 @@
 use super::composition_objects::ConfirmationDialog;
 use serde::Serialize;
 
-/// [Datetime picker element](https://api.slack.com/reference/block-kit/block-elements#datetimepicker)
+/// [Datetime picker element](https://docs.slack.dev/reference/block-kit/block-elements/datetime-picker-element)
 /// representation.
 ///
 /// # Example

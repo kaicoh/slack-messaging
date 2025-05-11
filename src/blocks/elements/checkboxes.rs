@@ -1,7 +1,7 @@
 use super::composition_objects::{ConfirmationDialog, Opt};
 use serde::Serialize;
 
-/// [Checkboxes](https://api.slack.com/reference/block-kit/block-elements#checkboxes)
+/// [Checkboxes](https://docs.slack.dev/reference/block-kit/block-elements/checkboxes-element)
 /// representation.
 ///
 /// # Example

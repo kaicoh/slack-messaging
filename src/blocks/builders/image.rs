@@ -1,6 +1,6 @@
 use super::{
-    composition_objects::{SlackFile, Text},
     Image,
+    composition_objects::{SlackFile, Text},
 };
 
 impl Image {
@@ -285,7 +285,7 @@ impl ImageBuilder {
         self.set_slack_file(Some(slack_file))
     }
 
-    /// Build an [`Image`] object.
+    /// Build an [`Image`] object. This method will panic either `image_url` or `slack_file` is not set or `alt_text` is not set.
     pub fn build(self) -> Image {
         if self.image_url.is_none() && self.slack_file.is_none() {
             panic!("Either image_url or slack_file must be set to ImageBuilder");

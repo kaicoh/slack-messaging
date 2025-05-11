@@ -1,7 +1,7 @@
 use super::composition_objects::{SlackFile, Text};
 use serde::Serialize;
 
-/// [Image block](https://api.slack.com/reference/block-kit/blocks#image)
+/// [Image block](https://docs.slack.dev/reference/block-kit/blocks/image-block)
 /// representation.
 ///
 /// # Example

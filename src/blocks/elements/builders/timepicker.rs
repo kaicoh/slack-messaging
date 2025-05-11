@@ -1,6 +1,6 @@
 use super::{
-    composition_objects::{ConfirmationDialog, Text},
     TimePicker,
+    composition_objects::{ConfirmationDialog, Text},
 };
 
 impl TimePicker {

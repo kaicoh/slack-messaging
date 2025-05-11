@@ -1,6 +1,6 @@
 use super::{
-    composition_objects::{DispatchActionConfiguration, Text},
     EmailInput,
+    composition_objects::{DispatchActionConfiguration, Text},
 };
 
 impl EmailInput {

@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/crates/l/slack-messaging)](LICENSE)
 [![Test](https://img.shields.io/github/actions/workflow/status/kaicoh/slack-messaging/test.yml)](https://github.com/kaicoh/slack-messaging/actions/workflows/test.yml)
 
-This is a library for [Rust](https://www.rust-lang.org/) to support building messages for [slack messaging api](https://api.slack.com/messaging/managing).
+This is a library for [Rust](https://www.rust-lang.org/) to support building [Slack Block Kit messages](https://docs.slack.dev/reference/block-kit).
 Using this, you can build any messages in type-safe way like following.
 
 ```rust
@@ -50,7 +50,7 @@ async fn main() {
         .json(&message);
 
     if let Err(err) = req.send().await {
-        eprintln!("{}", err);
+        eprintln!("{err}");
     }
 }
 ```
@@ -113,7 +113,7 @@ The following are a list of [Cargo features](https://doc.rust-lang.org/stable/ca
 
 ### fmt
 
-Enable `fmt` module and format messages in [this way](https://api.slack.com/reference/surfaces/formatting).
+Enable `fmt` module and format messages in [this way](https://docs.slack.dev/messaging/formatting-message-text#date-formatting).
 
 ```rust
 use chrono::prelude::*;

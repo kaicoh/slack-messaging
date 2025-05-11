@@ -1,7 +1,7 @@
 use super::composition_objects::Text;
 use serde::Serialize;
 
-/// [Video block](https://api.slack.com/reference/block-kit/blocks#video)
+/// [Video block](https://docs.slack.dev/reference/block-kit/blocks/video-block)
 /// representation.
 ///
 /// # Example

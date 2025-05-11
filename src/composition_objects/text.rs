@@ -3,7 +3,7 @@ use serde::Serialize;
 pub(super) const TYPE_PLAIN: &str = "plain_text";
 pub(super) const TYPE_MRKDWN: &str = "mrkdwn";
 
-/// [Text object](https://api.slack.com/reference/block-kit/composition-objects#text)
+/// [Text object](https://docs.slack.dev/reference/block-kit/composition-objects/text-object)
 /// representation.
 ///
 /// # Example

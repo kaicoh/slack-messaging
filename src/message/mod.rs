@@ -4,7 +4,7 @@ pub mod builder;
 use super::blocks::Block;
 use serde::Serialize;
 
-/// [Message payload](https://api.slack.com/reference/messaging/payload)
+/// [Message](https://docs.slack.dev/messaging#payloads)
 /// representation.
 ///
 /// # Example

@@ -1,4 +1,4 @@
-use super::{composition_objects::Text, Video};
+use super::{Video, composition_objects::Text};
 
 impl Video {
     /// Construct a [`VideoBuilder`].

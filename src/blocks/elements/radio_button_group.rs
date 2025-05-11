@@ -1,7 +1,7 @@
 use super::composition_objects::{ConfirmationDialog, Opt};
 use serde::Serialize;
 
-/// [Radio buton group element](https://api.slack.com/reference/block-kit/block-elements#radio)
+/// [Radio buton group element](https://docs.slack.dev/reference/block-kit/block-elements/radio-button-group-element)
 /// representation.
 ///
 /// # Example
