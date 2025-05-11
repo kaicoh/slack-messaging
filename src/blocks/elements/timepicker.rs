@@ -1,7 +1,7 @@
 use super::composition_objects::{ConfirmationDialog, Text};
 use serde::Serialize;
 
-/// [Time picker element](https://api.slack.com/reference/block-kit/block-elements#timepicker)
+/// [Time picker element](https://docs.slack.dev/reference/block-kit/block-elements/time-picker-element)
 /// representation.
 ///
 /// # Example

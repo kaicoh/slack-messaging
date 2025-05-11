@@ -1,10 +1,10 @@
 use super::{
-    composition_objects::{DispatchActionConfiguration, Text},
     RichText,
+    composition_objects::{DispatchActionConfiguration, Text},
 };
 use serde::Serialize;
 
-/// [Rich text input element](https://api.slack.com/reference/block-kit/block-elements#rich_text_input)
+/// [Rich text input element](https://docs.slack.dev/reference/block-kit/block-elements/rich-text-input-element)
 /// representation.
 ///
 /// # Example

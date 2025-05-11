@@ -1,7 +1,7 @@
 use super::composition_objects::Text;
 use serde::Serialize;
 
-/// [Header block](https://api.slack.com/reference/block-kit/blocks#header)
+/// [Header block](https://docs.slack.dev/reference/block-kit/blocks/header-block)
 /// representation.
 ///
 /// # Example

@@ -6,12 +6,12 @@ use super::elements::{
 };
 use serde::Serialize;
 
-/// [Actions block](https://api.slack.com/reference/block-kit/blocks#actions)
+/// [Actions block](https://docs.slack.dev/reference/block-kit/blocks/actions-block)
 /// representation.
 ///
 /// # Example
 ///
-/// The following is reproduction of [the 1st sample actions](https://api.slack.com/reference/block-kit/blocks#actions_examples).
+/// The following is reproduction of [the 1st sample actions](https://docs.slack.dev/reference/block-kit/blocks/actions-block#examples).
 ///
 /// ```
 /// # use slack_messaging::blocks::Actions;
@@ -101,7 +101,7 @@ use serde::Serialize;
 /// assert_eq!(json, expected);
 /// ```
 ///
-/// And the following is the [2nd sample actions](https://api.slack.com/reference/block-kit/blocks#actions_examples).
+/// And the following is the [2nd sample actions](https://docs.slack.dev/reference/block-kit/blocks/actions-block#examples).
 ///
 /// ```
 /// # use slack_messaging::blocks::Actions;
@@ -221,75 +221,75 @@ pub struct Actions {
 #[derive(Debug, Clone, Serialize)]
 #[serde(untagged)]
 pub enum ActionsElement {
-    /// [Button element](https://api.slack.com/reference/block-kit/block-elements#button)
+    /// [Button element](https://docs.slack.dev/reference/block-kit/block-elements/button-element)
     /// representation
     Button(Box<Button>),
 
-    /// [Checkbox group](https://api.slack.com/reference/block-kit/block-elements#checkboxes)
+    /// [Checkbox group](https://docs.slack.dev/reference/block-kit/block-elements/checkboxes-element)
     /// representation
     Checkboxes(Box<Checkboxes>),
 
-    /// [Date picker element](https://api.slack.com/reference/block-kit/block-elements#datepicker)
+    /// [Date picker element](https://docs.slack.dev/reference/block-kit/block-elements/date-picker-element)
     /// representation
     DatePicker(Box<DatePicker>),
 
-    /// [Datetime picker element](https://api.slack.com/reference/block-kit/block-elements#datetimepicker)
+    /// [Datetime picker element](https://docs.slack.dev/reference/block-kit/block-elements/datetime-picker-element)
     /// representation
     DatetimePicker(Box<DatetimePicker>),
 
-    /// [Multi-select menu Conversations list element](https://api.slack.com/reference/block-kit/block-elements#conversation_multi_select)
+    /// [Multi-select menu Conversations list element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#conversation_multi_select)
     /// representation
     MultiSelectConversations(Box<MultiSelectConversations>),
 
-    /// [Multi-select menu External data source element](https://api.slack.com/reference/block-kit/block-elements#external_multi_select)
+    /// [Multi-select menu External data source element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#external_multi_select)
     /// representation
     MultiSelectExternals(Box<MultiSelectExternals>),
 
-    /// [Multi-select menu Public channels element](https://api.slack.com/reference/block-kit/block-elements#channel_multi_select)
+    /// [Multi-select menu Public channels element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#channel_multi_select)
     /// representation
     MultiSelectPublicChannels(Box<MultiSelectPublicChannels>),
 
-    /// [Multi-select menu Static options element](https://api.slack.com/reference/block-kit/block-elements#static_multi_select)
+    /// [Multi-select menu Static options element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#static_multi_select)
     /// representation
     MultiSelectStaticOptions(Box<MultiSelectStaticOptions>),
 
-    /// [Multi-select menu User list element](https://api.slack.com/reference/block-kit/block-elements#users_multi_select)
+    /// [Multi-select menu User list element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#users_multi_select)
     /// representation
     MultiSelectUsers(Box<MultiSelectUsers>),
 
-    /// [Overflow menu element](https://api.slack.com/reference/block-kit/block-elements#overflow)
+    /// [Overflow menu element](https://docs.slack.dev/reference/block-kit/block-elements/overflow-menu-element)
     /// representation
     OverflowMenu(Box<OverflowMenu>),
 
-    /// [Radio buton group element](https://api.slack.com/reference/block-kit/block-elements#radio)
+    /// [Radio buton group element](https://docs.slack.dev/reference/block-kit/block-elements/radio-button-group-element)
     /// representation
     RadioButtonGroup(Box<RadioButtonGroup>),
 
-    /// [Select menu of conversations element](https://api.slack.com/reference/block-kit/block-elements#conversations_select)
+    /// [Select menu of conversations element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#conversations_select)
     /// representation
     SelectConversations(Box<SelectConversations>),
 
-    /// [Select menu of external data source element](https://api.slack.com/reference/block-kit/block-elements#external_select)
+    /// [Select menu of external data source element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#external_select)
     /// representation
     SelectExternals(Box<SelectExternals>),
 
-    /// [Select menu of public channels element](https://api.slack.com/reference/block-kit/block-elements#conversations_select)
+    /// [Select menu of public channels element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#channels_select)
     /// representation
     SelectPublicChannels(Box<SelectPublicChannels>),
 
-    /// [Select menu of static options element](https://api.slack.com/reference/block-kit/block-elements#static_select)
+    /// [Select menu of static options element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select)
     /// representation
     SelectStaticOptions(Box<SelectStaticOptions>),
 
-    /// [Select menu of users element](https://api.slack.com/reference/block-kit/block-elements#users_select)
+    /// [Select menu of users element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#users_select)
     /// representation
     SelectUsers(Box<SelectUsers>),
 
-    /// [Time picker element](https://api.slack.com/reference/block-kit/block-elements#timepicker)
+    /// [Time picker element](https://docs.slack.dev/reference/block-kit/block-elements/time-picker-element)
     /// representation
     TimePicker(Box<TimePicker>),
 
-    /// [Workflow button element](https://api.slack.com/reference/block-kit/block-elements#workflow_button)
+    /// [Workflow button element](https://docs.slack.dev/reference/block-kit/block-elements/workflow-button-element)
     /// representation
     WorkflowButton(Box<WorkflowButton>),
 }

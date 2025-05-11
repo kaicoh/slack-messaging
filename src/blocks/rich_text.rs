@@ -3,7 +3,7 @@ use super::rich_text_elements::{
 };
 use serde::Serialize;
 
-/// [Rich text block](https://api.slack.com/reference/block-kit/blocks#rich_text) representation.
+/// [Rich text block](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block) representation.
 ///
 /// # Example
 ///
@@ -75,19 +75,19 @@ pub struct RichText {
 #[derive(Debug, Clone, Serialize)]
 #[serde(untagged)]
 pub enum RichTextElement {
-    /// [Section element](https://api.slack.com/reference/block-kit/blocks#rich_text_section)
+    /// [Section element](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block#rich_text_section)
     /// representation
     Section(Box<RichTextSection>),
 
-    /// [List element](https://api.slack.com/reference/block-kit/blocks#rich_text_list)
+    /// [List element](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block#rich_text_list)
     /// representation
     List(Box<RichTextList>),
 
-    /// [Preformatted element](https://api.slack.com/reference/block-kit/blocks#rich_text_preformatted)
+    /// [Preformatted element](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block#rich_text_preformatted)
     /// representation
     Preformatted(Box<RichTextPreformatted>),
 
-    /// [Quote element](https://api.slack.com/reference/block-kit/blocks#rich_text_quote)
+    /// [Quote element](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block#rich_text_quote)
     /// representation
     Quote(Box<RichTextQuote>),
 }

@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-/// [File input element](https://api.slack.com/reference/block-kit/block-elements#file_input)
+/// [File input element](https://docs.slack.dev/reference/block-kit/block-elements/file-input-element)
 /// representation.
 ///
 /// # Example
@@ -37,7 +37,7 @@ pub struct FileInput {
     pub(super) max_files: Option<i64>,
 }
 
-/// Possible filetype values. See [this](https://api.slack.com/types/file#types).
+/// Possible filetype values. See [this](https://docs.slack.dev/reference/objects/file-object#types).
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum FileType {

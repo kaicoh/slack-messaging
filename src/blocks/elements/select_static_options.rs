@@ -1,7 +1,7 @@
 use super::composition_objects::{ConfirmationDialog, Opt, OptGroup, Text};
 use serde::Serialize;
 
-/// [Select menu of static options element](https://api.slack.com/reference/block-kit/block-elements#static_select)
+/// [Select menu of static options element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select)
 /// representation.
 ///
 /// # Example

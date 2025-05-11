@@ -1,7 +1,7 @@
 use super::{Opt, Text};
 use serde::Serialize;
 
-/// [Option group object](https://api.slack.com/reference/block-kit/composition-objects#option_group)
+/// [Option group object](https://docs.slack.dev/reference/block-kit/composition-objects/option-group-object)
 /// representation.
 ///
 /// # Example

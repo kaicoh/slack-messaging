@@ -1,7 +1,33 @@
-use super::InputParameter;
 use serde::Serialize;
+use serde_json::Value;
 
-/// [Trigger object](https://api.slack.com/reference/block-kit/composition-objects#trigger)
+/// Input parameter for [Trigger object](https://docs.slack.dev/reference/block-kit/composition-objects/trigger-object).
+///
+/// # Example
+///
+/// ```
+/// # use slack_messaging::composition_objects::InputParameter;
+/// let param = InputParameter::builder()
+///     .name("input_parameter_a")
+///     .value("Value for input param A")
+///     .build();
+///
+/// let expected = serde_json::json!({
+///     "name": "input_parameter_a",
+///     "value": "Value for input param A"
+/// });
+///
+/// let json = serde_json::to_value(param).unwrap();
+///
+/// assert_eq!(json, expected);
+/// ```
+#[derive(Debug, Clone, Serialize)]
+pub struct InputParameter {
+    pub(super) name: String,
+    pub(super) value: Value,
+}
+
+/// [Trigger object](https://docs.slack.dev/reference/block-kit/composition-objects/trigger-object)
 /// representation.
 ///
 /// # Example

@@ -1,7 +1,7 @@
 use super::composition_objects::{DispatchActionConfiguration, Text};
 use serde::Serialize;
 
-/// [Number input element](https://api.slack.com/reference/block-kit/block-elements#number)
+/// [Number input element](https://docs.slack.dev/reference/block-kit/block-elements/number-input-element)
 /// representation.
 ///
 /// # Example

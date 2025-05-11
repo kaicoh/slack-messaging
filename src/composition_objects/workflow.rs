@@ -1,7 +1,7 @@
 use super::Trigger;
 use serde::Serialize;
 
-/// [Workflow object](https://api.slack.com/reference/block-kit/composition-objects#workflow)
+/// [Workflow object](https://docs.slack.dev/reference/block-kit/composition-objects/workflow-object)
 /// representation.
 ///
 /// # Example

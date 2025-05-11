@@ -1,7 +1,7 @@
 use super::composition_objects::{DispatchActionConfiguration, Text};
 use serde::Serialize;
 
-/// [URL input element](https://api.slack.com/reference/block-kit/block-elements#url)
+/// [URL input element](https://docs.slack.dev/reference/block-kit/block-elements/url-input-element)
 /// representation.
 ///
 /// # Example

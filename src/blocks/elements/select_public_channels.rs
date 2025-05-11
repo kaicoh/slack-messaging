@@ -1,7 +1,7 @@
 use super::composition_objects::{ConfirmationDialog, Text};
 use serde::Serialize;
 
-/// [Select menu of public channels element](https://api.slack.com/reference/block-kit/block-elements#conversations_select)
+/// [Select menu of public channels element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#channels_select)
 /// representation.
 ///
 /// # Example

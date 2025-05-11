@@ -33,34 +33,34 @@ pub use video::Video;
 #[derive(Debug, Clone, Serialize)]
 #[serde(untagged)]
 pub enum Block {
-    /// [Actions block](https://api.slack.com/reference/block-kit/blocks#actions) representation
+    /// [Actions block](https://docs.slack.dev/reference/block-kit/blocks/actions-block) representation
     Actions(Box<Actions>),
 
-    /// [Context block](https://api.slack.com/reference/block-kit/blocks#context) representation
+    /// [Context block](https://docs.slack.dev/reference/block-kit/blocks/context-block) representation
     Context(Box<Context>),
 
-    /// [Divider block](https://api.slack.com/reference/block-kit/blocks#divider) representation
+    /// [Divider block](https://docs.slack.dev/reference/block-kit/blocks/divider-block) representation
     Divider(Box<Divider>),
 
-    /// [File block](https://api.slack.com/reference/block-kit/blocks#file) representation
+    /// [File block](https://docs.slack.dev/reference/block-kit/blocks/file-block) representation
     File(Box<File>),
 
-    /// [Header block](https://api.slack.com/reference/block-kit/blocks#header) representation
+    /// [Header block](https://docs.slack.dev/reference/block-kit/blocks/header-block) representation
     Header(Box<Header>),
 
-    /// [Image block](https://api.slack.com/reference/block-kit/blocks#image) representation
+    /// [Image block](https://docs.slack.dev/reference/block-kit/blocks/image-block) representation
     Image(Box<Image>),
 
-    /// [Input block](https://api.slack.com/reference/block-kit/blocks#input) representation
+    /// [Input block](https://docs.slack.dev/reference/block-kit/blocks/input-block) representation
     Input(Box<Input>),
 
-    /// [Rich text block](https://api.slack.com/reference/block-kit/blocks#rich_text) representation
+    /// [Rich text block](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block) representation
     RichText(Box<RichText>),
 
-    /// [Section block](https://api.slack.com/reference/block-kit/blocks#section) representation
+    /// [Section block](https://docs.slack.dev/reference/block-kit/blocks/section-block) representation
     Section(Box<Section>),
 
-    /// [Video block](https://api.slack.com/reference/block-kit/blocks#video) representation
+    /// [Video block](https://docs.slack.dev/reference/block-kit/blocks/video-block) representation
     Video(Box<Video>),
 }
 

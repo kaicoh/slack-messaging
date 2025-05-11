@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-/// Interaction type to set into [Dispatch action configuration](https://api.slack.com/reference/block-kit/composition-objects#dispatch_action_config)
+/// Interaction type to set into [Dispatch action configuration](https://docs.slack.dev/reference/block-kit/composition-objects/dispatch-action-configuration-object)
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum TriggerAction {
@@ -11,7 +11,7 @@ pub enum TriggerAction {
     OnCharacterEntered,
 }
 
-/// [Dispatch action configuration](https://api.slack.com/reference/block-kit/composition-objects#dispatch_action_config)
+/// [Dispatch action configuration](https://docs.slack.dev/reference/block-kit/composition-objects/dispatch-action-configuration-object)
 /// representation.
 ///
 /// # Example

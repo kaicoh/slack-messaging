@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-/// Type of conversation to set into [Conversation filter object](https://api.slack.com/reference/block-kit/composition-objects#filter_conversations)
+/// Type of conversation to set into [Conversation filter object](https://docs.slack.dev/reference/block-kit/composition-objects/conversation-filter-object)
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum Conversation {
@@ -10,7 +10,7 @@ pub enum Conversation {
     Public,
 }
 
-/// [Conversation filter object](https://api.slack.com/reference/block-kit/composition-objects#filter_conversations)
+/// [Conversation filter object](https://docs.slack.dev/reference/block-kit/composition-objects/conversation-filter-object)
 /// representation.
 ///
 /// # Example

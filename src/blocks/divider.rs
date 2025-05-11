@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-/// [Divider block](https://api.slack.com/reference/block-kit/blocks#divider)
+/// [Divider block](https://docs.slack.dev/reference/block-kit/blocks/divider-block)
 /// representation.
 ///
 /// # Example

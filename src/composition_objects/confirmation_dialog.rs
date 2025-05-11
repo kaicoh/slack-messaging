@@ -1,7 +1,7 @@
 use super::Text;
 use serde::Serialize;
 
-/// [Confirmation dialog object](https://api.slack.com/reference/block-kit/composition-objects#confirm)
+/// [Confirmation dialog object](https://docs.slack.dev/reference/block-kit/composition-objects/confirmation-dialog-object)
 /// representation.
 ///
 /// # Example

@@ -1,7 +1,7 @@
 use super::Text;
 use serde::Serialize;
 
-/// [Option object](https://api.slack.com/reference/block-kit/composition-objects#option)
+/// [Option object](https://docs.slack.dev/reference/block-kit/composition-objects/option-object)
 /// representation.
 ///
 /// # Example

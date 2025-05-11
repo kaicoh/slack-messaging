@@ -1,4 +1,4 @@
-use super::{composition_objects::Text, Accessory, Section};
+use super::{Accessory, Section, composition_objects::Text};
 
 impl Section {
     /// Construct a [`SectionBuilder`].
@@ -14,6 +14,7 @@ pub struct SectionBuilder {
     block_id: Option<String>,
     fields: Vec<Text>,
     accessory: Option<Accessory>,
+    expand: Option<bool>,
 }
 
 impl SectionBuilder {
@@ -281,6 +282,58 @@ impl SectionBuilder {
         self.set_accessory(Some(accessory.into()))
     }
 
+    /// Set expand field.
+    ///
+    /// ```
+    /// # use slack_messaging::{blocks::Section, mrkdwn};
+    /// let section = Section::builder()
+    ///     .text(mrkdwn!("A message *with some bold text* and _some italicized text_."))
+    ///     .set_expand(Some(true))
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "section",
+    ///     "text": {
+    ///         "type": "mrkdwn",
+    ///         "text": "A message *with some bold text* and _some italicized text_."
+    ///     },
+    ///     "expand": true
+    /// });
+    ///
+    /// let json = serde_json::to_value(section).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_expand(self, expand: Option<bool>) -> Self {
+        Self { expand, ..self }
+    }
+
+    /// Set expand field.
+    ///
+    /// ```
+    /// # use slack_messaging::{blocks::Section, mrkdwn};
+    /// let section = Section::builder()
+    ///     .text(mrkdwn!("A message *with some bold text* and _some italicized text_."))
+    ///     .expand(false)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "type": "section",
+    ///     "text": {
+    ///         "type": "mrkdwn",
+    ///         "text": "A message *with some bold text* and _some italicized text_."
+    ///     },
+    ///     "expand": false
+    /// });
+    ///
+    /// let json = serde_json::to_value(section).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn expand(self, expand: bool) -> Self {
+        self.set_expand(Some(expand))
+    }
+
     /// Build a [`Section`] object. This method will panic if text is not set and fields are empty.
     pub fn build(self) -> Section {
         if self.text.is_none() && self.fields.is_empty() {
@@ -293,6 +346,7 @@ impl SectionBuilder {
             block_id: self.block_id,
             fields: self.fields,
             accessory: self.accessory,
+            expand: self.expand,
         }
     }
 
@@ -314,5 +368,10 @@ impl SectionBuilder {
     /// Get accessory value.
     pub fn get_accessory(&self) -> &Option<Accessory> {
         &self.accessory
+    }
+
+    /// Get expand value.
+    pub fn get_expand(&self) -> &Option<bool> {
+        &self.expand
     }
 }

@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-/// [Slack file object](https://api.slack.com/reference/block-kit/composition-objects#slack_file)
+/// [Slack file object](https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object)
 /// representation.
 ///
 /// # Example

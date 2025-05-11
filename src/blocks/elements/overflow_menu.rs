@@ -1,7 +1,7 @@
 use super::composition_objects::{ConfirmationDialog, Opt};
 use serde::Serialize;
 
-/// [Overflow menu element](https://api.slack.com/reference/block-kit/block-elements#overflow)
+/// [Overflow menu element](https://docs.slack.dev/reference/block-kit/block-elements/overflow-menu-element)
 /// representation.
 ///
 /// # Example

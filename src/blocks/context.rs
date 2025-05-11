@@ -1,12 +1,12 @@
 use super::{composition_objects::Text, elements::Image};
 use serde::Serialize;
 
-/// [Context block](https://api.slack.com/reference/block-kit/blocks#context)
+/// [Context block](https://docs.slack.dev/reference/block-kit/blocks/context-block)
 /// representation.
 ///
 /// # Example
 ///
-/// The following is reproduction of [the sample context](https://api.slack.com/reference/block-kit/blocks#context_examples).
+/// The following is reproduction of [the sample context](https://docs.slack.dev/reference/block-kit/blocks/context-block#examples).
 ///
 /// ```
 /// # use slack_messaging::mrkdwn;
@@ -56,11 +56,11 @@ pub struct Context {
 #[derive(Debug, Clone, Serialize)]
 #[serde(untagged)]
 pub enum ContextElement {
-    /// [Image element](https://api.slack.com/reference/block-kit/block-elements#image)
+    /// [Image element](https://docs.slack.dev/reference/block-kit/block-elements/image-element)
     /// representation
     Image(Box<Image>),
 
-    /// [Text object](https://api.slack.com/reference/block-kit/composition-objects#text)
+    /// [Text object](https://docs.slack.dev/reference/block-kit/composition-objects/text-object)
     /// representation
     Text(Box<Text>),
 }
