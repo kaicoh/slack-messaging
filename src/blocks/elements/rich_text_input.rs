@@ -12,7 +12,7 @@ use serde::Serialize;
 /// ```
 /// # use slack_messaging::blocks::RichText;
 /// # use slack_messaging::blocks::elements::RichTextInput;
-/// # use slack_messaging::rich_text_elements::{RichTextSection, RichTextElementTypeText};
+/// # use slack_messaging::blocks::rich_text::elements::{RichTextSection, RichTextElementTypeText};
 /// let rich_text = RichTextInput::builder()
 ///     .action_id("rich_text_input-action")
 ///     .initial_value(

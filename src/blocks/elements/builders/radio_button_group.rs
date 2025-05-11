@@ -1,6 +1,6 @@
 use super::{
-    composition_objects::{ConfirmationDialog, Opt},
     RadioButtonGroup,
+    composition_objects::{ConfirmationDialog, Opt},
 };
 
 impl RadioButtonGroup {

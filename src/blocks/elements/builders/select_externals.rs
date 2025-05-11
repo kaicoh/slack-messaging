@@ -1,6 +1,6 @@
 use super::{
-    composition_objects::{ConfirmationDialog, Opt, Text},
     SelectExternals,
+    composition_objects::{ConfirmationDialog, Opt, Text},
 };
 
 impl SelectExternals {

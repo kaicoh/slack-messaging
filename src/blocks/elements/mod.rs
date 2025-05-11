@@ -1,4 +1,4 @@
-use super::{composition_objects, RichText};
+use super::{RichText, composition_objects};
 
 /// Builder objects for Block elements.
 pub mod builders;

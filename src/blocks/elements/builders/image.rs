@@ -1,4 +1,4 @@
-use super::{composition_objects::SlackFile, Image};
+use super::{Image, composition_objects::SlackFile};
 
 impl Image {
     /// Construct a [`ImageBuilder`].

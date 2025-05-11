@@ -1,6 +1,6 @@
 use super::{
-    composition_objects::{ConfirmationDialog, Opt},
     OverflowMenu,
+    composition_objects::{ConfirmationDialog, Opt},
 };
 
 impl OverflowMenu {

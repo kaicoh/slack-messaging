@@ -11,13 +11,13 @@ mod file;
 mod header;
 mod image;
 mod input;
-mod rich_text;
 mod section;
 mod video;
 
-use super::{composition_objects, rich_text_elements};
+use super::composition_objects;
 use serde::Serialize;
 
+pub mod rich_text;
 pub use actions::{Actions, ActionsElement};
 pub use context::{Context, ContextElement};
 pub use divider::Divider;

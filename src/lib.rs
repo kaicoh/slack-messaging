@@ -116,8 +116,6 @@ pub mod composition_objects;
 /// Format text for slack app. Require `fmt` feature.
 #[cfg(feature = "fmt")]
 pub mod fmt;
-/// Objects can be used inside of Rich text block.
-pub mod rich_text_elements;
 #[macro_use]
 mod macros;
 mod message;

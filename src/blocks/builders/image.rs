@@ -1,6 +1,6 @@
 use super::{
-    composition_objects::{SlackFile, Text},
     Image,
+    composition_objects::{SlackFile, Text},
 };
 
 impl Image {

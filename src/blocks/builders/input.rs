@@ -1,4 +1,4 @@
-use super::{composition_objects::Text, Input, InputElement};
+use super::{Input, InputElement, composition_objects::Text};
 
 impl Input {
     /// Construct an [`InputBuilder`].

@@ -1,4 +1,4 @@
-use super::{composition_objects::ConfirmationDialog, DatetimePicker};
+use super::{DatetimePicker, composition_objects::ConfirmationDialog};
 
 impl DatetimePicker {
     /// Construct a [`DatetimePickerBuilder`].

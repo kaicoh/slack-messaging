@@ -1,6 +1,6 @@
 use super::{
-    composition_objects::{Text, Workflow},
     WorkflowButton,
+    composition_objects::{Text, Workflow},
 };
 
 impl WorkflowButton {

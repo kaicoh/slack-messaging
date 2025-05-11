@@ -19,7 +19,7 @@ impl RichTextBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::RichText;
-    /// # use slack_messaging::rich_text_elements::{RichTextSection, RichTextElementTypeText};
+    /// # use slack_messaging::blocks::rich_text::elements::{RichTextSection, RichTextElementTypeText};
     /// let rich_text = RichText::builder()
     ///     .set_elements(
     ///         vec![
@@ -62,7 +62,7 @@ impl RichTextBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::RichText;
-    /// # use slack_messaging::rich_text_elements::{RichTextSection, RichTextElementTypeText};
+    /// # use slack_messaging::blocks::rich_text::elements::{RichTextSection, RichTextElementTypeText};
     /// let rich_text = RichText::builder()
     ///     .element(
     ///         RichTextSection::builder()

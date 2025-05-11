@@ -1,6 +1,6 @@
 use super::{
-    composition_objects::{ConfirmationDialog, Opt, OptGroup, Text},
     MultiSelectStaticOptions,
+    composition_objects::{ConfirmationDialog, Opt, OptGroup, Text},
 };
 
 impl MultiSelectStaticOptions {
