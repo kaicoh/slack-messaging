@@ -1,9 +1,9 @@
 [package]
 name = "slack-messaging"
-version = "0.4.1"
+version = "0.4.2"
 authors = ["kaicoh <sumireminami@gmail.com>"]
 edition = "2024"
-keywords = ["slack", "messaging", "webhook"]
+keywords = ["slack", "block_kit"]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/kaicoh/slack-messaging"
