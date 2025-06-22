@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-/// [Text object](https://docs.slack.dev/reference/block-kit/composition-objects/text-object)
+/// Markdown [text object](https://docs.slack.dev/reference/block-kit/composition-objects/text-object)
 /// representation.
 ///
 /// # Example

@@ -1,9 +1,24 @@
 use serde::Serialize;
 
-/// [Text object](https://docs.slack.dev/reference/block-kit/composition-objects/text-object)
+/// Plain [text object](https://docs.slack.dev/reference/block-kit/composition-objects/text-object)
 /// representation.
 ///
-/// # Example
+/// There is a [`Text`](crate::composition_objects::Text) object like this.
+/// The difference between these two objects is that [`Text`](crate::composition_objects::Text)
+/// can be used incase of both of plain text and mrkdwn are allowed to used.
+///
+/// On the other hand, use [`PlainText`] instead of this enum incase of only [`PlainText`]
+/// is allowed to use.
+///
+/// ### example to use [`Text`](crate::composition_objects::Text)
+///
+/// * The `text` and `description` field of [`Opt`](crate::composition_objects::Opt)
+/// object in the [`Checkboxes`](crate::blocks::elements::Checkboxes) and [`RadioButtonGroup`](crate::blocks::elements::RadioButtonGroup) element
+/// * The `text` field of [`Section`](crate::blocks::Section) block
+///
+/// ### example to use [`PlainText`]
+///
+/// * The `text` field of [`Button`](crate::blocks::elements::Button) element.
 ///
 /// ```
 /// # use slack_messaging::composition_objects::PlainText;
