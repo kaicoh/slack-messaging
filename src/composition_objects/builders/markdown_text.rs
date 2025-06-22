@@ -7,7 +7,7 @@ impl MrkdwnText {
     }
 }
 
-/// Builder for [`Text`] object.
+/// Builder for [`MrkdwnText`] object.
 #[derive(Debug, Default)]
 pub struct MrkdwnTextBuilder {
     text: Option<String>,

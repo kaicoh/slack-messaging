@@ -2,6 +2,8 @@ use super::{RichText, composition_objects};
 
 /// Builder objects for Block elements.
 pub mod builders;
+/// Types for select menu element or multi select menu element.
+pub mod select_menu_types;
 
 mod button;
 mod checkboxes;
@@ -28,34 +30,13 @@ pub use datetimepicker::DatetimePicker;
 pub use email_input::EmailInput;
 pub use file_input::{FileInput, FileType};
 pub use image::Image;
-pub use multi_select_menu::{
-    MultiSelect, MultiSelectConversations, MultiSelectExternals, MultiSelectMenu,
-    MultiSelectPublicChannels, MultiSelectStaticOptions, MultiSelectUsers,
-};
+pub use multi_select_menu::{MultiSelect, MultiSelectMenu};
 pub use number_input::NumberInput;
 pub use overflow_menu::OverflowMenu;
 pub use plain_text_input::PlainTextInput;
 pub use radio_button_group::RadioButtonGroup;
 pub use rich_text_input::RichTextInput;
-pub use select_menu::{
-    Select, SelectConversations, SelectExternals, SelectMenu, SelectPublicChannels,
-    SelectStaticOptions, SelectUsers,
-};
+pub use select_menu::{Select, SelectMenu};
 pub use timepicker::TimePicker;
 pub use url_input::UrlInput;
 pub use workflow_button::WorkflowButton;
-
-#[derive(Debug, Default, Copy, Clone)]
-pub struct StaticOptions;
-
-#[derive(Debug, Default, Copy, Clone)]
-pub struct ExternalDataSource;
-
-#[derive(Debug, Default, Copy, Clone)]
-pub struct UserList;
-
-#[derive(Debug, Default, Copy, Clone)]
-pub struct ConversationsList;
-
-#[derive(Debug, Default, Copy, Clone)]
-pub struct PublicChannels;

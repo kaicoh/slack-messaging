@@ -1,17 +1,16 @@
 use super::composition_objects::{
     ConfirmationDialog, ConversationFilter, Opt, OptGroup, PlainText,
 };
-use super::{
-    ConversationsList, ExternalDataSource, PublicChannels, Select, SelectConversations,
-    SelectExternals, SelectMenu, SelectPublicChannels, SelectStaticOptions, SelectUsers,
-    StaticOptions, UserList,
+use super::select_menu_types::{
+    Conversations, ExternalDataSource, PublicChannels, StaticOptions, Users,
 };
+use super::{Select, SelectMenu};
 use std::marker::PhantomData;
 
 macro_rules! impl_select_menu_builder {
-    ($($struct:tt using $ty:ty),*) => {
+    ($($ty:ty),*) => {
         $(
-            impl $struct {
+            impl Select<$ty> {
                 pub fn builder() -> SelectMenuBuilder<$ty> {
                     SelectMenuBuilder::<$ty>::default()
                 }
@@ -21,11 +20,11 @@ macro_rules! impl_select_menu_builder {
 }
 
 impl_select_menu_builder! {
-    SelectConversations using ConversationsList,
-    SelectExternals using ExternalDataSource,
-    SelectPublicChannels using PublicChannels,
-    SelectStaticOptions using StaticOptions,
-    SelectUsers using UserList
+    Conversations,
+    ExternalDataSource,
+    PublicChannels,
+    StaticOptions,
+    Users
 }
 
 /// Builder for [`SelectMenu`] object.
@@ -52,8 +51,9 @@ impl<T> SelectMenuBuilder<T> {
     /// Set action_id field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectStaticOptions;
-    /// let menu = SelectStaticOptions::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
+    /// let menu = Select::<StaticOptions>::builder()
     ///     .set_action_id(Some("text1234".into()))
     ///     .build();
     ///
@@ -73,8 +73,9 @@ impl<T> SelectMenuBuilder<T> {
     /// Set action_id field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectStaticOptions;
-    /// let menu = SelectStaticOptions::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
+    /// let menu = Select::<StaticOptions>::builder()
     ///     .action_id("text1234")
     ///     .build();
     ///
@@ -94,9 +95,10 @@ impl<T> SelectMenuBuilder<T> {
     /// Set confirm field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectExternals;
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::ExternalDataSource;
     /// # use slack_messaging::composition_objects::ConfirmationDialog;
-    /// let menu = SelectExternals::builder()
+    /// let menu = Select::<ExternalDataSource>::builder()
     ///     .set_confirm(
     ///         Some(ConfirmationDialog::builder()
     ///             .title("Are you sure?")
@@ -140,9 +142,10 @@ impl<T> SelectMenuBuilder<T> {
     /// Set confirm field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectExternals;
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::ExternalDataSource;
     /// # use slack_messaging::composition_objects::ConfirmationDialog;
-    /// let menu = SelectExternals::builder()
+    /// let menu = Select::<ExternalDataSource>::builder()
     ///     .confirm(
     ///         ConfirmationDialog::builder()
     ///             .title("Are you sure?")
@@ -186,8 +189,9 @@ impl<T> SelectMenuBuilder<T> {
     // Set focus_on_load field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectConversations;
-    /// let menu = SelectConversations::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
+    /// let menu = Select::<Conversations>::builder()
     ///     .set_focus_on_load(Some(true))
     ///     .build();
     ///
@@ -210,8 +214,9 @@ impl<T> SelectMenuBuilder<T> {
     /// Set focus_on_load field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectConversations;
-    /// let menu = SelectConversations::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
+    /// let menu = Select::<Conversations>::builder()
     ///     .set_focus_on_load(Some(true))
     ///     .build();
     ///
@@ -231,9 +236,10 @@ impl<T> SelectMenuBuilder<T> {
     /// Set placeholder field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::PublicChannels;
     /// # use slack_messaging::composition_objects::PlainText;
-    /// let menu = SelectPublicChannels::builder()
+    /// let menu = Select::<PublicChannels>::builder()
     ///     .set_placeholder(
     ///         Some(PlainText::builder()
     ///             .text("Select an item")
@@ -263,8 +269,9 @@ impl<T> SelectMenuBuilder<T> {
     /// Set placeholder field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
-    /// let menu = SelectPublicChannels::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::PublicChannels;
+    /// let menu = Select::<PublicChannels>::builder()
     ///     .placeholder("Select an item")
     ///     .build();
     ///
@@ -311,10 +318,11 @@ impl SelectMenuBuilder<StaticOptions> {
     /// (Either options or option_groups field should exist.)
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectStaticOptions;
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
     /// # use slack_messaging::composition_objects::Opt;
     /// # use slack_messaging::plain_text;
-    /// let menu = SelectStaticOptions::builder()
+    /// let menu = Select::<StaticOptions>::builder()
     ///     .set_options(
     ///         vec![
     ///             Opt::builder()
@@ -365,10 +373,11 @@ impl SelectMenuBuilder<StaticOptions> {
     /// (Either options or option_groups field should exist.)
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectStaticOptions;
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
     /// # use slack_messaging::composition_objects::Opt;
     /// # use slack_messaging::plain_text;
-    /// let menu = SelectStaticOptions::builder()
+    /// let menu = Select::<StaticOptions>::builder()
     ///     .option(
     ///         Opt::builder()
     ///             .text(plain_text!("option-0"))
@@ -408,7 +417,8 @@ impl SelectMenuBuilder<StaticOptions> {
     /// (Either options or option_groups field should exist.)
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectStaticOptions;
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
     /// # use slack_messaging::composition_objects::{Opt, OptGroup};
     /// # use slack_messaging::plain_text;
     /// let group_0 = OptGroup::builder()
@@ -443,7 +453,7 @@ impl SelectMenuBuilder<StaticOptions> {
     ///     )
     ///     .build();
     ///
-    /// let menu = SelectStaticOptions::builder()
+    /// let menu = Select::<StaticOptions>::builder()
     ///     .set_option_groups(vec![group_0, group_1])
     ///     .build();
     ///
@@ -513,10 +523,11 @@ impl SelectMenuBuilder<StaticOptions> {
     /// (Either options or option_groups field should exist.)
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectStaticOptions;
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
     /// # use slack_messaging::composition_objects::{Opt, OptGroup};
     /// # use slack_messaging::plain_text;
-    /// let menu = SelectStaticOptions::builder()
+    /// let menu = Select::<StaticOptions>::builder()
     ///     .option_group(
     ///         OptGroup::builder()
     ///             .label("Group Zero")
@@ -583,10 +594,11 @@ impl SelectMenuBuilder<StaticOptions> {
     /// Set initial_option field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectStaticOptions;
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
     /// # use slack_messaging::composition_objects::Opt;
     /// # use slack_messaging::plain_text;
-    /// let menu = SelectStaticOptions::builder()
+    /// let menu = Select::<StaticOptions>::builder()
     ///     .set_initial_option(
     ///         Some(Opt::builder()
     ///             .text(plain_text!("option-0"))
@@ -620,10 +632,11 @@ impl SelectMenuBuilder<StaticOptions> {
     /// Set initial_option field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectStaticOptions;
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
     /// # use slack_messaging::composition_objects::Opt;
     /// # use slack_messaging::plain_text;
-    /// let menu = SelectStaticOptions::builder()
+    /// let menu = Select::<StaticOptions>::builder()
     ///     .initial_option(
     ///         Opt::builder()
     ///             .text(plain_text!("option-0"))
@@ -685,10 +698,11 @@ impl SelectMenuBuilder<ExternalDataSource> {
     /// Set initial_option field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectExternals;
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::ExternalDataSource;
     /// # use slack_messaging::composition_objects::Opt;
     /// # use slack_messaging::plain_text;
-    /// let menu = SelectExternals::builder()
+    /// let menu = Select::<ExternalDataSource>::builder()
     ///     .set_initial_option(
     ///         Some(Opt::builder()
     ///             .text(plain_text!("option-0"))
@@ -722,10 +736,11 @@ impl SelectMenuBuilder<ExternalDataSource> {
     /// Set initial_option field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectExternals;
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::ExternalDataSource;
     /// # use slack_messaging::composition_objects::Opt;
     /// # use slack_messaging::plain_text;
-    /// let menu = SelectExternals::builder()
+    /// let menu = Select::<ExternalDataSource>::builder()
     ///     .initial_option(
     ///         Opt::builder()
     ///             .text(plain_text!("option-0"))
@@ -756,8 +771,9 @@ impl SelectMenuBuilder<ExternalDataSource> {
     /// Set min_query_length field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectExternals;
-    /// let menu = SelectExternals::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::ExternalDataSource;
+    /// let menu = Select::<ExternalDataSource>::builder()
     ///     .set_min_query_length(Some(3))
     ///     .build();
     ///
@@ -780,8 +796,9 @@ impl SelectMenuBuilder<ExternalDataSource> {
     /// Set min_query_length field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectExternals;
-    /// let menu = SelectExternals::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::ExternalDataSource;
+    /// let menu = Select::<ExternalDataSource>::builder()
     ///     .min_query_length(3)
     ///     .build();
     ///
@@ -822,12 +839,13 @@ impl SelectMenuBuilder<ExternalDataSource> {
     }
 }
 
-impl SelectMenuBuilder<UserList> {
+impl SelectMenuBuilder<Users> {
     /// Set initial_user field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectUsers;
-    /// let menu = SelectUsers::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Users;
+    /// let menu = Select::<Users>::builder()
     ///     .set_initial_user(Some("user_000".into()))
     ///     .build();
     ///
@@ -850,8 +868,9 @@ impl SelectMenuBuilder<UserList> {
     /// Set initial_user field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectUsers;
-    /// let menu = SelectUsers::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Users;
+    /// let menu = Select::<Users>::builder()
     ///     .initial_user("user_000")
     ///     .build();
     ///
@@ -873,9 +892,9 @@ impl SelectMenuBuilder<UserList> {
         &self.initial_user
     }
 
-    /// Build a enum variant SelectMenu::UserList object.
+    /// Build a enum variant SelectMenu::Users object.
     pub fn build(self) -> SelectMenu {
-        SelectMenu::UserList(Select::<UserList> {
+        SelectMenu::Users(Select::<Users> {
             action_id: self.action_id,
             initial_user: self.initial_user,
             confirm: self.confirm,
@@ -886,12 +905,13 @@ impl SelectMenuBuilder<UserList> {
     }
 }
 
-impl SelectMenuBuilder<ConversationsList> {
+impl SelectMenuBuilder<Conversations> {
     /// Set initial_conversation field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectConversations;
-    /// let menu = SelectConversations::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
+    /// let menu = Select::<Conversations>::builder()
     ///     .set_initial_conversation(Some("conversation_000".into()))
     ///     .build();
     ///
@@ -914,8 +934,9 @@ impl SelectMenuBuilder<ConversationsList> {
     /// Set initial_conversation field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectConversations;
-    /// let menu = SelectConversations::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
+    /// let menu = Select::<Conversations>::builder()
     ///     .initial_conversation("conversation_000")
     ///     .build();
     ///
@@ -935,8 +956,9 @@ impl SelectMenuBuilder<ConversationsList> {
     /// Set default_to_current_conversation field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectConversations;
-    /// let menu = SelectConversations::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
+    /// let menu = Select::<Conversations>::builder()
     ///     .set_default_to_current_conversation(Some(true))
     ///     .build();
     ///
@@ -959,8 +981,9 @@ impl SelectMenuBuilder<ConversationsList> {
     /// Set default_to_current_conversation field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectConversations;
-    /// let menu = SelectConversations::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
+    /// let menu = Select::<Conversations>::builder()
     ///     .default_to_current_conversation(true)
     ///     .build();
     ///
@@ -980,8 +1003,9 @@ impl SelectMenuBuilder<ConversationsList> {
     /// Set response_url_enabled field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectConversations;
-    /// let menu = SelectConversations::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
+    /// let menu = Select::<Conversations>::builder()
     ///     .set_response_url_enabled(Some(true))
     ///     .build();
     ///
@@ -1004,8 +1028,9 @@ impl SelectMenuBuilder<ConversationsList> {
     /// Set response_url_enabled field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectConversations;
-    /// let menu = SelectConversations::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
+    /// let menu = Select::<Conversations>::builder()
     ///     .response_url_enabled(true)
     ///     .build();
     ///
@@ -1025,9 +1050,10 @@ impl SelectMenuBuilder<ConversationsList> {
     /// Set filter field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectConversations;
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
     /// # use slack_messaging::composition_objects::{ConversationFilter, Conversation};
-    /// let menu = SelectConversations::builder()
+    /// let menu = Select::<Conversations>::builder()
     ///     .set_filter(
     ///         Some(ConversationFilter::builder()
     ///             .include(Conversation::Public)
@@ -1059,9 +1085,10 @@ impl SelectMenuBuilder<ConversationsList> {
     /// Set filter field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectConversations;
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
     /// # use slack_messaging::composition_objects::{ConversationFilter, Conversation};
-    /// let menu = SelectConversations::builder()
+    /// let menu = Select::<Conversations>::builder()
     ///     .filter(
     ///         ConversationFilter::builder()
     ///             .include(Conversation::Public)
@@ -1110,9 +1137,9 @@ impl SelectMenuBuilder<ConversationsList> {
         &self.filter
     }
 
-    /// Build a enum variant SelectMenu::ConversationsList object.
+    /// Build a enum variant SelectMenu::Conversations object.
     pub fn build(self) -> SelectMenu {
-        SelectMenu::ConversationsList(Select::<ConversationsList> {
+        SelectMenu::Conversations(Select::<Conversations> {
             action_id: self.action_id,
             initial_conversation: self.initial_conversation,
             default_to_current_conversation: self.default_to_current_conversation,
@@ -1130,8 +1157,9 @@ impl SelectMenuBuilder<PublicChannels> {
     /// Set initial_channel field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
-    /// let menu = SelectPublicChannels::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::PublicChannels;
+    /// let menu = Select::<PublicChannels>::builder()
     ///     .set_initial_channel(Some("channel_0".into()))
     ///     .build();
     ///
@@ -1154,8 +1182,9 @@ impl SelectMenuBuilder<PublicChannels> {
     /// Set initial_channel field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
-    /// let menu = SelectPublicChannels::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::PublicChannels;
+    /// let menu = Select::<PublicChannels>::builder()
     ///     .initial_channel("channel_0")
     ///     .build();
     ///
@@ -1175,8 +1204,9 @@ impl SelectMenuBuilder<PublicChannels> {
     /// Set response_url_enabled field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
-    /// let menu = SelectPublicChannels::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::PublicChannels;
+    /// let menu = Select::<PublicChannels>::builder()
     ///     .set_response_url_enabled(Some(true))
     ///     .build();
     ///
@@ -1199,8 +1229,9 @@ impl SelectMenuBuilder<PublicChannels> {
     /// Set response_url_enabled field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::SelectPublicChannels;
-    /// let menu = SelectPublicChannels::builder()
+    /// # use slack_messaging::blocks::elements::Select;
+    /// # use slack_messaging::blocks::elements::select_menu_types::PublicChannels;
+    /// let menu = Select::<PublicChannels>::builder()
     ///     .response_url_enabled(true)
     ///     .build();
     ///

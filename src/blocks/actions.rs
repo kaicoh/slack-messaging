@@ -13,13 +13,14 @@ use serde::Serialize;
 ///
 /// ```
 /// # use slack_messaging::blocks::Actions;
-/// # use slack_messaging::blocks::elements::{Button, SelectStaticOptions};
+/// # use slack_messaging::blocks::elements::{Button, Select};
+/// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
 /// # use slack_messaging::composition_objects::Opt;
 /// # use slack_messaging::plain_text;
 /// let actions = Actions::builder()
 ///     .block_id("actions1")
 ///     .element(
-///         SelectStaticOptions::builder()
+///         Select::<StaticOptions>::builder()
 ///             .action_id("select_2")
 ///             .placeholder("Which witch is the witchiest witch?")
 ///             .set_options(

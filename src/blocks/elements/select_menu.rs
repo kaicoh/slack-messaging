@@ -1,106 +1,24 @@
 use super::composition_objects::{
     ConfirmationDialog, ConversationFilter, Opt, OptGroup, PlainText,
 };
-use super::{ConversationsList, ExternalDataSource, PublicChannels, StaticOptions, UserList};
-use serde::{Serialize, Serializer};
+use super::select_menu_types::{
+    Conversations, ExternalDataSource, PublicChannels, SelectType, StaticOptions, Users,
+};
+use serde::Serialize;
 use std::marker::PhantomData;
 
-/// [Select menu of conversations element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#conversations_select)
-/// representation.
+/// The entry point to build any variant of [`SelectMenu`].
 ///
 /// # Example
 ///
-/// ```
-/// # use slack_messaging::blocks::elements::SelectConversations;
-/// let menu = SelectConversations::builder()
-///     .action_id("text1234")
-///     .placeholder("Select an item")
-///     .build();
-///
-/// let expected = serde_json::json!({
-///     "type": "conversations_select",
-///     "action_id": "text1234",
-///     "placeholder": {
-///         "type": "plain_text",
-///         "text": "Select an item"
-///     }
-/// });
-///
-/// let json = serde_json::to_value(menu).unwrap();
-///
-/// assert_eq!(json, expected);
-/// ```
-#[derive(Debug, Copy, Clone)]
-pub struct SelectConversations;
-
-/// [Select menu of external data source element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#external_select)
-/// representation.
-///
-/// # Example
+/// ## [Static options](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select)
 ///
 /// ```
-/// # use slack_messaging::blocks::elements::SelectExternals;
-/// let menu = SelectExternals::builder()
-///     .action_id("text1234")
-///     .min_query_length(3)
-///     .placeholder("Select an item")
-///     .build();
-///
-/// let expected = serde_json::json!({
-///     "type": "external_select",
-///     "action_id": "text1234",
-///     "min_query_length": 3,
-///     "placeholder": {
-///         "type": "plain_text",
-///         "text": "Select an item"
-///     }
-/// });
-///
-/// let json = serde_json::to_value(menu).unwrap();
-///
-/// assert_eq!(json, expected);
-/// ```
-#[derive(Debug, Copy, Clone)]
-pub struct SelectExternals;
-
-/// [Select menu of public channels element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#channels_select)
-/// representation.
-///
-/// # Example
-///
-/// ```
-/// # use slack_messaging::blocks::elements::SelectPublicChannels;
-/// let menu = SelectPublicChannels::builder()
-///     .action_id("text1234")
-///     .placeholder("Select an item")
-///     .build();
-///
-/// let expected = serde_json::json!({
-///     "type": "channels_select",
-///     "action_id": "text1234",
-///     "placeholder": {
-///         "type": "plain_text",
-///         "text": "Select an item"
-///     }
-/// });
-///
-/// let json = serde_json::to_value(menu).unwrap();
-///
-/// assert_eq!(json, expected);
-/// ```
-#[derive(Debug, Copy, Clone)]
-pub struct SelectPublicChannels;
-
-/// [Select menu of static options element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select)
-/// representation.
-///
-/// # Example
-///
-/// ```
-/// # use slack_messaging::blocks::elements::SelectStaticOptions;
+/// # use slack_messaging::blocks::elements::Select;
+/// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
 /// # use slack_messaging::composition_objects::Opt;
 /// # use slack_messaging::plain_text;
-/// let menu = SelectStaticOptions::builder()
+/// let menu = Select::<StaticOptions>::builder()
 ///     .action_id("text1234")
 ///     .option(
 ///         Opt::builder()
@@ -146,17 +64,39 @@ pub struct SelectPublicChannels;
 ///
 /// assert_eq!(json, expected);
 /// ```
-#[derive(Debug, Copy, Clone)]
-pub struct SelectStaticOptions;
-
-/// [Select menu of users element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#users_select)
-/// representation.
 ///
-/// # Example
+/// ## [External data source](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#external_select)
 ///
 /// ```
-/// # use slack_messaging::blocks::elements::SelectUsers;
-/// let menu = SelectUsers::builder()
+/// # use slack_messaging::blocks::elements::Select;
+/// # use slack_messaging::blocks::elements::select_menu_types::ExternalDataSource;
+/// let menu = Select::<ExternalDataSource>::builder()
+///     .action_id("text1234")
+///     .min_query_length(3)
+///     .placeholder("Select an item")
+///     .build();
+///
+/// let expected = serde_json::json!({
+///     "type": "external_select",
+///     "action_id": "text1234",
+///     "min_query_length": 3,
+///     "placeholder": {
+///         "type": "plain_text",
+///         "text": "Select an item"
+///     }
+/// });
+///
+/// let json = serde_json::to_value(menu).unwrap();
+///
+/// assert_eq!(json, expected);
+/// ```
+///
+/// ## [User list](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#users_select)
+///
+/// ```
+/// # use slack_messaging::blocks::elements::Select;
+/// # use slack_messaging::blocks::elements::select_menu_types::Users;
+/// let menu = Select::<Users>::builder()
 ///     .action_id("text1234")
 ///     .placeholder("Select an item")
 ///     .build();
@@ -174,38 +114,54 @@ pub struct SelectStaticOptions;
 ///
 /// assert_eq!(json, expected);
 /// ```
-#[derive(Debug, Copy, Clone)]
-pub struct SelectUsers;
-
-pub trait SelectType {
-    fn serialize<S>(ty: &PhantomData<Self>, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer;
-}
-
-macro_rules! impl_select_type {
-    ($($ty:tt as $expr:tt),*) => {
-        $(
-            impl SelectType for $ty {
-                fn serialize<S>(_: &PhantomData<$ty>, serializer: S) -> Result<S::Ok, S::Error>
-                where
-                    S: Serializer,
-                {
-                    serializer.serialize_str($expr)
-                }
-            }
-        )*
-    };
-}
-
-impl_select_type! {
-    StaticOptions as "static_select",
-    ExternalDataSource as "external_select",
-    UserList as "users_select",
-    ConversationsList as "conversations_select",
-    PublicChannels as "channels_select"
-}
-
+///
+/// ## [Conversation list](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#conversations_select)
+///
+/// ```
+/// # use slack_messaging::blocks::elements::Select;
+/// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
+/// let menu = Select::<Conversations>::builder()
+///     .action_id("text1234")
+///     .placeholder("Select an item")
+///     .build();
+///
+/// let expected = serde_json::json!({
+///     "type": "conversations_select",
+///     "action_id": "text1234",
+///     "placeholder": {
+///         "type": "plain_text",
+///         "text": "Select an item"
+///     }
+/// });
+///
+/// let json = serde_json::to_value(menu).unwrap();
+///
+/// assert_eq!(json, expected);
+/// ```
+///
+/// ## [Public channels](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#channel_multi_select)
+///
+/// ```
+/// # use slack_messaging::blocks::elements::Select;
+/// # use slack_messaging::blocks::elements::select_menu_types::PublicChannels;
+/// let menu = Select::<PublicChannels>::builder()
+///     .action_id("text1234")
+///     .placeholder("Select an item")
+///     .build();
+///
+/// let expected = serde_json::json!({
+///     "type": "channels_select",
+///     "action_id": "text1234",
+///     "placeholder": {
+///         "type": "plain_text",
+///         "text": "Select an item"
+///     }
+/// });
+///
+/// let json = serde_json::to_value(menu).unwrap();
+///
+/// assert_eq!(json, expected);
+/// ```
 #[derive(Debug, Default, Clone, Serialize)]
 pub struct Select<T>
 where
@@ -257,18 +213,28 @@ where
     pub(super) placeholder: Option<PlainText>,
 }
 
-/// [Select menu element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element)
-/// which can be one of the [Static options](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select),
-/// [External data source](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#external_select),
-/// [User list](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#users_select),
-/// [Conversations list](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#conversations_select),
-/// or [Public channels](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#channels_select).
+/// [Select menu element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element).
+/// To build any of this variant, you should use [`Select`].
 #[derive(Debug, Clone, Serialize)]
 #[serde(untagged)]
 pub enum SelectMenu {
+    /// [Select menu of static options element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select)
+    /// representation.
     StaticOptions(Select<StaticOptions>),
+
+    /// [Select menu of external data source element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#external_select)
+    /// representation.
     ExternalDataSource(Select<ExternalDataSource>),
-    UserList(Select<UserList>),
-    ConversationsList(Select<ConversationsList>),
+
+    /// [Select menu of users element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#users_select)
+    /// representation.
+    Users(Select<Users>),
+
+    /// [Select menu of conversations element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#conversations_select)
+    /// representation.
+    Conversations(Select<Conversations>),
+
+    /// [Select menu of public channels element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#channels_select)
+    /// representation.
     PublicChannels(Select<PublicChannels>),
 }

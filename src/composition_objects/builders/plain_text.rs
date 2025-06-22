@@ -7,7 +7,7 @@ impl PlainText {
     }
 }
 
-/// Builder for [`Text`] object.
+/// Builder for [`PlainText`] object.
 #[derive(Debug, Default)]
 pub struct PlainTextBuilder {
     text: Option<String>,

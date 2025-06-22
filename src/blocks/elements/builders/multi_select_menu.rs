@@ -1,17 +1,16 @@
 use super::composition_objects::{
     ConfirmationDialog, ConversationFilter, Opt, OptGroup, PlainText,
 };
-use super::{
-    ConversationsList, ExternalDataSource, MultiSelect, MultiSelectConversations,
-    MultiSelectExternals, MultiSelectMenu, MultiSelectPublicChannels, MultiSelectStaticOptions,
-    MultiSelectUsers, PublicChannels, StaticOptions, UserList,
+use super::select_menu_types::{
+    Conversations, ExternalDataSource, PublicChannels, StaticOptions, Users,
 };
+use super::{MultiSelect, MultiSelectMenu};
 use std::marker::PhantomData;
 
 macro_rules! impl_multi_select_menu_builder {
-    ($($struct:tt using $ty:ty),*) => {
+    ($($ty:ty),*) => {
         $(
-            impl $struct {
+            impl MultiSelect<$ty> {
                 pub fn builder() -> MultiSelectMenuBuilder<$ty> {
                     MultiSelectMenuBuilder::<$ty>::default()
                 }
@@ -21,14 +20,14 @@ macro_rules! impl_multi_select_menu_builder {
 }
 
 impl_multi_select_menu_builder! {
-    MultiSelectConversations using ConversationsList,
-    MultiSelectExternals using ExternalDataSource,
-    MultiSelectPublicChannels using PublicChannels,
-    MultiSelectStaticOptions using StaticOptions,
-    MultiSelectUsers using UserList
+    Conversations,
+    ExternalDataSource,
+    PublicChannels,
+    StaticOptions,
+    Users
 }
 
-/// Builder for [`MultiSelect`] object.
+/// Builder for [`MultiSelectMenu`] object.
 #[derive(Debug, Default)]
 pub struct MultiSelectMenuBuilder<T> {
     r#type: PhantomData<T>,
@@ -52,8 +51,9 @@ impl<T> MultiSelectMenuBuilder<T> {
     /// Set action_id field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
-    /// let menu = MultiSelectStaticOptions::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
+    /// let menu = MultiSelect::<StaticOptions>::builder()
     ///     .set_action_id(Some("text1234".into()))
     ///     .build();
     ///
@@ -73,8 +73,9 @@ impl<T> MultiSelectMenuBuilder<T> {
     /// Set action_id field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
-    /// let menu = MultiSelectStaticOptions::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
+    /// let menu = MultiSelect::<StaticOptions>::builder()
     ///     .action_id("text1234")
     ///     .build();
     ///
@@ -94,9 +95,10 @@ impl<T> MultiSelectMenuBuilder<T> {
     /// Set confirm field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectExternals;
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::ExternalDataSource;
     /// # use slack_messaging::composition_objects::ConfirmationDialog;
-    /// let menu = MultiSelectExternals::builder()
+    /// let menu = MultiSelect::<ExternalDataSource>::builder()
     ///     .set_confirm(
     ///         Some(ConfirmationDialog::builder()
     ///             .title("Are you sure?")
@@ -140,9 +142,10 @@ impl<T> MultiSelectMenuBuilder<T> {
     /// Set confirm field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectExternals;
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::ExternalDataSource;
     /// # use slack_messaging::composition_objects::ConfirmationDialog;
-    /// let menu = MultiSelectExternals::builder()
+    /// let menu = MultiSelect::<ExternalDataSource>::builder()
     ///     .confirm(
     ///         ConfirmationDialog::builder()
     ///             .title("Are you sure?")
@@ -186,8 +189,9 @@ impl<T> MultiSelectMenuBuilder<T> {
     /// Set max_selected_items field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectUsers;
-    /// let menu = MultiSelectUsers::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Users;
+    /// let menu = MultiSelect::<Users>::builder()
     ///     .set_max_selected_items(Some(30))
     ///     .build();
     ///
@@ -210,8 +214,9 @@ impl<T> MultiSelectMenuBuilder<T> {
     /// Set max_selected_items field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectUsers;
-    /// let menu = MultiSelectUsers::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Users;
+    /// let menu = MultiSelect::<Users>::builder()
     ///     .max_selected_items(30)
     ///     .build();
     ///
@@ -231,8 +236,9 @@ impl<T> MultiSelectMenuBuilder<T> {
     /// Set focus_on_load field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectConversations;
-    /// let menu = MultiSelectConversations::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
+    /// let menu = MultiSelect::<Conversations>::builder()
     ///     .set_focus_on_load(Some(true))
     ///     .build();
     ///
@@ -255,8 +261,9 @@ impl<T> MultiSelectMenuBuilder<T> {
     /// Set focus_on_load field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectConversations;
-    /// let menu = MultiSelectConversations::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
+    /// let menu = MultiSelect::<Conversations>::builder()
     ///     .focus_on_load(true)
     ///     .build();
     ///
@@ -276,9 +283,10 @@ impl<T> MultiSelectMenuBuilder<T> {
     /// Set placeholder field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectPublicChannels;
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::PublicChannels;
     /// # use slack_messaging::composition_objects::PlainText;
-    /// let menu = MultiSelectPublicChannels::builder()
+    /// let menu = MultiSelect::<PublicChannels>::builder()
     ///     .set_placeholder(
     ///         Some(PlainText::builder()
     ///             .text("Select channels")
@@ -308,8 +316,9 @@ impl<T> MultiSelectMenuBuilder<T> {
     /// Set placeholder field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectPublicChannels;
-    /// let menu = MultiSelectPublicChannels::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::PublicChannels;
+    /// let menu = MultiSelect::<PublicChannels>::builder()
     ///     .placeholder("Select channels")
     ///     .build();
     ///
@@ -361,10 +370,11 @@ impl MultiSelectMenuBuilder<StaticOptions> {
     /// (Either options or option_groups field should exist.)
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
     /// # use slack_messaging::composition_objects::Opt;
     /// # use slack_messaging::plain_text;
-    /// let menu = MultiSelectStaticOptions::builder()
+    /// let menu = MultiSelect::<StaticOptions>::builder()
     ///     .set_options(
     ///         vec![
     ///             Opt::builder()
@@ -415,10 +425,11 @@ impl MultiSelectMenuBuilder<StaticOptions> {
     /// (Either options or option_groups field should exist.)
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
     /// # use slack_messaging::composition_objects::Opt;
     /// # use slack_messaging::plain_text;
-    /// let menu = MultiSelectStaticOptions::builder()
+    /// let menu = MultiSelect::<StaticOptions>::builder()
     ///     .option(
     ///         Opt::builder()
     ///             .text(plain_text!("option-0"))
@@ -458,7 +469,8 @@ impl MultiSelectMenuBuilder<StaticOptions> {
     /// (Either options or option_groups field should exist.)
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
     /// # use slack_messaging::composition_objects::{Opt, OptGroup};
     /// # use slack_messaging::plain_text;
     /// let group_0 = OptGroup::builder()
@@ -493,7 +505,7 @@ impl MultiSelectMenuBuilder<StaticOptions> {
     ///     )
     ///     .build();
     ///
-    /// let menu = MultiSelectStaticOptions::builder()
+    /// let menu = MultiSelect::<StaticOptions>::builder()
     ///     .set_option_groups(vec![group_0, group_1])
     ///     .build();
     ///
@@ -563,10 +575,11 @@ impl MultiSelectMenuBuilder<StaticOptions> {
     /// (Either options or option_groups field should exist.)
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
     /// # use slack_messaging::composition_objects::{Opt, OptGroup};
     /// # use slack_messaging::plain_text;
-    /// let menu = MultiSelectStaticOptions::builder()
+    /// let menu = MultiSelect::<StaticOptions>::builder()
     ///     .option_group(
     ///         OptGroup::builder()
     ///             .label("Group Zero")
@@ -633,10 +646,11 @@ impl MultiSelectMenuBuilder<StaticOptions> {
     /// Set initial_options field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
     /// # use slack_messaging::composition_objects::Opt;
     /// # use slack_messaging::plain_text;
-    /// let menu = MultiSelectStaticOptions::builder()
+    /// let menu = MultiSelect::<StaticOptions>::builder()
     ///     .set_initial_options(
     ///         vec![
     ///             Opt::builder()
@@ -685,10 +699,11 @@ impl MultiSelectMenuBuilder<StaticOptions> {
     /// Add Opt object to initial_options field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectStaticOptions;
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
     /// # use slack_messaging::composition_objects::Opt;
     /// # use slack_messaging::plain_text;
-    /// let menu = MultiSelectStaticOptions::builder()
+    /// let menu = MultiSelect::<StaticOptions>::builder()
     ///     .initial_option(
     ///         Opt::builder()
     ///             .text(plain_text!("option-0"))
@@ -761,10 +776,11 @@ impl MultiSelectMenuBuilder<ExternalDataSource> {
     /// Set initial_options field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectExternals;
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::ExternalDataSource;
     /// # use slack_messaging::composition_objects::Opt;
     /// # use slack_messaging::plain_text;
-    /// let menu = MultiSelectExternals::builder()
+    /// let menu = MultiSelect::<ExternalDataSource>::builder()
     ///     .set_initial_options(
     ///         vec![
     ///             Opt::builder()
@@ -813,10 +829,11 @@ impl MultiSelectMenuBuilder<ExternalDataSource> {
     /// Add Opt object to initial_options field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectExternals;
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::ExternalDataSource;
     /// # use slack_messaging::composition_objects::Opt;
     /// # use slack_messaging::plain_text;
-    /// let menu = MultiSelectExternals::builder()
+    /// let menu = MultiSelect::<ExternalDataSource>::builder()
     ///     .initial_option(
     ///         Opt::builder()
     ///             .text(plain_text!("option-0"))
@@ -870,8 +887,9 @@ impl MultiSelectMenuBuilder<ExternalDataSource> {
     /// Set min_query_length field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectExternals;
-    /// let menu = MultiSelectExternals::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::ExternalDataSource;
+    /// let menu = MultiSelect::<ExternalDataSource>::builder()
     ///     .set_min_query_length(Some(5))
     ///     .build();
     ///
@@ -894,8 +912,9 @@ impl MultiSelectMenuBuilder<ExternalDataSource> {
     /// Set min_query_length field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectExternals;
-    /// let menu = MultiSelectExternals::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::ExternalDataSource;
+    /// let menu = MultiSelect::<ExternalDataSource>::builder()
     ///     .min_query_length(5)
     ///     .build();
     ///
@@ -937,12 +956,13 @@ impl MultiSelectMenuBuilder<ExternalDataSource> {
     }
 }
 
-impl MultiSelectMenuBuilder<UserList> {
+impl MultiSelectMenuBuilder<Users> {
     /// Set initial_users field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectUsers;
-    /// let menu = MultiSelectUsers::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Users;
+    /// let menu = MultiSelect::<Users>::builder()
     ///     .set_initial_users(
     ///         vec!["user0000".into(), "user9999".into()]
     ///     )
@@ -967,8 +987,9 @@ impl MultiSelectMenuBuilder<UserList> {
     /// Add user id to initial_users field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectUsers;
-    /// let menu = MultiSelectUsers::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Users;
+    /// let menu = MultiSelect::<Users>::builder()
     ///     .initial_user("user0000")
     ///     .initial_user("user0001")
     ///     .build();
@@ -998,9 +1019,9 @@ impl MultiSelectMenuBuilder<UserList> {
         &self.initial_users
     }
 
-    /// Build a enum variant MultiSelectMenu::UserList object.
+    /// Build a enum variant MultiSelectMenu::Users object.
     pub fn build(self) -> MultiSelectMenu {
-        MultiSelectMenu::UserList(MultiSelect::<UserList> {
+        MultiSelectMenu::Users(MultiSelect::<Users> {
             action_id: self.action_id,
             initial_users: self.initial_users,
             confirm: self.confirm,
@@ -1012,12 +1033,13 @@ impl MultiSelectMenuBuilder<UserList> {
     }
 }
 
-impl MultiSelectMenuBuilder<ConversationsList> {
+impl MultiSelectMenuBuilder<Conversations> {
     /// Set initial_conversations field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectConversations;
-    /// let menu = MultiSelectConversations::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
+    /// let menu = MultiSelect::<Conversations>::builder()
     ///     .set_initial_conversations(
     ///         vec!["conversation_0".to_string(), "conversation_1".to_string()]
     ///     )
@@ -1042,8 +1064,9 @@ impl MultiSelectMenuBuilder<ConversationsList> {
     /// Add conversation id to initial_conversations field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectConversations;
-    /// let menu = MultiSelectConversations::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
+    /// let menu = MultiSelect::<Conversations>::builder()
     ///     .initial_conversation("conversation_0")
     ///     .initial_conversation("conversation_1")
     ///     .build();
@@ -1072,8 +1095,9 @@ impl MultiSelectMenuBuilder<ConversationsList> {
     /// Set default_to_current_conversation field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectConversations;
-    /// let menu = MultiSelectConversations::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
+    /// let menu = MultiSelect::<Conversations>::builder()
     ///     .set_default_to_current_conversation(Some(true))
     ///     .build();
     ///
@@ -1096,8 +1120,9 @@ impl MultiSelectMenuBuilder<ConversationsList> {
     /// Set default_to_current_conversation field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectConversations;
-    /// let menu = MultiSelectConversations::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
+    /// let menu = MultiSelect::<Conversations>::builder()
     ///     .default_to_current_conversation(true)
     ///     .build();
     ///
@@ -1117,9 +1142,10 @@ impl MultiSelectMenuBuilder<ConversationsList> {
     /// Set filter field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectConversations;
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
     /// # use slack_messaging::composition_objects::{ConversationFilter, Conversation};
-    /// let menu = MultiSelectConversations::builder()
+    /// let menu = MultiSelect::<Conversations>::builder()
     ///     .set_filter(
     ///         Some(ConversationFilter::builder()
     ///             .include(Conversation::Public)
@@ -1151,9 +1177,10 @@ impl MultiSelectMenuBuilder<ConversationsList> {
     /// Set filter field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectConversations;
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::Conversations;
     /// # use slack_messaging::composition_objects::{ConversationFilter, Conversation};
-    /// let menu = MultiSelectConversations::builder()
+    /// let menu = MultiSelect::<Conversations>::builder()
     ///     .filter(
     ///         ConversationFilter::builder()
     ///             .include(Conversation::Public)
@@ -1197,9 +1224,9 @@ impl MultiSelectMenuBuilder<ConversationsList> {
         &self.filter
     }
 
-    /// Build a enum variant MultiSelectMenu::ConversationsList object.
+    /// Build a enum variant MultiSelectMenu::Conversations object.
     pub fn build(self) -> MultiSelectMenu {
-        MultiSelectMenu::ConversationsList(MultiSelect::<ConversationsList> {
+        MultiSelectMenu::Conversations(MultiSelect::<Conversations> {
             action_id: self.action_id,
             initial_conversations: self.initial_conversations,
             default_to_current_conversation: self.default_to_current_conversation,
@@ -1217,8 +1244,9 @@ impl MultiSelectMenuBuilder<PublicChannels> {
     /// Set initial_channels field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectPublicChannels;
-    /// let menu = MultiSelectPublicChannels::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::PublicChannels;
+    /// let menu = MultiSelect::<PublicChannels>::builder()
     ///     .set_initial_channels(
     ///         vec!["channel_0".to_string(), "channel_1".to_string()]
     ///     )
@@ -1243,8 +1271,9 @@ impl MultiSelectMenuBuilder<PublicChannels> {
     /// Add channel id to initial_channels field.
     ///
     /// ```
-    /// # use slack_messaging::blocks::elements::MultiSelectPublicChannels;
-    /// let menu = MultiSelectPublicChannels::builder()
+    /// # use slack_messaging::blocks::elements::MultiSelect;
+    /// # use slack_messaging::blocks::elements::select_menu_types::PublicChannels;
+    /// let menu = MultiSelect::<PublicChannels>::builder()
     ///     .initial_channel("channel_0")
     ///     .initial_channel("channel_1")
     ///     .build();
