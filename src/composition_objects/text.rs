@@ -12,7 +12,7 @@ use serde::Serialize;
 /// ### example to use [`Text`]
 ///
 /// * The `text` and `description` field of [`Opt`](crate::composition_objects::Opt)
-/// object in the [`Checkboxes`](crate::blocks::elements::Checkboxes) and [`RadioButtonGroup`](crate::blocks::elements::RadioButtonGroup) element
+///   object in the [`Checkboxes`](crate::blocks::elements::Checkboxes) and [`RadioButtonGroup`](crate::blocks::elements::RadioButtonGroup) element
 /// * The `text` field of [`Section`](crate::blocks::Section) block
 ///
 /// ### example to use [`PlainText`]
