@@ -1,4 +1,4 @@
-use super::composition_objects::{ConfirmationDialog, Opt};
+use super::composition_objects::{ConfirmationDialog, Opt, Text};
 use serde::Serialize;
 
 /// [Radio buton group element](https://docs.slack.dev/reference/block-kit/block-elements/radio-button-group-element)
@@ -8,18 +8,19 @@ use serde::Serialize;
 ///
 /// ```
 /// # use slack_messaging::blocks::elements::RadioButtonGroup;
-/// # use slack_messaging::composition_objects::Opt;
+/// # use slack_messaging::composition_objects::{Opt, Text};
+/// # use slack_messaging::mrkdwn;
 /// let radio = RadioButtonGroup::builder()
 ///     .action_id("radio_button_group")
 ///     .option(
-///         Opt::builder()
-///             .text("Radio 1")
+///         Opt::<Text>::builder()
+///             .text(mrkdwn!("**Radio 1**"))
 ///             .value("A1")
 ///             .build()
 ///     )
 ///     .option(
-///         Opt::builder()
-///             .text("Radio 2")
+///         Opt::<Text>::builder()
+///             .text(mrkdwn!("**Radio 2**"))
 ///             .value("A2")
 ///             .build()
 ///     )
@@ -32,15 +33,15 @@ use serde::Serialize;
 ///         {
 ///             "value": "A1",
 ///             "text": {
-///                 "type": "plain_text",
-///                 "text": "Radio 1"
+///                 "type": "mrkdwn",
+///                 "text": "**Radio 1**"
 ///             }
 ///         },
 ///         {
 ///             "value": "A2",
 ///             "text": {
-///                 "type": "plain_text",
-///                 "text": "Radio 2"
+///                 "type": "mrkdwn",
+///                 "text": "**Radio 2**"
 ///             }
 ///         }
 ///     ]
@@ -58,10 +59,10 @@ pub struct RadioButtonGroup {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(super) action_id: Option<String>,
 
-    pub(super) options: Vec<Opt>,
+    pub(super) options: Vec<Opt<Text>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) initial_option: Option<Opt>,
+    pub(super) initial_option: Option<Opt<Text>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(super) confirm: Option<ConfirmationDialog>,

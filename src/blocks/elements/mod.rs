@@ -10,21 +10,13 @@ mod datetimepicker;
 mod email_input;
 mod file_input;
 mod image;
-mod multi_select_conversations;
-mod multi_select_externals;
-mod multi_select_public_channels;
-mod multi_select_static_options;
-mod multi_select_users;
+mod multi_select_menu;
 mod number_input;
 mod overflow_menu;
 mod plain_text_input;
 mod radio_button_group;
 mod rich_text_input;
-mod select_conversations;
-mod select_externals;
-mod select_public_channels;
-mod select_static_options;
-mod select_users;
+mod select_menu;
 mod timepicker;
 mod url_input;
 mod workflow_button;
@@ -36,21 +28,34 @@ pub use datetimepicker::DatetimePicker;
 pub use email_input::EmailInput;
 pub use file_input::{FileInput, FileType};
 pub use image::Image;
-pub use multi_select_conversations::MultiSelectConversations;
-pub use multi_select_externals::MultiSelectExternals;
-pub use multi_select_public_channels::MultiSelectPublicChannels;
-pub use multi_select_static_options::MultiSelectStaticOptions;
-pub use multi_select_users::MultiSelectUsers;
+pub use multi_select_menu::{
+    MultiSelect, MultiSelectConversations, MultiSelectExternals, MultiSelectMenu,
+    MultiSelectPublicChannels, MultiSelectStaticOptions, MultiSelectUsers,
+};
 pub use number_input::NumberInput;
 pub use overflow_menu::OverflowMenu;
 pub use plain_text_input::PlainTextInput;
 pub use radio_button_group::RadioButtonGroup;
 pub use rich_text_input::RichTextInput;
-pub use select_conversations::SelectConversations;
-pub use select_externals::SelectExternals;
-pub use select_public_channels::SelectPublicChannels;
-pub use select_static_options::SelectStaticOptions;
-pub use select_users::SelectUsers;
+pub use select_menu::{
+    Select, SelectConversations, SelectExternals, SelectMenu, SelectPublicChannels,
+    SelectStaticOptions, SelectUsers,
+};
 pub use timepicker::TimePicker;
 pub use url_input::UrlInput;
 pub use workflow_button::WorkflowButton;
+
+#[derive(Debug, Default, Copy, Clone)]
+pub struct StaticOptions;
+
+#[derive(Debug, Default, Copy, Clone)]
+pub struct ExternalDataSource;
+
+#[derive(Debug, Default, Copy, Clone)]
+pub struct UserList;
+
+#[derive(Debug, Default, Copy, Clone)]
+pub struct ConversationsList;
+
+#[derive(Debug, Default, Copy, Clone)]
+pub struct PublicChannels;

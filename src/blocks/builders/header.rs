@@ -1,4 +1,4 @@
-use super::{Header, composition_objects::Text};
+use super::{Header, composition_objects::PlainText};
 
 impl Header {
     /// Construct a [`HeaderBuilder`].
@@ -10,7 +10,7 @@ impl Header {
 /// Builder for [`Header`] object.
 #[derive(Debug, Default)]
 pub struct HeaderBuilder {
-    text: Option<Text>,
+    text: Option<PlainText>,
     block_id: Option<String>,
 }
 
@@ -19,11 +19,11 @@ impl HeaderBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::Header;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::PlainText;
     /// let header = Header::builder()
     ///     .set_text(
-    ///         Some(Text::builder()
-    ///             .plain_text("Budget Performance")
+    ///         Some(PlainText::builder()
+    ///             .text("Budget Performance")
     ///             .build())
     ///     )
     ///     .build();
@@ -40,7 +40,7 @@ impl HeaderBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_text(self, text: Option<Text>) -> Self {
+    pub fn set_text(self, text: Option<PlainText>) -> Self {
         Self { text, ..self }
     }
 
@@ -65,7 +65,7 @@ impl HeaderBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn text(self, text: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(text).build();
+        let text = PlainText::builder().text(text).build();
         self.set_text(Some(text))
     }
 
@@ -136,7 +136,7 @@ impl HeaderBuilder {
     }
 
     /// Get text value.
-    pub fn get_text(&self) -> &Option<Text> {
+    pub fn get_text(&self) -> &Option<PlainText> {
         &self.text
     }
 }

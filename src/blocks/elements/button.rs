@@ -1,4 +1,4 @@
-use super::composition_objects::{ConfirmationDialog, Text};
+use super::composition_objects::{ConfirmationDialog, PlainText};
 use serde::Serialize;
 
 /// [Button element](https://docs.slack.dev/reference/block-kit/block-elements/button-element)
@@ -33,7 +33,7 @@ pub struct Button {
     #[serde(rename = "type")]
     pub(super) kind: &'static str,
 
-    pub(super) text: Text,
+    pub(super) text: PlainText,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(super) action_id: Option<String>,

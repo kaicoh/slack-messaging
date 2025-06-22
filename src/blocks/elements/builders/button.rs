@@ -1,6 +1,6 @@
 use super::{
     Button,
-    composition_objects::{ConfirmationDialog, Text},
+    composition_objects::{ConfirmationDialog, PlainText},
 };
 
 impl Button {
@@ -13,7 +13,7 @@ impl Button {
 /// Builder for [`Button`] object.
 #[derive(Debug, Default)]
 pub struct ButtonBuilder {
-    text: Option<Text>,
+    text: Option<PlainText>,
     action_id: Option<String>,
     url: Option<String>,
     value: Option<String>,
@@ -44,19 +44,19 @@ impl ButtonBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn text(self, text: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(text.into()).build();
+        let text = PlainText::builder().text(text).build();
         self.set_text(Some(text))
     }
 
     /// Set text field.
     ///
     /// ```
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::PlainText;
     /// # use slack_messaging::blocks::elements::Button;
     /// let button = Button::builder()
     ///     .set_text(
-    ///         Some(Text::builder()
-    ///             .plain_text("Click Me")
+    ///         Some(PlainText::builder()
+    ///             .text("Click Me")
     ///             .build())
     ///     )
     ///     .build();
@@ -73,7 +73,7 @@ impl ButtonBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_text(self, text: Option<Text>) -> Self {
+    pub fn set_text(self, text: Option<PlainText>) -> Self {
         Self { text, ..self }
     }
 
@@ -463,7 +463,7 @@ impl ButtonBuilder {
     }
 
     /// Get text value.
-    pub fn get_text(&self) -> &Option<Text> {
+    pub fn get_text(&self) -> &Option<PlainText> {
         &self.text
     }
 

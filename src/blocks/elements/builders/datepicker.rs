@@ -1,6 +1,6 @@
 use super::{
     DatePicker,
-    composition_objects::{ConfirmationDialog, Text},
+    composition_objects::{ConfirmationDialog, PlainText},
 };
 
 impl DatePicker {
@@ -17,7 +17,7 @@ pub struct DatePickerBuilder {
     initial_date: Option<String>,
     confirm: Option<ConfirmationDialog>,
     focus_on_load: Option<bool>,
-    placeholder: Option<Text>,
+    placeholder: Option<PlainText>,
 }
 
 impl DatePickerBuilder {
@@ -249,11 +249,11 @@ impl DatePickerBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::DatePicker;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::PlainText;
     /// let datepicker = DatePicker::builder()
     ///     .set_placeholder(
-    ///         Some(Text::builder()
-    ///             .plain_text("Select a date")
+    ///         Some(PlainText::builder()
+    ///             .text("Select a date")
     ///             .build())
     ///     )
     ///     .build();
@@ -270,7 +270,7 @@ impl DatePickerBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
+    pub fn set_placeholder(self, placeholder: Option<PlainText>) -> Self {
         Self {
             placeholder,
             ..self
@@ -298,7 +298,7 @@ impl DatePickerBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(placeholder.into()).build();
+        let text = PlainText::builder().text(placeholder.into()).build();
         self.set_placeholder(Some(text))
     }
 
@@ -335,7 +335,7 @@ impl DatePickerBuilder {
     }
 
     /// Get action_id value.
-    pub fn get_placeholder(&self) -> &Option<Text> {
+    pub fn get_placeholder(&self) -> &Option<PlainText> {
         &self.placeholder
     }
 }

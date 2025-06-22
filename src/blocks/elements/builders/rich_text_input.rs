@@ -1,6 +1,6 @@
 use super::{
     RichText, RichTextInput,
-    composition_objects::{DispatchActionConfiguration, Text},
+    composition_objects::{DispatchActionConfiguration, PlainText},
 };
 
 impl RichTextInput {
@@ -17,7 +17,7 @@ pub struct RichTextInputBuilder {
     initial_value: Option<RichText>,
     dispatch_action_config: Option<DispatchActionConfiguration>,
     focus_on_load: Option<bool>,
-    placeholder: Option<Text>,
+    placeholder: Option<PlainText>,
 }
 
 impl RichTextInputBuilder {
@@ -272,11 +272,11 @@ impl RichTextInputBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::RichTextInput;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::PlainText;
     /// let rich_text = RichTextInput::builder()
     ///     .set_placeholder(
-    ///         Some(Text::builder()
-    ///             .plain_text("Enter text")
+    ///         Some(PlainText::builder()
+    ///             .text("Enter text")
     ///             .build())
     ///     )
     ///     .build();
@@ -293,7 +293,7 @@ impl RichTextInputBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
+    pub fn set_placeholder(self, placeholder: Option<PlainText>) -> Self {
         Self {
             placeholder,
             ..self
@@ -321,7 +321,7 @@ impl RichTextInputBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(placeholder.into()).build();
+        let text = PlainText::builder().text(placeholder).build();
         self.set_placeholder(Some(text))
     }
 
@@ -358,7 +358,7 @@ impl RichTextInputBuilder {
     }
 
     /// Get action_id value.
-    pub fn get_placeholder(&self) -> &Option<Text> {
+    pub fn get_placeholder(&self) -> &Option<PlainText> {
         &self.placeholder
     }
 }

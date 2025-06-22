@@ -1,4 +1,4 @@
-use super::composition_objects::{ConfirmationDialog, Text};
+use super::composition_objects::{ConfirmationDialog, PlainText};
 use serde::Serialize;
 
 /// [Date picker element](https://docs.slack.dev/reference/block-kit/block-elements/date-picker-element)
@@ -46,5 +46,5 @@ pub struct DatePicker {
     pub(super) focus_on_load: Option<bool>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) placeholder: Option<Text>,
+    pub(super) placeholder: Option<PlainText>,
 }

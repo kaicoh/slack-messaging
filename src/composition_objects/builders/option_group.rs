@@ -1,4 +1,4 @@
-use super::{Opt, OptGroup, Text};
+use super::{Opt, OptGroup, PlainText};
 
 impl OptGroup {
     /// Construct a [`OptGroupBuilder`].
@@ -10,7 +10,7 @@ impl OptGroup {
 /// Builder for [`OptGroup`] object.
 #[derive(Debug, Default)]
 pub struct OptGroupBuilder {
-    label: Option<Text>,
+    label: Option<PlainText>,
     options: Vec<Opt>,
 }
 
@@ -18,11 +18,11 @@ impl OptGroupBuilder {
     /// Set label field.
     ///
     /// ```
-    /// # use slack_messaging::composition_objects::{OptGroup, Text};
+    /// # use slack_messaging::composition_objects::{OptGroup, PlainText};
     /// let options = OptGroup::builder()
     ///     .set_label(
-    ///         Some(Text::builder()
-    ///             .plain_text("Group One")
+    ///         Some(PlainText::builder()
+    ///             .text("Group One")
     ///             .build())
     ///     )
     ///     .build();
@@ -39,7 +39,7 @@ impl OptGroupBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_label(self, label: Option<Text>) -> Self {
+    pub fn set_label(self, label: Option<PlainText>) -> Self {
         Self { label, ..self }
     }
 
@@ -64,7 +64,7 @@ impl OptGroupBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn label(self, label: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(label.into()).build();
+        let text = PlainText::builder().text(label).build();
         self.set_label(Some(text))
     }
 
@@ -72,12 +72,13 @@ impl OptGroupBuilder {
     ///
     /// ```
     /// # use slack_messaging::composition_objects::{OptGroup, Opt};
+    /// # use slack_messaging::plain_text;
     /// let options = OptGroup::builder()
     ///     .label("")
     ///     .set_options(
     ///         vec![
     ///             Opt::builder()
-    ///                 .text("option-0")
+    ///                 .text(plain_text!("option-0"))
     ///                 .value("value-0")
     ///                 .build(),
     ///         ]
@@ -112,11 +113,12 @@ impl OptGroupBuilder {
     ///
     /// ```
     /// # use slack_messaging::composition_objects::{OptGroup, Opt};
+    /// # use slack_messaging::plain_text;
     /// let options = OptGroup::builder()
     ///     .label("")
     ///     .option(
     ///         Opt::builder()
-    ///             .text("option-0")
+    ///             .text(plain_text!("option-0"))
     ///             .value("value-0")
     ///             .build(),
     ///     )
@@ -157,7 +159,7 @@ impl OptGroupBuilder {
     }
 
     /// Get label value.
-    pub fn get_label(&self) -> &Option<Text> {
+    pub fn get_label(&self) -> &Option<PlainText> {
         &self.label
     }
 

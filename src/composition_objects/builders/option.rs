@@ -1,33 +1,55 @@
-use super::{Opt, Text};
+use super::Opt;
+use serde::Serialize;
 
-impl Opt {
+impl<T: Clone + Serialize> Opt<T> {
     /// Construct a [`OptBuilder`].
-    pub fn builder() -> OptBuilder {
-        OptBuilder::default()
+    pub fn builder() -> OptBuilder<T> {
+        OptBuilder::<T> {
+            text: None,
+            value: None,
+            description: None,
+            url: None,
+        }
     }
 }
 
 /// Builder for [`Opt`] object.
 #[derive(Debug, Default)]
-pub struct OptBuilder {
-    text: Option<Text>,
+pub struct OptBuilder<T> {
+    text: Option<T>,
     value: Option<String>,
-    description: Option<Text>,
+    description: Option<T>,
     url: Option<String>,
 }
 
-impl OptBuilder {
+impl<T> OptBuilder<T>
+where
+    T: Clone + Serialize,
+{
+    /// Build a [`Opt`] object. This method will panic if both
+    /// `text` and `value` are not set.
+    pub fn build(self) -> Opt<T> {
+        Opt {
+            text: self.text.expect("text must be set to OptBuilder"),
+            value: self.value.expect("value must be set to OptBuilder"),
+            description: self.description,
+            url: self.url,
+        }
+    }
+}
+
+impl<T> OptBuilder<T> {
     /// Set text field.
     ///
     /// ```
-    /// # use slack_messaging::composition_objects::{Opt, Text};
-    /// let option = Opt::builder()
+    /// # use slack_messaging::composition_objects::{Opt, PlainText};
+    /// let option = Opt::<PlainText>::builder()
     ///     .set_text(
-    ///         Some(Text::builder()
-    ///             .plain_text("This is a plain text.")
+    ///         Some(PlainText::builder()
+    ///             .text("This is a plain text.")
     ///             .build())
     ///     )
-    ///     .value("")
+    ///     .value("100")
     ///     .build();
     ///
     /// let expected = serde_json::json!({
@@ -35,25 +57,28 @@ impl OptBuilder {
     ///         "type": "plain_text",
     ///         "text": "This is a plain text."
     ///     },
-    ///     "value": ""
+    ///     "value": "100"
     /// });
     ///
     /// let json = serde_json::to_value(option).unwrap();
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_text(self, text: Option<Text>) -> Self {
-        Self { text, ..self }
+    pub fn set_text(self, text: Option<impl Into<T>>) -> Self {
+        Self {
+            text: text.map(|v| v.into()),
+            ..self
+        }
     }
 
-    /// Set plain text object to text field.
-    /// If you want to set markdown text object, use `set_text` method instead.
+    /// Set text field.
     ///
     /// ```
-    /// # use slack_messaging::composition_objects::Opt;
-    /// let option = Opt::builder()
-    ///     .text("This is a plain text.")
-    ///     .value("")
+    /// # use slack_messaging::composition_objects::{Opt, PlainText};
+    /// # use slack_messaging::plain_text;
+    /// let option = Opt::<PlainText>::builder()
+    ///     .text(plain_text!("This is a plain text."))
+    ///     .value("100")
     ///     .build();
     ///
     /// let expected = serde_json::json!({
@@ -61,31 +86,31 @@ impl OptBuilder {
     ///         "type": "plain_text",
     ///         "text": "This is a plain text."
     ///     },
-    ///     "value": ""
+    ///     "value": "100"
     /// });
     ///
     /// let json = serde_json::to_value(option).unwrap();
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn text(self, text: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(text.into()).build();
+    pub fn text(self, text: impl Into<T>) -> Self {
         self.set_text(Some(text))
     }
 
     /// Set value field.
     ///
     /// ```
-    /// # use slack_messaging::composition_objects::Opt;
-    /// let option = Opt::builder()
-    ///     .text("")
+    /// # use slack_messaging::composition_objects::{Opt, PlainText};
+    /// # use slack_messaging::plain_text;
+    /// let option = Opt::<PlainText>::builder()
+    ///     .text(plain_text!("hi"))
     ///     .set_value(Some("valueeeeeee".into()))
     ///     .build();
     ///
     /// let expected = serde_json::json!({
     ///     "text": {
     ///         "type": "plain_text",
-    ///         "text": ""
+    ///         "text": "hi"
     ///     },
     ///     "value": "valueeeeeee"
     /// });
@@ -101,16 +126,17 @@ impl OptBuilder {
     /// Set value field.
     ///
     /// ```
-    /// # use slack_messaging::composition_objects::Opt;
-    /// let option = Opt::builder()
-    ///     .text("")
+    /// # use slack_messaging::composition_objects::{Opt, PlainText};
+    /// # use slack_messaging::plain_text;
+    /// let option = Opt::<PlainText>::builder()
+    ///     .text(plain_text!("hi"))
     ///     .value("valueeeeeee")
     ///     .build();
     ///
     /// let expected = serde_json::json!({
     ///     "text": {
     ///         "type": "plain_text",
-    ///         "text": ""
+    ///         "text": "hi"
     ///     },
     ///     "value": "valueeeeeee"
     /// });
@@ -127,24 +153,23 @@ impl OptBuilder {
     ///
     /// ```
     /// # use slack_messaging::composition_objects::{Opt, Text};
-    /// let option = Opt::builder()
-    ///     .text("")
-    ///     .value("")
+    /// # use slack_messaging::mrkdwn;
+    /// let option = Opt::<Text>::builder()
+    ///     .text(mrkdwn!("hi"))
+    ///     .value("0")
     ///     .set_description(
-    ///         Some(Text::builder()
-    ///             .plain_text("This is a description.")
-    ///             .build())
+    ///         Some(mrkdwn!("This is a description."))
     ///     )
     ///     .build();
     ///
     /// let expected = serde_json::json!({
     ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": ""
+    ///         "type": "mrkdwn",
+    ///         "text": "hi"
     ///     },
-    ///     "value": "",
+    ///     "value": "0",
     ///     "description": {
-    ///         "type": "plain_text",
+    ///         "type": "mrkdwn",
     ///         "text": "This is a description."
     ///     }
     /// });
@@ -153,32 +178,32 @@ impl OptBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_description(self, description: Option<Text>) -> Self {
+    pub fn set_description(self, description: Option<impl Into<T>>) -> Self {
         Self {
-            description,
+            description: description.map(|v| v.into()),
             ..self
         }
     }
 
-    /// Set plain text object to description field.
-    /// If you want to set markdown text object, use `set_text` method instead.
+    /// Set description field.
     ///
     /// ```
-    /// # use slack_messaging::composition_objects::Opt;
-    /// let option = Opt::builder()
-    ///     .text("")
-    ///     .value("")
-    ///     .description("This is a description.")
+    /// # use slack_messaging::composition_objects::{Opt, Text};
+    /// # use slack_messaging::mrkdwn;
+    /// let option = Opt::<Text>::builder()
+    ///     .text(mrkdwn!("hi"))
+    ///     .value("0")
+    ///     .description(mrkdwn!("This is a description."))
     ///     .build();
     ///
     /// let expected = serde_json::json!({
     ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": ""
+    ///         "type": "mrkdwn",
+    ///         "text": "hi"
     ///     },
-    ///     "value": "",
+    ///     "value": "0",
     ///     "description": {
-    ///         "type": "plain_text",
+    ///         "type": "mrkdwn",
     ///         "text": "This is a description."
     ///     }
     /// });
@@ -187,17 +212,17 @@ impl OptBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn description(self, description: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(description).build();
-        self.set_description(Some(text))
+    pub fn description(self, description: impl Into<T>) -> Self {
+        self.set_description(Some(description))
     }
 
     /// Set url field.
     ///
     /// ```
-    /// # use slack_messaging::composition_objects::Opt;
-    /// let option = Opt::builder()
-    ///     .text("")
+    /// # use slack_messaging::composition_objects::{Opt, PlainText};
+    /// # use slack_messaging::plain_text;
+    /// let option = Opt::<PlainText>::builder()
+    ///     .text(plain_text!("hi"))
     ///     .value("")
     ///     .set_url(Some("https://google.com".into()))
     ///     .build();
@@ -205,7 +230,7 @@ impl OptBuilder {
     /// let expected = serde_json::json!({
     ///     "text": {
     ///         "type": "plain_text",
-    ///         "text": ""
+    ///         "text": "hi"
     ///     },
     ///     "value": "",
     ///     "url": "https://google.com"
@@ -222,9 +247,10 @@ impl OptBuilder {
     /// Set url field.
     ///
     /// ```
-    /// # use slack_messaging::composition_objects::Opt;
-    /// let option = Opt::builder()
-    ///     .text("")
+    /// # use slack_messaging::composition_objects::{Opt, PlainText};
+    /// # use slack_messaging::plain_text;
+    /// let option = Opt::<PlainText>::builder()
+    ///     .text(plain_text!("hi"))
     ///     .value("")
     ///     .url("https://google.com")
     ///     .build();
@@ -232,7 +258,7 @@ impl OptBuilder {
     /// let expected = serde_json::json!({
     ///     "text": {
     ///         "type": "plain_text",
-    ///         "text": ""
+    ///         "text": "hi"
     ///     },
     ///     "value": "",
     ///     "url": "https://google.com"
@@ -246,19 +272,8 @@ impl OptBuilder {
         self.set_url(Some(url.into()))
     }
 
-    /// Build a [`Opt`] object. This method will panic if both
-    /// `text` and `value` are not set.
-    pub fn build(self) -> Opt {
-        Opt {
-            text: self.text.expect("text must be set to OptBuilder"),
-            value: self.value.expect("value must be set to OptBuilder"),
-            description: self.description,
-            url: self.url,
-        }
-    }
-
     /// Get text value.
-    pub fn get_text(&self) -> &Option<Text> {
+    pub fn get_text(&self) -> &Option<T> {
         &self.text
     }
 
@@ -268,7 +283,7 @@ impl OptBuilder {
     }
 
     /// Get description value.
-    pub fn get_description(&self) -> &Option<Text> {
+    pub fn get_description(&self) -> &Option<T> {
         &self.description
     }
 

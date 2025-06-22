@@ -1,6 +1,6 @@
 use super::{
     PlainTextInput,
-    composition_objects::{DispatchActionConfiguration, Text},
+    composition_objects::{DispatchActionConfiguration, PlainText},
 };
 
 impl PlainTextInput {
@@ -20,7 +20,7 @@ pub struct PlainTextInputBuilder {
     max_length: Option<i64>,
     dispatch_action_config: Option<DispatchActionConfiguration>,
     focus_on_load: Option<bool>,
-    placeholder: Option<Text>,
+    placeholder: Option<PlainText>,
 }
 
 impl PlainTextInputBuilder {
@@ -345,11 +345,11 @@ impl PlainTextInputBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::PlainTextInput;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::PlainText;
     /// let plain = PlainTextInput::builder()
     ///     .set_placeholder(
-    ///         Some(Text::builder()
-    ///             .plain_text("Enter some text.")
+    ///         Some(PlainText::builder()
+    ///             .text("Enter some text.")
     ///             .build())
     ///     )
     ///     .build();
@@ -366,7 +366,7 @@ impl PlainTextInputBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
+    pub fn set_placeholder(self, placeholder: Option<PlainText>) -> Self {
         Self {
             placeholder,
             ..self
@@ -394,7 +394,7 @@ impl PlainTextInputBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(placeholder.into()).build();
+        let text = PlainText::builder().text(placeholder).build();
         self.set_placeholder(Some(text))
     }
 
@@ -449,7 +449,7 @@ impl PlainTextInputBuilder {
     }
 
     /// Get action_id value.
-    pub fn get_placeholder(&self) -> &Option<Text> {
+    pub fn get_placeholder(&self) -> &Option<PlainText> {
         &self.placeholder
     }
 }

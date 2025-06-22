@@ -71,8 +71,11 @@ impl From<Image> for ContextElement {
     }
 }
 
-impl From<Text> for ContextElement {
-    fn from(value: Text) -> Self {
-        Self::Text(Box::new(value))
+impl<T> From<T> for ContextElement
+where
+    Text: From<T>,
+{
+    fn from(value: T) -> Self {
+        Self::Text(Box::new(Text::from(value)))
     }
 }

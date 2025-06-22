@@ -1,4 +1,4 @@
-use super::Text;
+use super::PlainText;
 use serde::Serialize;
 
 /// [Confirmation dialog object](https://docs.slack.dev/reference/block-kit/composition-objects/confirmation-dialog-object)
@@ -40,13 +40,13 @@ use serde::Serialize;
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct ConfirmationDialog {
-    pub(super) title: Text,
+    pub(super) title: PlainText,
 
-    pub(super) text: Text,
+    pub(super) text: PlainText,
 
-    pub(super) confirm: Text,
+    pub(super) confirm: PlainText,
 
-    pub(super) deny: Text,
+    pub(super) deny: PlainText,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(super) style: Option<&'static str>,

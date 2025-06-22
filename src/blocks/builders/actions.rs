@@ -22,14 +22,15 @@ impl ActionsBuilder {
     /// # use slack_messaging::blocks::Actions;
     /// # use slack_messaging::blocks::elements::{Button, SelectStaticOptions};
     /// # use slack_messaging::composition_objects::Opt;
+    /// # use slack_messaging::plain_text;
     /// let actions = Actions::builder()
     ///     .set_elements(
     ///         vec![
     ///             SelectStaticOptions::builder()
     ///                 .action_id("select_2")
     ///                 .placeholder("Which witch is the witchiest witch?")
-    ///                 .option(Opt::builder().text("Matilda").value("matilda").build())
-    ///                 .option(Opt::builder().text("Glinda").value("glinda").build())
+    ///                 .option(Opt::builder().text(plain_text!("Matilda")).value("matilda").build())
+    ///                 .option(Opt::builder().text(plain_text!("Glinda")).value("glinda").build())
     ///                 .build()
     ///                 .into(),
     ///             Button::builder()

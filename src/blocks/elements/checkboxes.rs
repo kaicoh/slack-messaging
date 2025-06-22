@@ -1,4 +1,4 @@
-use super::composition_objects::{ConfirmationDialog, Opt};
+use super::composition_objects::{ConfirmationDialog, Opt, Text};
 use serde::Serialize;
 
 /// [Checkboxes](https://docs.slack.dev/reference/block-kit/block-elements/checkboxes-element)
@@ -8,18 +8,19 @@ use serde::Serialize;
 ///
 /// ```
 /// # use slack_messaging::blocks::elements::Checkboxes;
-/// # use slack_messaging::composition_objects::Opt;
+/// # use slack_messaging::composition_objects::{Opt, Text};
+/// # use slack_messaging::mrkdwn;
 /// let checkboxes = Checkboxes::builder()
 ///     .action_id("group-0")
 ///     .option(
-///         Opt::builder()
-///             .text("option-0")
+///         Opt::<Text>::builder()
+///             .text(mrkdwn!("option-0"))
 ///             .value("value-0")
 ///             .build()
 ///     )
 ///     .option(
-///         Opt::builder()
-///             .text("option-1")
+///         Opt::<Text>::builder()
+///             .text(mrkdwn!("option-1"))
 ///             .value("value-1")
 ///             .build()
 ///     )
@@ -32,14 +33,14 @@ use serde::Serialize;
 ///         {
 ///             "value": "value-0",
 ///             "text": {
-///                 "type": "plain_text",
+///                 "type": "mrkdwn",
 ///                 "text": "option-0"
 ///             }
 ///         },
 ///         {
 ///             "value": "value-1",
 ///             "text": {
-///                 "type": "plain_text",
+///                 "type": "mrkdwn",
 ///                 "text": "option-1"
 ///             }
 ///         }
@@ -58,10 +59,10 @@ pub struct Checkboxes {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(super) action_id: Option<String>,
 
-    pub(super) options: Vec<Opt>,
+    pub(super) options: Vec<Opt<Text>>,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub(super) initial_options: Vec<Opt>,
+    pub(super) initial_options: Vec<Opt<Text>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(super) confirm: Option<ConfirmationDialog>,
