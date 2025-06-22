@@ -1,6 +1,6 @@
 use super::{
     Image,
-    composition_objects::{SlackFile, Text},
+    composition_objects::{PlainText, SlackFile},
 };
 
 impl Image {
@@ -15,7 +15,7 @@ impl Image {
 pub struct ImageBuilder {
     alt_text: Option<String>,
     image_url: Option<String>,
-    title: Option<Text>,
+    title: Option<PlainText>,
     block_id: Option<String>,
     slack_file: Option<SlackFile>,
 }
@@ -117,13 +117,13 @@ impl ImageBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::Image;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::PlainText;
     /// let image = Image::builder()
     ///     .image_url("")
     ///     .alt_text("")
     ///     .set_title(
-    ///         Some(Text::builder()
-    ///             .plain_text("Please enjoy this photo of a kitten")
+    ///         Some(PlainText::builder()
+    ///             .text("Please enjoy this photo of a kitten")
     ///             .build())
     ///     )
     ///     .build();
@@ -142,7 +142,7 @@ impl ImageBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_title(self, title: Option<Text>) -> Self {
+    pub fn set_title(self, title: Option<PlainText>) -> Self {
         Self { title, ..self }
     }
 
@@ -171,7 +171,7 @@ impl ImageBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn title(self, title: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(title).build();
+        let text = PlainText::builder().text(title).build();
         self.set_title(Some(text))
     }
 
@@ -312,7 +312,7 @@ impl ImageBuilder {
     }
 
     /// Get title value.
-    pub fn get_title(&self) -> &Option<Text> {
+    pub fn get_title(&self) -> &Option<PlainText> {
         &self.title
     }
 

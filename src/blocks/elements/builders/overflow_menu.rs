@@ -68,15 +68,16 @@ impl OverflowMenuBuilder {
     /// ```
     /// # use slack_messaging::blocks::elements::OverflowMenu;
     /// # use slack_messaging::composition_objects::Opt;
+    /// # use slack_messaging::plain_text;
     /// let overflow = OverflowMenu::builder()
     ///     .set_options(
     ///         vec![
     ///             Opt::builder()
-    ///                 .text("option-0")
+    ///                 .text(plain_text!("option-0"))
     ///                 .value("value-0")
     ///                 .build(),
     ///             Opt::builder()
-    ///                 .text("option-1")
+    ///                 .text(plain_text!("option-1"))
     ///                 .value("value-1")
     ///                 .build(),
     ///         ]
@@ -116,10 +117,11 @@ impl OverflowMenuBuilder {
     /// ```
     /// # use slack_messaging::blocks::elements::OverflowMenu;
     /// # use slack_messaging::composition_objects::Opt;
+    /// # use slack_messaging::plain_text;
     /// let overflow = OverflowMenu::builder()
     ///     .option(
     ///         Opt::builder()
-    ///             .text("option-0")
+    ///             .text(plain_text!("option-0"))
     ///             .value("value-0")
     ///             .build(),
     ///     )

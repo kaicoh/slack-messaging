@@ -1,6 +1,6 @@
 use super::{
     TimePicker,
-    composition_objects::{ConfirmationDialog, Text},
+    composition_objects::{ConfirmationDialog, PlainText},
 };
 
 impl TimePicker {
@@ -17,7 +17,7 @@ pub struct TimePickerBuilder {
     initial_time: Option<String>,
     confirm: Option<ConfirmationDialog>,
     focus_on_load: Option<bool>,
-    placeholder: Option<Text>,
+    placeholder: Option<PlainText>,
     timezone: Option<String>,
 }
 
@@ -250,11 +250,11 @@ impl TimePickerBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::TimePicker;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::PlainText;
     /// let timepicker = TimePicker::builder()
     ///     .set_placeholder(
-    ///         Some(Text::builder()
-    ///             .plain_text("Select a time")
+    ///         Some(PlainText::builder()
+    ///             .text("Select a time")
     ///             .build())
     ///     )
     ///     .build();
@@ -271,7 +271,7 @@ impl TimePickerBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
+    pub fn set_placeholder(self, placeholder: Option<PlainText>) -> Self {
         Self {
             placeholder,
             ..self
@@ -299,7 +299,7 @@ impl TimePickerBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(placeholder.into()).build();
+        let text = PlainText::builder().text(placeholder).build();
         self.set_placeholder(Some(text))
     }
 
@@ -379,7 +379,7 @@ impl TimePickerBuilder {
     }
 
     /// Get action_id value.
-    pub fn get_placeholder(&self) -> &Option<Text> {
+    pub fn get_placeholder(&self) -> &Option<PlainText> {
         &self.placeholder
     }
 

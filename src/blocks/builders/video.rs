@@ -1,4 +1,4 @@
-use super::{Video, composition_objects::Text};
+use super::{Video, composition_objects::PlainText};
 
 impl Video {
     /// Construct a [`VideoBuilder`].
@@ -11,13 +11,13 @@ impl Video {
 #[derive(Debug, Default)]
 pub struct VideoBuilder {
     alt_text: Option<String>,
-    title: Option<Text>,
+    title: Option<PlainText>,
     title_url: Option<String>,
     thumbnail_url: Option<String>,
     video_url: Option<String>,
     author_name: Option<String>,
     block_id: Option<String>,
-    description: Option<Text>,
+    description: Option<PlainText>,
     provider_icon_url: Option<String>,
     provider_name: Option<String>,
 }
@@ -109,7 +109,7 @@ impl VideoBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_title(self, title: Option<Text>) -> Self {
+    pub fn set_title(self, title: Option<PlainText>) -> Self {
         Self { title, ..self }
     }
 
@@ -140,7 +140,7 @@ impl VideoBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn title(self, title: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(title).build();
+        let text = PlainText::builder().text(title).build();
         self.set_title(Some(text))
     }
 
@@ -493,7 +493,7 @@ impl VideoBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_description(self, description: Option<Text>) -> Self {
+    pub fn set_description(self, description: Option<PlainText>) -> Self {
         Self {
             description,
             ..self
@@ -532,7 +532,7 @@ impl VideoBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn description(self, description: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(description).build();
+        let text = PlainText::builder().text(description).build();
         self.set_description(Some(text))
     }
 
@@ -698,7 +698,7 @@ impl VideoBuilder {
     }
 
     /// Get title value.
-    pub fn get_title(&self) -> &Option<Text> {
+    pub fn get_title(&self) -> &Option<PlainText> {
         &self.title
     }
 
@@ -728,7 +728,7 @@ impl VideoBuilder {
     }
 
     /// Get description value.
-    pub fn get_description(&self) -> &Option<Text> {
+    pub fn get_description(&self) -> &Option<PlainText> {
         &self.description
     }
 

@@ -22,11 +22,11 @@ impl SectionBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::Section;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::MrkdwnText;
     /// let section = Section::builder()
     ///     .set_text(
-    ///         Some(Text::builder()
-    ///             .mrkdwn("A message *with some bold text* and _some italicized text_.")
+    ///         Some(MrkdwnText::builder()
+    ///             .text("A message *with some bold text* and _some italicized text_.")
     ///             .build())
     ///     )
     ///     .build();
@@ -43,19 +43,22 @@ impl SectionBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_text(self, text: Option<Text>) -> Self {
-        Self { text, ..self }
+    pub fn set_text(self, text: Option<impl Into<Text>>) -> Self {
+        Self {
+            text: text.map(|v| v.into()),
+            ..self
+        }
     }
 
     /// Set text field.
     ///
     /// ```
     /// # use slack_messaging::blocks::Section;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::MrkdwnText;
     /// let section = Section::builder()
     ///     .text(
-    ///         Text::builder()
-    ///             .mrkdwn("A message *with some bold text* and _some italicized text_.")
+    ///         MrkdwnText::builder()
+    ///             .text("A message *with some bold text* and _some italicized text_.")
     ///             .build()
     ///     )
     ///     .build();
@@ -72,7 +75,7 @@ impl SectionBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn text(self, text: Text) -> Self {
+    pub fn text(self, text: impl Into<Text>) -> Self {
         self.set_text(Some(text))
     }
 
@@ -132,12 +135,12 @@ impl SectionBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::Section;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::{PlainText, MrkdwnText};
     /// let section = Section::builder()
     ///     .set_fields(
     ///         vec![
-    ///             Text::builder().plain_text("hello").build(),
-    ///             Text::builder().mrkdwn("*world*").build(),
+    ///             PlainText::builder().text("hello").build().into(),
+    ///             MrkdwnText::builder().text("*world*").build().into(),
     ///         ]
     ///     )
     ///     .build();
@@ -168,9 +171,9 @@ impl SectionBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::Section;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::PlainText;
     /// let section = Section::builder()
-    ///     .field(Text::builder().plain_text("hello world").build())
+    ///     .field(PlainText::builder().text("hello world").build())
     ///     .build();
     ///
     /// let expected = serde_json::json!({
@@ -187,9 +190,9 @@ impl SectionBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn field(self, field: Text) -> Self {
+    pub fn field(self, field: impl Into<Text>) -> Self {
         let mut fields = self.fields;
-        fields.push(field);
+        fields.push(field.into());
         Self { fields, ..self }
     }
 

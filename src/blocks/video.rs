@@ -1,4 +1,4 @@
-use super::composition_objects::Text;
+use super::composition_objects::PlainText;
 use serde::Serialize;
 
 /// [Video block](https://docs.slack.dev/reference/block-kit/blocks/video-block)
@@ -50,7 +50,7 @@ pub struct Video {
 
     pub(super) alt_text: String,
 
-    pub(super) title: Text,
+    pub(super) title: PlainText,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(super) title_url: Option<String>,
@@ -66,7 +66,7 @@ pub struct Video {
     pub(super) block_id: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) description: Option<Text>,
+    pub(super) description: Option<PlainText>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(super) provider_icon_url: Option<String>,

@@ -1,9 +1,7 @@
 use super::composition_objects::Text;
 use super::elements::{
-    Button, Checkboxes, DatePicker, Image, MultiSelectConversations, MultiSelectExternals,
-    MultiSelectPublicChannels, MultiSelectStaticOptions, MultiSelectUsers, OverflowMenu,
-    RadioButtonGroup, SelectConversations, SelectExternals, SelectPublicChannels,
-    SelectStaticOptions, SelectUsers, TimePicker, WorkflowButton,
+    Button, Checkboxes, DatePicker, Image, MultiSelectMenu, OverflowMenu, RadioButtonGroup,
+    SelectMenu, TimePicker, WorkflowButton,
 };
 use serde::Serialize;
 
@@ -15,16 +13,12 @@ use serde::Serialize;
 /// ```
 /// # use slack_messaging::blocks::Section;
 /// # use slack_messaging::blocks::elements::Image;
-/// # use slack_messaging::composition_objects::Text;
+/// # use slack_messaging::{mrkdwn, plain_text};
 /// let section = Section::builder()
 ///     .block_id("section_1")
-///     .text(
-///         Text::builder()
-///             .mrkdwn("A message *with some bold text* and _some italicized text_.")
-///             .build()
-///     )
-///     .field(Text::builder().mrkdwn("High").build())
-///     .field(Text::builder().plain_text("String").build())
+///     .text(mrkdwn!("A message *with some bold text* and _some italicized text_."))
+///     .field(mrkdwn!("High"))
+///     .field(plain_text!("String"))
 ///     .accessory(
 ///         Image::builder()
 ///             .image_url("http://placekitten.com/700/500")
@@ -102,25 +96,9 @@ pub enum Accessory {
     /// representation
     Image(Box<Image>),
 
-    /// [Multi-select menu Conversations list element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#conversation_multi_select)
+    /// [Multi-select menu element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element)
     /// representation
-    MultiSelectConversations(Box<MultiSelectConversations>),
-
-    /// [Multi-select menu External data source element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#external_multi_select)
-    /// representation
-    MultiSelectExternals(Box<MultiSelectExternals>),
-
-    /// [Multi-select menu Public channels element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#channel_multi_select)
-    /// representation
-    MultiSelectPublicChannels(Box<MultiSelectPublicChannels>),
-
-    /// [Multi-select menu Static options element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#static_multi_select)
-    /// representation
-    MultiSelectStaticOptions(Box<MultiSelectStaticOptions>),
-
-    /// [Multi-select menu User list element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#users_multi_select)
-    /// representation
-    MultiSelectUsers(Box<MultiSelectUsers>),
+    MultiSelectMenu(Box<MultiSelectMenu>),
 
     /// [Overflow menu element](https://docs.slack.dev/reference/block-kit/block-elements/overflow-menu-element)
     /// representation
@@ -130,25 +108,9 @@ pub enum Accessory {
     /// representation
     RadioButtonGroup(Box<RadioButtonGroup>),
 
-    /// [Select menu of conversations element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#conversations_select)
+    /// [Select menu element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#conversations_select)
     /// representation
-    SelectConversations(Box<SelectConversations>),
-
-    /// [Select menu of external data source element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#external_select)
-    /// representation
-    SelectExternals(Box<SelectExternals>),
-
-    /// [Select menu of public channels element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#channels_select)
-    /// representation
-    SelectPublicChannels(Box<SelectPublicChannels>),
-
-    /// [Select menu of static options element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select)
-    /// representation
-    SelectStaticOptions(Box<SelectStaticOptions>),
-
-    /// [Select menu of users element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#users_select)
-    /// representation
-    SelectUsers(Box<SelectUsers>),
+    SelectMenu(Box<SelectMenu>),
 
     /// [Time picker element](https://docs.slack.dev/reference/block-kit/block-elements/time-picker-element)
     /// representation
@@ -176,18 +138,10 @@ accessory_from! {
     Checkboxes,
     DatePicker,
     Image,
-    MultiSelectConversations,
-    MultiSelectExternals,
-    MultiSelectPublicChannels,
-    MultiSelectStaticOptions,
-    MultiSelectUsers,
+    MultiSelectMenu,
     OverflowMenu,
     RadioButtonGroup,
-    SelectConversations,
-    SelectExternals,
-    SelectPublicChannels,
-    SelectStaticOptions,
-    SelectUsers,
+    SelectMenu,
     TimePicker,
     WorkflowButton
 }

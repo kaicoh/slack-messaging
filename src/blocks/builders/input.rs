@@ -1,4 +1,4 @@
-use super::{Input, InputElement, composition_objects::Text};
+use super::{Input, InputElement, composition_objects::PlainText};
 
 impl Input {
     /// Construct an [`InputBuilder`].
@@ -10,11 +10,11 @@ impl Input {
 /// Builder for [`Input`] object.
 #[derive(Debug, Default)]
 pub struct InputBuilder {
-    label: Option<Text>,
+    label: Option<PlainText>,
     element: Option<InputElement>,
     dispatch_action: Option<bool>,
     block_id: Option<String>,
-    hint: Option<Text>,
+    hint: Option<PlainText>,
     optional: Option<bool>,
 }
 
@@ -24,11 +24,11 @@ impl InputBuilder {
     /// ```
     /// # use slack_messaging::blocks::Input;
     /// # use slack_messaging::blocks::elements::PlainTextInput;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::PlainText;
     /// let input = Input::builder()
     ///     .set_label(
-    ///         Some(Text::builder()
-    ///             .plain_text("label text")
+    ///         Some(PlainText::builder()
+    ///             .text("label text")
     ///             .build())
     ///     )
     ///     .element(
@@ -57,7 +57,7 @@ impl InputBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_label(self, label: Option<Text>) -> Self {
+    pub fn set_label(self, label: Option<PlainText>) -> Self {
         Self { label, ..self }
     }
 
@@ -95,7 +95,7 @@ impl InputBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn label(self, label: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(label).build();
+        let text = PlainText::builder().text(label).build();
         self.set_label(Some(text))
     }
 
@@ -340,11 +340,11 @@ impl InputBuilder {
     /// ```
     /// # use slack_messaging::blocks::Input;
     /// # use slack_messaging::blocks::elements::PlainTextInput;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::PlainText;
     /// let input = Input::builder()
     ///     .set_hint(
-    ///         Some(Text::builder()
-    ///             .plain_text("Some hints for input")
+    ///         Some(PlainText::builder()
+    ///             .text("Some hints for input")
     ///             .build())
     ///     )
     ///     .label("label text")
@@ -378,7 +378,7 @@ impl InputBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_hint(self, hint: Option<Text>) -> Self {
+    pub fn set_hint(self, hint: Option<PlainText>) -> Self {
         Self { hint, ..self }
     }
 
@@ -421,7 +421,7 @@ impl InputBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn hint(self, hint: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(hint).build();
+        let text = PlainText::builder().text(hint).build();
         self.set_hint(Some(text))
     }
 
@@ -517,7 +517,7 @@ impl InputBuilder {
     }
 
     /// Get label value.
-    pub fn get_label(&self) -> &Option<Text> {
+    pub fn get_label(&self) -> &Option<PlainText> {
         &self.label
     }
 
@@ -537,7 +537,7 @@ impl InputBuilder {
     }
 
     /// Get hint value.
-    pub fn get_hint(&self) -> &Option<Text> {
+    pub fn get_hint(&self) -> &Option<PlainText> {
         &self.hint
     }
 

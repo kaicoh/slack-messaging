@@ -1,8 +1,6 @@
 use super::elements::{
-    Button, Checkboxes, DatePicker, DatetimePicker, MultiSelectConversations, MultiSelectExternals,
-    MultiSelectPublicChannels, MultiSelectStaticOptions, MultiSelectUsers, OverflowMenu,
-    RadioButtonGroup, SelectConversations, SelectExternals, SelectPublicChannels,
-    SelectStaticOptions, SelectUsers, TimePicker, WorkflowButton,
+    Button, Checkboxes, DatePicker, DatetimePicker, MultiSelectMenu, OverflowMenu,
+    RadioButtonGroup, SelectMenu, TimePicker, WorkflowButton,
 };
 use serde::Serialize;
 
@@ -15,20 +13,22 @@ use serde::Serialize;
 ///
 /// ```
 /// # use slack_messaging::blocks::Actions;
-/// # use slack_messaging::blocks::elements::{Button, SelectStaticOptions};
+/// # use slack_messaging::blocks::elements::{Button, Select};
+/// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
 /// # use slack_messaging::composition_objects::Opt;
+/// # use slack_messaging::plain_text;
 /// let actions = Actions::builder()
 ///     .block_id("actions1")
 ///     .element(
-///         SelectStaticOptions::builder()
+///         Select::<StaticOptions>::builder()
 ///             .action_id("select_2")
 ///             .placeholder("Which witch is the witchiest witch?")
 ///             .set_options(
 ///                 vec![
-///                     Opt::builder().text("Matilda").value("matilda").build(),
-///                     Opt::builder().text("Glinda").value("glinda").build(),
-///                     Opt::builder().text("Granny Weatherwax").value("grannyWeatherwax").build(),
-///                     Opt::builder().text("Hermione").value("hermione").build(),
+///                     Opt::builder().text(plain_text!("Matilda")).value("matilda").build(),
+///                     Opt::builder().text(plain_text!("Glinda")).value("glinda").build(),
+///                     Opt::builder().text(plain_text!("Granny Weatherwax")).value("grannyWeatherwax").build(),
+///                     Opt::builder().text(plain_text!("Hermione")).value("hermione").build(),
 ///                 ]
 ///             )
 ///             .build()
@@ -107,6 +107,7 @@ use serde::Serialize;
 /// # use slack_messaging::blocks::Actions;
 /// # use slack_messaging::blocks::elements::{Button, DatePicker, OverflowMenu};
 /// # use slack_messaging::composition_objects::Opt;
+/// # use slack_messaging::plain_text;
 /// let actions = Actions::builder()
 ///     .block_id("actionblock789")
 ///     .element(
@@ -119,11 +120,36 @@ use serde::Serialize;
 ///     .element(
 ///         OverflowMenu::builder()
 ///             .action_id("overflow")
-///             .option(Opt::builder().text("*this is plain_text text*").value("value-0").build())
-///             .option(Opt::builder().text("*this is plain_text text*").value("value-1").build())
-///             .option(Opt::builder().text("*this is plain_text text*").value("value-2").build())
-///             .option(Opt::builder().text("*this is plain_text text*").value("value-3").build())
-///             .option(Opt::builder().text("*this is plain_text text*").value("value-4").build())
+///             .option(
+///                 Opt::builder()
+///                     .text(plain_text!("*this is plain_text text*"))
+///                     .value("value-0")
+///                     .build()
+///             )
+///             .option(
+///                 Opt::builder()
+///                     .text(plain_text!("*this is plain_text text*"))
+///                     .value("value-1")
+///                     .build()
+///             )
+///             .option(
+///                 Opt::builder()
+///                     .text(plain_text!("*this is plain_text text*"))
+///                     .value("value-2")
+///                     .build()
+///             )
+///             .option(
+///                 Opt::builder()
+///                     .text(plain_text!("*this is plain_text text*"))
+///                     .value("value-3")
+///                     .build()
+///             )
+///             .option(
+///                 Opt::builder()
+///                     .text(plain_text!("*this is plain_text text*"))
+///                     .value("value-4")
+///                     .build()
+///             )
 ///             .build()
 ///     )
 ///     .element(
@@ -237,25 +263,9 @@ pub enum ActionsElement {
     /// representation
     DatetimePicker(Box<DatetimePicker>),
 
-    /// [Multi-select menu Conversations list element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#conversation_multi_select)
+    /// [Multi-select menu element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element)
     /// representation
-    MultiSelectConversations(Box<MultiSelectConversations>),
-
-    /// [Multi-select menu External data source element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#external_multi_select)
-    /// representation
-    MultiSelectExternals(Box<MultiSelectExternals>),
-
-    /// [Multi-select menu Public channels element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#channel_multi_select)
-    /// representation
-    MultiSelectPublicChannels(Box<MultiSelectPublicChannels>),
-
-    /// [Multi-select menu Static options element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#static_multi_select)
-    /// representation
-    MultiSelectStaticOptions(Box<MultiSelectStaticOptions>),
-
-    /// [Multi-select menu User list element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#users_multi_select)
-    /// representation
-    MultiSelectUsers(Box<MultiSelectUsers>),
+    MultiSelectMenu(Box<MultiSelectMenu>),
 
     /// [Overflow menu element](https://docs.slack.dev/reference/block-kit/block-elements/overflow-menu-element)
     /// representation
@@ -265,25 +275,9 @@ pub enum ActionsElement {
     /// representation
     RadioButtonGroup(Box<RadioButtonGroup>),
 
-    /// [Select menu of conversations element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#conversations_select)
+    /// [Select menu element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element)
     /// representation
-    SelectConversations(Box<SelectConversations>),
-
-    /// [Select menu of external data source element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#external_select)
-    /// representation
-    SelectExternals(Box<SelectExternals>),
-
-    /// [Select menu of public channels element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#channels_select)
-    /// representation
-    SelectPublicChannels(Box<SelectPublicChannels>),
-
-    /// [Select menu of static options element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select)
-    /// representation
-    SelectStaticOptions(Box<SelectStaticOptions>),
-
-    /// [Select menu of users element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#users_select)
-    /// representation
-    SelectUsers(Box<SelectUsers>),
+    SelectMenu(Box<SelectMenu>),
 
     /// [Time picker element](https://docs.slack.dev/reference/block-kit/block-elements/time-picker-element)
     /// representation
@@ -311,18 +305,10 @@ actions_from! {
     Checkboxes,
     DatePicker,
     DatetimePicker,
-    MultiSelectConversations,
-    MultiSelectExternals,
-    MultiSelectPublicChannels,
-    MultiSelectStaticOptions,
-    MultiSelectUsers,
+    MultiSelectMenu,
     OverflowMenu,
     RadioButtonGroup,
-    SelectConversations,
-    SelectExternals,
-    SelectPublicChannels,
-    SelectStaticOptions,
-    SelectUsers,
+    SelectMenu,
     TimePicker,
     WorkflowButton
 }

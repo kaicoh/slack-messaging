@@ -21,7 +21,7 @@ impl ContextBuilder {
     /// ```
     /// # use slack_messaging::blocks::Context;
     /// # use slack_messaging::blocks::elements::Image;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::MrkdwnText;
     /// let context = Context::builder()
     ///     .set_elements(
     ///         vec![
@@ -30,8 +30,8 @@ impl ContextBuilder {
     ///                 .alt_text("images")
     ///                 .build()
     ///                 .into(),
-    ///             Text::builder()
-    ///                 .mrkdwn("Location: **Dogpatch**")
+    ///             MrkdwnText::builder()
+    ///                 .text("Location: **Dogpatch**")
     ///                 .build()
     ///                 .into(),
     ///         ]
@@ -67,7 +67,7 @@ impl ContextBuilder {
     /// ```
     /// # use slack_messaging::blocks::Context;
     /// # use slack_messaging::blocks::elements::Image;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::MrkdwnText;
     /// let context = Context::builder()
     ///     .element(
     ///         Image::builder()
@@ -76,8 +76,8 @@ impl ContextBuilder {
     ///             .build()
     ///     )
     ///     .element(
-    ///         Text::builder()
-    ///             .mrkdwn("Location: **Dogpatch**")
+    ///         MrkdwnText::builder()
+    ///             .text("Location: **Dogpatch**")
     ///             .build()
     ///     )
     ///     .build();

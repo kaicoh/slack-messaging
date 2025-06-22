@@ -1,4 +1,4 @@
-use super::composition_objects::Text;
+use super::composition_objects::PlainText;
 use serde::Serialize;
 
 /// [Header block](https://docs.slack.dev/reference/block-kit/blocks/header-block)
@@ -31,7 +31,7 @@ pub struct Header {
     #[serde(rename = "type")]
     pub(super) kind: &'static str,
 
-    pub(super) text: Text,
+    pub(super) text: PlainText,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(super) block_id: Option<String>,
