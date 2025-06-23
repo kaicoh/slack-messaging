@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.5.0][] - 2025-06-23
+
+- Strict type check for text object.
+
+### Breaking Changes
+
+In order to check text type, the `Text` struct is now turned into the `PlainText` and the `MrkdwnText` struct.
+And the Text enum is introduced to represent both of plain text and markdwon text.
+
+Use the PlainText instead of the Text in case of only plain text is allowed to use.
+On the other hand, use Text when both plain text and markdwon text are allowed.
+
+And the `select menu element` and the `multi-select menu element` are renewed.
+
+| before 0.5.0 | 0.5.0 |
+| --- | --- |
+| Text | PlainText, MrkdwnText |
+| -- | Text (new enum) |
+| MultiSelectConversations | MultiSelect\<Conversations\> |
+| MultiSelectExternals | MultiSelect\<ExternalDataSource\> |
+| MultiSelectPublicChannels | MultiSelect\<PublicChannels\> |
+| MultiSelectStaticOptions | MultiSelect\<StaticOptions\> |
+| MultiSelectUsers | MultiSelect\<Users\> |
+| SelectConversations | Select\<Conversations\> |
+| SelectExternals | Select\<ExternalDataSource\> |
+| SelectPublicChannels | Select\<PublicChannels\> |
+| SelectStaticOptions | Select\<StaticOptions\> |
+| SelectUsers | Select\<Users\> |
+
 ## [0.4.1][] - 2025-05-11
 
 - Support [Markdown block](https://docs.slack.dev/reference/block-kit/blocks/markdown-block).
@@ -44,6 +73,7 @@
 
 - pre-release
 
+[0.5.0]: https://github.com/kaicoh/slack-messaging/releases/v0.5.0
 [0.4.1]: https://github.com/kaicoh/slack-messaging/releases/v0.4.1
 [0.4.0]: https://github.com/kaicoh/slack-messaging/releases/v0.4.0
 [0.3.3]: https://github.com/kaicoh/slack-messaging/releases/v0.3.3

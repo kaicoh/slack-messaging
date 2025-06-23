@@ -7,7 +7,7 @@ use serde::Serialize;
 /// The difference between these two objects is that [`Text`](crate::composition_objects::Text)
 /// can be used incase of both of plain text and mrkdwn are allowed to used.
 ///
-/// On the other hand, use [`PlainText`] instead of this enum incase of only [`PlainText`]
+/// On the other hand, use [`PlainText`] instead of [`Text`](crate::composition_objects::Text) incase of only [`PlainText`]
 /// is allowed to use.
 ///
 /// ### example to use [`Text`](crate::composition_objects::Text)
