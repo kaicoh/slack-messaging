@@ -1,6 +1,6 @@
 use super::{
     WorkflowButton,
-    composition_objects::{Text, Workflow},
+    composition_objects::{PlainText, Workflow},
 };
 
 impl WorkflowButton {
@@ -13,7 +13,7 @@ impl WorkflowButton {
 /// Builder for [`WorkflowButton`] object.
 #[derive(Debug, Default)]
 pub struct WorkflowButtonBuilder {
-    text: Option<Text>,
+    text: Option<PlainText>,
     workflow: Option<Workflow>,
     action_id: Option<String>,
     style: Option<&'static str>,
@@ -58,7 +58,7 @@ impl WorkflowButtonBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn text(self, text: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(text.into()).build();
+        let text = PlainText::builder().text(text).build();
         self.set_text(Some(text))
     }
 
@@ -66,11 +66,11 @@ impl WorkflowButtonBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::WorkflowButton;
-    /// # use slack_messaging::composition_objects::{Text, Trigger, Workflow};
+    /// # use slack_messaging::composition_objects::{PlainText, Trigger, Workflow};
     /// let button = WorkflowButton::builder()
     ///     .set_text(
-    ///         Some(Text::builder()
-    ///             .plain_text("Click Me")
+    ///         Some(PlainText::builder()
+    ///             .text("Click Me")
     ///             .build())
     ///     )
     ///     .workflow(
@@ -102,7 +102,7 @@ impl WorkflowButtonBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_text(self, text: Option<Text>) -> Self {
+    pub fn set_text(self, text: Option<PlainText>) -> Self {
         Self { text, ..self }
     }
 
@@ -464,7 +464,7 @@ impl WorkflowButtonBuilder {
     }
 
     /// Get text value.
-    pub fn get_text(&self) -> &Option<Text> {
+    pub fn get_text(&self) -> &Option<PlainText> {
         &self.text
     }
 

@@ -9,17 +9,18 @@ use serde::Serialize;
 /// ```
 /// # use slack_messaging::blocks::elements::OverflowMenu;
 /// # use slack_messaging::composition_objects::Opt;
+/// # use slack_messaging::plain_text;
 /// let overflow = OverflowMenu::builder()
 ///     .action_id("overflow_0")
 ///     .option(
 ///         Opt::builder()
-///             .text("option-0")
+///             .text(plain_text!("option-0"))
 ///             .value("value-0")
 ///             .build()
 ///     )
 ///     .option(
 ///         Opt::builder()
-///             .text("option-1")
+///             .text(plain_text!("option-1"))
 ///             .value("value-1")
 ///             .build()
 ///     )

@@ -1,4 +1,4 @@
-use super::composition_objects::{SlackFile, Text};
+use super::composition_objects::{PlainText, SlackFile};
 use serde::Serialize;
 
 /// [Image block](https://docs.slack.dev/reference/block-kit/blocks/image-block)
@@ -41,7 +41,7 @@ pub struct Image {
     pub(super) image_url: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) title: Option<Text>,
+    pub(super) title: Option<PlainText>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(super) block_id: Option<String>,

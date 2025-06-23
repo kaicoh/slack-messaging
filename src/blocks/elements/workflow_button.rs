@@ -1,4 +1,4 @@
-use super::composition_objects::{Text, Workflow};
+use super::composition_objects::{PlainText, Workflow};
 use serde::Serialize;
 
 /// [Workflow button element](https://docs.slack.dev/reference/block-kit/block-elements/workflow-button-element)
@@ -66,7 +66,7 @@ pub struct WorkflowButton {
     #[serde(rename = "type")]
     pub(super) kind: &'static str,
 
-    pub(super) text: Text,
+    pub(super) text: PlainText,
 
     pub(super) workflow: Workflow,
 

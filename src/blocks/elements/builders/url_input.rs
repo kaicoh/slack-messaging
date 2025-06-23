@@ -1,6 +1,6 @@
 use super::{
     UrlInput,
-    composition_objects::{DispatchActionConfiguration, Text},
+    composition_objects::{DispatchActionConfiguration, PlainText},
 };
 
 impl UrlInput {
@@ -17,7 +17,7 @@ pub struct UrlInputBuilder {
     initial_value: Option<String>,
     dispatch_action_config: Option<DispatchActionConfiguration>,
     focus_on_load: Option<bool>,
-    placeholder: Option<Text>,
+    placeholder: Option<PlainText>,
 }
 
 impl UrlInputBuilder {
@@ -216,11 +216,11 @@ impl UrlInputBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::UrlInput;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::PlainText;
     /// let url = UrlInput::builder()
     ///     .set_placeholder(
-    ///         Some(Text::builder()
-    ///             .plain_text("Enter url")
+    ///         Some(PlainText::builder()
+    ///             .text("Enter url")
     ///             .build())
     ///     )
     ///     .build();
@@ -237,7 +237,7 @@ impl UrlInputBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
+    pub fn set_placeholder(self, placeholder: Option<PlainText>) -> Self {
         Self {
             placeholder,
             ..self
@@ -265,7 +265,7 @@ impl UrlInputBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(placeholder.into()).build();
+        let text = PlainText::builder().text(placeholder).build();
         self.set_placeholder(Some(text))
     }
 
@@ -302,7 +302,7 @@ impl UrlInputBuilder {
     }
 
     /// Get action_id value.
-    pub fn get_placeholder(&self) -> &Option<Text> {
+    pub fn get_placeholder(&self) -> &Option<PlainText> {
         &self.placeholder
     }
 }

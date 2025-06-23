@@ -1,4 +1,4 @@
-use super::composition_objects::{DispatchActionConfiguration, Text};
+use super::composition_objects::{DispatchActionConfiguration, PlainText};
 use serde::Serialize;
 
 /// [Email input element](https://docs.slack.dev/reference/block-kit/block-elements/email-input-element)
@@ -44,5 +44,5 @@ pub struct EmailInput {
     pub(super) focus_on_load: Option<bool>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) placeholder: Option<Text>,
+    pub(super) placeholder: Option<PlainText>,
 }

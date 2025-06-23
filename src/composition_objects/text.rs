@@ -1,73 +1,40 @@
+use super::{MrkdwnText, PlainText};
 use serde::Serialize;
 
-pub(super) const TYPE_PLAIN: &str = "plain_text";
-pub(super) const TYPE_MRKDWN: &str = "mrkdwn";
-
 /// [Text object](https://docs.slack.dev/reference/block-kit/composition-objects/text-object)
-/// representation.
+/// that can be either plain text or markdown.
 ///
-/// # Example
+/// Use this enum instead of [`PlainText`] or [`MrkdwnText`] in case of both of them can be used.
 ///
-/// ## type plain_text
+/// On the other hand, use [`PlainText`] instead of this enum incase of only [`PlainText`]
+/// is allowed to use.
 ///
-/// ```
-/// # use slack_messaging::composition_objects::Text;
-/// let text = Text::builder()
-///     .plain_text("Hello, World!")
-///     .build();
+/// ### example to use [`Text`]
 ///
-/// let json = serde_json::to_value(text).unwrap();
+/// * The `text` and `description` field of [`Opt`](crate::composition_objects::Opt)
+///   object in the [`Checkboxes`](crate::blocks::elements::Checkboxes) and [`RadioButtonGroup`](crate::blocks::elements::RadioButtonGroup) element
+/// * The `text` field of [`Section`](crate::blocks::Section) block
 ///
-/// let expected = serde_json::json!({
-///     "type": "plain_text",
-///     "text": "Hello, World!"
-/// });
+/// ### example to use [`PlainText`]
 ///
-/// assert_eq!(json, expected);
-/// ```
+/// * The `text` field of [`Button`](crate::blocks::elements::Button) element.
 ///
-/// ## type mrkdwn
-///
-/// ```
-/// # use slack_messaging::composition_objects::Text;
-/// let text = Text::builder()
-///     .mrkdwn("Hello, World!")
-///     .build();
-///
-/// let json = serde_json::to_value(text).unwrap();
-///
-/// let expected = serde_json::json!({
-///     "type": "mrkdwn",
-///     "text": "Hello, World!",
-/// });
-///
-/// assert_eq!(json, expected);
-/// ```
 #[derive(Debug, Clone, Serialize)]
-pub struct Text {
-    #[serde(rename = "type")]
-    pub(super) kind: &'static str,
-
-    pub(super) text: String,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) emoji: Option<bool>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) verbatim: Option<bool>,
+#[serde(untagged)]
+pub enum Text {
+    Plain(PlainText),
+    Mrkdwn(MrkdwnText),
 }
 
-impl PartialEq for Text {
-    fn eq(&self, other: &Self) -> bool {
-        if self.kind != other.kind || self.text.as_str() != other.text.as_str() {
-            return false;
-        }
+impl From<PlainText> for Text {
+    fn from(value: PlainText) -> Self {
+        Self::Plain(value)
+    }
+}
 
-        match self.kind {
-            TYPE_PLAIN => self.emoji == other.emoji,
-            TYPE_MRKDWN => self.verbatim == other.verbatim,
-            _ => false,
-        }
+impl From<MrkdwnText> for Text {
+    fn from(value: MrkdwnText) -> Self {
+        Self::Mrkdwn(value)
     }
 }
 
@@ -76,86 +43,37 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_equals_with_same_type_and_text() {
-        let plain_0 = text_plain("Hello");
-        let plain_1 = text_plain("Hello");
-        let plain_2 = text_plain("hello");
+    fn it_is_serialized_without_enum_tag() {
+        let text: Text = PlainText::builder()
+            .text("hello world")
+            .emoji(true)
+            .build()
+            .into();
 
-        let mrkdwn_0 = text_mrkdwn("Hello");
-        let mrkdwn_1 = text_mrkdwn("Hello");
-        let mrkdwn_2 = text_mrkdwn("hello");
+        let json = serde_json::to_value(text).unwrap();
 
-        assert_eq!(plain_0, plain_1);
-        assert_eq!(mrkdwn_0, mrkdwn_1);
+        let expected = serde_json::json!({
+            "type": "plain_text",
+            "text": "hello world",
+            "emoji": true
+        });
 
-        assert_ne!(plain_0, mrkdwn_0);
-        assert_ne!(plain_0, mrkdwn_1);
-        assert_ne!(plain_1, mrkdwn_0);
-        assert_ne!(plain_1, mrkdwn_1);
+        assert_eq!(json, expected);
 
-        assert_ne!(plain_0, plain_2);
-        assert_ne!(mrkdwn_0, mrkdwn_2);
-    }
+        let text: Text = MrkdwnText::builder()
+            .text("hello world")
+            .verbatim(true)
+            .build()
+            .into();
 
-    #[test]
-    fn it_compares_emoji_field_when_plain_text() {
-        let plain_0 = Text {
-            emoji: Some(false),
-            ..text_plain("Hello")
-        };
-        let plain_1 = text_plain("Hello");
+        let json = serde_json::to_value(text).unwrap();
 
-        assert_ne!(plain_0, plain_1);
+        let expected = serde_json::json!({
+            "type": "mrkdwn",
+            "text": "hello world",
+            "verbatim": true
+        });
 
-        let plain_0 = Text {
-            emoji: Some(false),
-            ..text_plain("Hello")
-        };
-        let plain_1 = Text {
-            emoji: Some(false),
-            ..text_plain("Hello")
-        };
-
-        assert_eq!(plain_0, plain_1);
-    }
-
-    #[test]
-    fn it_compares_verbatim_field_when_mrkdwn() {
-        let mrkdwn_0 = Text {
-            verbatim: Some(true),
-            ..text_mrkdwn("Hello")
-        };
-        let mrkdwn_1 = text_mrkdwn("Hello");
-
-        assert_ne!(mrkdwn_0, mrkdwn_1);
-
-        let mrkdwn_0 = Text {
-            verbatim: Some(true),
-            ..text_mrkdwn("Hello")
-        };
-        let mrkdwn_1 = Text {
-            verbatim: Some(true),
-            ..text_mrkdwn("Hello")
-        };
-
-        assert_eq!(mrkdwn_0, mrkdwn_1);
-    }
-
-    fn text_plain(text: &str) -> Text {
-        Text {
-            kind: TYPE_PLAIN,
-            text: text.into(),
-            emoji: None,
-            verbatim: None,
-        }
-    }
-
-    fn text_mrkdwn(text: &str) -> Text {
-        Text {
-            kind: TYPE_MRKDWN,
-            text: text.into(),
-            emoji: None,
-            verbatim: None,
-        }
+        assert_eq!(json, expected);
     }
 }

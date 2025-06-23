@@ -1,6 +1,6 @@
 use super::{
     RadioButtonGroup,
-    composition_objects::{ConfirmationDialog, Opt},
+    composition_objects::{ConfirmationDialog, Opt, Text},
 };
 
 impl RadioButtonGroup {
@@ -14,8 +14,8 @@ impl RadioButtonGroup {
 #[derive(Debug, Default)]
 pub struct RadioButtonGroupBuilder {
     action_id: Option<String>,
-    options: Vec<Opt>,
-    initial_option: Option<Opt>,
+    options: Vec<Opt<Text>>,
+    initial_option: Option<Opt<Text>>,
     confirm: Option<ConfirmationDialog>,
     focus_on_load: Option<bool>,
 }
@@ -69,16 +69,17 @@ impl RadioButtonGroupBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::RadioButtonGroup;
-    /// # use slack_messaging::composition_objects::Opt;
+    /// # use slack_messaging::composition_objects::{Opt, Text};
+    /// # use slack_messaging::{plain_text, mrkdwn};
     /// let radio = RadioButtonGroup::builder()
     ///     .set_options(
     ///         vec![
-    ///             Opt::builder()
-    ///                 .text("Radio 1")
+    ///             Opt::<Text>::builder()
+    ///                 .text(mrkdwn!("**Radio 1**"))
     ///                 .value("A1")
     ///                 .build(),
-    ///             Opt::builder()
-    ///                 .text("Radio 2")
+    ///             Opt::<Text>::builder()
+    ///                 .text(plain_text!("Radio 2"))
     ///                 .value("A2")
     ///                 .build(),
     ///         ]
@@ -91,8 +92,8 @@ impl RadioButtonGroupBuilder {
     ///         {
     ///             "value": "A1",
     ///             "text": {
-    ///                 "type": "plain_text",
-    ///                 "text": "Radio 1"
+    ///                 "type": "mrkdwn",
+    ///                 "text": "**Radio 1**"
     ///             }
     ///         },
     ///         {
@@ -109,7 +110,7 @@ impl RadioButtonGroupBuilder {
     ///
     /// assert_eq!(radio_json, expected);
     /// ```
-    pub fn set_options(self, options: Vec<Opt>) -> Self {
+    pub fn set_options(self, options: Vec<Opt<Text>>) -> Self {
         Self { options, ..self }
     }
 
@@ -117,11 +118,12 @@ impl RadioButtonGroupBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::RadioButtonGroup;
-    /// # use slack_messaging::composition_objects::Opt;
+    /// # use slack_messaging::composition_objects::{Opt, Text};
+    /// # use slack_messaging::plain_text;
     /// let radio = RadioButtonGroup::builder()
     ///     .option(
-    ///         Opt::builder()
-    ///             .text("Radio 1")
+    ///         Opt::<Text>::builder()
+    ///             .text(plain_text!("Radio 1"))
     ///             .value("A1")
     ///             .build(),
     ///     )
@@ -144,7 +146,7 @@ impl RadioButtonGroupBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn option(self, option: Opt) -> Self {
+    pub fn option(self, option: Opt<Text>) -> Self {
         let Self { mut options, .. } = self;
         options.push(option);
         Self { options, ..self }
@@ -154,11 +156,12 @@ impl RadioButtonGroupBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::RadioButtonGroup;
-    /// # use slack_messaging::composition_objects::Opt;
+    /// # use slack_messaging::composition_objects::{Opt, Text};
+    /// # use slack_messaging::mrkdwn;
     /// let radio = RadioButtonGroup::builder()
     ///     .set_initial_option(
-    ///         Some(Opt::builder()
-    ///             .text("Radio 1")
+    ///         Some(Opt::<Text>::builder()
+    ///             .text(mrkdwn!("**Radio 1**"))
     ///             .value("A1")
     ///             .build()),
     ///     )
@@ -170,8 +173,8 @@ impl RadioButtonGroupBuilder {
     ///     "initial_option": {
     ///        "value": "A1",
     ///        "text": {
-    ///            "type": "plain_text",
-    ///            "text": "Radio 1"
+    ///            "type": "mrkdwn",
+    ///            "text": "**Radio 1**"
     ///        }
     ///     }
     /// });
@@ -180,7 +183,7 @@ impl RadioButtonGroupBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_initial_option(self, initial_option: Option<Opt>) -> Self {
+    pub fn set_initial_option(self, initial_option: Option<Opt<Text>>) -> Self {
         Self {
             initial_option,
             ..self
@@ -191,11 +194,12 @@ impl RadioButtonGroupBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::RadioButtonGroup;
-    /// # use slack_messaging::composition_objects::Opt;
+    /// # use slack_messaging::composition_objects::{Opt, Text};
+    /// # use slack_messaging::plain_text;
     /// let radio = RadioButtonGroup::builder()
     ///     .initial_option(
-    ///         Opt::builder()
-    ///             .text("Radio 1")
+    ///         Opt::<Text>::builder()
+    ///             .text(plain_text!("Radio 1"))
     ///             .value("A1")
     ///             .build(),
     ///     )
@@ -217,7 +221,7 @@ impl RadioButtonGroupBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn initial_option(self, initial_option: Opt) -> Self {
+    pub fn initial_option(self, initial_option: Opt<Text>) -> Self {
         self.set_initial_option(Some(initial_option))
     }
 
@@ -380,12 +384,12 @@ impl RadioButtonGroupBuilder {
     }
 
     /// Get options value.
-    pub fn get_options(&self) -> &[Opt] {
+    pub fn get_options(&self) -> &[Opt<Text>] {
         &self.options
     }
 
     /// Get initial_option value.
-    pub fn get_initial_option(&self) -> &Option<Opt> {
+    pub fn get_initial_option(&self) -> &Option<Opt<Text>> {
         &self.initial_option
     }
 

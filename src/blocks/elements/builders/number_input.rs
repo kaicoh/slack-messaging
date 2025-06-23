@@ -1,6 +1,6 @@
 use super::{
     NumberInput,
-    composition_objects::{DispatchActionConfiguration, Text},
+    composition_objects::{DispatchActionConfiguration, PlainText},
 };
 
 impl NumberInput {
@@ -20,7 +20,7 @@ pub struct NumberInputBuilder {
     max_value: Option<String>,
     dispatch_action_config: Option<DispatchActionConfiguration>,
     focus_on_load: Option<bool>,
-    placeholder: Option<Text>,
+    placeholder: Option<PlainText>,
 }
 
 impl NumberInputBuilder {
@@ -375,11 +375,11 @@ impl NumberInputBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::NumberInput;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::PlainText;
     /// let num = NumberInput::builder()
     ///     .set_placeholder(
-    ///         Some(Text::builder()
-    ///             .plain_text("How old are you?")
+    ///         Some(PlainText::builder()
+    ///             .text("How old are you?")
     ///             .build())
     ///     )
     ///     .is_decimal_allowed(false)
@@ -398,7 +398,7 @@ impl NumberInputBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
+    pub fn set_placeholder(self, placeholder: Option<PlainText>) -> Self {
         Self {
             placeholder,
             ..self
@@ -428,7 +428,7 @@ impl NumberInputBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(placeholder.into()).build();
+        let text = PlainText::builder().text(placeholder).build();
         self.set_placeholder(Some(text))
     }
 
@@ -485,7 +485,7 @@ impl NumberInputBuilder {
     }
 
     /// Get action_id value.
-    pub fn get_placeholder(&self) -> &Option<Text> {
+    pub fn get_placeholder(&self) -> &Option<PlainText> {
         &self.placeholder
     }
 }

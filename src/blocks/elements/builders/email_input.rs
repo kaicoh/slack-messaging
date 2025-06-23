@@ -1,6 +1,6 @@
 use super::{
     EmailInput,
-    composition_objects::{DispatchActionConfiguration, Text},
+    composition_objects::{DispatchActionConfiguration, PlainText},
 };
 
 impl EmailInput {
@@ -17,7 +17,7 @@ pub struct EmailInputBuilder {
     initial_value: Option<String>,
     dispatch_action_config: Option<DispatchActionConfiguration>,
     focus_on_load: Option<bool>,
-    placeholder: Option<Text>,
+    placeholder: Option<PlainText>,
 }
 
 impl EmailInputBuilder {
@@ -220,11 +220,11 @@ impl EmailInputBuilder {
     ///
     /// ```
     /// # use slack_messaging::blocks::elements::EmailInput;
-    /// # use slack_messaging::composition_objects::Text;
+    /// # use slack_messaging::composition_objects::PlainText;
     /// let email = EmailInput::builder()
     ///     .set_placeholder(
-    ///         Some(Text::builder()
-    ///             .plain_text("Enter your email.")
+    ///         Some(PlainText::builder()
+    ///             .text("Enter your email.")
     ///             .build())
     ///     )
     ///     .build();
@@ -241,7 +241,7 @@ impl EmailInputBuilder {
     ///
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_placeholder(self, placeholder: Option<Text>) -> Self {
+    pub fn set_placeholder(self, placeholder: Option<PlainText>) -> Self {
         Self {
             placeholder,
             ..self
@@ -269,7 +269,7 @@ impl EmailInputBuilder {
     /// assert_eq!(json, expected);
     /// ```
     pub fn placeholder(self, placeholder: impl Into<String>) -> Self {
-        let text = Text::builder().plain_text(placeholder.into()).build();
+        let text = PlainText::builder().text(placeholder.into()).build();
         self.set_placeholder(Some(text))
     }
 
@@ -306,7 +306,7 @@ impl EmailInputBuilder {
     }
 
     /// Get action_id value.
-    pub fn get_placeholder(&self) -> &Option<Text> {
+    pub fn get_placeholder(&self) -> &Option<PlainText> {
         &self.placeholder
     }
 }

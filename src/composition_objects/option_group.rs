@@ -1,4 +1,4 @@
-use super::{Opt, Text};
+use super::{Opt, PlainText};
 use serde::Serialize;
 
 /// [Option group object](https://docs.slack.dev/reference/block-kit/composition-objects/option-group-object)
@@ -8,17 +8,18 @@ use serde::Serialize;
 ///
 /// ```
 /// # use slack_messaging::composition_objects::{OptGroup, Opt};
+/// # use slack_messaging::plain_text;
 /// let options = OptGroup::builder()
 ///     .label("Group One")
 ///     .option(
 ///         Opt::builder()
-///             .text("option-0")
+///             .text(plain_text!("option-0"))
 ///             .value("value-0")
 ///             .build()
 ///     )
 ///     .option(
 ///         Opt::builder()
-///             .text("option-1")
+///             .text(plain_text!("option-1"))
 ///             .value("value-1")
 ///             .build()
 ///     )
@@ -53,6 +54,6 @@ use serde::Serialize;
 /// ```
 #[derive(Debug, Clone, Serialize)]
 pub struct OptGroup {
-    pub(super) label: Text,
+    pub(super) label: PlainText,
     pub(super) options: Vec<Opt>,
 }
