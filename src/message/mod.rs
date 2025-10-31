@@ -108,4 +108,7 @@ pub struct Message {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(super) delete_original: Option<bool>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(super) reply_broadcast: Option<bool>,
 }

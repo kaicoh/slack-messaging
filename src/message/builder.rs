@@ -17,6 +17,7 @@ pub struct MessageBuilder {
     response_type: Option<String>,
     replace_original: Option<bool>,
     delete_original: Option<bool>,
+    reply_broadcast: Option<bool>,
 }
 
 impl MessageBuilder {
@@ -363,6 +364,46 @@ impl MessageBuilder {
         self.set_delete_original(Some(delete_original))
     }
 
+    /// Set reply_broadcast field.
+    ///
+    /// ```
+    /// # use slack_messaging::Message;
+    /// let message = Message::builder()
+    ///     .set_reply_broadcast(Some(true))
+    ///     .build();
+    /// 
+    /// let expected = serde_json::json!({
+    ///     "reply_broadcast": true,
+    /// });
+    ///
+    /// let json = serde_json::to_value(message).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn set_reply_broadcast(self, reply_broadcast: Option<bool>) -> Self {
+        Self { reply_broadcast, ..self }
+    }
+
+    /// Set reply_broadcast field.
+    ///
+    /// ```
+    /// # use slack_messaging::Message;
+    /// let message = Message::builder()
+    ///     .reply_broadcast(true)
+    ///     .build();
+    ///
+    /// let expected = serde_json::json!({
+    ///     "reply_broadcast": true,
+    /// });
+    ///
+    /// let json = serde_json::to_value(message).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// ```
+    pub fn reply_broadcast(self, reply_broadcast: bool) -> Self {
+        self.set_reply_broadcast(Some(reply_broadcast))
+    }
+
     /// Build a [`Message`] object.
     pub fn build(self) -> Message {
         Message {
@@ -373,6 +414,7 @@ impl MessageBuilder {
             response_type: self.response_type,
             replace_original: self.replace_original,
             delete_original: self.delete_original,
+            reply_broadcast: self.reply_broadcast,
         }
     }
 
@@ -409,5 +451,10 @@ impl MessageBuilder {
     /// Get delete_original value.
     pub fn get_delete_original(&self) -> &Option<bool> {
         &self.delete_original
+    }
+
+    /// Get reply_broadcast value.
+    pub fn get_reply_broadcast(&self) -> &Option<bool> {
+        &self.reply_broadcast
     }
 }
