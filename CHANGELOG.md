@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.1][] - 2025-11-01
+
+- https://github.com/kaicoh/slack-messaging/pull/19 `reply_broadcast` Message Parameter.
+
 ## [0.5.0][] - 2025-06-23
 
 - Strict type check for text object.
@@ -73,6 +77,7 @@ And the `select menu element` and the `multi-select menu element` are renewed.
 
 - pre-release
 
+[0.5.1]: https://github.com/kaicoh/slack-messaging/releases/v0.5.1
 [0.5.0]: https://github.com/kaicoh/slack-messaging/releases/v0.5.0
 [0.4.1]: https://github.com/kaicoh/slack-messaging/releases/v0.4.1
 [0.4.0]: https://github.com/kaicoh/slack-messaging/releases/v0.4.0
