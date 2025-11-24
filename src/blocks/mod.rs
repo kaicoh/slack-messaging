@@ -18,7 +18,11 @@ mod video;
 use super::composition_objects;
 use serde::Serialize;
 
+/// Module for building [`RichText`] block.
 pub mod rich_text;
+/// Module for building [`Table`] block.
+pub mod table;
+
 pub use actions::{Actions, ActionsElement};
 pub use context::{Context, ContextElement};
 pub use divider::Divider;
@@ -29,6 +33,7 @@ pub use input::{Input, InputElement};
 pub use markdown::Markdown;
 pub use rich_text::{RichText, RichTextElement};
 pub use section::{Accessory, Section};
+pub use table::Table;
 pub use video::Video;
 
 /// Objects that can be set to blocks in [Message](crate::message::Message).
@@ -65,6 +70,9 @@ pub enum Block {
     /// [Section block](https://docs.slack.dev/reference/block-kit/blocks/section-block) representation
     Section(Box<Section>),
 
+    /// [Table block](https://docs.slack.dev/reference/block-kit/blocks/table-block) representation
+    Table(Box<Table>),
+
     /// [Video block](https://docs.slack.dev/reference/block-kit/blocks/video-block) representation
     Video(Box<Video>),
 }
@@ -92,5 +100,6 @@ block_from! {
     Markdown,
     RichText,
     Section,
+    Table,
     Video
 }
