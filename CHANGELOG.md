@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.2][] - 2025-11-24
+
+- https://github.com/kaicoh/slack-messaging/pull/21 Support `Table` block.
+
 ## [0.5.1][] - 2025-11-01
 
 - https://github.com/kaicoh/slack-messaging/pull/19 `reply_broadcast` Message Parameter.
