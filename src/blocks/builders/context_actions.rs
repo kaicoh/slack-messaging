@@ -7,7 +7,7 @@ impl ContextActions {
     }
 }
 
-/// Builder for [`Context`] object.
+/// Builder for [`ContextActions`] object.
 #[derive(Debug, Default)]
 pub struct ContextActionsBuilder {
     elements: Vec<ContextActionsElement>,
