@@ -6,6 +6,7 @@ pub mod elements;
 
 mod actions;
 mod context;
+mod context_actions;
 mod divider;
 mod file;
 mod header;
@@ -25,6 +26,7 @@ pub mod table;
 
 pub use actions::{Actions, ActionsElement};
 pub use context::{Context, ContextElement};
+pub use context_actions::{ContextActions, ContextActionsElement};
 pub use divider::Divider;
 pub use file::{File, FileSource};
 pub use header::Header;
@@ -45,6 +47,9 @@ pub enum Block {
 
     /// [Context block](https://docs.slack.dev/reference/block-kit/blocks/context-block) representation
     Context(Box<Context>),
+
+    /// [Context actions block](https://docs.slack.dev/reference/block-kit/blocks/context-actions-block) representation
+    ContextActions(Box<ContextActions>),
 
     /// [Divider block](https://docs.slack.dev/reference/block-kit/blocks/divider-block) representation
     Divider(Box<Divider>),
@@ -92,6 +97,7 @@ macro_rules! block_from {
 block_from! {
     Actions,
     Context,
+    ContextActions,
     Divider,
     File,
     Header,
