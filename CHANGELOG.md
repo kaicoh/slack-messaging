@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.5.3][] - 2025-11-26
+
+- https://github.com/kaicoh/slack-messaging/pull/23 Support `ContextActions` block.
+
 ## [0.5.2][] - 2025-11-24
 
 - https://github.com/kaicoh/slack-messaging/pull/21 Support `Table` block.
@@ -81,6 +85,7 @@ And the `select menu element` and the `multi-select menu element` are renewed.
 
 - pre-release
 
+[0.5.3]: https://github.com/kaicoh/slack-messaging/releases/v0.5.3
 [0.5.2]: https://github.com/kaicoh/slack-messaging/releases/v0.5.2
 [0.5.1]: https://github.com/kaicoh/slack-messaging/releases/v0.5.1
 [0.5.0]: https://github.com/kaicoh/slack-messaging/releases/v0.5.0
