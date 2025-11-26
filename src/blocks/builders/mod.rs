@@ -2,6 +2,7 @@ use super::*;
 
 mod actions;
 mod context;
+mod context_actions;
 mod divider;
 mod file;
 mod header;
@@ -15,6 +16,7 @@ mod video;
 
 pub use actions::ActionsBuilder;
 pub use context::ContextBuilder;
+pub use context_actions::ContextActionsBuilder;
 pub use divider::DividerBuilder;
 pub use file::FileBuilder;
 pub use header::HeaderBuilder;
