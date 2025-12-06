@@ -6,6 +6,7 @@ use serde::Serialize;
 ///
 /// The Builder returns [`ConfirmationDialogError`](crate::composition_objects::builders::ConfirmationDialogError),
 /// if your object has any validation errors.
+///
 /// # Example
 ///
 /// ```

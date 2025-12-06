@@ -73,11 +73,12 @@ impl MrkdwnTextBuilder {
     /// ```
     /// use slack_messaging::Builder;
     /// use slack_messaging::composition_objects::MrkdwnText;
+    /// # use std::error::Error;
     ///
+    /// # fn try_main() -> Result<(), Box<dyn Error>> {
     /// let text = MrkdwnText::builder()
     ///     .set_text(Some("hello world".into()))
-    ///     .build()
-    ///     .unwrap(); // unwrap Result::Ok
+    ///     .build()?;
     ///
     /// let expected = serde_json::json!({
     ///     "type": "mrkdwn",
@@ -86,6 +87,11 @@ impl MrkdwnTextBuilder {
     ///
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
+    /// #     Ok(())
+    /// # }
+    /// # fn main() {
+    /// #     try_main().unwrap()
+    /// # }
     /// ```
     pub fn set_text(self, text: Option<String>) -> Self {
         Self {
@@ -99,11 +105,12 @@ impl MrkdwnTextBuilder {
     /// ```
     /// use slack_messaging::Builder;
     /// use slack_messaging::composition_objects::MrkdwnText;
+    /// # use std::error::Error;
     ///
+    /// # fn try_main() -> Result<(), Box<dyn Error>> {
     /// let text = MrkdwnText::builder()
     ///     .text("hello world")
-    ///     .build()
-    ///     .unwrap(); // unwrap Result::Ok
+    ///     .build()?;
     ///
     /// let expected = serde_json::json!({
     ///     "type": "mrkdwn",
@@ -112,14 +119,19 @@ impl MrkdwnTextBuilder {
     ///
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
+    /// #     Ok(())
+    /// # }
+    /// # fn main() {
+    /// #     try_main().unwrap()
+    /// # }
     /// ```
     pub fn text(self, text: impl Into<String>) -> Self {
         self.set_text(Some(text.into()))
     }
 
     /// get verbatim field value
-    pub fn get_verbatim(&self) -> Option<&bool> {
-        self.verbatim.inner_ref()
+    pub fn get_verbatim(&self) -> Option<bool> {
+        self.verbatim.inner_ref().copied()
     }
 
     /// set verbatim field value
@@ -127,12 +139,13 @@ impl MrkdwnTextBuilder {
     /// ```
     /// use slack_messaging::Builder;
     /// use slack_messaging::composition_objects::MrkdwnText;
+    /// # use std::error::Error;
     ///
+    /// # fn try_main() -> Result<(), Box<dyn Error>> {
     /// let text = MrkdwnText::builder()
     ///     .text(":smile:")
     ///     .set_verbatim(Some(true))
-    ///     .build()
-    ///     .unwrap(); // unwrap Result::Ok
+    ///     .build()?;
     ///
     /// let expected = serde_json::json!({
     ///     "type": "mrkdwn",
@@ -142,6 +155,11 @@ impl MrkdwnTextBuilder {
     ///
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
+    /// #     Ok(())
+    /// # }
+    /// # fn main() {
+    /// #     try_main().unwrap()
+    /// # }
     /// ```
     pub fn set_verbatim(self, verbatim: Option<bool>) -> Self {
         Self {
@@ -155,7 +173,9 @@ impl MrkdwnTextBuilder {
     /// ```
     /// use slack_messaging::Builder;
     /// use slack_messaging::composition_objects::MrkdwnText;
+    /// # use std::error::Error;
     ///
+    /// # fn try_main() -> Result<(), Box<dyn Error>> {
     /// let text = MrkdwnText::builder()
     ///     .text(":smile:")
     ///     .verbatim(true)
@@ -170,6 +190,11 @@ impl MrkdwnTextBuilder {
     ///
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
+    /// #     Ok(())
+    /// # }
+    /// # fn main() {
+    /// #     try_main().unwrap()
+    /// # }
     /// ```
     pub fn verbatim(self, verbatim: bool) -> Self {
         self.set_verbatim(Some(verbatim))

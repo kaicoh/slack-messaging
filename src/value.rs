@@ -18,6 +18,10 @@ impl<T> Value<T> {
         self.inner.as_ref()
     }
 
+    pub(crate) fn take_inner(&mut self) -> Option<T> {
+        self.inner.take()
+    }
+
     pub(crate) fn push(&mut self, error: ValidationError) {
         self.errors.push(error);
     }
@@ -42,6 +46,7 @@ macro_rules! impl_merge {
 type E = Vec<ValidationError>;
 
 impl_merge!(merge_2, (v0, T0, E), (v1, T1, E));
+impl_merge!(merge_3, (v0, T0, E), (v1, T1, E), (v2, T2, E));
 impl_merge!(
     merge_5,
     (v0, T0, E),

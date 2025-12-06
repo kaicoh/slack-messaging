@@ -73,11 +73,12 @@ impl PlainTextBuilder {
     /// ```
     /// use slack_messaging::Builder;
     /// use slack_messaging::composition_objects::PlainText;
+    /// # use std::error::Error;
     ///
+    /// # fn try_main() -> Result<(), Box<dyn Error>> {
     /// let text = PlainText::builder()
     ///     .set_text(Some("hello world".into()))
-    ///     .build()
-    ///     .unwrap(); // unwrap Result::Ok
+    ///     .build()?;
     ///
     /// let expected = serde_json::json!({
     ///     "type": "plain_text",
@@ -86,6 +87,11 @@ impl PlainTextBuilder {
     ///
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
+    /// #     Ok(())
+    /// # }
+    /// # fn main() {
+    /// #     try_main().unwrap()
+    /// # }
     /// ```
     pub fn set_text(self, text: Option<String>) -> Self {
         Self {
@@ -99,11 +105,12 @@ impl PlainTextBuilder {
     /// ```
     /// use slack_messaging::Builder;
     /// use slack_messaging::composition_objects::PlainText;
+    /// # use std::error::Error;
     ///
+    /// # fn try_main() -> Result<(), Box<dyn Error>> {
     /// let text = PlainText::builder()
     ///     .text("hello world")
-    ///     .build()
-    ///     .unwrap(); // unwrap Result::Ok
+    ///     .build()?;
     ///
     /// let expected = serde_json::json!({
     ///     "type": "plain_text",
@@ -112,14 +119,19 @@ impl PlainTextBuilder {
     ///
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
+    /// #     Ok(())
+    /// # }
+    /// # fn main() {
+    /// #     try_main().unwrap()
+    /// # }
     /// ```
     pub fn text(self, text: impl Into<String>) -> Self {
         self.set_text(Some(text.into()))
     }
 
     /// get emoji field value
-    pub fn get_emoji(&self) -> Option<&bool> {
-        self.emoji.inner_ref()
+    pub fn get_emoji(&self) -> Option<bool> {
+        self.emoji.inner_ref().copied()
     }
 
     /// set emoji field value
@@ -127,12 +139,13 @@ impl PlainTextBuilder {
     /// ```
     /// use slack_messaging::Builder;
     /// use slack_messaging::composition_objects::PlainText;
+    /// # use std::error::Error;
     ///
+    /// # fn try_main() -> Result<(), Box<dyn Error>> {
     /// let text = PlainText::builder()
     ///     .text(":smile:")
     ///     .set_emoji(Some(true))
-    ///     .build()
-    ///     .unwrap(); // unwrap Result::Ok
+    ///     .build()?;
     ///
     /// let expected = serde_json::json!({
     ///     "type": "plain_text",
@@ -142,6 +155,11 @@ impl PlainTextBuilder {
     ///
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
+    /// #     Ok(())
+    /// # }
+    /// # fn main() {
+    /// #     try_main().unwrap()
+    /// # }
     /// ```
     pub fn set_emoji(self, emoji: Option<bool>) -> Self {
         Self {
@@ -155,12 +173,13 @@ impl PlainTextBuilder {
     /// ```
     /// use slack_messaging::Builder;
     /// use slack_messaging::composition_objects::PlainText;
+    /// # use std::error::Error;
     ///
+    /// # fn try_main() -> Result<(), Box<dyn Error>> {
     /// let text = PlainText::builder()
     ///     .text(":smile:")
     ///     .emoji(true)
-    ///     .build()
-    ///     .unwrap(); // unwrap Result::Ok
+    ///     .build()?;
     ///
     /// let expected = serde_json::json!({
     ///     "type": "plain_text",
@@ -170,6 +189,11 @@ impl PlainTextBuilder {
     ///
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
+    /// #     Ok(())
+    /// # }
+    /// # fn main() {
+    /// #     try_main().unwrap()
+    /// # }
     /// ```
     pub fn emoji(self, emoji: bool) -> Self {
         self.set_emoji(Some(emoji))
