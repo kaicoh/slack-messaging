@@ -7,7 +7,7 @@ use std::error::Error;
 use std::fmt;
 
 impl ConversationFilter {
-    /// Construct a [`ConversationFilter`].
+    /// Construct a [`ConversationFilterBuilder`].
     pub fn builder() -> ConversationFilterBuilder {
         ConversationFilterBuilder::default()
     }

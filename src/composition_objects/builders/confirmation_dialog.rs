@@ -7,7 +7,7 @@ use std::error::Error;
 use std::fmt;
 
 impl ConfirmationDialog {
-    /// Construct a [`ConfirmationDialog`].
+    /// Construct a [`ConfirmationDialogBuilder`].
     pub fn builder() -> ConfirmationDialogBuilder {
         ConfirmationDialogBuilder::default()
     }
