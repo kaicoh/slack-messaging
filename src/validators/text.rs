@@ -6,14 +6,14 @@ type Text = Value<String>;
 
 fn max(max: usize, mut value: Text) -> Text {
     if value.inner_ref().is_some_and(|v| v.len() > max) {
-        value.push(ValidationErrorKind::MaxTextLegth(max));
+        value.push(ValidationError::MaxTextLegth(max));
     }
     value
 }
 
 fn min(min: usize, mut value: Text) -> Text {
     if value.inner_ref().as_ref().is_some_and(|v| v.len() < min) {
-        value.push(ValidationErrorKind::MinTextLegth(min));
+        value.push(ValidationError::MinTextLegth(min));
     }
     value
 }
@@ -50,7 +50,7 @@ mod tests {
         let text_3001 = "a".repeat(3001);
         let value: Value<String> = Value::new(Some(text_3001));
         let result = max_3000(value);
-        assert_eq!(result.errors, vec![ValidationErrorKind::MaxTextLegth(3000)]);
+        assert_eq!(result.errors, vec![ValidationError::MaxTextLegth(3000)]);
     }
 
     #[test]
@@ -63,6 +63,6 @@ mod tests {
         let text_0 = "".to_string();
         let value: Value<String> = Value::new(Some(text_0));
         let result = min_1(value);
-        assert_eq!(result.errors, vec![ValidationErrorKind::MinTextLegth(1)]);
+        assert_eq!(result.errors, vec![ValidationError::MinTextLegth(1)]);
     }
 }

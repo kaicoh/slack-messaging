@@ -1,68 +1,68 @@
 use super::error::ValidationError;
 use super::validators;
 use super::value::{self, Value};
-use super::{Builder, PlainText};
+use super::{Builder, MrkdwnText};
 
 use std::error::Error;
 use std::fmt;
 
-impl PlainText {
-    /// Construct a [`PlainTextBuilder`].
-    pub fn builder() -> PlainTextBuilder {
-        PlainTextBuilder::default()
+impl MrkdwnText {
+    /// Construct a [`MrkdwnTextBuilder`].
+    pub fn builder() -> MrkdwnTextBuilder {
+        MrkdwnTextBuilder::default()
     }
 }
 
-/// Error while building [`PlainText`] object.
+/// Error while building [`MrkdwnText`] object.
 #[derive(Debug, Clone, PartialEq)]
-pub struct PlainTextError {
+pub struct MrkdwnTextError {
     /// errors of text field
     pub text: Vec<ValidationError>,
 
-    /// errors of emoji field
-    pub emoji: Vec<ValidationError>,
+    /// errors of verbatim field
+    pub verbatim: Vec<ValidationError>,
 }
 
-impl fmt::Display for PlainTextError {
+impl fmt::Display for MrkdwnTextError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "PlainTextError {{ text: {:?}, emoji: {:?} }}",
-            self.text, self.emoji,
+            "MrkdwnTextError {{ text: {:?}, verbatim: {:?} }}",
+            self.text, self.verbatim,
         )
     }
 }
 
-impl Error for PlainTextError {}
+impl Error for MrkdwnTextError {}
 
-/// Builder for [`PlainText`] object.
+/// Builder for [`MrkdwnText`] object.
 #[derive(Debug)]
-pub struct PlainTextBuilder {
+pub struct MrkdwnTextBuilder {
     text: Value<String>,
-    emoji: Value<bool>,
+    verbatim: Value<bool>,
 }
 
-impl Default for PlainTextBuilder {
+impl Default for MrkdwnTextBuilder {
     fn default() -> Self {
-        PlainTextBuilder {
+        MrkdwnTextBuilder {
             text: new_text(None),
-            emoji: new_emoji(None),
+            verbatim: new_verbatim(None),
         }
     }
 }
 
-impl Builder for PlainTextBuilder {
-    type Target = PlainText;
-    type Error = PlainTextError;
+impl Builder for MrkdwnTextBuilder {
+    type Target = MrkdwnText;
+    type Error = MrkdwnTextError;
 
     fn build(self) -> Result<Self::Target, Self::Error> {
-        value::merge_2(self.text, self.emoji)
-            .map(|(text, emoji)| PlainText { text, emoji })
-            .map_err(|(text, emoji)| PlainTextError { text, emoji })
+        value::merge_2(self.text, self.verbatim)
+            .map(|(text, verbatim)| MrkdwnText { text, verbatim })
+            .map_err(|(text, verbatim)| MrkdwnTextError { text, verbatim })
     }
 }
 
-impl PlainTextBuilder {
+impl MrkdwnTextBuilder {
     /// get text field value
     pub fn get_text(&self) -> Option<&String> {
         self.text.inner_ref()
@@ -72,15 +72,15 @@ impl PlainTextBuilder {
     ///
     /// ```
     /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::PlainText;
+    /// use slack_messaging::composition_objects::MrkdwnText;
     ///
-    /// let text = PlainText::builder()
+    /// let text = MrkdwnText::builder()
     ///     .set_text(Some("hello world".into()))
     ///     .build()
     ///     .unwrap(); // unwrap Result::Ok
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "plain_text",
+    ///     "type": "mrkdwn",
     ///     "text": "hello world",
     /// });
     ///
@@ -98,15 +98,15 @@ impl PlainTextBuilder {
     ///
     /// ```
     /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::PlainText;
+    /// use slack_messaging::composition_objects::MrkdwnText;
     ///
-    /// let text = PlainText::builder()
+    /// let text = MrkdwnText::builder()
     ///     .text("hello world")
     ///     .build()
     ///     .unwrap(); // unwrap Result::Ok
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "plain_text",
+    ///     "type": "mrkdwn",
     ///     "text": "hello world",
     /// });
     ///
@@ -117,62 +117,62 @@ impl PlainTextBuilder {
         self.set_text(Some(text.into()))
     }
 
-    /// get emoji field value
-    pub fn get_emoji(&self) -> Option<&bool> {
-        self.emoji.inner_ref()
+    /// get verbatim field value
+    pub fn get_verbatim(&self) -> Option<&bool> {
+        self.verbatim.inner_ref()
     }
 
-    /// set emoji field value
+    /// set verbatim field value
     ///
     /// ```
     /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::PlainText;
+    /// use slack_messaging::composition_objects::MrkdwnText;
     ///
-    /// let text = PlainText::builder()
+    /// let text = MrkdwnText::builder()
     ///     .text(":smile:")
-    ///     .set_emoji(Some(true))
+    ///     .set_verbatim(Some(true))
     ///     .build()
     ///     .unwrap(); // unwrap Result::Ok
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "plain_text",
+    ///     "type": "mrkdwn",
     ///     "text": ":smile:",
-    ///     "emoji": true,
+    ///     "verbatim": true,
     /// });
     ///
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
     /// ```
-    pub fn set_emoji(self, emoji: Option<bool>) -> Self {
+    pub fn set_verbatim(self, verbatim: Option<bool>) -> Self {
         Self {
-            emoji: new_emoji(emoji),
+            verbatim: new_verbatim(verbatim),
             ..self
         }
     }
 
-    /// set emoji field value
+    /// set verbatim field value
     ///
     /// ```
     /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::PlainText;
+    /// use slack_messaging::composition_objects::MrkdwnText;
     ///
-    /// let text = PlainText::builder()
+    /// let text = MrkdwnText::builder()
     ///     .text(":smile:")
-    ///     .emoji(true)
+    ///     .verbatim(true)
     ///     .build()
     ///     .unwrap(); // unwrap Result::Ok
     ///
     /// let expected = serde_json::json!({
-    ///     "type": "plain_text",
+    ///     "type": "mrkdwn",
     ///     "text": ":smile:",
-    ///     "emoji": true,
+    ///     "verbatim": true,
     /// });
     ///
     /// let json = serde_json::to_value(text).unwrap();
     /// assert_eq!(json, expected);
     /// ```
-    pub fn emoji(self, emoji: bool) -> Self {
-        self.set_emoji(Some(emoji))
+    pub fn verbatim(self, verbatim: bool) -> Self {
+        self.set_verbatim(Some(verbatim))
     }
 }
 
@@ -185,8 +185,8 @@ fn new_text(text: Option<String>) -> Value<String> {
     }
 }
 
-fn new_emoji(emoji: Option<bool>) -> Value<bool> {
-    pipe! { Value::new(emoji) => validators::do_nothing }
+fn new_verbatim(verbatim: Option<bool>) -> Value<bool> {
+    pipe! { Value::new(verbatim) => validators::do_nothing }
 }
 
 #[cfg(test)]
@@ -194,53 +194,56 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_builds_plain_text() {
-        let result = PlainText::builder().text("hello world").emoji(true).build();
+    fn it_builds_mrkdwn() {
+        let result = MrkdwnText::builder()
+            .text("hello world")
+            .verbatim(true)
+            .build();
         assert!(result.is_ok());
 
         let val = result.unwrap();
-        let expected = PlainText {
+        let expected = MrkdwnText {
             text: Some("hello world".into()),
-            emoji: Some(true),
+            verbatim: Some(true),
         };
         assert_eq!(val, expected);
     }
 
     #[test]
     fn default_builder_returns_text_required_error() {
-        let result = PlainText::builder().build();
+        let result = MrkdwnText::builder().build();
         assert!(result.is_err());
 
         let err = result.unwrap_err();
-        let expected = PlainTextError {
+        let expected = MrkdwnTextError {
             text: vec![ValidationError::Required],
-            emoji: vec![],
+            verbatim: vec![],
         };
         assert_eq!(err, expected);
     }
 
     #[test]
     fn builder_can_return_min_text_1_error() {
-        let result = PlainText::builder().text("").build();
+        let result = MrkdwnText::builder().text("").build();
         assert!(result.is_err());
 
         let err = result.unwrap_err();
-        let expected = PlainTextError {
+        let expected = MrkdwnTextError {
             text: vec![ValidationError::MinTextLegth(1)],
-            emoji: vec![],
+            verbatim: vec![],
         };
         assert_eq!(err, expected);
     }
 
     #[test]
     fn builder_can_return_max_text_3000_error() {
-        let result = PlainText::builder().text("a".repeat(3001)).build();
+        let result = MrkdwnText::builder().text("a".repeat(3001)).build();
         assert!(result.is_err());
 
         let err = result.unwrap_err();
-        let expected = PlainTextError {
+        let expected = MrkdwnTextError {
             text: vec![ValidationError::MaxTextLegth(3000)],
-            emoji: vec![],
+            verbatim: vec![],
         };
         assert_eq!(err, expected);
     }

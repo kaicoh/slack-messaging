@@ -1,9 +1,9 @@
-use super::error::ValidationErrorKind;
+use super::error::ValidationError;
 
 #[derive(Debug)]
 pub(crate) struct Value<T> {
     pub(crate) inner: Option<T>,
-    pub(crate) errors: Vec<ValidationErrorKind>,
+    pub(crate) errors: Vec<ValidationError>,
 }
 
 impl<T> Value<T> {
@@ -18,7 +18,7 @@ impl<T> Value<T> {
         self.inner.as_ref()
     }
 
-    pub(crate) fn push(&mut self, error: ValidationErrorKind) {
+    pub(crate) fn push(&mut self, error: ValidationError) {
         self.errors.push(error);
     }
 
@@ -39,6 +39,6 @@ macro_rules! impl_merge {
     };
 }
 
-type E = Vec<ValidationErrorKind>;
+type E = Vec<ValidationError>;
 
 impl_merge!(merge_2, (v0, T0, E), (v1, T1, E));

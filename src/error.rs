@@ -1,7 +1,7 @@
 use thiserror::Error;
 
 #[derive(Debug, Clone, Copy, PartialEq, Error)]
-pub enum ValidationErrorKind {
+pub enum ValidationError {
     #[error("required")]
     Required,
 
