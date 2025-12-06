@@ -43,12 +43,12 @@ mod tests {
     #[test]
     fn max_3000_sets_error_if_the_value_has_more_than_3000_characters() {
         let text_3000 = "a".repeat(3000);
-        let value: Value<String> = Value::new(Some(text_3000));
+        let value: Text = Value::new(Some(text_3000));
         let result = max_3000(value);
         assert!(result.errors.is_empty());
 
         let text_3001 = "a".repeat(3001);
-        let value: Value<String> = Value::new(Some(text_3001));
+        let value: Text = Value::new(Some(text_3001));
         let result = max_3000(value);
         assert_eq!(result.errors, vec![ValidationError::MaxTextLegth(3000)]);
     }
@@ -56,12 +56,12 @@ mod tests {
     #[test]
     fn min_1_sets_error_if_the_value_has_empty_string() {
         let text_1 = "a".to_string();
-        let value: Value<String> = Value::new(Some(text_1));
+        let value: Text = Value::new(Some(text_1));
         let result = min_1(value);
         assert!(result.errors.is_empty());
 
         let text_0 = "".to_string();
-        let value: Value<String> = Value::new(Some(text_0));
+        let value: Text = Value::new(Some(text_0));
         let result = min_1(value);
         assert_eq!(result.errors, vec![ValidationError::MinTextLegth(1)]);
     }

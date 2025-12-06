@@ -1,6 +1,8 @@
+use super::composition_objects;
 use super::error::ValidationError;
 use super::value::Value;
 
+pub(crate) mod objects;
 pub(crate) mod text;
 
 pub(crate) fn required<T>(mut value: Value<T>) -> Value<T> {

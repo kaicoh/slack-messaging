@@ -9,11 +9,12 @@ use serde::Serialize;
 ///```
 /// use slack_messaging::Builder;
 /// use slack_messaging::composition_objects::PlainText;
+/// # use std::error::Error;
 ///
+/// # fn try_main() -> Result<(), Box<dyn Error>> {
 /// let text = PlainText::builder()
 ///     .text("Hello, World!")
-///     .build()
-///     .unwrap(); // unwrap Result::Ok
+///     .build()?;
 ///
 /// let json = serde_json::to_value(text).unwrap();
 ///
@@ -30,14 +31,19 @@ use serde::Serialize;
 ///     .build();
 ///
 /// assert!(text.is_err());
+/// #     Ok(())
+/// # }
+/// # fn main() {
+/// #     try_main().unwrap()
+/// # }
 ///```
 #[derive(Debug, Clone, Serialize)]
 #[serde(tag = "type", rename = "plain_text")]
 pub struct PlainText {
-    pub(super) text: Option<String>,
+    pub(crate) text: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) emoji: Option<bool>,
+    pub(crate) emoji: Option<bool>,
 }
 
 impl PartialEq for PlainText {
