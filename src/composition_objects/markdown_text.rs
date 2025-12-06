@@ -1,3 +1,4 @@
+use super::TextObject;
 use serde::Serialize;
 
 /// Markdown [text object](https://docs.slack.dev/reference/block-kit/composition-objects/text-object)
@@ -57,6 +58,12 @@ impl PartialEq for MrkdwnText {
             }
             _ => false,
         }
+    }
+}
+
+impl TextObject for MrkdwnText {
+    fn text(&self) -> Option<&String> {
+        self.text.as_ref()
     }
 }
 

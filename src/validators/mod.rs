@@ -2,8 +2,8 @@ use super::composition_objects;
 use super::error::ValidationError;
 use super::value::Value;
 
-pub(crate) mod objects;
 pub(crate) mod text;
+pub(crate) mod text_object;
 
 pub(crate) fn required<T>(mut value: Value<T>) -> Value<T> {
     if value.inner_ref().is_none() {

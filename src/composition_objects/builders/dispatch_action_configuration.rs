@@ -149,3 +149,22 @@ impl DispatchActionConfigurationBuilder {
 fn new_trigger_actions_on(value: Option<Vec<TriggerAction>>) -> Value<Vec<TriggerAction>> {
     pipe! { Value::new(value) => validators::do_nothing }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_builds_dispatch_action_configuration() {
+        let result = DispatchActionConfiguration::builder()
+            .trigger_actions_on(TriggerAction::OnEnterPressed)
+            .build();
+        assert!(result.is_ok());
+
+        let val = result.unwrap();
+        let expected = DispatchActionConfiguration {
+            trigger_actions_on: vec![TriggerAction::OnEnterPressed],
+        };
+        assert_eq!(val, expected);
+    }
+}

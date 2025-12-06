@@ -640,7 +640,7 @@ fn new_title(title: Option<PlainText>) -> Value<PlainText> {
     pipe! {
         Value::new(title) =>
             validators::required |
-            validators::objects::plain_text::max_100
+            validators::text_object::max_100
     }
 }
 
@@ -648,7 +648,7 @@ fn new_text(text: Option<PlainText>) -> Value<PlainText> {
     pipe! {
         Value::new(text) =>
             validators::required |
-            validators::objects::plain_text::max_300
+            validators::text_object::max_300
     }
 }
 
@@ -656,7 +656,7 @@ fn new_confirm(confirm: Option<PlainText>) -> Value<PlainText> {
     pipe! {
         Value::new(confirm) =>
             validators::required |
-            validators::objects::plain_text::max_30
+            validators::text_object::max_30
     }
 }
 
@@ -664,7 +664,7 @@ fn new_deny(deny: Option<PlainText>) -> Value<PlainText> {
     pipe! {
         Value::new(deny) =>
             validators::required |
-            validators::objects::plain_text::max_30
+            validators::text_object::max_30
     }
 }
 

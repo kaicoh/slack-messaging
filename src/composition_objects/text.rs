@@ -19,11 +19,25 @@ use serde::Serialize;
 ///
 /// * The `text` field of [`Button`](crate::blocks::elements::Button) element.
 ///
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum Text {
     Plain(PlainText),
     Mrkdwn(MrkdwnText),
+}
+
+/// TextObject is a trait any text object representations must satisfy.
+pub trait TextObject {
+    fn text(&self) -> Option<&String>;
+}
+
+impl TextObject for Text {
+    fn text(&self) -> Option<&String> {
+        match self {
+            Self::Plain(t) => t.text(),
+            Self::Mrkdwn(t) => t.text(),
+        }
+    }
 }
 
 impl From<PlainText> for Text {

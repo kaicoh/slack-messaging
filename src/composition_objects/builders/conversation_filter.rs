@@ -319,3 +319,24 @@ fn new_exclude_external_shared_channels(
 fn new_exclude_bot_users(exclude_bot_users: Option<bool>) -> Value<bool> {
     pipe! { Value::new(exclude_bot_users) => validators::do_nothing }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_builds_conversation_filter() {
+        let result = ConversationFilter::builder()
+            .include(Conversation::Im)
+            .build();
+        assert!(result.is_ok());
+
+        let val = result.unwrap();
+        let expected = ConversationFilter {
+            include: vec![Conversation::Im],
+            exclude_external_shared_channels: None,
+            exclude_bot_users: None,
+        };
+        assert_eq!(val, expected);
+    }
+}

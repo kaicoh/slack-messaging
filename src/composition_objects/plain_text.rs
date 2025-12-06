@@ -1,3 +1,4 @@
+use super::TextObject;
 use serde::Serialize;
 
 /// Plain [text object](https://docs.slack.dev/reference/block-kit/composition-objects/text-object)
@@ -55,6 +56,12 @@ impl PartialEq for PlainText {
             }
             _ => false,
         }
+    }
+}
+
+impl TextObject for PlainText {
+    fn text(&self) -> Option<&String> {
+        self.text.as_ref()
     }
 }
 
