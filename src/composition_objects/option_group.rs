@@ -1,29 +1,35 @@
-use super::{Opt, PlainText};
+use super::{Opt, PlainText, TextInOption};
 use serde::Serialize;
 
 /// [Option group object](https://docs.slack.dev/reference/block-kit/composition-objects/option-group-object)
 /// representation.
 ///
+/// The Builder returns [`OptGroupError`](crate::composition_objects::builders::OptGroupError),
+/// if your object has any validation errors.
+///
 /// # Example
 ///
 /// ```
-/// # use slack_messaging::composition_objects::{OptGroup, Opt};
-/// # use slack_messaging::plain_text;
-/// let options = OptGroup::builder()
-///     .label("Group One")
+/// use slack_messaging::{Builder, plain_text};
+/// use slack_messaging::composition_objects::{OptGroup, Opt, PlainText};
+/// # use std::error::Error;
+///
+/// # fn try_main() -> Result<(), Box<dyn Error>> {
+/// let options = OptGroup::<PlainText>::builder()
+///     .label(plain_text!("Group One")?)
 ///     .option(
 ///         Opt::builder()
-///             .text(plain_text!("option-0"))
+///             .text(plain_text!("option-0")?)
 ///             .value("value-0")
-///             .build()
+///             .build()?
 ///     )
 ///     .option(
 ///         Opt::builder()
-///             .text(plain_text!("option-1"))
+///             .text(plain_text!("option-1")?)
 ///             .value("value-1")
-///             .build()
+///             .build()?
 ///     )
-///     .build();
+///     .build()?;
 ///
 /// let expected = serde_json::json!({
 ///     "label": {
@@ -51,9 +57,22 @@ use serde::Serialize;
 /// let json = serde_json::to_value(options).unwrap();
 ///
 /// assert_eq!(json, expected);
+///
+/// // If your object has any validation errors, the build method returns Result::Err
+///
+/// let options = OptGroup::<PlainText>::builder()
+///     .label(plain_text!("Group One")?)
+///     .build();
+///
+/// assert!(options.is_err());
+/// #     Ok(())
+/// # }
+/// # fn main() {
+/// #     try_main().unwrap()
+/// # }
 /// ```
-#[derive(Debug, Clone, Serialize)]
-pub struct OptGroup {
-    pub(super) label: PlainText,
-    pub(super) options: Vec<Opt>,
+#[derive(Debug, Clone, Serialize, PartialEq)]
+pub struct OptGroup<T: TextInOption> {
+    pub(crate) label: Option<PlainText>,
+    pub(crate) options: Vec<Opt<T>>,
 }

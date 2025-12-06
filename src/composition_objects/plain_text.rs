@@ -1,30 +1,21 @@
+use super::TextObject;
 use serde::Serialize;
 
 /// Plain [text object](https://docs.slack.dev/reference/block-kit/composition-objects/text-object)
 /// representation.
 ///
-/// There is a [`Text`](crate::composition_objects::Text) object like this.
-/// The difference between these two objects is that [`Text`](crate::composition_objects::Text)
-/// can be used incase of both of plain text and mrkdwn are allowed to used.
+/// The Builder returns [`PlainTextError`](crate::composition_objects::builders::PlainTextError),
+/// if your object has any validation errors.
 ///
-/// On the other hand, use [`PlainText`] instead of [`Text`](crate::composition_objects::Text) incase of only [`PlainText`]
-/// is allowed to use.
+///```
+/// use slack_messaging::Builder;
+/// use slack_messaging::composition_objects::PlainText;
+/// # use std::error::Error;
 ///
-/// ### example to use [`Text`](crate::composition_objects::Text)
-///
-/// * The `text` and `description` field of [`Opt`](crate::composition_objects::Opt)
-///   object in the [`Checkboxes`](crate::blocks::elements::Checkboxes) and [`RadioButtonGroup`](crate::blocks::elements::RadioButtonGroup) element
-/// * The `text` field of [`Section`](crate::blocks::Section) block
-///
-/// ### example to use [`PlainText`]
-///
-/// * The `text` field of [`Button`](crate::blocks::elements::Button) element.
-///
-/// ```
-/// # use slack_messaging::composition_objects::PlainText;
+/// # fn try_main() -> Result<(), Box<dyn Error>> {
 /// let text = PlainText::builder()
 ///     .text("Hello, World!")
-///     .build();
+///     .build()?;
 ///
 /// let json = serde_json::to_value(text).unwrap();
 ///
@@ -34,20 +25,43 @@ use serde::Serialize;
 /// });
 ///
 /// assert_eq!(json, expected);
-/// ```
+///
+/// // If your object has any validation errors, the build method returns Result::Err
+/// let text = PlainText::builder()
+///     .text("")
+///     .build();
+///
+/// assert!(text.is_err());
+/// #     Ok(())
+/// # }
+/// # fn main() {
+/// #     try_main().unwrap()
+/// # }
+///```
 #[derive(Debug, Clone, Serialize)]
 #[serde(tag = "type", rename = "plain_text")]
 pub struct PlainText {
-    pub(super) text: String,
+    pub(crate) text: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) emoji: Option<bool>,
+    pub(crate) emoji: Option<bool>,
 }
 
 impl PartialEq for PlainText {
     fn eq(&self, other: &Self) -> bool {
-        self.text.as_str() == other.text.as_str()
-            && self.emoji.unwrap_or(false) == other.emoji.unwrap_or(false)
+        match (self.text.as_ref(), other.text.as_ref()) {
+            (Some(t0), Some(t1)) => {
+                t0.as_str() == t1.as_str()
+                    && self.emoji.unwrap_or(false) == other.emoji.unwrap_or(false)
+            }
+            _ => false,
+        }
+    }
+}
+
+impl TextObject for PlainText {
+    fn text(&self) -> Option<&String> {
+        self.text.as_ref()
     }
 }
 
@@ -83,7 +97,7 @@ mod tests {
 
     fn make_text(text: &str) -> PlainText {
         PlainText {
-            text: text.into(),
+            text: Some(text.into()),
             emoji: None,
         }
     }

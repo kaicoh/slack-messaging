@@ -1,15 +1,23 @@
+use super::TextObject;
 use serde::Serialize;
 
 /// Markdown [text object](https://docs.slack.dev/reference/block-kit/composition-objects/text-object)
 /// representation.
 ///
+/// The Builder returns [`MrkdwnTextError`](crate::composition_objects::builders::MrkdwnTextError),
+/// if your object has any validation errors.
+///
 /// # Example
 ///
 /// ```
-/// # use slack_messaging::composition_objects::MrkdwnText;
+/// use slack_messaging::Builder;
+/// use slack_messaging::composition_objects::MrkdwnText;
+/// # use std::error::Error;
+///
+/// # fn try_main() -> Result<(), Box<dyn Error>> {
 /// let text = MrkdwnText::builder()
 ///     .text("Hello, World!")
-///     .build();
+///     .build()?;
 ///
 /// let json = serde_json::to_value(text).unwrap();
 ///
@@ -19,20 +27,43 @@ use serde::Serialize;
 /// });
 ///
 /// assert_eq!(json, expected);
+///
+/// // If your object has any validation errors, the build method returns Result::Err
+/// let text = MrkdwnText::builder()
+///     .text("")
+///     .build();
+///
+/// assert!(text.is_err());
+/// #     Ok(())
+/// # }
+/// # fn main() {
+/// #     try_main().unwrap()
+/// # }
 /// ```
 #[derive(Debug, Clone, Serialize)]
 #[serde(tag = "type", rename = "mrkdwn")]
 pub struct MrkdwnText {
-    pub(super) text: String,
+    pub(crate) text: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) verbatim: Option<bool>,
+    pub(crate) verbatim: Option<bool>,
 }
 
 impl PartialEq for MrkdwnText {
     fn eq(&self, other: &Self) -> bool {
-        self.text.as_str() == other.text.as_str()
-            && self.verbatim.unwrap_or(false) == other.verbatim.unwrap_or(false)
+        match (self.text.as_ref(), other.text.as_ref()) {
+            (Some(t0), Some(t1)) => {
+                t0.as_str() == t1.as_str()
+                    && self.verbatim.unwrap_or(false) == other.verbatim.unwrap_or(false)
+            }
+            _ => false,
+        }
+    }
+}
+
+impl TextObject for MrkdwnText {
+    fn text(&self) -> Option<&String> {
+        self.text.as_ref()
     }
 }
 
@@ -68,7 +99,7 @@ mod tests {
 
     fn make_text(text: &str) -> MrkdwnText {
         MrkdwnText {
-            text: text.into(),
+            text: Some(text.into()),
             verbatim: None,
         }
     }

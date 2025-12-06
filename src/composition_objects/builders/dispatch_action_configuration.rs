@@ -1,4 +1,10 @@
-use super::{DispatchActionConfiguration, TriggerAction};
+use super::error::ValidationError;
+use super::validators;
+use super::value::Value;
+use super::{Builder, DispatchActionConfiguration, TriggerAction};
+
+use std::error::Error;
+use std::fmt;
 
 impl DispatchActionConfiguration {
     /// Construct a [`DispatchActionConfigurationBuilder`].
@@ -7,25 +13,80 @@ impl DispatchActionConfiguration {
     }
 }
 
+/// Error while building [`DispatchActionConfiguration`] object.
+#[derive(Debug, Clone, PartialEq)]
+pub struct DispatchActionConfigurationError {
+    /// errors of trigger_actions_on field
+    pub trigger_actions_on: Vec<ValidationError>,
+}
+
+impl fmt::Display for DispatchActionConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "DispatchActionConfigurationError {{ trigger_actions_on: {:?} }}",
+            self.trigger_actions_on
+        )
+    }
+}
+
+impl Error for DispatchActionConfigurationError {}
+
 /// Builder for [`DispatchActionConfiguration`] object.
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct DispatchActionConfigurationBuilder {
-    trigger_actions_on: Vec<TriggerAction>,
+    trigger_actions_on: Value<Vec<TriggerAction>>,
+}
+
+impl Default for DispatchActionConfigurationBuilder {
+    fn default() -> Self {
+        DispatchActionConfigurationBuilder {
+            trigger_actions_on: new_trigger_actions_on(None),
+        }
+    }
+}
+
+impl Builder for DispatchActionConfigurationBuilder {
+    type Target = DispatchActionConfiguration;
+    type Error = DispatchActionConfigurationError;
+
+    fn build(self) -> Result<Self::Target, Self::Error> {
+        let Self { trigger_actions_on } = self;
+
+        if trigger_actions_on.has_errors() {
+            Err(DispatchActionConfigurationError {
+                trigger_actions_on: trigger_actions_on.errors,
+            })
+        } else {
+            Ok(DispatchActionConfiguration {
+                trigger_actions_on: trigger_actions_on.inner.unwrap_or_default(),
+            })
+        }
+    }
 }
 
 impl DispatchActionConfigurationBuilder {
-    /// Set trigger_actions_on field.
+    /// get trigger_actions_on field value
+    pub fn get_trigger_actions_on(&self) -> Option<&[TriggerAction]> {
+        self.trigger_actions_on.inner_ref().map(|v| v.as_ref())
+    }
+
+    /// set trigger_actions_on field value
     ///
     /// ```
-    /// # use slack_messaging::composition_objects::{DispatchActionConfiguration, TriggerAction};
+    /// use slack_messaging::Builder;
+    /// use slack_messaging::composition_objects::{DispatchActionConfiguration, TriggerAction};
+    /// # use std::error::Error;
+    ///
+    /// # fn try_main() -> Result<(), Box<dyn Error>> {
     /// let config = DispatchActionConfiguration::builder()
-    ///     .set_trigger_actions(
+    ///     .set_trigger_actions_on(
     ///         vec![
     ///             TriggerAction::OnEnterPressed,
     ///             TriggerAction::OnCharacterEntered,
     ///         ]
     ///     )
-    ///     .build();
+    ///     .build()?;
     ///
     /// let expected = serde_json::json!({
     ///     "trigger_actions_on": [
@@ -37,48 +98,73 @@ impl DispatchActionConfigurationBuilder {
     /// let json = serde_json::to_value(config).unwrap();
     ///
     /// assert_eq!(json, expected);
+    /// #     Ok(())
+    /// # }
+    /// # fn main() {
+    /// #     try_main().unwrap()
+    /// # }
     /// ```
-    pub fn set_trigger_actions(self, actions: Vec<TriggerAction>) -> Self {
+    pub fn set_trigger_actions_on(self, values: Vec<TriggerAction>) -> Self {
         Self {
-            trigger_actions_on: actions,
+            trigger_actions_on: new_trigger_actions_on(Some(values)),
         }
     }
 
-    /// Add trigger_action to trigger_actions_on field.
+    /// add value to trigger_actions_on field
     ///
     /// ```
-    /// # use slack_messaging::composition_objects::{DispatchActionConfiguration, TriggerAction};
+    /// use slack_messaging::Builder;
+    /// use slack_messaging::composition_objects::{DispatchActionConfiguration, TriggerAction};
+    /// # use std::error::Error;
+    ///
+    /// # fn try_main() -> Result<(), Box<dyn Error>> {
     /// let config = DispatchActionConfiguration::builder()
-    ///     .trigger_action(TriggerAction::OnEnterPressed)
-    ///     .build();
+    ///     .trigger_actions_on(TriggerAction::OnEnterPressed)
+    ///     .trigger_actions_on(TriggerAction::OnCharacterEntered)
+    ///     .build()?;
     ///
     /// let expected = serde_json::json!({
     ///     "trigger_actions_on": [
-    ///         "on_enter_pressed"
+    ///         "on_enter_pressed",
+    ///         "on_character_entered"
     ///     ]
     /// });
     ///
     /// let json = serde_json::to_value(config).unwrap();
     ///
     /// assert_eq!(json, expected);
+    /// #     Ok(())
+    /// # }
+    /// # fn main() {
+    /// #     try_main().unwrap()
+    /// # }
     /// ```
-    pub fn trigger_action(self, action: TriggerAction) -> Self {
-        let Self {
-            mut trigger_actions_on,
-        } = self;
-        trigger_actions_on.push(action);
-        Self { trigger_actions_on }
+    pub fn trigger_actions_on(mut self, value: TriggerAction) -> Self {
+        let mut list = self.trigger_actions_on.take_inner().unwrap_or_default();
+        list.push(value);
+        self.set_trigger_actions_on(list)
     }
+}
 
-    /// Build a [`DispatchActionConfiguration`] object.
-    pub fn build(self) -> DispatchActionConfiguration {
-        DispatchActionConfiguration {
-            trigger_actions_on: self.trigger_actions_on,
-        }
-    }
+fn new_trigger_actions_on(value: Option<Vec<TriggerAction>>) -> Value<Vec<TriggerAction>> {
+    pipe! { Value::new(value) => validators::do_nothing }
+}
 
-    /// Get trigger_actions value.
-    pub fn get_trigger_actions(&self) -> &[TriggerAction] {
-        &self.trigger_actions_on
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_builds_dispatch_action_configuration() {
+        let result = DispatchActionConfiguration::builder()
+            .trigger_actions_on(TriggerAction::OnEnterPressed)
+            .build();
+        assert!(result.is_ok());
+
+        let val = result.unwrap();
+        let expected = DispatchActionConfiguration {
+            trigger_actions_on: vec![TriggerAction::OnEnterPressed],
+        };
+        assert_eq!(val, expected);
     }
 }
