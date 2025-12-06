@@ -51,11 +51,11 @@ pub enum Conversation {
 #[derive(Debug, Clone, Serialize)]
 pub struct ConversationFilter {
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub(super) include: Vec<Conversation>,
+    pub(crate) include: Vec<Conversation>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) exclude_external_shared_channels: Option<bool>,
+    pub(crate) exclude_external_shared_channels: Option<bool>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) exclude_bot_users: Option<bool>,
+    pub(crate) exclude_bot_users: Option<bool>,
 }

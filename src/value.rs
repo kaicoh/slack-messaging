@@ -26,7 +26,7 @@ impl<T> Value<T> {
         self.errors.push(error);
     }
 
-    fn has_errors(&self) -> bool {
+    pub(crate) fn has_errors(&self) -> bool {
         !self.errors.is_empty()
     }
 }
