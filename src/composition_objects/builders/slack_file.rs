@@ -14,7 +14,7 @@ impl SlackFile {
 }
 
 /// Error while building [`SlackFile`] object.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub struct SlackFileError {
     /// errors of id field
     pub id: Vec<ValidationError>,
@@ -69,29 +69,6 @@ impl SlackFileBuilder {
     }
 
     /// set id field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::SlackFile;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let file = SlackFile::builder()
-    ///     .set_id(Some("F0123456"))
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "id": "F0123456",
-    /// });
-    ///
-    /// let json = serde_json::to_value(file).unwrap();
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_id(self, id: Option<impl Into<String>>) -> Self {
         Self {
             id: new_id(id.map(|v| v.into())),
@@ -100,29 +77,6 @@ impl SlackFileBuilder {
     }
 
     /// set id field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::SlackFile;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let file = SlackFile::builder()
-    ///     .id("F0123456")
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "id": "F0123456",
-    /// });
-    ///
-    /// let json = serde_json::to_value(file).unwrap();
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn id(self, id: impl Into<String>) -> Self {
         self.set_id(Some(id))
     }
@@ -133,29 +87,6 @@ impl SlackFileBuilder {
     }
 
     /// set url field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::SlackFile;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let file = SlackFile::builder()
-    ///     .set_url(Some("https://files.slack.com/files-pri/T0123456-F0123456/xyz.png"))
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "url": "https://files.slack.com/files-pri/T0123456-F0123456/xyz.png",
-    /// });
-    ///
-    /// let json = serde_json::to_value(file).unwrap();
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_url(self, url: Option<impl Into<String>>) -> Self {
         Self {
             url: new_url(url.map(|v| v.into())),
@@ -164,29 +95,6 @@ impl SlackFileBuilder {
     }
 
     /// set url field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::SlackFile;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let file = SlackFile::builder()
-    ///     .url("https://files.slack.com/files-pri/T0123456-F0123456/xyz.png")
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "url": "https://files.slack.com/files-pri/T0123456-F0123456/xyz.png",
-    /// });
-    ///
-    /// let json = serde_json::to_value(file).unwrap();
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn url(self, url: impl Into<String>) -> Self {
         self.set_url(Some(url))
     }
@@ -205,15 +113,28 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_builds_slack_file() {
-        let result = SlackFile::builder().id("F0123456").build();
-        assert!(result.is_ok());
-
-        let val = result.unwrap();
+    fn it_has_setter_methods() {
         let expected = SlackFile {
             id: Some("F0123456".into()),
-            url: None,
+            url: Some("https://files.slack.com/files-pri/T0123456-F0123456/xyz.png".into()),
         };
+
+        let val = SlackFile::builder()
+            .set_id(Some("F0123456"))
+            .set_url(Some(
+                "https://files.slack.com/files-pri/T0123456-F0123456/xyz.png",
+            ))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+
+        let val = SlackFile::builder()
+            .id("F0123456")
+            .url("https://files.slack.com/files-pri/T0123456-F0123456/xyz.png")
+            .build()
+            .unwrap();
+
         assert_eq!(val, expected);
     }
 }

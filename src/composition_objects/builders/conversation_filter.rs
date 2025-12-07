@@ -14,7 +14,7 @@ impl ConversationFilter {
 }
 
 /// Error while building [`ConversationFilter`] object.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub struct ConversationFilterError {
     /// errors of include field
     pub include: Vec<ValidationError>,
@@ -96,40 +96,6 @@ impl ConversationFilterBuilder {
     }
 
     /// set include field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::{Conversation, ConversationFilter};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let filter = ConversationFilter::builder()
-    ///     .set_include(
-    ///         Some(
-    ///             vec![
-    ///                 Conversation::Im,
-    ///                 Conversation::Private,
-    ///             ]
-    ///         )
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "include": [
-    ///         "im",
-    ///         "private"
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(filter).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_include(self, include: Option<Vec<Conversation>>) -> Self {
         Self {
             include: new_include(include),
@@ -138,71 +104,11 @@ impl ConversationFilterBuilder {
     }
 
     /// set include field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::{Conversation, ConversationFilter};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let filter = ConversationFilter::builder()
-    ///     .include(
-    ///         vec![
-    ///             Conversation::Im,
-    ///             Conversation::Private,
-    ///         ]
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "include": [
-    ///         "im",
-    ///         "private"
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(filter).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn include(self, include: Vec<Conversation>) -> Self {
         self.set_include(Some(include))
     }
 
     /// add conversation to include field
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::{Conversation, ConversationFilter};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let filter = ConversationFilter::builder()
-    ///     .conversation(Conversation::Im)
-    ///     .conversation(Conversation::Private)
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "include": [
-    ///         "im",
-    ///         "private"
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(filter).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn conversation(mut self, conversation: Conversation) -> Self {
         let mut list = self.include.take_inner().unwrap_or_default();
         list.push(conversation);
@@ -215,30 +121,6 @@ impl ConversationFilterBuilder {
     }
 
     /// set exclude_external_shared_channels field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::ConversationFilter;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let filter = ConversationFilter::builder()
-    ///     .set_exclude_external_shared_channels(Some(true))
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "exclude_external_shared_channels": true
-    /// });
-    ///
-    /// let json = serde_json::to_value(filter).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_exclude_external_shared_channels(self, value: Option<bool>) -> Self {
         Self {
             exclude_external_shared_channels: new_exclude_external_shared_channels(value),
@@ -247,30 +129,6 @@ impl ConversationFilterBuilder {
     }
 
     /// set exclude_external_shared_channels field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::ConversationFilter;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let filter = ConversationFilter::builder()
-    ///     .exclude_external_shared_channels(false)
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "exclude_external_shared_channels": false
-    /// });
-    ///
-    /// let json = serde_json::to_value(filter).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn exclude_external_shared_channels(self, value: bool) -> Self {
         self.set_exclude_external_shared_channels(Some(value))
     }
@@ -281,30 +139,6 @@ impl ConversationFilterBuilder {
     }
 
     /// set exclude_bot_users field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::ConversationFilter;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let filter = ConversationFilter::builder()
-    ///     .set_exclude_bot_users(Some(true))
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "exclude_bot_users": true
-    /// });
-    ///
-    /// let json = serde_json::to_value(filter).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_exclude_bot_users(self, exclude_bot_users: Option<bool>) -> Self {
         Self {
             exclude_bot_users: new_exclude_bot_users(exclude_bot_users),
@@ -313,30 +147,6 @@ impl ConversationFilterBuilder {
     }
 
     /// set exclude_bot_users field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::ConversationFilter;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let filter = ConversationFilter::builder()
-    ///     .exclude_bot_users(false)
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "exclude_bot_users": false
-    /// });
-    ///
-    /// let json = serde_json::to_value(filter).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn exclude_bot_users(self, exclude_bot_users: bool) -> Self {
         self.set_exclude_bot_users(Some(exclude_bot_users))
     }
@@ -364,15 +174,46 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_builds_conversation_filter() {
-        let result = ConversationFilter::builder()
-            .conversation(Conversation::Im)
-            .build();
-        assert!(result.is_ok());
+    fn it_has_setter_methods() {
+        let val = ConversationFilter::builder()
+            .set_include(Some(vec![Conversation::Im, Conversation::Private]))
+            .set_exclude_external_shared_channels(Some(true))
+            .set_exclude_bot_users(Some(true))
+            .build()
+            .unwrap();
 
-        let val = result.unwrap();
         let expected = ConversationFilter {
-            include: vec![Conversation::Im],
+            include: vec![Conversation::Im, Conversation::Private],
+            exclude_external_shared_channels: Some(true),
+            exclude_bot_users: Some(true),
+        };
+        assert_eq!(val, expected);
+
+        let val = ConversationFilter::builder()
+            .include(vec![Conversation::Im, Conversation::Private])
+            .exclude_external_shared_channels(false)
+            .exclude_bot_users(false)
+            .build()
+            .unwrap();
+
+        let expected = ConversationFilter {
+            include: vec![Conversation::Im, Conversation::Private],
+            exclude_external_shared_channels: Some(false),
+            exclude_bot_users: Some(false),
+        };
+        assert_eq!(val, expected);
+    }
+
+    #[test]
+    fn it_has_additional_setter_for_include_field() {
+        let val = ConversationFilter::builder()
+            .conversation(Conversation::Im)
+            .conversation(Conversation::Private)
+            .build()
+            .unwrap();
+
+        let expected = ConversationFilter {
+            include: vec![Conversation::Im, Conversation::Private],
             exclude_external_shared_channels: None,
             exclude_bot_users: None,
         };

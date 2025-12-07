@@ -14,7 +14,7 @@ impl PlainText {
 }
 
 /// Error while building [`PlainText`] object.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub struct PlainTextError {
     /// errors of text field
     pub text: Vec<ValidationError>,
@@ -69,30 +69,6 @@ impl PlainTextBuilder {
     }
 
     /// set text field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::PlainText;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let text = PlainText::builder()
-    ///     .set_text(Some("hello world"))
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "plain_text",
-    ///     "text": "hello world",
-    /// });
-    ///
-    /// let json = serde_json::to_value(text).unwrap();
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_text(self, text: Option<impl Into<String>>) -> Self {
         Self {
             text: new_text(text.map(|v| v.into())),
@@ -101,30 +77,6 @@ impl PlainTextBuilder {
     }
 
     /// set text field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::PlainText;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let text = PlainText::builder()
-    ///     .text("hello world")
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "plain_text",
-    ///     "text": "hello world",
-    /// });
-    ///
-    /// let json = serde_json::to_value(text).unwrap();
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn text(self, text: impl Into<String>) -> Self {
         self.set_text(Some(text))
     }
@@ -135,32 +87,6 @@ impl PlainTextBuilder {
     }
 
     /// set emoji field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::PlainText;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let text = PlainText::builder()
-    ///     .text(":smile:")
-    ///     .set_emoji(Some(true))
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "plain_text",
-    ///     "text": ":smile:",
-    ///     "emoji": true,
-    /// });
-    ///
-    /// let json = serde_json::to_value(text).unwrap();
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_emoji(self, emoji: Option<bool>) -> Self {
         Self {
             emoji: new_emoji(emoji),
@@ -169,32 +95,6 @@ impl PlainTextBuilder {
     }
 
     /// set emoji field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::PlainText;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let text = PlainText::builder()
-    ///     .text(":smile:")
-    ///     .emoji(true)
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "plain_text",
-    ///     "text": ":smile:",
-    ///     "emoji": true,
-    /// });
-    ///
-    /// let json = serde_json::to_value(text).unwrap();
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn emoji(self, emoji: bool) -> Self {
         self.set_emoji(Some(emoji))
     }
@@ -218,54 +118,70 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_builds_plain_text() {
-        let result = PlainText::builder().text("hello world").emoji(true).build();
-        assert!(result.is_ok());
-
-        let val = result.unwrap();
+    fn it_has_setter_methods() {
         let expected = PlainText {
             text: Some("hello world".into()),
             emoji: Some(true),
         };
+
+        let val = PlainText::builder()
+            .set_text(Some("hello world"))
+            .set_emoji(Some(true))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+
+        let val = PlainText::builder()
+            .text("hello world")
+            .emoji(true)
+            .build()
+            .unwrap();
+
         assert_eq!(val, expected);
     }
 
     #[test]
-    fn default_builder_returns_text_required_error() {
-        let result = PlainText::builder().build();
-        assert!(result.is_err());
+    fn text_field_is_required() {
+        let err = PlainText::builder().emoji(true).build().unwrap_err();
 
-        let err = result.unwrap_err();
         let expected = PlainTextError {
             text: vec![ValidationError::Required],
-            emoji: vec![],
+            ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 
     #[test]
-    fn builder_can_return_min_text_1_error() {
-        let result = PlainText::builder().text("").build();
-        assert!(result.is_err());
+    fn text_field_length_must_be_more_than_1() {
+        let err = PlainText::builder()
+            .text("")
+            .emoji(true)
+            .build()
+            .unwrap_err();
 
-        let err = result.unwrap_err();
         let expected = PlainTextError {
             text: vec![ValidationError::MinTextLegth(1)],
-            emoji: vec![],
+            ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 
     #[test]
-    fn builder_can_return_max_text_3000_error() {
-        let result = PlainText::builder().text("a".repeat(3001)).build();
-        assert!(result.is_err());
+    fn text_field_length_must_be_less_than_3000() {
+        let err = PlainText::builder()
+            .text("a".repeat(3001))
+            .emoji(true)
+            .build()
+            .unwrap_err();
 
-        let err = result.unwrap_err();
         let expected = PlainTextError {
             text: vec![ValidationError::MaxTextLegth(3000)],
-            emoji: vec![],
+            ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 }

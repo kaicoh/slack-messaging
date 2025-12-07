@@ -14,7 +14,7 @@ impl MrkdwnText {
 }
 
 /// Error while building [`MrkdwnText`] object.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub struct MrkdwnTextError {
     /// errors of text field
     pub text: Vec<ValidationError>,
@@ -69,30 +69,6 @@ impl MrkdwnTextBuilder {
     }
 
     /// set text field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::MrkdwnText;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let text = MrkdwnText::builder()
-    ///     .set_text(Some("hello world"))
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "mrkdwn",
-    ///     "text": "hello world",
-    /// });
-    ///
-    /// let json = serde_json::to_value(text).unwrap();
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_text(self, text: Option<impl Into<String>>) -> Self {
         Self {
             text: new_text(text.map(|v| v.into())),
@@ -101,30 +77,6 @@ impl MrkdwnTextBuilder {
     }
 
     /// set text field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::MrkdwnText;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let text = MrkdwnText::builder()
-    ///     .text("hello world")
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "mrkdwn",
-    ///     "text": "hello world",
-    /// });
-    ///
-    /// let json = serde_json::to_value(text).unwrap();
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn text(self, text: impl Into<String>) -> Self {
         self.set_text(Some(text))
     }
@@ -135,32 +87,6 @@ impl MrkdwnTextBuilder {
     }
 
     /// set verbatim field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::MrkdwnText;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let text = MrkdwnText::builder()
-    ///     .text(":smile:")
-    ///     .set_verbatim(Some(true))
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "mrkdwn",
-    ///     "text": ":smile:",
-    ///     "verbatim": true,
-    /// });
-    ///
-    /// let json = serde_json::to_value(text).unwrap();
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_verbatim(self, verbatim: Option<bool>) -> Self {
         Self {
             verbatim: new_verbatim(verbatim),
@@ -169,33 +95,6 @@ impl MrkdwnTextBuilder {
     }
 
     /// set verbatim field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::MrkdwnText;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let text = MrkdwnText::builder()
-    ///     .text(":smile:")
-    ///     .verbatim(true)
-    ///     .build()
-    ///     .unwrap(); // unwrap Result::Ok
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "mrkdwn",
-    ///     "text": ":smile:",
-    ///     "verbatim": true,
-    /// });
-    ///
-    /// let json = serde_json::to_value(text).unwrap();
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn verbatim(self, verbatim: bool) -> Self {
         self.set_verbatim(Some(verbatim))
     }
@@ -219,57 +118,70 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_builds_mrkdwn() {
-        let result = MrkdwnText::builder()
-            .text("hello world")
-            .verbatim(true)
-            .build();
-        assert!(result.is_ok());
-
-        let val = result.unwrap();
+    fn it_has_setter_methods() {
         let expected = MrkdwnText {
             text: Some("hello world".into()),
             verbatim: Some(true),
         };
+
+        let val = MrkdwnText::builder()
+            .set_text(Some("hello world"))
+            .set_verbatim(Some(true))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+
+        let val = MrkdwnText::builder()
+            .text("hello world")
+            .verbatim(true)
+            .build()
+            .unwrap();
+
         assert_eq!(val, expected);
     }
 
     #[test]
-    fn default_builder_returns_text_required_error() {
-        let result = MrkdwnText::builder().build();
-        assert!(result.is_err());
+    fn text_field_is_required() {
+        let err = MrkdwnText::builder().verbatim(true).build().unwrap_err();
 
-        let err = result.unwrap_err();
         let expected = MrkdwnTextError {
             text: vec![ValidationError::Required],
-            verbatim: vec![],
+            ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 
     #[test]
-    fn builder_can_return_min_text_1_error() {
-        let result = MrkdwnText::builder().text("").build();
-        assert!(result.is_err());
+    fn text_field_length_must_be_more_than_1() {
+        let err = MrkdwnText::builder()
+            .text("")
+            .verbatim(true)
+            .build()
+            .unwrap_err();
 
-        let err = result.unwrap_err();
         let expected = MrkdwnTextError {
             text: vec![ValidationError::MinTextLegth(1)],
-            verbatim: vec![],
+            ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 
     #[test]
-    fn builder_can_return_max_text_3000_error() {
-        let result = MrkdwnText::builder().text("a".repeat(3001)).build();
-        assert!(result.is_err());
+    fn text_field_length_must_be_less_than_3000() {
+        let err = MrkdwnText::builder()
+            .text("a".repeat(3001))
+            .verbatim(true)
+            .build()
+            .unwrap_err();
 
-        let err = result.unwrap_err();
         let expected = MrkdwnTextError {
             text: vec![ValidationError::MaxTextLegth(3000)],
-            verbatim: vec![],
+            ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 }

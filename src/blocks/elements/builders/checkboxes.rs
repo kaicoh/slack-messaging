@@ -108,47 +108,6 @@ impl CheckboxesBuilder {
     }
 
     /// set action_id field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, mrkdwn};
-    /// use slack_messaging::blocks::elements::Checkboxes;
-    /// use slack_messaging::composition_objects::{Opt, Text};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let checkboxes = Checkboxes::builder()
-    ///     .set_action_id(Some("group-0"))
-    ///     .option(
-    ///         Opt::builder()
-    ///             .text(mrkdwn!("option-0")?)
-    ///             .value("value-0")
-    ///             .build()?
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "checkboxes",
-    ///     "action_id": "group-0",
-    ///     "options": [
-    ///         {
-    ///             "value": "value-0",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-0"
-    ///             }
-    ///         }
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(checkboxes).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_action_id(self, action_id: Option<impl Into<String>>) -> Self {
         Self {
             action_id: new_action_id(action_id.map(|v| v.into())),
@@ -157,47 +116,6 @@ impl CheckboxesBuilder {
     }
 
     /// set action_id field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, mrkdwn};
-    /// use slack_messaging::blocks::elements::Checkboxes;
-    /// use slack_messaging::composition_objects::{Opt, Text};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let checkboxes = Checkboxes::builder()
-    ///     .action_id("group-0")
-    ///     .option(
-    ///         Opt::builder()
-    ///             .text(mrkdwn!("option-0")?)
-    ///             .value("value-0")
-    ///             .build()?
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "checkboxes",
-    ///     "action_id": "group-0",
-    ///     "options": [
-    ///         {
-    ///             "value": "value-0",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-0"
-    ///             }
-    ///         }
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(checkboxes).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn action_id(self, action_id: impl Into<String>) -> Self {
         self.set_action_id(Some(action_id))
     }
@@ -208,60 +126,6 @@ impl CheckboxesBuilder {
     }
 
     /// set options field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, mrkdwn};
-    /// use slack_messaging::blocks::elements::Checkboxes;
-    /// use slack_messaging::composition_objects::{Opt, Text};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let checkboxes = Checkboxes::builder()
-    ///     .set_options(
-    ///         Some(
-    ///             vec![
-    ///                 Opt::builder()
-    ///                     .text(mrkdwn!("option-0")?)
-    ///                     .value("value-0")
-    ///                     .build()?,
-    ///                 Opt::builder()
-    ///                     .text(mrkdwn!("option-1")?)
-    ///                     .value("value-1")
-    ///                     .build()?,
-    ///             ]
-    ///         )
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "checkboxes",
-    ///     "options": [
-    ///         {
-    ///             "value": "value-0",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-0"
-    ///             }
-    ///         },
-    ///         {
-    ///             "value": "value-1",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-1"
-    ///             }
-    ///         }
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(checkboxes).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_options(self, options: Option<Vec<Opt<Text>>>) -> Self {
         Self {
             options: new_options(options),
@@ -270,115 +134,11 @@ impl CheckboxesBuilder {
     }
 
     /// set options field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, mrkdwn};
-    /// use slack_messaging::blocks::elements::Checkboxes;
-    /// use slack_messaging::composition_objects::{Opt, Text};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let checkboxes = Checkboxes::builder()
-    ///     .options(
-    ///         vec![
-    ///             Opt::builder()
-    ///                 .text(mrkdwn!("option-0")?)
-    ///                 .value("value-0")
-    ///                 .build()?,
-    ///             Opt::builder()
-    ///                 .text(mrkdwn!("option-1")?)
-    ///                 .value("value-1")
-    ///                 .build()?,
-    ///         ]
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "checkboxes",
-    ///     "options": [
-    ///         {
-    ///             "value": "value-0",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-0"
-    ///             }
-    ///         },
-    ///         {
-    ///             "value": "value-1",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-1"
-    ///             }
-    ///         }
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(checkboxes).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn options(self, options: Vec<Opt<Text>>) -> Self {
         self.set_options(Some(options))
     }
 
     /// add option to options field
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, mrkdwn};
-    /// use slack_messaging::blocks::elements::Checkboxes;
-    /// use slack_messaging::composition_objects::{Opt, Text};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let checkboxes = Checkboxes::builder()
-    ///     .option(
-    ///         Opt::builder()
-    ///             .text(mrkdwn!("option-0")?)
-    ///             .value("value-0")
-    ///             .build()?,
-    ///     )
-    ///     .option(
-    ///         Opt::builder()
-    ///             .text(mrkdwn!("option-1")?)
-    ///             .value("value-1")
-    ///             .build()?,
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "checkboxes",
-    ///     "options": [
-    ///         {
-    ///             "value": "value-0",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-0"
-    ///             }
-    ///         },
-    ///         {
-    ///             "value": "value-1",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-1"
-    ///             }
-    ///         }
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(checkboxes).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn option(mut self, option: Opt<Text>) -> Self {
         let mut list = self.options.take_inner().unwrap_or_default();
         list.push(option);
@@ -391,64 +151,6 @@ impl CheckboxesBuilder {
     }
 
     /// set initial_options field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, mrkdwn};
-    /// use slack_messaging::blocks::elements::Checkboxes;
-    /// use slack_messaging::composition_objects::{Opt, Text};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let checkboxes = Checkboxes::builder()
-    ///     .option(
-    ///         Opt::builder()
-    ///             .text(mrkdwn!("option-0")?)
-    ///             .value("value-0")
-    ///             .build()?,
-    ///     )
-    ///     .set_initial_options(
-    ///         Some(
-    ///             vec![
-    ///                 Opt::builder()
-    ///                     .text(mrkdwn!("option-0")?)
-    ///                     .value("value-0")
-    ///                     .build()?,
-    ///             ]
-    ///         )
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "checkboxes",
-    ///     "options": [
-    ///         {
-    ///             "value": "value-0",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-0"
-    ///             }
-    ///         }
-    ///     ],
-    ///     "initial_options": [
-    ///         {
-    ///             "value": "value-0",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-0"
-    ///             }
-    ///         }
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(checkboxes).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_initial_options(self, initial_options: Option<Vec<Opt<Text>>>) -> Self {
         Self {
             initial_options: new_initial_options(initial_options),
@@ -457,121 +159,11 @@ impl CheckboxesBuilder {
     }
 
     /// set initial_options field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, mrkdwn};
-    /// use slack_messaging::blocks::elements::Checkboxes;
-    /// use slack_messaging::composition_objects::{Opt, Text};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let checkboxes = Checkboxes::builder()
-    ///     .option(
-    ///         Opt::builder()
-    ///             .text(mrkdwn!("option-0")?)
-    ///             .value("value-0")
-    ///             .build()?,
-    ///     )
-    ///     .initial_options(
-    ///         vec![
-    ///             Opt::builder()
-    ///                 .text(mrkdwn!("option-0")?)
-    ///                 .value("value-0")
-    ///                 .build()?,
-    ///         ]
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "checkboxes",
-    ///     "options": [
-    ///         {
-    ///             "value": "value-0",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-0"
-    ///             }
-    ///         }
-    ///     ],
-    ///     "initial_options": [
-    ///         {
-    ///             "value": "value-0",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-0"
-    ///             }
-    ///         }
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(checkboxes).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn initial_options(self, initial_options: Vec<Opt<Text>>) -> Self {
         self.set_initial_options(Some(initial_options))
     }
 
     /// add option to initial_options field
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, mrkdwn};
-    /// use slack_messaging::blocks::elements::Checkboxes;
-    /// use slack_messaging::composition_objects::{Opt, Text};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let checkboxes = Checkboxes::builder()
-    ///     .option(
-    ///         Opt::builder()
-    ///             .text(mrkdwn!("option-0")?)
-    ///             .value("value-0")
-    ///             .build()?,
-    ///     )
-    ///     .initial_option(
-    ///         Opt::builder()
-    ///             .text(mrkdwn!("option-0")?)
-    ///             .value("value-0")
-    ///             .build()?,
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "checkboxes",
-    ///     "options": [
-    ///         {
-    ///             "value": "value-0",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-0"
-    ///             }
-    ///         }
-    ///     ],
-    ///     "initial_options": [
-    ///         {
-    ///             "value": "value-0",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-0"
-    ///             }
-    ///         }
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(checkboxes).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn initial_option(mut self, option: Opt<Text>) -> Self {
         let mut list = self.initial_options.take_inner().unwrap_or_default();
         list.push(option);
@@ -584,73 +176,6 @@ impl CheckboxesBuilder {
     }
 
     /// set confirm field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, mrkdwn, plain_text};
-    /// use slack_messaging::blocks::elements::Checkboxes;
-    /// use slack_messaging::composition_objects::{ConfirmationDialog, Opt, Text};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let checkboxes = Checkboxes::builder()
-    ///     .option(
-    ///         Opt::builder()
-    ///             .text(mrkdwn!("option-0")?)
-    ///             .value("value-0")
-    ///             .build()?,
-    ///     )
-    ///     .set_confirm(
-    ///         Some(
-    ///             ConfirmationDialog::builder()
-    ///                 .title(plain_text!("Are you sure?")?)
-    ///                 .text(plain_text!("Wouldn't you prefer a good game of _chess_?")?)
-    ///                 .confirm(plain_text!("Do it")?)
-    ///                 .deny(plain_text!("Stop, I've changed my mind!")?)
-    ///                 .build()?
-    ///         )
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "checkboxes",
-    ///     "options": [
-    ///         {
-    ///             "value": "value-0",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-0"
-    ///             }
-    ///         }
-    ///     ],
-    ///     "confirm": {
-    ///         "title": {
-    ///             "type": "plain_text",
-    ///             "text": "Are you sure?"
-    ///         },
-    ///         "text": {
-    ///             "type": "plain_text",
-    ///             "text": "Wouldn't you prefer a good game of _chess_?"
-    ///         },
-    ///         "confirm": {
-    ///             "type": "plain_text",
-    ///             "text": "Do it"
-    ///         },
-    ///         "deny": {
-    ///             "type": "plain_text",
-    ///             "text": "Stop, I've changed my mind!"
-    ///         }
-    ///     }
-    /// });
-    ///
-    /// let json = serde_json::to_value(checkboxes).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_confirm(self, confirm: Option<ConfirmationDialog>) -> Self {
         Self {
             confirm: new_confirm(confirm),
@@ -659,71 +184,6 @@ impl CheckboxesBuilder {
     }
 
     /// set confirm field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, mrkdwn, plain_text};
-    /// use slack_messaging::blocks::elements::Checkboxes;
-    /// use slack_messaging::composition_objects::{ConfirmationDialog, Opt, Text};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let checkboxes = Checkboxes::builder()
-    ///     .option(
-    ///         Opt::builder()
-    ///             .text(mrkdwn!("option-0")?)
-    ///             .value("value-0")
-    ///             .build()?,
-    ///     )
-    ///     .confirm(
-    ///         ConfirmationDialog::builder()
-    ///             .title(plain_text!("Are you sure?")?)
-    ///             .text(plain_text!("Wouldn't you prefer a good game of _chess_?")?)
-    ///             .confirm(plain_text!("Do it")?)
-    ///             .deny(plain_text!("Stop, I've changed my mind!")?)
-    ///             .build()?
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "checkboxes",
-    ///     "options": [
-    ///         {
-    ///             "value": "value-0",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-0"
-    ///             }
-    ///         }
-    ///     ],
-    ///     "confirm": {
-    ///         "title": {
-    ///             "type": "plain_text",
-    ///             "text": "Are you sure?"
-    ///         },
-    ///         "text": {
-    ///             "type": "plain_text",
-    ///             "text": "Wouldn't you prefer a good game of _chess_?"
-    ///         },
-    ///         "confirm": {
-    ///             "type": "plain_text",
-    ///             "text": "Do it"
-    ///         },
-    ///         "deny": {
-    ///             "type": "plain_text",
-    ///             "text": "Stop, I've changed my mind!"
-    ///         }
-    ///     }
-    /// });
-    ///
-    /// let json = serde_json::to_value(checkboxes).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn confirm(self, confirm: ConfirmationDialog) -> Self {
         self.set_confirm(Some(confirm))
     }
@@ -734,47 +194,6 @@ impl CheckboxesBuilder {
     }
 
     /// set focus_on_load field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, mrkdwn};
-    /// use slack_messaging::blocks::elements::Checkboxes;
-    /// use slack_messaging::composition_objects::{Opt, Text};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let checkboxes = Checkboxes::builder()
-    ///     .option(
-    ///         Opt::builder()
-    ///             .text(mrkdwn!("option-0")?)
-    ///             .value("value-0")
-    ///             .build()?,
-    ///     )
-    ///     .set_focus_on_load(Some(true))
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "checkboxes",
-    ///     "options": [
-    ///         {
-    ///             "value": "value-0",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-0"
-    ///             }
-    ///         }
-    ///     ],
-    ///     "focus_on_load": true
-    /// });
-    ///
-    /// let json = serde_json::to_value(checkboxes).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_focus_on_load(self, focus_on_load: Option<bool>) -> Self {
         Self {
             focus_on_load: new_focus_on_load(focus_on_load),
@@ -783,47 +202,6 @@ impl CheckboxesBuilder {
     }
 
     /// set focus_on_load field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, mrkdwn};
-    /// use slack_messaging::blocks::elements::Checkboxes;
-    /// use slack_messaging::composition_objects::{Opt, Text};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let checkboxes = Checkboxes::builder()
-    ///     .option(
-    ///         Opt::builder()
-    ///             .text(mrkdwn!("option-0")?)
-    ///             .value("value-0")
-    ///             .build()?,
-    ///     )
-    ///     .focus_on_load(true)
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "checkboxes",
-    ///     "options": [
-    ///         {
-    ///             "value": "value-0",
-    ///             "text": {
-    ///                 "type": "mrkdwn",
-    ///                 "text": "option-0"
-    ///             }
-    ///         }
-    ///     ],
-    ///     "focus_on_load": true
-    /// });
-    ///
-    /// let json = serde_json::to_value(checkboxes).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn focus_on_load(self, focus_on_load: bool) -> Self {
         self.set_focus_on_load(Some(focus_on_load))
     }
@@ -855,100 +233,133 @@ fn new_focus_on_load(focus: Option<bool>) -> Value<bool> {
 
 #[cfg(test)]
 mod tests {
-    use super::super::composition_objects::MrkdwnText;
+    use super::super::composition_objects::test_helpers::*;
     use super::*;
 
     #[test]
-    fn it_builds_checkboxes() {
-        let result = Checkboxes::builder()
-            .action_id("group-0")
-            .option(
-                Opt::builder()
-                    .text(mrkdwn("option-0"))
-                    .value("value-0")
-                    .build()
-                    .unwrap(),
-            )
-            .build();
-        assert!(result.is_ok());
+    fn it_has_setter_methods() {
+        let expected = checkboxes();
 
-        let val = result.unwrap();
-        let expected = Checkboxes {
-            action_id: Some("group-0".into()),
-            options: vec![Opt {
-                text: Some(mrkdwn("option-0").into()),
-                value: Some("value-0".into()),
-                description: None,
-                url: None,
-            }],
-            initial_options: vec![],
-            confirm: None,
-            focus_on_load: None,
-        };
+        let val = Checkboxes::builder()
+            .set_action_id(Some("foo"))
+            .set_options(Some(vec![option_0(), option_1()]))
+            .set_initial_options(Some(vec![option_0()]))
+            .set_confirm(Some(confirm()))
+            .set_focus_on_load(Some(true))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+
+        let val = Checkboxes::builder()
+            .action_id("foo")
+            .options(vec![option_0(), option_1()])
+            .initial_options(vec![option_0()])
+            .confirm(confirm())
+            .focus_on_load(true)
+            .build()
+            .unwrap();
+
         assert_eq!(val, expected);
     }
 
     #[test]
-    fn action_id_field_length_is_up_to_255() {
-        let result = Checkboxes::builder()
-            .action_id("a".repeat(256))
-            .option(
-                Opt::builder()
-                    .text(mrkdwn("option-0"))
-                    .value("value-0")
-                    .build()
-                    .unwrap(),
-            )
-            .build();
-        assert!(result.is_err());
+    fn it_has_additional_setter_for_options_field() {
+        let val = Checkboxes::builder()
+            .option(option_0())
+            .option(option_1())
+            .build()
+            .unwrap();
 
-        let err = result.unwrap_err();
+        let expected = Checkboxes {
+            action_id: None,
+            initial_options: vec![],
+            confirm: None,
+            focus_on_load: None,
+            ..checkboxes()
+        };
+
+        assert_eq!(val, expected);
+    }
+
+    #[test]
+    fn it_has_additional_setter_for_initial_options_field() {
+        let val = Checkboxes::builder()
+            .option(option_0())
+            .option(option_1())
+            .initial_option(option_0())
+            .initial_option(option_1())
+            .build()
+            .unwrap();
+
+        let expected = Checkboxes {
+            action_id: None,
+            initial_options: vec![option_0(), option_1()],
+            confirm: None,
+            focus_on_load: None,
+            ..checkboxes()
+        };
+
+        assert_eq!(val, expected);
+    }
+
+    #[test]
+    fn action_id_field_length_must_be_less_than_255() {
+        let err = Checkboxes::builder()
+            .action_id("a".repeat(256))
+            .option(option_0())
+            .build()
+            .unwrap_err();
+
         let expected = CheckboxesError {
             action_id: vec![ValidationError::MaxTextLegth(255)],
             ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 
     #[test]
     fn options_field_is_required() {
-        let result = Checkboxes::builder().build();
-        assert!(result.is_err());
+        let err = Checkboxes::builder().build().unwrap_err();
 
-        let err = result.unwrap_err();
         let expected = CheckboxesError {
             options: vec![ValidationError::Required],
             ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 
     #[test]
-    fn options_field_length_is_up_to_10() {
-        let options: Vec<Opt<Text>> = (0..11)
-            .map(|_| {
-                Opt::builder()
-                    .text(mrkdwn("option-0"))
-                    .value("value-0")
-                    .build()
-                    .unwrap()
-            })
-            .collect();
-        let result = Checkboxes::builder().options(options).build();
-        assert!(result.is_err());
+    fn options_field_length_must_be_less_than_10() {
+        let options: Vec<Opt<Text>> = (0..11).map(|_| option_0()).collect();
 
-        let err = result.unwrap_err();
+        let err = Checkboxes::builder().options(options).build().unwrap_err();
+
         let expected = CheckboxesError {
             options: vec![ValidationError::MaxArraySize(10)],
             ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 
-    fn mrkdwn(text: impl Into<String>) -> MrkdwnText {
-        MrkdwnText {
-            text: Some(text.into()),
-            verbatim: None,
+    fn option_0() -> Opt<Text> {
+        option_text("opt0", "val0")
+    }
+
+    fn option_1() -> Opt<Text> {
+        option_text("opt1", "val1")
+    }
+
+    fn checkboxes() -> Checkboxes {
+        Checkboxes {
+            action_id: Some("foo".into()),
+            options: vec![option_text("opt0", "val0"), option_text("opt1", "val1")],
+            initial_options: vec![option_text("opt0", "val0")],
+            confirm: Some(confirm()),
+            focus_on_load: Some(true),
         }
     }
 }

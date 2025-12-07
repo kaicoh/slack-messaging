@@ -138,34 +138,6 @@ impl ButtonBuilder {
     }
 
     /// set text field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, plain_text};
-    /// use slack_messaging::blocks::elements::Button;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let button = Button::builder()
-    ///     .set_text(Some(plain_text!("Click Me")?))
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "button",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Click Me"
-    ///     }
-    /// });
-    ///
-    /// let json = serde_json::to_value(button).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_text(self, text: Option<PlainText>) -> Self {
         Self {
             text: new_text(text),
@@ -174,34 +146,6 @@ impl ButtonBuilder {
     }
 
     /// set text field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, plain_text};
-    /// use slack_messaging::blocks::elements::Button;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let button = Button::builder()
-    ///     .text(plain_text!("Click Me")?)
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "button",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Click Me"
-    ///     }
-    /// });
-    ///
-    /// let json = serde_json::to_value(button).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn text(self, text: PlainText) -> Self {
         self.set_text(Some(text))
     }
@@ -212,36 +156,6 @@ impl ButtonBuilder {
     }
 
     /// set action_id field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, plain_text};
-    /// use slack_messaging::blocks::elements::Button;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let button = Button::builder()
-    ///     .text(plain_text!("Click Me")?)
-    ///     .set_action_id(Some("button-0"))
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "button",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Click Me"
-    ///     },
-    ///     "action_id": "button-0"
-    /// });
-    ///
-    /// let json = serde_json::to_value(button).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_action_id(self, action_id: Option<impl Into<String>>) -> Self {
         Self {
             action_id: new_action_id(action_id.map(|v| v.into())),
@@ -250,36 +164,6 @@ impl ButtonBuilder {
     }
 
     /// set action_id field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, plain_text};
-    /// use slack_messaging::blocks::elements::Button;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let button = Button::builder()
-    ///     .text(plain_text!("Click Me")?)
-    ///     .action_id("button-0")
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "button",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Click Me"
-    ///     },
-    ///     "action_id": "button-0"
-    /// });
-    ///
-    /// let json = serde_json::to_value(button).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn action_id(self, action_id: impl Into<String>) -> Self {
         self.set_action_id(Some(action_id))
     }
@@ -290,36 +174,6 @@ impl ButtonBuilder {
     }
 
     /// set url field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, plain_text};
-    /// use slack_messaging::blocks::elements::Button;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let button = Button::builder()
-    ///     .text(plain_text!("Click Me")?)
-    ///     .set_url(Some("https://google.com"))
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "button",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Click Me"
-    ///     },
-    ///     "url": "https://google.com"
-    /// });
-    ///
-    /// let json = serde_json::to_value(button).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_url(self, url: Option<impl Into<String>>) -> Self {
         Self {
             url: new_url(url.map(|v| v.into())),
@@ -328,36 +182,6 @@ impl ButtonBuilder {
     }
 
     /// set url field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, plain_text};
-    /// use slack_messaging::blocks::elements::Button;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let button = Button::builder()
-    ///     .text(plain_text!("Click Me")?)
-    ///     .url("https://google.com")
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "button",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Click Me"
-    ///     },
-    ///     "url": "https://google.com"
-    /// });
-    ///
-    /// let json = serde_json::to_value(button).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn url(self, url: impl Into<String>) -> Self {
         self.set_url(Some(url))
     }
@@ -368,36 +192,6 @@ impl ButtonBuilder {
     }
 
     /// set value field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, plain_text};
-    /// use slack_messaging::blocks::elements::Button;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let button = Button::builder()
-    ///     .text(plain_text!("Click Me")?)
-    ///     .set_value(Some("click_me_123"))
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "button",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Click Me"
-    ///     },
-    ///     "value": "click_me_123"
-    /// });
-    ///
-    /// let json = serde_json::to_value(button).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_value(self, value: Option<impl Into<String>>) -> Self {
         Self {
             value: new_value(value.map(|v| v.into())),
@@ -406,36 +200,6 @@ impl ButtonBuilder {
     }
 
     /// set value field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, plain_text};
-    /// use slack_messaging::blocks::elements::Button;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let button = Button::builder()
-    ///     .text(plain_text!("Click Me")?)
-    ///     .value("click_me_123")
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "button",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Click Me"
-    ///     },
-    ///     "value": "click_me_123"
-    /// });
-    ///
-    /// let json = serde_json::to_value(button).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn value(self, value: impl Into<String>) -> Self {
         self.set_value(Some(value))
     }
@@ -446,36 +210,6 @@ impl ButtonBuilder {
     }
 
     /// set "primary" to style field
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, plain_text};
-    /// use slack_messaging::blocks::elements::Button;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let button = Button::builder()
-    ///     .text(plain_text!("Click Me")?)
-    ///     .primary()
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "button",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Click Me"
-    ///     },
-    ///     "style": "primary"
-    /// });
-    ///
-    /// let json = serde_json::to_value(button).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn primary(self) -> Self {
         Self {
             style: new_style(Some("primary")),
@@ -484,36 +218,6 @@ impl ButtonBuilder {
     }
 
     /// set "danger" to style field
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, plain_text};
-    /// use slack_messaging::blocks::elements::Button;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let button = Button::builder()
-    ///     .text(plain_text!("Click Me")?)
-    ///     .danger()
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "button",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Click Me"
-    ///     },
-    ///     "style": "danger"
-    /// });
-    ///
-    /// let json = serde_json::to_value(button).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn danger(self) -> Self {
         Self {
             style: new_style(Some("danger")),
@@ -527,63 +231,6 @@ impl ButtonBuilder {
     }
 
     /// set confirm field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, plain_text};
-    /// use slack_messaging::blocks::elements::Button;
-    /// use slack_messaging::composition_objects::ConfirmationDialog;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let button = Button::builder()
-    ///     .text(plain_text!("Click Me")?)
-    ///     .set_confirm(
-    ///         Some(
-    ///             ConfirmationDialog::builder()
-    ///                 .title(plain_text!("Are you sure?")?)
-    ///                 .text(plain_text!("Wouldn't you prefer a good game of _chess_?")?)
-    ///                 .confirm(plain_text!("Do it")?)
-    ///                 .deny(plain_text!("Stop, I've changed my mind!")?)
-    ///                 .build()?
-    ///         )
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "button",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Click Me"
-    ///     },
-    ///     "confirm": {
-    ///         "title": {
-    ///             "type": "plain_text",
-    ///             "text": "Are you sure?"
-    ///         },
-    ///         "text": {
-    ///             "type": "plain_text",
-    ///             "text": "Wouldn't you prefer a good game of _chess_?"
-    ///         },
-    ///         "confirm": {
-    ///             "type": "plain_text",
-    ///             "text": "Do it"
-    ///         },
-    ///         "deny": {
-    ///             "type": "plain_text",
-    ///             "text": "Stop, I've changed my mind!"
-    ///         }
-    ///     }
-    /// });
-    ///
-    /// let json = serde_json::to_value(button).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_confirm(self, confirm: Option<ConfirmationDialog>) -> Self {
         Self {
             confirm: new_confirm(confirm),
@@ -592,61 +239,6 @@ impl ButtonBuilder {
     }
 
     /// set confirm field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, plain_text};
-    /// use slack_messaging::blocks::elements::Button;
-    /// use slack_messaging::composition_objects::ConfirmationDialog;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let button = Button::builder()
-    ///     .text(plain_text!("Click Me")?)
-    ///     .confirm(
-    ///         ConfirmationDialog::builder()
-    ///             .title(plain_text!("Are you sure?")?)
-    ///             .text(plain_text!("Wouldn't you prefer a good game of _chess_?")?)
-    ///             .confirm(plain_text!("Do it")?)
-    ///             .deny(plain_text!("Stop, I've changed my mind!")?)
-    ///             .build()?
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "button",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Click Me"
-    ///     },
-    ///     "confirm": {
-    ///         "title": {
-    ///             "type": "plain_text",
-    ///             "text": "Are you sure?"
-    ///         },
-    ///         "text": {
-    ///             "type": "plain_text",
-    ///             "text": "Wouldn't you prefer a good game of _chess_?"
-    ///         },
-    ///         "confirm": {
-    ///             "type": "plain_text",
-    ///             "text": "Do it"
-    ///         },
-    ///         "deny": {
-    ///             "type": "plain_text",
-    ///             "text": "Stop, I've changed my mind!"
-    ///         }
-    ///     }
-    /// });
-    ///
-    /// let json = serde_json::to_value(button).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn confirm(self, confirm: ConfirmationDialog) -> Self {
         self.set_confirm(Some(confirm))
     }
@@ -657,36 +249,6 @@ impl ButtonBuilder {
     }
 
     /// set accessibility_label field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, plain_text};
-    /// use slack_messaging::blocks::elements::Button;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let button = Button::builder()
-    ///     .text(plain_text!("Click Me")?)
-    ///     .set_accessibility_label(Some("Click Me!"))
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "button",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Click Me"
-    ///     },
-    ///     "accessibility_label": "Click Me!"
-    /// });
-    ///
-    /// let json = serde_json::to_value(button).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_accessibility_label(self, label: Option<impl Into<String>>) -> Self {
         Self {
             accessibility_label: new_accessibility_label(label.map(|v| v.into())),
@@ -695,36 +257,6 @@ impl ButtonBuilder {
     }
 
     /// set accessibility_label field value
-    ///
-    /// ```
-    /// use slack_messaging::{Builder, plain_text};
-    /// use slack_messaging::blocks::elements::Button;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let button = Button::builder()
-    ///     .text(plain_text!("Click Me")?)
-    ///     .accessibility_label("Click Me!")
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "type": "button",
-    ///     "text": {
-    ///         "type": "plain_text",
-    ///         "text": "Click Me"
-    ///     },
-    ///     "accessibility_label": "Click Me!"
-    /// });
-    ///
-    /// let json = serde_json::to_value(button).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn accessibility_label(self, label: impl Into<String>) -> Self {
         self.set_accessibility_label(Some(label))
     }
@@ -764,36 +296,51 @@ fn new_accessibility_label(label: Option<String>) -> Value<String> {
 
 #[cfg(test)]
 mod tests {
+    use super::super::composition_objects::test_helpers::*;
     use super::*;
 
     #[test]
-    fn it_builds_button() {
-        let result = Button::builder()
-            .text(plain_text("Click Me"))
-            .value("click_me_123")
-            .action_id("button-0")
-            .build();
-        assert!(result.is_ok());
+    fn it_has_setter_methods() {
+        let val = Button::builder()
+            .set_text(Some(plain_text("Click Me")))
+            .set_action_id(Some("button-0"))
+            .set_url(Some("https://google.com"))
+            .set_value(Some("click_me_123"))
+            .set_confirm(Some(confirm()))
+            .set_accessibility_label(Some("Click Me!"))
+            .primary()
+            .build()
+            .unwrap();
 
-        let val = result.unwrap();
         let expected = Button {
-            text: Some(plain_text("Click Me")),
-            action_id: Some("button-0".into()),
-            url: None,
-            value: Some("click_me_123".into()),
-            style: None,
-            confirm: None,
-            accessibility_label: None,
+            style: Some("primary"),
+            ..button()
         };
+
+        assert_eq!(val, expected);
+
+        let val = Button::builder()
+            .text(plain_text("Click Me"))
+            .action_id("button-0")
+            .url("https://google.com")
+            .value("click_me_123")
+            .confirm(confirm())
+            .accessibility_label("Click Me!")
+            .danger()
+            .build()
+            .unwrap();
+
+        let expected = Button {
+            style: Some("danger"),
+            ..button()
+        };
+
         assert_eq!(val, expected);
     }
 
     #[test]
     fn text_field_is_required() {
-        let result = Button::builder().build();
-        assert!(result.is_err());
-
-        let err = result.unwrap_err();
+        let err = Button::builder().build().unwrap_err();
         let expected = ButtonError {
             text: vec![ValidationError::Required],
             ..Default::default()
@@ -802,86 +349,93 @@ mod tests {
     }
 
     #[test]
-    fn text_field_length_is_up_to_75() {
-        let result = Button::builder().text(plain_text("a".repeat(76))).build();
-        assert!(result.is_err());
+    fn text_field_length_must_be_less_than_75() {
+        let err = Button::builder()
+            .text(plain_text("a".repeat(76)))
+            .build()
+            .unwrap_err();
 
-        let err = result.unwrap_err();
         let expected = ButtonError {
             text: vec![ValidationError::MaxTextLegth(75)],
             ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 
     #[test]
-    fn action_id_field_length_is_up_to_255() {
-        let result = Button::builder()
+    fn action_id_field_length_must_be_less_than_255() {
+        let err = Button::builder()
             .text(plain_text("Click Me"))
             .action_id("a".repeat(256))
-            .build();
-        assert!(result.is_err());
+            .build()
+            .unwrap_err();
 
-        let err = result.unwrap_err();
         let expected = ButtonError {
             action_id: vec![ValidationError::MaxTextLegth(255)],
             ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 
     #[test]
-    fn url_field_length_is_up_to_3000() {
-        let result = Button::builder()
+    fn url_field_length_must_be_less_than_3000() {
+        let err = Button::builder()
             .text(plain_text("Click Me"))
             .url("a".repeat(3001))
-            .build();
-        assert!(result.is_err());
+            .build()
+            .unwrap_err();
 
-        let err = result.unwrap_err();
         let expected = ButtonError {
             url: vec![ValidationError::MaxTextLegth(3000)],
             ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 
     #[test]
-    fn value_field_length_is_up_to_2000() {
-        let result = Button::builder()
+    fn value_field_length_must_be_less_than_2000() {
+        let err = Button::builder()
             .text(plain_text("Click Me"))
             .value("a".repeat(2001))
-            .build();
-        assert!(result.is_err());
+            .build()
+            .unwrap_err();
 
-        let err = result.unwrap_err();
         let expected = ButtonError {
             value: vec![ValidationError::MaxTextLegth(2000)],
             ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 
     #[test]
-    fn accessibility_label_field_length_is_up_to_75() {
-        let result = Button::builder()
+    fn accessibility_label_field_length_must_be_less_than_75() {
+        let err = Button::builder()
             .text(plain_text("Click Me"))
             .accessibility_label("a".repeat(76))
-            .build();
-        assert!(result.is_err());
+            .build()
+            .unwrap_err();
 
-        let err = result.unwrap_err();
         let expected = ButtonError {
             accessibility_label: vec![ValidationError::MaxTextLegth(75)],
             ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 
-    fn plain_text(text: impl Into<String>) -> PlainText {
-        PlainText {
-            text: Some(text.into()),
-            emoji: None,
+    fn button() -> Button {
+        Button {
+            text: Some(plain_text("Click Me")),
+            action_id: Some("button-0".into()),
+            url: Some("https://google.com".into()),
+            value: Some("click_me_123".into()),
+            style: None,
+            confirm: Some(confirm()),
+            accessibility_label: Some("Click Me!".into()),
         }
     }
 }

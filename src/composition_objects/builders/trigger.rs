@@ -15,7 +15,7 @@ impl InputParameter {
 }
 
 /// Error while building [`InputParameter`] object.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub struct InputParameterError {
     /// errors of name field
     pub name: Vec<ValidationError>,
@@ -70,32 +70,6 @@ impl InputParameterBuilder {
     }
 
     /// set name field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::InputParameter;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let param = InputParameter::builder()
-    ///     .set_name(Some("input_parameter_a"))
-    ///     .value("Value for input param A")
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "name": "input_parameter_a",
-    ///     "value": "Value for input param A"
-    /// });
-    ///
-    /// let json = serde_json::to_value(param).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_name(self, name: Option<impl Into<String>>) -> Self {
         Self {
             name: new_name(name.map(|v| v.into())),
@@ -104,32 +78,6 @@ impl InputParameterBuilder {
     }
 
     /// set name field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::InputParameter;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let param = InputParameter::builder()
-    ///     .name("input_parameter_a")
-    ///     .value("Value for input param A")
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "name": "input_parameter_a",
-    ///     "value": "Value for input param A"
-    /// });
-    ///
-    /// let json = serde_json::to_value(param).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn name(self, name: impl Into<String>) -> Self {
         self.set_name(Some(name))
     }
@@ -140,32 +88,6 @@ impl InputParameterBuilder {
     }
 
     /// set value field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::InputParameter;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let param = InputParameter::builder()
-    ///     .name("input_parameter_a")
-    ///     .set_value(Some("Value for input param A"))
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "name": "input_parameter_a",
-    ///     "value": "Value for input param A"
-    /// });
-    ///
-    /// let json = serde_json::to_value(param).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_value(self, value: Option<impl Into<JsonValue>>) -> Self {
         Self {
             value: new_value(value.map(|v| v.into())),
@@ -174,32 +96,6 @@ impl InputParameterBuilder {
     }
 
     /// set value field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::InputParameter;
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let param = InputParameter::builder()
-    ///     .name("input_parameter_a")
-    ///     .value("Value for input param A")
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "name": "input_parameter_a",
-    ///     "value": "Value for input param A"
-    /// });
-    ///
-    /// let json = serde_json::to_value(param).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn value(self, value: impl Into<JsonValue>) -> Self {
         self.set_value(Some(value))
     }
@@ -221,7 +117,7 @@ impl Trigger {
 }
 
 /// Error while building [`Trigger`] object.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub struct TriggerError {
     /// errors of url field
     pub url: Vec<ValidationError>,
@@ -282,42 +178,6 @@ impl TriggerBuilder {
     }
 
     /// set url field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::{InputParameter, Trigger};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let trigger = Trigger::builder()
-    ///     .set_url(Some("https://slack.com/shortcuts/Ft0123ABC456/123...xyz"))
-    ///     .customizable_input_parameter(
-    ///         InputParameter::builder()
-    ///             .name("input_parameter_a")
-    ///             .value("Value for input param A")
-    ///             .build()?
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "url": "https://slack.com/shortcuts/Ft0123ABC456/123...xyz",
-    ///     "customizable_input_parameters": [
-    ///         {
-    ///             "name": "input_parameter_a",
-    ///             "value": "Value for input param A"
-    ///         }
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(trigger).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_url(self, url: Option<impl Into<String>>) -> Self {
         Self {
             url: new_url(url.map(|v| v.into())),
@@ -326,42 +186,6 @@ impl TriggerBuilder {
     }
 
     /// set url field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::{InputParameter, Trigger};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let trigger = Trigger::builder()
-    ///     .url("https://slack.com/shortcuts/Ft0123ABC456/123...xyz")
-    ///     .customizable_input_parameter(
-    ///         InputParameter::builder()
-    ///             .name("input_parameter_a")
-    ///             .value("Value for input param A")
-    ///             .build()?
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "url": "https://slack.com/shortcuts/Ft0123ABC456/123...xyz",
-    ///     "customizable_input_parameters": [
-    ///         {
-    ///             "name": "input_parameter_a",
-    ///             "value": "Value for input param A"
-    ///         }
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(trigger).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn url(self, url: impl Into<String>) -> Self {
         self.set_url(Some(url))
     }
@@ -374,46 +198,6 @@ impl TriggerBuilder {
     }
 
     /// set customizable_input_parameters field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::{InputParameter, Trigger};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let trigger = Trigger::builder()
-    ///     .url("https://slack.com/shortcuts/Ft0123ABC456/123...xyz")
-    ///     .set_customizable_input_parameters(
-    ///         Some(
-    ///             vec![
-    ///                 InputParameter::builder()
-    ///                     .name("input_parameter_a")
-    ///                     .value("Value for input param A")
-    ///                     .build()?
-    ///             ]
-    ///         )
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "url": "https://slack.com/shortcuts/Ft0123ABC456/123...xyz",
-    ///     "customizable_input_parameters": [
-    ///         {
-    ///             "name": "input_parameter_a",
-    ///             "value": "Value for input param A"
-    ///         }
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(trigger).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn set_customizable_input_parameters(
         self,
         customizable_input_parameters: Option<Vec<InputParameter>>,
@@ -427,85 +211,11 @@ impl TriggerBuilder {
     }
 
     /// set customizable_input_parameters field value
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::{InputParameter, Trigger};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let trigger = Trigger::builder()
-    ///     .url("https://slack.com/shortcuts/Ft0123ABC456/123...xyz")
-    ///     .customizable_input_parameters(
-    ///         vec![
-    ///             InputParameter::builder()
-    ///                 .name("input_parameter_a")
-    ///                 .value("Value for input param A")
-    ///                 .build()?
-    ///         ]
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "url": "https://slack.com/shortcuts/Ft0123ABC456/123...xyz",
-    ///     "customizable_input_parameters": [
-    ///         {
-    ///             "name": "input_parameter_a",
-    ///             "value": "Value for input param A"
-    ///         }
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(trigger).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn customizable_input_parameters(self, params: Vec<InputParameter>) -> Self {
         self.set_customizable_input_parameters(Some(params))
     }
 
     /// Add parameter to customizable_input_parameters field
-    ///
-    /// ```
-    /// use slack_messaging::Builder;
-    /// use slack_messaging::composition_objects::{InputParameter, Trigger};
-    /// # use std::error::Error;
-    ///
-    /// # fn try_main() -> Result<(), Box<dyn Error>> {
-    /// let trigger = Trigger::builder()
-    ///     .url("https://slack.com/shortcuts/Ft0123ABC456/123...xyz")
-    ///     .customizable_input_parameter(
-    ///         InputParameter::builder()
-    ///             .name("input_parameter_a")
-    ///             .value("Value for input param A")
-    ///             .build()?
-    ///     )
-    ///     .build()?;
-    ///
-    /// let expected = serde_json::json!({
-    ///     "url": "https://slack.com/shortcuts/Ft0123ABC456/123...xyz",
-    ///     "customizable_input_parameters": [
-    ///         {
-    ///             "name": "input_parameter_a",
-    ///             "value": "Value for input param A"
-    ///         }
-    ///     ]
-    /// });
-    ///
-    /// let json = serde_json::to_value(trigger).unwrap();
-    ///
-    /// assert_eq!(json, expected);
-    /// #     Ok(())
-    /// # }
-    /// # fn main() {
-    /// #     try_main().unwrap()
-    /// # }
-    /// ```
     pub fn customizable_input_parameter(mut self, param: InputParameter) -> Self {
         let mut list = self
             .customizable_input_parameters
@@ -531,66 +241,133 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_builds_input_parameter() {
-        let result = InputParameter::builder().name("foo").value("bar").build();
-        assert!(result.is_ok());
-
-        let val = result.unwrap();
+    fn input_parameter_builder_has_setter_methods() {
         let expected = InputParameter {
             name: Some("foo".into()),
             value: Some("bar".into()),
         };
+
+        let val = InputParameter::builder()
+            .set_name(Some("foo"))
+            .set_value(Some("bar"))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+
+        let val = InputParameter::builder()
+            .name("foo")
+            .value("bar")
+            .build()
+            .unwrap();
+
         assert_eq!(val, expected);
     }
 
     #[test]
-    fn default_input_parameter_builder_returns_error() {
-        let result = InputParameter::builder().build();
-        assert!(result.is_err());
+    fn name_field_of_input_parameter_builder_is_required() {
+        let err = InputParameter::builder().value("bar").build().unwrap_err();
 
-        let err = result.unwrap_err();
         let expected = InputParameterError {
             name: vec![ValidationError::Required],
-            value: vec![ValidationError::Required],
+            ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 
     #[test]
-    fn it_builds_trigger() {
-        let result = Trigger::builder()
-            .url("foo")
-            .customizable_input_parameter(
-                InputParameter::builder()
-                    .name("bar")
-                    .value("baz")
-                    .build()
-                    .unwrap(),
-            )
-            .build();
-        assert!(result.is_ok());
+    fn value_field_of_input_parameter_builder_is_required() {
+        let err = InputParameter::builder().name("foo").build().unwrap_err();
 
-        let val = result.unwrap();
+        let expected = InputParameterError {
+            value: vec![ValidationError::Required],
+            ..Default::default()
+        };
+
+        assert_eq!(err, expected);
+    }
+
+    #[test]
+    fn trigger_builder_has_setter_methods() {
         let expected = Trigger {
-            url: Some("foo".into()),
+            url: Some("foobarbaz".into()),
             customizable_input_parameters: vec![InputParameter {
-                name: Some("bar".into()),
-                value: Some("baz".into()),
+                name: Some("foo".into()),
+                value: Some("bar".into()),
             }],
         };
+
+        let val = Trigger::builder()
+            .set_url(Some("foobarbaz"))
+            .set_customizable_input_parameters(Some(vec![InputParameter {
+                name: Some("foo".into()),
+                value: Some("bar".into()),
+            }]))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+
+        let val = Trigger::builder()
+            .url("foobarbaz")
+            .customizable_input_parameters(vec![InputParameter {
+                name: Some("foo".into()),
+                value: Some("bar".into()),
+            }])
+            .build()
+            .unwrap();
+
         assert_eq!(val, expected);
     }
 
     #[test]
-    fn default_trigger_builder_returns_error() {
-        let result = Trigger::builder().build();
-        assert!(result.is_err());
+    fn trigger_builder_has_additional_setter_for_customizable_input_parameters_field() {
+        let expected = Trigger {
+            url: Some("foobarbaz".into()),
+            customizable_input_parameters: vec![
+                InputParameter {
+                    name: Some("foo".into()),
+                    value: Some("bar".into()),
+                },
+                InputParameter {
+                    name: Some("baz".into()),
+                    value: Some("foo".into()),
+                },
+            ],
+        };
 
-        let err = result.unwrap_err();
+        let val = Trigger::builder()
+            .url("foobarbaz")
+            .customizable_input_parameter(InputParameter {
+                name: Some("foo".into()),
+                value: Some("bar".into()),
+            })
+            .customizable_input_parameter(InputParameter {
+                name: Some("baz".into()),
+                value: Some("foo".into()),
+            })
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+    }
+
+    #[test]
+    fn url_field_of_trigger_builder_is_required() {
+        let err = Trigger::builder()
+            .customizable_input_parameter(InputParameter {
+                name: Some("foo".into()),
+                value: Some("bar".into()),
+            })
+            .build()
+            .unwrap_err();
+
         let expected = TriggerError {
             url: vec![ValidationError::Required],
-            customizable_input_parameters: vec![],
+            ..Default::default()
         };
+
         assert_eq!(err, expected);
     }
 }
