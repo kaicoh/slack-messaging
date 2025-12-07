@@ -59,17 +59,17 @@ use serde::Serialize;
 #[serde(tag = "type", rename = "email_text_input")]
 pub struct EmailInput {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) action_id: Option<String>,
+    pub(crate) action_id: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) initial_value: Option<String>,
+    pub(crate) initial_value: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) dispatch_action_config: Option<DispatchActionConfiguration>,
+    pub(crate) dispatch_action_config: Option<DispatchActionConfiguration>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) focus_on_load: Option<bool>,
+    pub(crate) focus_on_load: Option<bool>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) placeholder: Option<PlainText>,
+    pub(crate) placeholder: Option<PlainText>,
 }
