@@ -77,7 +77,7 @@ impl PlainTextBuilder {
     ///
     /// # fn try_main() -> Result<(), Box<dyn Error>> {
     /// let text = PlainText::builder()
-    ///     .set_text(Some("hello world".into()))
+    ///     .set_text(Some("hello world"))
     ///     .build()?;
     ///
     /// let expected = serde_json::json!({
@@ -93,9 +93,9 @@ impl PlainTextBuilder {
     /// #     try_main().unwrap()
     /// # }
     /// ```
-    pub fn set_text(self, text: Option<String>) -> Self {
+    pub fn set_text(self, text: Option<impl Into<String>>) -> Self {
         Self {
-            text: new_text(text),
+            text: new_text(text.map(|v| v.into())),
             ..self
         }
     }
@@ -126,7 +126,7 @@ impl PlainTextBuilder {
     /// # }
     /// ```
     pub fn text(self, text: impl Into<String>) -> Self {
-        self.set_text(Some(text.into()))
+        self.set_text(Some(text))
     }
 
     /// get emoji field value

@@ -179,7 +179,7 @@ impl<T: TextInOption> OptBuilder<T> {
     /// # fn try_main() -> Result<(), Box<dyn Error>> {
     /// let option = Opt::<PlainText>::builder()
     ///     .text(plain_text!("Maru")?)
-    ///     .set_value(Some("maru".into()))
+    ///     .set_value(Some("maru"))
     ///     .build()?;
     ///
     /// let expected = serde_json::json!({
@@ -198,9 +198,9 @@ impl<T: TextInOption> OptBuilder<T> {
     /// # fn main() {
     /// #     try_main().unwrap()
     /// # }
-    pub fn set_value(self, value: Option<String>) -> Self {
+    pub fn set_value(self, value: Option<impl Into<String>>) -> Self {
         Self {
-            value: new_value(value),
+            value: new_value(value.map(|v| v.into())),
             ..self
         }
     }
@@ -235,7 +235,7 @@ impl<T: TextInOption> OptBuilder<T> {
     /// #     try_main().unwrap()
     /// # }
     pub fn value(self, value: impl Into<String>) -> Self {
-        self.set_value(Some(value.into()))
+        self.set_value(Some(value))
     }
 
     /// get description field value
@@ -338,7 +338,7 @@ impl<T: TextInOption> OptBuilder<T> {
     /// let option = Opt::<PlainText>::builder()
     ///     .text(plain_text!("Maru")?)
     ///     .value("maru")
-    ///     .set_url(Some("https://google.com".into()))
+    ///     .set_url(Some("https://google.com"))
     ///     .build()?;
     ///
     /// let expected = serde_json::json!({
@@ -358,9 +358,9 @@ impl<T: TextInOption> OptBuilder<T> {
     /// # fn main() {
     /// #     try_main().unwrap()
     /// # }
-    pub fn set_url(self, url: Option<String>) -> Self {
+    pub fn set_url(self, url: Option<impl Into<String>>) -> Self {
         Self {
-            url: new_url(url),
+            url: new_url(url.map(|v| v.into())),
             ..self
         }
     }
@@ -397,7 +397,7 @@ impl<T: TextInOption> OptBuilder<T> {
     /// #     try_main().unwrap()
     /// # }
     pub fn url(self, url: impl Into<String>) -> Self {
-        self.set_url(Some(url.into()))
+        self.set_url(Some(url))
     }
 }
 
