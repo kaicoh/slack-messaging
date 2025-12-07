@@ -30,6 +30,7 @@ pub use workflow::Workflow;
 #[cfg(test)]
 pub(crate) mod test_helpers {
     use super::*;
+    use std::marker::PhantomData;
 
     pub(crate) fn plain_text(text: impl Into<String>) -> PlainText {
         PlainText {
@@ -50,6 +51,7 @@ pub(crate) mod test_helpers {
         value: impl Into<String>,
     ) -> Opt<PlainText> {
         Opt {
+            phantom: PhantomData,
             text: Some(plain_text(text)),
             value: Some(value.into()),
             description: None,
@@ -59,6 +61,7 @@ pub(crate) mod test_helpers {
 
     pub(crate) fn option_text(text: impl Into<String>, value: impl Into<String>) -> Opt<Text> {
         Opt {
+            phantom: PhantomData,
             text: Some(mrkdwn(text).into()),
             value: Some(value.into()),
             description: None,

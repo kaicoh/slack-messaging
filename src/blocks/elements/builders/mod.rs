@@ -20,3 +20,4 @@ pub use feedback_buttons::{
 };
 pub use file_input::{FileInputBuilder, FileInputError};
 pub use icon_button::{IconButtonBuilder, IconButtonError};
+pub use image::{ImageBuilder, ImageError};

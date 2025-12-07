@@ -25,6 +25,10 @@ use serde::Serialize;
 /// let json = serde_json::to_value(file).unwrap();
 ///
 /// assert_eq!(json, expected);
+///
+/// // If your object has any validation errors, the build method returns Result::Err
+/// let file = SlackFile::builder().build();
+/// assert!(file.is_err());
 /// #     Ok(())
 /// # }
 /// # fn main() {

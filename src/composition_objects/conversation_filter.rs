@@ -42,6 +42,10 @@ pub enum Conversation {
 /// let json = serde_json::to_value(filter).unwrap();
 ///
 /// assert_eq!(json, expected);
+///
+/// // If your object has any validation errors, the build method returns Result::Err
+/// let filter = ConversationFilter::builder().build();
+/// assert!(filter.is_err());
 /// #     Ok(())
 /// # }
 /// # fn main() {

@@ -15,6 +15,9 @@ pub enum ValidationError {
     #[error("max array length `{0}` items")]
     MaxArraySize(usize),
 
+    #[error("the array cannot be empty")]
+    EmptyArray,
+
     #[error("should be in the format `{0}`")]
     InvalidFormat(&'static str),
 
@@ -23,4 +26,10 @@ pub enum ValidationError {
 
     #[error("min value is `{0}")]
     MinIntegerValue(i64),
+
+    #[error("you must provide either {0} or {1}")]
+    ExclusiveField(&'static str, &'static str),
+
+    #[error("you must supply at least one field")]
+    NoFieldProvided,
 }

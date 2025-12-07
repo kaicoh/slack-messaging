@@ -41,6 +41,12 @@ pub enum TriggerAction {
 /// let json = serde_json::to_value(config).unwrap();
 ///
 /// assert_eq!(json, expected);
+///
+/// // If your object has any validation errors, the build method returns Result::Err
+/// let config = DispatchActionConfiguration::builder()
+///     .trigger_actions_on(vec![])
+///     .build();
+/// assert!(config.is_err());
 /// #     Ok(())
 /// # }
 /// # fn main() {

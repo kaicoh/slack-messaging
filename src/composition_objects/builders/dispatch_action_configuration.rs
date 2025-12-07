@@ -92,7 +92,7 @@ impl DispatchActionConfigurationBuilder {
 }
 
 fn new_trigger_actions_on(value: Option<Vec<TriggerAction>>) -> Value<Vec<TriggerAction>> {
-    pipe! { Value::new(value) => validators::do_nothing }
+    pipe! { Value::new(value) => validators::list::not_empty }
 }
 
 #[cfg(test)]
@@ -143,5 +143,19 @@ mod tests {
             ],
         };
         assert_eq!(val, expected);
+    }
+
+    #[test]
+    fn trigger_actions_on_field_cannot_be_empty() {
+        let err = DispatchActionConfiguration::builder()
+            .trigger_actions_on(vec![])
+            .build()
+            .unwrap_err();
+
+        let expected = DispatchActionConfigurationError {
+            trigger_actions_on: vec![ValidationError::EmptyArray],
+        };
+
+        assert_eq!(err, expected);
     }
 }

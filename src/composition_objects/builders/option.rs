@@ -1,3 +1,4 @@
+use super::super::option::UrlAvailable;
 use super::error::ValidationError;
 use super::validators;
 use super::value::{self, Value};
@@ -5,10 +6,11 @@ use super::{Builder, Opt, TextInOption};
 
 use std::error::Error;
 use std::fmt;
+use std::marker::PhantomData;
 
-impl<T: TextInOption> Opt<T> {
+impl<T: TextInOption, P> Opt<T, P> {
     /// Construct a [`OptBuilder`].
-    pub fn builder() -> OptBuilder<T> {
+    pub fn builder() -> OptBuilder<T, P> {
         OptBuilder::default()
     }
 }
@@ -43,16 +45,18 @@ impl Error for OptError {}
 
 /// Builder for [`Opt`] object.
 #[derive(Debug)]
-pub struct OptBuilder<T: TextInOption> {
+pub struct OptBuilder<T: TextInOption, P> {
+    phantom: PhantomData<P>,
     text: Value<T>,
     value: Value<String>,
     description: Value<T>,
     url: Value<String>,
 }
 
-impl<T: TextInOption> Default for OptBuilder<T> {
+impl<T: TextInOption, P> Default for OptBuilder<T, P> {
     fn default() -> Self {
         OptBuilder {
+            phantom: PhantomData,
             text: new_text(None),
             value: new_value(None),
             description: new_description(None),
@@ -61,12 +65,13 @@ impl<T: TextInOption> Default for OptBuilder<T> {
     }
 }
 
-impl<T: TextInOption> Builder for OptBuilder<T> {
-    type Target = Opt<T>;
+impl<T: TextInOption, P> Builder for OptBuilder<T, P> {
+    type Target = Opt<T, P>;
     type Error = OptError;
 
     fn build(self) -> Result<Self::Target, Self::Error> {
         let Self {
+            phantom,
             text,
             value,
             description,
@@ -75,6 +80,7 @@ impl<T: TextInOption> Builder for OptBuilder<T> {
 
         value::merge_4(text, value, description, url)
             .map(|(text, value, description, url)| Opt {
+                phantom,
                 text,
                 value,
                 description,
@@ -89,7 +95,7 @@ impl<T: TextInOption> Builder for OptBuilder<T> {
     }
 }
 
-impl<T: TextInOption> OptBuilder<T> {
+impl<T: TextInOption, P> OptBuilder<T, P> {
     /// get text field value
     pub fn get_text(&self) -> Option<&T> {
         self.text.inner_ref()
@@ -143,7 +149,9 @@ impl<T: TextInOption> OptBuilder<T> {
     pub fn description(self, description: impl Into<T>) -> Self {
         self.set_description(Some(description))
     }
+}
 
+impl<T: TextInOption> OptBuilder<T, UrlAvailable> {
     /// get url field value
     pub fn get_url(&self) -> Option<&String> {
         self.url.inner_ref()
@@ -195,13 +203,43 @@ mod tests {
     #[test]
     fn it_has_setter_methods() {
         let expected = Opt {
+            phantom: PhantomData,
+            text: Some(plain_text("foo")),
+            value: Some("bar".into()),
+            description: Some(plain_text("baz")),
+            url: None,
+        };
+
+        let val = Opt::<PlainText>::builder()
+            .set_text(Some(plain_text("foo")))
+            .set_value(Some("bar"))
+            .set_description(Some(plain_text("baz")))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+
+        let val = Opt::<PlainText>::builder()
+            .text(plain_text("foo"))
+            .value("bar")
+            .description(plain_text("baz"))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+    }
+
+    #[test]
+    fn url_field_is_available_only_if_the_phantom_type_is_used() {
+        let expected = Opt {
+            phantom: PhantomData,
             text: Some(plain_text("foo")),
             value: Some("bar".into()),
             description: Some(plain_text("baz")),
             url: Some("foobarbaz".into()),
         };
 
-        let val = Opt::builder()
+        let val = Opt::<PlainText, UrlAvailable>::builder()
             .set_text(Some(plain_text("foo")))
             .set_value(Some("bar"))
             .set_description(Some(plain_text("baz")))
@@ -211,7 +249,7 @@ mod tests {
 
         assert_eq!(val, expected);
 
-        let val = Opt::builder()
+        let val = Opt::<PlainText, UrlAvailable>::builder()
             .text(plain_text("foo"))
             .value("bar")
             .description(plain_text("baz"))
@@ -303,7 +341,7 @@ mod tests {
 
     #[test]
     fn url_field_length_must_be_less_than_3000() {
-        let err = Opt::<PlainText>::builder()
+        let err = Opt::<PlainText, UrlAvailable>::builder()
             .text(plain_text("foo"))
             .value("bar")
             .url("f".repeat(3001))

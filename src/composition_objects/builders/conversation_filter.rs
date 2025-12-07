@@ -62,10 +62,20 @@ impl Builder for ConversationFilterBuilder {
 
     fn build(self) -> Result<Self::Target, Self::Error> {
         let Self {
-            include,
-            exclude_external_shared_channels,
-            exclude_bot_users,
+            mut include,
+            mut exclude_external_shared_channels,
+            mut exclude_bot_users,
         } = self;
+
+        if include.inner_ref().is_none()
+            && exclude_external_shared_channels.inner_ref().is_none()
+            && exclude_bot_users.inner_ref().is_none()
+        {
+            let err = ValidationError::NoFieldProvided;
+            include.push(err);
+            exclude_external_shared_channels.push(err);
+            exclude_bot_users.push(err);
+        }
 
         value::merge_3(include, exclude_external_shared_channels, exclude_bot_users)
             .map(
@@ -153,7 +163,7 @@ impl ConversationFilterBuilder {
 }
 
 fn new_include(include: Option<Vec<Conversation>>) -> Value<Vec<Conversation>> {
-    pipe! { Value::new(include) => validators::do_nothing }
+    pipe! { Value::new(include) => validators::list::not_empty }
 }
 
 fn new_exclude_external_shared_channels(
@@ -218,5 +228,33 @@ mod tests {
             exclude_bot_users: None,
         };
         assert_eq!(val, expected);
+    }
+
+    #[test]
+    fn include_field_cannot_be_empty() {
+        let err = ConversationFilter::builder()
+            .include(vec![])
+            .build()
+            .unwrap_err();
+
+        let expected = ConversationFilterError {
+            include: vec![ValidationError::EmptyArray],
+            ..Default::default()
+        };
+
+        assert_eq!(err, expected);
+    }
+
+    #[test]
+    fn it_sets_error_if_no_field_provided() {
+        let err = ConversationFilter::builder().build().unwrap_err();
+
+        let expected = ConversationFilterError {
+            include: vec![ValidationError::NoFieldProvided],
+            exclude_external_shared_channels: vec![ValidationError::NoFieldProvided],
+            exclude_bot_users: vec![ValidationError::NoFieldProvided],
+        };
+
+        assert_eq!(err, expected);
     }
 }

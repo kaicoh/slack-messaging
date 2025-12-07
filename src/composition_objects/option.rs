@@ -1,5 +1,6 @@
 use super::{PlainText, Text, TextObject};
 use serde::Serialize;
+use std::marker::PhantomData;
 
 /// [Option object](https://docs.slack.dev/reference/block-kit/composition-objects/option-object)
 /// representation.
@@ -45,7 +46,10 @@ use serde::Serialize;
 /// # }
 /// ```
 #[derive(Debug, Clone, Serialize, PartialEq)]
-pub struct Opt<T: TextInOption> {
+pub struct Opt<T: TextInOption, P = UrlUnavailable> {
+    #[serde(skip)]
+    pub(crate) phantom: PhantomData<P>,
+
     pub(crate) text: Option<T>,
 
     pub(crate) value: Option<String>,
@@ -63,3 +67,13 @@ pub trait TextInOption: TextObject {}
 
 impl TextInOption for Text {}
 impl TextInOption for PlainText {}
+
+/// Phantom type to control url field of [`Opt`]. By default, this type is used,
+/// and the url field is unavailable.
+#[derive(Debug, Clone, PartialEq)]
+pub struct UrlUnavailable;
+
+/// Phantom type to control url field of [`Opt`]. Using this type, the url field
+/// is available.
+#[derive(Debug, Clone, PartialEq)]
+pub struct UrlAvailable;

@@ -56,7 +56,23 @@ impl Builder for SlackFileBuilder {
     type Error = SlackFileError;
 
     fn build(self) -> Result<Self::Target, Self::Error> {
-        value::merge_2(self.id, self.url)
+        let Self { mut id, mut url } = self;
+
+        match (id.inner_ref(), url.inner_ref()) {
+            (Some(_), Some(_)) => {
+                let err = ValidationError::ExclusiveField("id", "url");
+                id.push(err);
+                url.push(err);
+            }
+            (None, None) => {
+                let err = ValidationError::NoFieldProvided;
+                id.push(err);
+                url.push(err);
+            }
+            _ => {}
+        }
+
+        value::merge_2(id, url)
             .map(|(id, url)| SlackFile { id, url })
             .map_err(|(id, url)| SlackFileError { id, url })
     }
@@ -114,13 +130,30 @@ mod tests {
 
     #[test]
     fn it_has_setter_methods() {
+        // use id field
         let expected = SlackFile {
             id: Some("F0123456".into()),
-            url: Some("https://files.slack.com/files-pri/T0123456-F0123456/xyz.png".into()),
+            url: None,
         };
 
         let val = SlackFile::builder()
             .set_id(Some("F0123456"))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+
+        let val = SlackFile::builder().id("F0123456").build().unwrap();
+
+        assert_eq!(val, expected);
+
+        // use url field
+        let expected = SlackFile {
+            id: None,
+            url: Some("https://files.slack.com/files-pri/T0123456-F0123456/xyz.png".into()),
+        };
+
+        let val = SlackFile::builder()
             .set_url(Some(
                 "https://files.slack.com/files-pri/T0123456-F0123456/xyz.png",
             ))
@@ -130,11 +163,34 @@ mod tests {
         assert_eq!(val, expected);
 
         let val = SlackFile::builder()
-            .id("F0123456")
             .url("https://files.slack.com/files-pri/T0123456-F0123456/xyz.png")
             .build()
             .unwrap();
 
         assert_eq!(val, expected);
+    }
+
+    #[test]
+    fn it_sets_error_if_both_field_are_not_set() {
+        let err = SlackFile::builder().build().unwrap_err();
+        let expected = SlackFileError {
+            id: vec![ValidationError::NoFieldProvided],
+            url: vec![ValidationError::NoFieldProvided],
+        };
+        assert_eq!(err, expected);
+    }
+
+    #[test]
+    fn it_sets_error_if_both_field_are_set() {
+        let err = SlackFile::builder()
+            .id("F0123456")
+            .url("https://files.slack.com/files-pri/T0123456-F0123456/xyz.png")
+            .build()
+            .unwrap_err();
+        let expected = SlackFileError {
+            id: vec![ValidationError::ExclusiveField("id", "url")],
+            url: vec![ValidationError::ExclusiveField("id", "url")],
+        };
+        assert_eq!(err, expected);
     }
 }

@@ -64,9 +64,19 @@ impl Builder for ImageBuilder {
     fn build(self) -> Result<Self::Target, Self::Error> {
         let Self {
             alt_text,
-            image_url,
-            slack_file,
+            mut image_url,
+            mut slack_file,
         } = self;
+
+        match (image_url.inner_ref(), slack_file.inner_ref()) {
+            (Some(_), Some(_)) | (None, None) => {
+                let err = ValidationError::ExclusiveField("image_url", "slack_file");
+                image_url.push(err);
+                slack_file.push(err);
+            }
+            _ => {}
+        }
+
         value::merge_3(alt_text, image_url, slack_file)
             .map(|(alt_text, image_url, slack_file)| Image {
                 alt_text,
@@ -205,7 +215,10 @@ mod tests {
 
     #[test]
     fn alt_text_field_is_required() {
-        let err = Image::builder().build().unwrap_err();
+        let err = Image::builder()
+            .slack_file(slack_file())
+            .build()
+            .unwrap_err();
 
         let expected = ImageError {
             alt_text: vec![ValidationError::Required],
@@ -225,6 +238,37 @@ mod tests {
 
         let expected = ImageError {
             image_url: vec![ValidationError::MaxTextLegth(3000)],
+            ..Default::default()
+        };
+
+        assert_eq!(err, expected);
+    }
+
+    #[test]
+    fn either_image_url_or_slack_file_fields_is_set() {
+        let err = Image::builder()
+            .alt_text("Multiple cute kittens")
+            .image_url("http://placekitten.com/700/500")
+            .slack_file(slack_file())
+            .build()
+            .unwrap_err();
+
+        let expected = ImageError {
+            image_url: vec![ValidationError::ExclusiveField("image_url", "slack_file")],
+            slack_file: vec![ValidationError::ExclusiveField("image_url", "slack_file")],
+            ..Default::default()
+        };
+
+        assert_eq!(err, expected);
+
+        let err = Image::builder()
+            .alt_text("Multiple cute kittens")
+            .build()
+            .unwrap_err();
+
+        let expected = ImageError {
+            image_url: vec![ValidationError::ExclusiveField("image_url", "slack_file")],
+            slack_file: vec![ValidationError::ExclusiveField("image_url", "slack_file")],
             ..Default::default()
         };
 
