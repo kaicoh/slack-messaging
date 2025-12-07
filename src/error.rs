@@ -14,4 +14,7 @@ pub enum ValidationError {
 
     #[error("max array length `{0}` items")]
     MaxArraySize(usize),
+
+    #[error("should be in the format `{0}`")]
+    InvalidFormat(&'static str),
 }

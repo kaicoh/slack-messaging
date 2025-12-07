@@ -1,6 +1,13 @@
 use super::*;
 
+use chrono::NaiveDate;
+use once_cell::sync::Lazy;
 use paste::paste;
+use regex::Regex;
+use std::error::Error;
+
+static DATE_FORMAT: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"(?x)(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})").unwrap());
 
 type Text = Value<String>;
 
@@ -16,6 +23,15 @@ fn min(min: usize, mut value: Text) -> Text {
         value.push(ValidationError::MinTextLegth(min));
     }
     value
+}
+
+fn is_valid_date(text: &str) -> Result<(), Box<dyn Error>> {
+    let caps = DATE_FORMAT.captures(text).ok_or("Failed to capture text")?;
+    let year: i32 = caps["year"].parse()?;
+    let month: u32 = caps["month"].parse()?;
+    let day: u32 = caps["day"].parse()?;
+    NaiveDate::from_ymd_opt(year, month, day).ok_or("Invalid date")?;
+    Ok(())
 }
 
 macro_rules! impl_max {
@@ -34,6 +50,13 @@ impl_max!(75, 150, 255, 2000, 3000);
 
 pub(crate) fn min_1(value: Text) -> Text {
     min(1, value)
+}
+
+pub(crate) fn date_format(mut value: Text) -> Text {
+    if value.inner_ref().is_some_and(|v| is_valid_date(v).is_err()) {
+        value.push(ValidationError::InvalidFormat("YYYY-MM-DD"));
+    }
+    value
 }
 
 #[cfg(test)]
@@ -64,5 +87,29 @@ mod tests {
         let value: Text = Value::new(Some(text_0));
         let result = min_1(value);
         assert_eq!(result.errors, vec![ValidationError::MinTextLegth(1)]);
+    }
+
+    #[test]
+    fn date_format_sets_error_if_the_value_does_not_meet_date_format() {
+        let date = "2010-03-14".to_string();
+        let value: Text = Value::new(Some(date));
+        let result = date_format(value);
+        assert!(result.errors.is_empty());
+
+        let invalid_date = "2015-02-29".to_string();
+        let value: Text = Value::new(Some(invalid_date));
+        let result = date_format(value);
+        assert_eq!(
+            result.errors,
+            vec![ValidationError::InvalidFormat("YYYY-MM-DD")]
+        );
+
+        let text = "foobar".to_string();
+        let value: Text = Value::new(Some(text));
+        let result = date_format(value);
+        assert_eq!(
+            result.errors,
+            vec![ValidationError::InvalidFormat("YYYY-MM-DD")]
+        );
     }
 }

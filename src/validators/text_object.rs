@@ -25,7 +25,7 @@ macro_rules! impl_max {
     }
 }
 
-impl_max!(30, 75, 100, 300);
+impl_max!(30, 75, 100, 150, 300);
 
 #[cfg(test)]
 mod tests {

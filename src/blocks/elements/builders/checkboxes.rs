@@ -356,8 +356,8 @@ mod tests {
     fn checkboxes() -> Checkboxes {
         Checkboxes {
             action_id: Some("foo".into()),
-            options: vec![option_text("opt0", "val0"), option_text("opt1", "val1")],
-            initial_options: vec![option_text("opt0", "val0")],
+            options: vec![option_0(), option_1()],
+            initial_options: vec![option_0()],
             confirm: Some(confirm()),
             focus_on_load: Some(true),
         }
