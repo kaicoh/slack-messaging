@@ -49,7 +49,6 @@ use serde::Serialize;
 /// #     try_main().unwrap()
 /// # }
 /// ```
-/// ```
 #[derive(Debug, Clone, Serialize, PartialEq)]
 #[serde(tag = "type", rename = "datepicker")]
 pub struct DatePicker {

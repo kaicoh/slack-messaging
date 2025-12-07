@@ -76,6 +76,15 @@ pub(crate) mod test_helpers {
         }
     }
 
+    pub(crate) fn dispatch_action_config() -> DispatchActionConfiguration {
+        DispatchActionConfiguration {
+            trigger_actions_on: vec![
+                TriggerAction::OnEnterPressed,
+                TriggerAction::OnCharacterEntered,
+            ],
+        }
+    }
+
     pub(crate) fn trigger() -> Trigger {
         Trigger {
             url: Some("foo".into()),
