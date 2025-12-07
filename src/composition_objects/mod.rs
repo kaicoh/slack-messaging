@@ -13,6 +13,7 @@ mod plain_text;
 mod slack_file;
 mod text;
 mod trigger;
+mod workflow;
 
 pub use confirmation_dialog::ConfirmationDialog;
 pub use conversation_filter::{Conversation, ConversationFilter};
@@ -24,3 +25,4 @@ pub use plain_text::PlainText;
 pub use slack_file::SlackFile;
 pub use text::{Text, TextObject};
 pub use trigger::{InputParameter, Trigger};
+pub use workflow::Workflow;

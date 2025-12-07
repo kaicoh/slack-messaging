@@ -1,5 +1,6 @@
 use thiserror::Error;
 
+/// Validation error object
 #[derive(Debug, Clone, Copy, PartialEq, Error)]
 pub enum ValidationError {
     #[error("required")]
