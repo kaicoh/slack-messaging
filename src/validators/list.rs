@@ -23,7 +23,7 @@ macro_rules! impl_max_item {
     }
 }
 
-impl_max_item!(100);
+impl_max_item!(10, 100);
 
 #[cfg(test)]
 mod tests {
