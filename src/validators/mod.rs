@@ -2,6 +2,7 @@ use super::composition_objects;
 use super::error::ValidationError;
 use super::value::Value;
 
+pub(crate) mod integer;
 pub(crate) mod list;
 pub(crate) mod text;
 pub(crate) mod text_object;
