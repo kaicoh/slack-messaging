@@ -186,6 +186,60 @@ impl<T: TextInOption> OptGroupBuilder<T> {
     /// let options = OptGroup::<PlainText>::builder()
     ///     .label(plain_text!("Group One")?)
     ///     .set_options(
+    ///         Some(
+    ///             vec![
+    ///                 Opt::builder()
+    ///                     .text(plain_text!("option-0")?)
+    ///                     .value("value-0")
+    ///                     .build()?
+    ///             ]
+    ///         )
+    ///     )
+    ///     .build()?;
+    ///
+    /// let expected = serde_json::json!({
+    ///     "label": {
+    ///         "type": "plain_text",
+    ///         "text": "Group One"
+    ///     },
+    ///     "options": [
+    ///         {
+    ///             "text": {
+    ///                 "type": "plain_text",
+    ///                 "text": "option-0",
+    ///             },
+    ///             "value": "value-0"
+    ///         }
+    ///     ]
+    /// });
+    ///
+    /// let json = serde_json::to_value(options).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// #     Ok(())
+    /// # }
+    /// # fn main() {
+    /// #     try_main().unwrap()
+    /// # }
+    /// ```
+    pub fn set_options(self, options: Option<Vec<Opt<T>>>) -> Self {
+        Self {
+            options: new_options(options),
+            ..self
+        }
+    }
+
+    /// set options field value
+    ///
+    /// ```
+    /// use slack_messaging::{Builder, plain_text};
+    /// use slack_messaging::composition_objects::{OptGroup, Opt, PlainText};
+    /// # use std::error::Error;
+    ///
+    /// # fn try_main() -> Result<(), Box<dyn Error>> {
+    /// let options = OptGroup::<PlainText>::builder()
+    ///     .label(plain_text!("Group One")?)
+    ///     .options(
     ///         vec![
     ///             Opt::builder()
     ///                 .text(plain_text!("option-0")?)
@@ -220,11 +274,8 @@ impl<T: TextInOption> OptGroupBuilder<T> {
     /// #     try_main().unwrap()
     /// # }
     /// ```
-    pub fn set_options(self, options: Vec<Opt<T>>) -> Self {
-        Self {
-            options: new_options(Some(options)),
-            ..self
-        }
+    pub fn options(self, options: Vec<Opt<T>>) -> Self {
+        self.set_options(Some(options))
     }
 
     /// add option to options field
@@ -273,7 +324,7 @@ impl<T: TextInOption> OptGroupBuilder<T> {
     pub fn option(mut self, option: Opt<T>) -> Self {
         let mut list = self.options.take_inner().unwrap_or_default();
         list.push(option);
-        self.set_options(list)
+        self.options(list)
     }
 }
 
@@ -368,7 +419,7 @@ mod tests {
 
         let result = OptGroup::<PlainText>::builder()
             .label(plain_text("foo"))
-            .set_options(options)
+            .options(options)
             .build();
         assert!(result.is_err());
 

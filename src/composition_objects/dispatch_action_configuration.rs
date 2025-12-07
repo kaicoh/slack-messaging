@@ -27,8 +27,8 @@ pub enum TriggerAction {
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {
 /// let config = DispatchActionConfiguration::builder()
-///     .trigger_actions_on(TriggerAction::OnEnterPressed)
-///     .trigger_actions_on(TriggerAction::OnCharacterEntered)
+///     .trigger_action(TriggerAction::OnEnterPressed)
+///     .trigger_action(TriggerAction::OnCharacterEntered)
 ///     .build()?;
 ///
 /// let expected = serde_json::json!({

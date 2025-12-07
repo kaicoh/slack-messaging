@@ -26,8 +26,8 @@ pub enum Conversation {
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {
 /// let filter = ConversationFilter::builder()
-///     .include(Conversation::Public)
-///     .include(Conversation::Mpim)
+///     .conversation(Conversation::Public)
+///     .conversation(Conversation::Mpim)
 ///     .exclude_bot_users(true)
 ///     .build()?;
 ///

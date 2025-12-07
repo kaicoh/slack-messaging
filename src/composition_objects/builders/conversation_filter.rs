@@ -105,6 +105,48 @@ impl ConversationFilterBuilder {
     /// # fn try_main() -> Result<(), Box<dyn Error>> {
     /// let filter = ConversationFilter::builder()
     ///     .set_include(
+    ///         Some(
+    ///             vec![
+    ///                 Conversation::Im,
+    ///                 Conversation::Private,
+    ///             ]
+    ///         )
+    ///     )
+    ///     .build()?;
+    ///
+    /// let expected = serde_json::json!({
+    ///     "include": [
+    ///         "im",
+    ///         "private"
+    ///     ]
+    /// });
+    ///
+    /// let json = serde_json::to_value(filter).unwrap();
+    ///
+    /// assert_eq!(json, expected);
+    /// #     Ok(())
+    /// # }
+    /// # fn main() {
+    /// #     try_main().unwrap()
+    /// # }
+    /// ```
+    pub fn set_include(self, include: Option<Vec<Conversation>>) -> Self {
+        Self {
+            include: new_include(include),
+            ..self
+        }
+    }
+
+    /// set include field value
+    ///
+    /// ```
+    /// use slack_messaging::Builder;
+    /// use slack_messaging::composition_objects::{Conversation, ConversationFilter};
+    /// # use std::error::Error;
+    ///
+    /// # fn try_main() -> Result<(), Box<dyn Error>> {
+    /// let filter = ConversationFilter::builder()
+    ///     .include(
     ///         vec![
     ///             Conversation::Im,
     ///             Conversation::Private,
@@ -128,14 +170,11 @@ impl ConversationFilterBuilder {
     /// #     try_main().unwrap()
     /// # }
     /// ```
-    pub fn set_include(self, include: Vec<Conversation>) -> Self {
-        Self {
-            include: new_include(Some(include)),
-            ..self
-        }
+    pub fn include(self, include: Vec<Conversation>) -> Self {
+        self.set_include(Some(include))
     }
 
-    /// add value to include field
+    /// add conversation to include field
     ///
     /// ```
     /// use slack_messaging::Builder;
@@ -144,8 +183,8 @@ impl ConversationFilterBuilder {
     ///
     /// # fn try_main() -> Result<(), Box<dyn Error>> {
     /// let filter = ConversationFilter::builder()
-    ///     .include(Conversation::Im)
-    ///     .include(Conversation::Private)
+    ///     .conversation(Conversation::Im)
+    ///     .conversation(Conversation::Private)
     ///     .build()?;
     ///
     /// let expected = serde_json::json!({
@@ -164,10 +203,10 @@ impl ConversationFilterBuilder {
     /// #     try_main().unwrap()
     /// # }
     /// ```
-    pub fn include(mut self, include: Conversation) -> Self {
+    pub fn conversation(mut self, conversation: Conversation) -> Self {
         let mut list = self.include.take_inner().unwrap_or_default();
-        list.push(include);
-        self.set_include(list)
+        list.push(conversation);
+        self.include(list)
     }
 
     /// get exclude_external_shared_channels field value
@@ -327,7 +366,7 @@ mod tests {
     #[test]
     fn it_builds_conversation_filter() {
         let result = ConversationFilter::builder()
-            .include(Conversation::Im)
+            .conversation(Conversation::Im)
             .build();
         assert!(result.is_ok());
 

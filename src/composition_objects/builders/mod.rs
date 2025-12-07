@@ -8,6 +8,7 @@ mod option;
 mod option_group;
 mod plain_text;
 mod slack_file;
+mod trigger;
 
 pub use confirmation_dialog::{ConfirmationDialogBuilder, ConfirmationDialogError};
 pub use conversation_filter::{ConversationFilterBuilder, ConversationFilterError};
@@ -19,3 +20,4 @@ pub use option::{OptBuilder, OptError};
 pub use option_group::{OptGroupBuilder, OptGroupError};
 pub use plain_text::{PlainTextBuilder, PlainTextError};
 pub use slack_file::{SlackFileBuilder, SlackFileError};
+pub use trigger::{InputParameterBuilder, InputParameterError, TriggerBuilder, TriggerError};
