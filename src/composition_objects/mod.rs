@@ -94,4 +94,11 @@ pub(crate) mod test_helpers {
             }],
         }
     }
+
+    pub(crate) fn slack_file() -> SlackFile {
+        SlackFile {
+            id: Some("12345".into()),
+            url: None,
+        }
+    }
 }
