@@ -139,7 +139,7 @@ impl EmailInputBuilder {
         self.initial_value.inner_ref()
     }
 
-    /// set options field value
+    /// set initial_value field value
     pub fn set_initial_value(self, date: Option<impl Into<String>>) -> Self {
         Self {
             initial_value: new_initial_value(date.map(|v| v.into())),
@@ -147,7 +147,7 @@ impl EmailInputBuilder {
         }
     }
 
-    /// set options field value
+    /// set initial_value field value
     pub fn initial_value(self, date: impl Into<String>) -> Self {
         self.set_initial_value(Some(date))
     }

@@ -6,6 +6,7 @@ mod date_picker;
 mod datetime_picker;
 mod email_input;
 mod feedback_buttons;
+mod file_input;
 
 pub use button::{ButtonBuilder, ButtonError};
 pub use checkboxes::{CheckboxesBuilder, CheckboxesError};
@@ -15,3 +16,4 @@ pub use email_input::{EmailInputBuilder, EmailInputError};
 pub use feedback_buttons::{
     FeedbackButtonBuilder, FeedbackButtonError, FeedbackButtonsBuilder, FeedbackButtonsError,
 };
+pub use file_input::{FileInputBuilder, FileInputError};

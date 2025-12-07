@@ -17,4 +17,10 @@ pub enum ValidationError {
 
     #[error("should be in the format `{0}`")]
     InvalidFormat(&'static str),
+
+    #[error("max value is `{0}")]
+    MaxIntegerValue(i64),
+
+    #[error("min value is `{0}")]
+    MinIntegerValue(i64),
 }
