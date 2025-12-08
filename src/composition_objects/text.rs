@@ -26,20 +26,6 @@ pub enum Text {
     Mrkdwn(MrkdwnText),
 }
 
-/// TextObject is a trait any text object representations must satisfy.
-pub trait TextObject {
-    fn text(&self) -> Option<&String>;
-}
-
-impl TextObject for Text {
-    fn text(&self) -> Option<&String> {
-        match self {
-            Self::Plain(t) => t.text(),
-            Self::Mrkdwn(t) => t.text(),
-        }
-    }
-}
-
 impl From<PlainText> for Text {
     fn from(value: PlainText) -> Self {
         Self::Plain(value)

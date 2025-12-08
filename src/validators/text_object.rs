@@ -1,4 +1,4 @@
-use super::composition_objects::TextObject;
+use super::composition_objects::types::TextObject;
 use super::*;
 
 use paste::paste;

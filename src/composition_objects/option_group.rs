@@ -1,4 +1,4 @@
-use super::{Opt, PlainText, TextInOption};
+use super::{Opt, PlainText, types::TextInOption};
 use serde::Serialize;
 
 /// [Option group object](https://docs.slack.dev/reference/block-kit/composition-objects/option-group-object)

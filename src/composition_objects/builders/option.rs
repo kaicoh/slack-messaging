@@ -1,8 +1,8 @@
-use super::super::option::UrlAvailable;
+use super::super::types::{TextInOption, UrlAvailable};
 use super::error::ValidationError;
 use super::validators;
 use super::value::{self, Value};
-use super::{Builder, Opt, TextInOption};
+use super::{Builder, Opt};
 
 use std::error::Error;
 use std::fmt;

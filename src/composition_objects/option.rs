@@ -1,4 +1,4 @@
-use super::{PlainText, Text, TextObject};
+use super::types::{TextInOption, UrlUnavailable};
 use serde::Serialize;
 use std::marker::PhantomData;
 
@@ -60,20 +60,3 @@ pub struct Opt<T: TextInOption, P = UrlUnavailable> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) url: Option<String>,
 }
-
-/// TextInOption is a trait that can be set to text and desciption field
-/// of [`Opt`] object
-pub trait TextInOption: TextObject {}
-
-impl TextInOption for Text {}
-impl TextInOption for PlainText {}
-
-/// Phantom type to control url field of [`Opt`]. By default, this type is used,
-/// and the url field is unavailable.
-#[derive(Debug, Clone, PartialEq)]
-pub struct UrlUnavailable;
-
-/// Phantom type to control url field of [`Opt`]. Using this type, the url field
-/// is available.
-#[derive(Debug, Clone, PartialEq)]
-pub struct UrlAvailable;

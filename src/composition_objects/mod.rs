@@ -2,6 +2,8 @@ use super::{Builder, error, validators, value};
 
 /// Builder objects for Composition objects.
 pub mod builders;
+/// Types to control type check
+pub mod types;
 
 mod confirmation_dialog;
 mod conversation_filter;
@@ -19,11 +21,11 @@ pub use confirmation_dialog::ConfirmationDialog;
 pub use conversation_filter::{Conversation, ConversationFilter};
 pub use dispatch_action_configuration::{DispatchActionConfiguration, TriggerAction};
 pub use markdown_text::MrkdwnText;
-pub use option::{Opt, TextInOption};
+pub use option::Opt;
 pub use option_group::OptGroup;
 pub use plain_text::PlainText;
 pub use slack_file::SlackFile;
-pub use text::{Text, TextObject};
+pub use text::Text;
 pub use trigger::{InputParameter, Trigger};
 pub use workflow::Workflow;
 

@@ -1,7 +1,8 @@
+use super::super::types::TextInOption;
 use super::error::ValidationError;
 use super::validators;
 use super::value::{self, Value};
-use super::{Builder, Opt, OptGroup, PlainText, TextInOption};
+use super::{Builder, Opt, OptGroup, PlainText};
 
 use std::error::Error;
 use std::fmt;
