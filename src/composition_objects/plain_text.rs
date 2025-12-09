@@ -1,30 +1,22 @@
+use crate::validators;
+use crate::value::Value;
+
+use derive_macro::Builder;
 use serde::Serialize;
 
 /// Plain [text object](https://docs.slack.dev/reference/block-kit/composition-objects/text-object)
 /// representation.
 ///
-/// There is a [`Text`](crate::composition_objects::Text) object like this.
-/// The difference between these two objects is that [`Text`](crate::composition_objects::Text)
-/// can be used incase of both of plain text and mrkdwn are allowed to used.
+/// # Example
 ///
-/// On the other hand, use [`PlainText`] instead of [`Text`](crate::composition_objects::Text) incase of only [`PlainText`]
-/// is allowed to use.
+///```
+/// use slack_messaging::composition_objects::PlainText;
+/// # use std::error::Error;
 ///
-/// ### example to use [`Text`](crate::composition_objects::Text)
-///
-/// * The `text` and `description` field of [`Opt`](crate::composition_objects::Opt)
-///   object in the [`Checkboxes`](crate::blocks::elements::Checkboxes) and [`RadioButtonGroup`](crate::blocks::elements::RadioButtonGroup) element
-/// * The `text` field of [`Section`](crate::blocks::Section) block
-///
-/// ### example to use [`PlainText`]
-///
-/// * The `text` field of [`Button`](crate::blocks::elements::Button) element.
-///
-/// ```
-/// # use slack_messaging::composition_objects::PlainText;
+/// # fn try_main() -> Result<(), Box<dyn Error>> {
 /// let text = PlainText::builder()
 ///     .text("Hello, World!")
-///     .build();
+///     .build()?;
 ///
 /// let json = serde_json::to_value(text).unwrap();
 ///
@@ -34,26 +26,108 @@ use serde::Serialize;
 /// });
 ///
 /// assert_eq!(json, expected);
-/// ```
-#[derive(Debug, Clone, Serialize)]
+///
+/// // If your object has any validation errors, the build method returns Result::Err
+/// let text = PlainText::builder()
+///     .text("")
+///     .build();
+///
+/// assert!(text.is_err());
+/// #     Ok(())
+/// # }
+/// # fn main() {
+/// #     try_main().unwrap()
+/// # }
+///```
+#[derive(Debug, Clone, Serialize, Builder)]
 #[serde(tag = "type", rename = "plain_text")]
 pub struct PlainText {
-    pub(super) text: String,
+    #[builder(setter = "set_text")]
+    pub(crate) text: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) emoji: Option<bool>,
+    pub(crate) emoji: Option<bool>,
 }
 
 impl PartialEq for PlainText {
     fn eq(&self, other: &Self) -> bool {
-        self.text.as_str() == other.text.as_str()
-            && self.emoji.unwrap_or(false) == other.emoji.unwrap_or(false)
+        match (self.text.as_ref(), other.text.as_ref()) {
+            (Some(t0), Some(t1)) => {
+                t0.as_str() == t1.as_str()
+                    && self.emoji.unwrap_or(false) == other.emoji.unwrap_or(false)
+            }
+            _ => false,
+        }
+    }
+}
+
+fn set_text(value: Option<String>) -> Value<String> {
+    pipe! {
+        Value::new(value) =>
+            validators::required |
+            validators::text::min_1 |
+            validators::text::max_3000
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::errors::*;
+
+    #[test]
+    fn it_implements_builder() {
+        let expected = PlainText {
+            text: Some("Hello World:smile:".into()),
+            emoji: Some(true),
+        };
+
+        let text = PlainText::builder()
+            .text("Hello World:smile:")
+            .emoji(true)
+            .build()
+            .unwrap();
+
+        assert_eq!(text, expected);
+
+        let text = PlainText::builder()
+            .set_text(Some("Hello World:smile:"))
+            .set_emoji(Some(true))
+            .build()
+            .unwrap();
+
+        assert_eq!(text, expected);
+    }
+
+    #[test]
+    fn it_requires_text() {
+        let err = PlainText::builder().build().unwrap_err();
+        assert_eq!(err.object(), "PlainText");
+
+        let text_err = err.field("text");
+        assert!(text_err.includes(ValidationErrorKind::Required));
+    }
+
+    #[test]
+    fn it_requires_text_more_than_1_character() {
+        let err = PlainText::builder().text("").build().unwrap_err();
+        assert_eq!(err.object(), "PlainText");
+
+        let text_err = err.field("text");
+        assert!(text_err.includes(ValidationErrorKind::MinTextLegth(1)));
+    }
+
+    #[test]
+    fn it_requires_text_less_than_3000_characters() {
+        let err = PlainText::builder()
+            .text("a".repeat(3001))
+            .build()
+            .unwrap_err();
+        assert_eq!(err.object(), "PlainText");
+
+        let text_err = err.field("text");
+        assert!(text_err.includes(ValidationErrorKind::MaxTextLegth(3000)));
+    }
 
     #[test]
     fn it_equals_with_same_text() {
@@ -83,7 +157,7 @@ mod tests {
 
     fn make_text(text: &str) -> PlainText {
         PlainText {
-            text: text.into(),
+            text: Some(text.into()),
             emoji: None,
         }
     }
