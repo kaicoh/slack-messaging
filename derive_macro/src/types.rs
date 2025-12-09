@@ -54,15 +54,20 @@ impl Field {
         let getter = format_ident!("get_{ident}");
         let setter = format_ident!("set_{ident}");
 
+        let doc_getter = format!("get {ident} field value.");
+        let doc_setter = format!("set {ident} field value.");
+
         quote! {
             fn #constructor_name(value: ::std::option::Option<#ty>) -> crate::value::Value<#ty> {
                 #constructor_fn(value)
             }
 
+            #[doc = #doc_getter]
             pub fn #getter(&self) -> ::std::option::Option<&#ty> {
                 self.#ident.inner_ref()
             }
 
+            #[doc = #doc_setter]
             pub fn #setter(self, value: ::std::option::Option<impl Into<#ty>>) -> Self {
                 Self {
                     #ident: Self::#constructor_name(value.map(|v| v.into())),
@@ -70,6 +75,7 @@ impl Field {
                 }
             }
 
+            #[doc = #doc_setter]
             pub fn #ident(self, value: impl Into<#ty>) -> Self {
                 self.#setter(Some(value))
             }

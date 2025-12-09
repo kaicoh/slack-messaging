@@ -75,7 +75,7 @@ impl ValidationError {
 
     pub fn field(&self) -> Option<&str> {
         if let Self::SingleField { field, .. } = self {
-            Some(&field)
+            Some(field)
         } else {
             None
         }
@@ -83,8 +83,8 @@ impl ValidationError {
 
     pub fn errors(&self) -> &[ValidationErrorKind] {
         match self {
-            Self::AcrossFields(errors) => &errors,
-            Self::SingleField { errors, .. } => &errors,
+            Self::AcrossFields(errors) => errors,
+            Self::SingleField { errors, .. } => errors,
         }
     }
 }
@@ -114,18 +114,18 @@ mod test_helpers {
 
     impl<'a> FromIterator<&'a ValidationErrorKind> for ErrorKinds {
         fn from_iter<T: IntoIterator<Item = &'a ValidationErrorKind>>(iter: T) -> Self {
-            Self(iter.into_iter().map(|v| *v).collect())
+            Self(iter.into_iter().copied().collect())
         }
     }
 
     impl ErrorKinds {
         pub fn includes(&self, error: ValidationErrorKind) -> bool {
-            self.0.iter().find(|&e| *e == error).is_some()
+            self.0.contains(&error)
         }
     }
 
     impl ValidationErrors {
-        pub fn field<'a>(&'a self, field: &'static str) -> ErrorKinds {
+        pub fn field(&self, field: &'static str) -> ErrorKinds {
             self.errors()
                 .iter()
                 .filter_map(move |e| {

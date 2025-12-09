@@ -24,6 +24,9 @@ impl Target {
 
         let ident = &self.ident;
         let builder = format_ident!("{ident}Builder");
+        let doc_builder_method = format!("constract [`{builder}`] object.");
+        let doc_builder = format!("Builder for [`{ident}`] object.");
+        let doc_build_method = format!("build [`{ident}`] object.");
 
         let fields = self.data.clone().take_struct().unwrap().fields;
         let merge_fn = format_ident!("merge_{}", fields.len() + 1);
@@ -42,11 +45,13 @@ impl Target {
 
         quote! {
             impl #ident {
+                #[doc = #doc_builder_method]
                 pub fn builder() -> #builder {
                     #builder::default()
                 }
             }
 
+            #[doc = #doc_builder]
             #[derive(Debug)]
             pub struct #builder {
                 #(#builder_fields,)*
@@ -55,6 +60,7 @@ impl Target {
             impl #builder {
                 #(#accessors)*
 
+                #[doc = #doc_build_method]
                 pub fn build(self) -> ::std::result::Result<#ident, crate::errors::ValidationErrors> {
                     let v0 = crate::value::Value::<()> {
                         inner: None,
