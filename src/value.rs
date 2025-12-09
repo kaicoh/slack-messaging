@@ -47,3 +47,12 @@ macro_rules! impl_merge {
 type E = Vec<ValidationErrorKind>;
 
 impl_merge!(merge_3, (v0, T0, E), (v1, T1, E), (v2, T2, E));
+impl_merge!(
+    merge_6,
+    (v0, T0, E),
+    (v1, T1, E),
+    (v2, T2, E),
+    (v3, T3, E),
+    (v4, T4, E),
+    (v5, T5, E)
+);

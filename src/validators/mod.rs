@@ -2,6 +2,7 @@ use crate::errors::ValidationErrorKind;
 use crate::value::Value;
 
 pub(crate) mod text;
+pub(crate) mod text_object;
 
 pub(crate) fn required<T>(mut value: Value<T>) -> Value<T> {
     if value.inner_ref().is_none() {

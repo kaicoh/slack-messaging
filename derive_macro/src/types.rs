@@ -8,6 +8,7 @@ pub struct Field {
     pub ident: Option<syn::Ident>,
     pub ty: syn::Type,
     pub setter: Option<syn::Expr>,
+    pub private_setter: Option<bool>,
 }
 
 impl Field {
@@ -51,8 +52,20 @@ impl Field {
             Some(path) => quote! { #path },
             None => quote! { crate::value::Value::new },
         };
+
         let getter = format_ident!("get_{ident}");
+        let (getter_result_ty, after_get) = if self.inner_ty_can_copy() {
+            (quote! { #ty }, quote! { .copied() })
+        } else {
+            (quote! { &#ty }, quote! {})
+        };
+
         let setter = format_ident!("set_{ident}");
+        let setter_visibility = if self.private_setter.is_some_and(|v| v) {
+            quote! {}
+        } else {
+            quote! { pub }
+        };
 
         let doc_getter = format!("get {ident} field value.");
         let doc_setter = format!("set {ident} field value.");
@@ -63,12 +76,12 @@ impl Field {
             }
 
             #[doc = #doc_getter]
-            pub fn #getter(&self) -> ::std::option::Option<&#ty> {
-                self.#ident.inner_ref()
+            pub fn #getter(&self) -> ::std::option::Option<#getter_result_ty> {
+                self.#ident.inner_ref()#after_get
             }
 
             #[doc = #doc_setter]
-            pub fn #setter(self, value: ::std::option::Option<impl Into<#ty>>) -> Self {
+            #setter_visibility fn #setter(self, value: ::std::option::Option<impl Into<#ty>>) -> Self {
                 Self {
                     #ident: Self::#constructor_name(value.map(|v| v.into())),
                     ..self
@@ -76,10 +89,15 @@ impl Field {
             }
 
             #[doc = #doc_setter]
-            pub fn #ident(self, value: impl Into<#ty>) -> Self {
+            #setter_visibility fn #ident(self, value: impl Into<#ty>) -> Self {
                 self.#setter(Some(value))
             }
         }
+    }
+
+    fn inner_ty_can_copy(&self) -> bool {
+        let inner_ty = self.inner_ty();
+        is_bool_type(inner_ty) || is_static_str_ref(inner_ty)
     }
 }
 
@@ -127,4 +145,51 @@ fn get_option_inner_type(ty: &syn::Type) -> Option<&syn::Type> {
     };
 
     Some(inner_type)
+}
+
+fn is_bool_type(ty: &syn::Type) -> bool {
+    if let syn::Type::Path(syn::TypePath { path, .. }) = ty {
+        // Check if the path has a single segment
+        if let Some(segment) = path.segments.first() {
+            // Check if the segment's identifier is "bool"
+            if segment.ident == "bool" {
+                // Ensure there are no generic arguments or other path components
+                return path.segments.len() == 1 && segment.arguments.is_empty();
+            }
+        }
+    }
+    false
+}
+
+fn is_static_str_ref(ty: &syn::Type) -> bool {
+    if let syn::Type::Reference(syn::TypeReference {
+        elem,
+        lifetime,
+        mutability: None, // &'static str is immutable
+        ..
+    }) = ty
+    {
+        // Check for the 'static lifetime
+        if let Some(lt) = lifetime {
+            if lt.ident.to_string() != "static" {
+                return false;
+            }
+        } else {
+            // If no explicit lifetime is given, it might be inferred as 'static in some contexts,
+            // but for explicit &'static str, the lifetime will typically be present.
+            // For robustness, you might need to consider inferred static lifetimes depending on your use case.
+            return false;
+        }
+
+        // Check if the inner type is `str`
+        if let syn::Type::Path(syn::TypePath { path, .. }) = &**elem {
+            if path.segments.len() == 1 && path.segments[0].ident == "str" {
+                // Ensure there are no generic arguments on `str`
+                if let syn::PathArguments::None = path.segments[0].arguments {
+                    return true;
+                }
+            }
+        }
+    }
+    false
 }
