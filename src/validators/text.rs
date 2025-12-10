@@ -46,7 +46,7 @@ macro_rules! impl_max {
     }
 }
 
-impl_max!(150, 3000);
+impl_max!(75, 150, 255, 2000, 3000);
 
 pub(crate) fn min_1(value: Text) -> Text {
     min(1, value)

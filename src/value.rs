@@ -33,7 +33,10 @@ impl<T> Value<T> {
 
 macro_rules! impl_merge {
     ($name:tt, $(($param:tt, $ty:tt, $e:ty)),*) => {
-        #[allow(clippy::result_large_err)]
+        #[allow(
+            clippy::result_large_err,
+            clippy::too_many_arguments,
+        )]
         pub(crate) fn $name<$($ty),*>($($param: Value<$ty>),*) -> Result<($(Option<$ty>),*), ($($e),*)> {
             if $($param.has_errors())||* {
                 Err(($($param.errors),*))
@@ -65,4 +68,15 @@ impl_merge!(
     (v3, T3, E),
     (v4, T4, E),
     (v5, T5, E)
+);
+impl_merge!(
+    merge_8,
+    (v0, T0, E),
+    (v1, T1, E),
+    (v2, T2, E),
+    (v3, T3, E),
+    (v4, T4, E),
+    (v5, T5, E),
+    (v6, T6, E),
+    (v7, T7, E)
 );

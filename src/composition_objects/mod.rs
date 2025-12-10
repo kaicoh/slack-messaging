@@ -29,7 +29,7 @@ pub use trigger::Trigger;
 pub use workflow::Workflow;
 
 #[cfg(test)]
-mod test_helpers {
+pub mod test_helpers {
     use super::types::*;
     use super::*;
 
@@ -64,6 +64,16 @@ mod test_helpers {
                 input_param("param_0", "value_0"),
                 input_param("param_1", "value_1"),
             ]),
+        }
+    }
+
+    pub fn confirm() -> ConfirmationDialog {
+        ConfirmationDialog {
+            title: Some(plain_text("Are you sure?")),
+            text: Some(plain_text("Wouldn't you prefer a good game of _chess_?")),
+            confirm: Some(plain_text("Do it")),
+            deny: Some(plain_text("Stop, I've changed my mind!")),
+            style: None,
         }
     }
 }
