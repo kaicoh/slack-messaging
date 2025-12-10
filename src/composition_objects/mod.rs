@@ -40,10 +40,27 @@ pub mod test_helpers {
         }
     }
 
+    pub fn mrkdwn_text(text: impl Into<String>) -> MrkdwnText {
+        MrkdwnText {
+            text: Some(text.into()),
+            verbatim: None,
+        }
+    }
+
     pub fn option(text: impl Into<String>, value: impl Into<String>) -> Opt<PlainText> {
         Opt {
             phantom: std::marker::PhantomData,
             text: Some(plain_text(text)),
+            value: Some(value.into()),
+            description: None,
+            url: None,
+        }
+    }
+
+    pub fn option_t(text: impl Into<String>, value: impl Into<String>) -> Opt<Text> {
+        Opt {
+            phantom: std::marker::PhantomData,
+            text: Some(mrkdwn_text(text).into()),
             value: Some(value.into()),
             description: None,
             url: None,
