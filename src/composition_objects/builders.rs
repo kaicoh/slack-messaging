@@ -6,3 +6,4 @@ pub use super::option_group::OptGroupBuilder;
 pub use super::plain_text::PlainTextBuilder;
 pub use super::slack_file::SlackFileBuilder;
 pub use super::trigger::TriggerBuilder;
+pub use super::workflow::WorkflowBuilder;
