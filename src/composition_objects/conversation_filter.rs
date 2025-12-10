@@ -1,5 +1,7 @@
 use crate::composition_objects::types::Conversation;
 use crate::errors::ValidationErrorKind;
+use crate::validators;
+use crate::value::Value;
 
 use derive_macro::Builder;
 use serde::Serialize;
@@ -45,7 +47,7 @@ use serde::Serialize;
 #[builder(validate = "validate")]
 pub struct ConversationFilter {
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(push_item = "conversation")]
+    #[builder(push_item = "conversation", setter = "set_conversations")]
     pub(crate) include: Option<Vec<Conversation>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -64,6 +66,10 @@ fn validate(builder: &ConversationFilterBuilder) -> Vec<ValidationErrorKind> {
     } else {
         vec![]
     }
+}
+
+fn set_conversations(value: Option<Vec<Conversation>>) -> Value<Vec<Conversation>> {
+    pipe! { Value::new(value) => validators::list::not_empty }
 }
 
 #[cfg(test)]
@@ -122,5 +128,32 @@ mod tests {
 
         let errors = err.across_fields();
         assert!(errors.includes(ValidationErrorKind::NoFieldProvided));
+
+        let filter = ConversationFilter::builder()
+            .conversation(Conversation::Public)
+            .build();
+        assert!(filter.is_ok());
+
+        let filter = ConversationFilter::builder()
+            .exclude_external_shared_channels(true)
+            .build();
+        assert!(filter.is_ok());
+
+        let filter = ConversationFilter::builder()
+            .exclude_bot_users(true)
+            .build();
+        assert!(filter.is_ok());
+    }
+
+    #[test]
+    fn it_requires_include_field_not_empty() {
+        let err = ConversationFilter::builder()
+            .include(vec![])
+            .build()
+            .unwrap_err();
+        assert_eq!(err.object(), "ConversationFilter");
+
+        let errors = err.field("include");
+        assert!(errors.includes(ValidationErrorKind::EmptyArray));
     }
 }
