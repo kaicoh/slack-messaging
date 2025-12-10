@@ -1,6 +1,6 @@
 use darling::FromDeriveInput;
 use proc_macro::TokenStream;
-use proc_macro_error::proc_macro_error;
+use proc_macro_error::{abort, proc_macro_error};
 use quote::{format_ident, quote};
 use syn::{DeriveInput, parse_macro_input};
 
@@ -14,9 +14,23 @@ struct Target {
     ident: syn::Ident,
     // generics: syn::Generics,
     data: darling::ast::Data<(), types::Field>,
+    validate: Option<darling::Result<syn::Path>>,
 }
 
 impl Target {
+    fn validate(&self) -> Option<syn::Path> {
+        match self.validate.clone().transpose() {
+            Ok(v) => v,
+            Err(err) => {
+                abort! {
+                    err.span(), "Invalid attribute #[builder(validate = ...)]";
+                    note = "Invalid argument for `validate` attribute. Only paths are allowed.";
+                    help = "Try formating the argument like `path::to::function` or `\"path::to::function\"`";
+                }
+            }
+        }
+    }
+
     fn into_token_strem(self) -> TokenStream {
         if self.data.is_enum() {
             panic!("enum is not supported")
@@ -27,6 +41,11 @@ impl Target {
         let doc_builder_method = format!("constract [`{builder}`] object.");
         let doc_builder = format!("Builder for [`{ident}`] object.");
         let doc_build_method = format!("build [`{ident}`] object.");
+
+        let validate_across_fields = match self.validate() {
+            Some(path) => quote! { #path(self) },
+            None => quote! { vec![] },
+        };
 
         let fields = self.data.clone().take_struct().unwrap().fields;
         let merge_fn = format_ident!("merge_{}", fields.len() + 1);
@@ -60,11 +79,15 @@ impl Target {
             impl #builder {
                 #(#accessors)*
 
+                fn validate_across_fields(&self) -> Vec<crate::errors::ValidationErrorKind> {
+                    #validate_across_fields
+                }
+
                 #[doc = #doc_build_method]
                 pub fn build(self) -> ::std::result::Result<#ident, crate::errors::ValidationErrors> {
                     let v0 = crate::value::Value::<()> {
                         inner: None,
-                        errors: vec![],
+                        errors: self.validate_across_fields(),
                     };
 
                     let Self { #(#field_names_0),* } = self;

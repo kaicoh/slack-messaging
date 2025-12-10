@@ -9,6 +9,7 @@ pub struct Field {
     pub ty: syn::Type,
     pub setter: Option<syn::Expr>,
     pub private_setter: Option<bool>,
+    pub push_item: Option<syn::Expr>,
 }
 
 impl Field {
@@ -54,10 +55,10 @@ impl Field {
         };
 
         let getter = format_ident!("get_{ident}");
-        let (getter_result_ty, after_get) = if self.inner_ty_can_copy() {
-            (quote! { #ty }, quote! { .copied() })
-        } else {
-            (quote! { &#ty }, quote! {})
+        let (getter_result_ty, after_get) = match InnerType::new(self.inner_ty()) {
+            InnerType::CanCopy => (quote! { #ty }, quote! { .copied() }),
+            InnerType::Vec(inner_ty) => (quote! { &[#inner_ty] }, quote! { .map(|v| v.as_ref()) }),
+            InnerType::Other => (quote! { &#ty }, quote! {}),
         };
 
         let setter = format_ident!("set_{ident}");
@@ -65,6 +66,22 @@ impl Field {
             quote! {}
         } else {
             quote! { pub }
+        };
+
+        let push_item = match (self.push_item.as_ref(), InnerType::new(self.inner_ty())) {
+            (Some(expr), InnerType::Vec(inner_ty)) => {
+                let doc = format!("push list element to {ident} field.");
+
+                quote! {
+                    #[doc = #doc]
+                    pub fn #expr(mut self, value: impl Into<#inner_ty>) -> Self {
+                        let mut list = self.#ident.take_inner().unwrap_or_default();
+                        list.push(value.into());
+                        self.#ident(list)
+                    }
+                }
+            }
+            _ => quote! {},
         };
 
         let doc_getter = format!("get {ident} field value.");
@@ -92,12 +109,9 @@ impl Field {
             #setter_visibility fn #ident(self, value: impl Into<#ty>) -> Self {
                 self.#setter(Some(value))
             }
-        }
-    }
 
-    fn inner_ty_can_copy(&self) -> bool {
-        let inner_ty = self.inner_ty();
-        is_bool_type(inner_ty) || is_static_str_ref(inner_ty)
+            #push_item
+        }
     }
 }
 
@@ -147,7 +161,28 @@ fn get_option_inner_type(ty: &syn::Type) -> Option<&syn::Type> {
     Some(inner_type)
 }
 
-fn is_bool_type(ty: &syn::Type) -> bool {
+#[derive(Debug)]
+enum InnerType {
+    CanCopy,
+    Vec(syn::Type),
+    Other,
+}
+
+impl InnerType {
+    fn new(ty: &syn::Type) -> Self {
+        if is_bool(ty) || is_static_str_ref(ty) {
+            return Self::CanCopy;
+        }
+
+        if let Some(inner_ty) = get_vec_inner_type(ty) {
+            return Self::Vec(inner_ty);
+        }
+
+        Self::Other
+    }
+}
+
+fn is_bool(ty: &syn::Type) -> bool {
     if let syn::Type::Path(syn::TypePath { path, .. }) = ty {
         // Check if the path has a single segment
         if let Some(segment) = path.segments.first() {
@@ -192,4 +227,19 @@ fn is_static_str_ref(ty: &syn::Type) -> bool {
         }
     }
     false
+}
+
+fn get_vec_inner_type(ty: &syn::Type) -> Option<syn::Type> {
+    if let syn::Type::Path(type_path) = ty {
+        if let Some(last_segment) = type_path.path.segments.last() {
+            if last_segment.ident == "Vec" {
+                if let syn::PathArguments::AngleBracketed(generics) = &last_segment.arguments {
+                    if let Some(syn::GenericArgument::Type(inner_ty)) = generics.args.first() {
+                        return Some(inner_ty.clone());
+                    }
+                }
+            }
+        }
+    }
+    None
 }

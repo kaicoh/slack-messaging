@@ -126,15 +126,17 @@ mod test_helpers {
 
     impl ValidationErrors {
         pub fn field(&self, field: &'static str) -> ErrorKinds {
+            self.filter_errors(|e| e.field().is_some_and(|f| f == field))
+        }
+
+        pub fn across_fields(&self) -> ErrorKinds {
+            self.filter_errors(|e| matches!(e, ValidationError::AcrossFields(_)))
+        }
+
+        fn filter_errors(&self, predicate: impl Fn(&ValidationError) -> bool) -> ErrorKinds {
             self.errors()
                 .iter()
-                .filter_map(move |e| {
-                    if e.field().is_some_and(|f| f == field) {
-                        Some(e.errors())
-                    } else {
-                        None
-                    }
-                })
+                .filter_map(move |e| if predicate(e) { Some(e.errors()) } else { None })
                 .flatten()
                 .collect()
         }
