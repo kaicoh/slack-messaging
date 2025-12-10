@@ -11,6 +11,7 @@ mod markdown_text;
 mod option;
 mod option_group;
 mod plain_text;
+mod slack_file;
 mod text;
 
 pub use confirmation_dialog::ConfirmationDialog;
@@ -20,6 +21,7 @@ pub use markdown_text::MrkdwnText;
 pub use option::Opt;
 pub use option_group::OptGroup;
 pub use plain_text::PlainText;
+pub use slack_file::SlackFile;
 pub use text::Text;
 
 #[cfg(test)]

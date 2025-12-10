@@ -4,3 +4,4 @@ pub use super::markdown_text::MrkdwnTextBuilder;
 pub use super::option::OptBuilder;
 pub use super::option_group::OptGroupBuilder;
 pub use super::plain_text::PlainTextBuilder;
+pub use super::slack_file::SlackFileBuilder;
