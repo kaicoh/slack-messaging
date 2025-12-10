@@ -1,6 +1,7 @@
 use crate::errors::ValidationErrorKind;
 use crate::value::Value;
 
+pub(crate) mod integer;
 pub(crate) mod list;
 pub(crate) mod text;
 pub(crate) mod text_object;
