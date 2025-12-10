@@ -1,7 +1,7 @@
+use crate::composition_objects::PlainText;
 use crate::validators;
 use crate::value::Value;
 
-use super::PlainText;
 use derive_macro::Builder;
 use serde::Serialize;
 
@@ -128,7 +128,7 @@ fn set_deny(value: Option<PlainText>) -> Value<PlainText> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::composition_objects::{PlainText, test_helpers::*};
+    use crate::composition_objects::test_helpers::*;
     use crate::errors::*;
 
     #[test]

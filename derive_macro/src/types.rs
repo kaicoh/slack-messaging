@@ -10,6 +10,8 @@ pub struct Field {
     pub setter: Option<syn::Expr>,
     pub private_setter: Option<bool>,
     pub push_item: Option<syn::Expr>,
+    pub no_accessors: Option<bool>,
+    pub phantom: Option<syn::LitStr>,
 }
 
 impl Field {
@@ -19,6 +21,20 @@ impl Field {
 
     pub fn inner_ty(&self) -> &syn::Type {
         get_option_inner_type(&self.ty).expect("field should be Option type")
+    }
+
+    pub fn is_phantom(&self) -> bool {
+        self.phantom.is_some()
+    }
+
+    pub fn build_target_field(&self) -> TokenStream {
+        let ident = self.ident();
+
+        if self.is_phantom() {
+            quote! { #ident: ::std::marker::PhantomData }
+        } else {
+            quote! { #ident }
+        }
     }
 
     pub fn field_name(&self) -> TokenStream {
@@ -34,14 +50,25 @@ impl Field {
 
     pub fn default_field(&self) -> TokenStream {
         let ident = self.ident();
-        let constructor = self.field_constructor_name();
-        quote! { #ident: Self::#constructor(::std::option::Option::None) }
+
+        if self.is_phantom() {
+            quote! { #ident: ::std::marker::PhantomData }
+        } else {
+            let constructor = self.field_constructor_name();
+            quote! { #ident: Self::#constructor(::std::option::Option::None) }
+        }
     }
 
-    pub fn builder_field(&self) -> TokenStream {
+    pub fn init_builder_field(&self) -> TokenStream {
         let ident = self.ident();
-        let ty = self.inner_ty();
-        quote! { #ident: crate::value::Value<#ty> }
+
+        if let Some(lit) = self.phantom.as_ref() {
+            let param: TokenStream = lit.value().parse().unwrap();
+            quote! { #ident: ::std::marker::PhantomData<#param> }
+        } else {
+            let ty = self.inner_ty();
+            quote! { #ident: crate::value::Value<#ty> }
+        }
     }
 
     pub fn builder_accessors(&self) -> TokenStream {
@@ -87,30 +114,38 @@ impl Field {
         let doc_getter = format!("get {ident} field value.");
         let doc_setter = format!("set {ident} field value.");
 
+        let accessors = if self.no_accessors.is_some_and(|v| v) {
+            quote! {}
+        } else {
+            quote! {
+                #[doc = #doc_getter]
+                pub fn #getter(&self) -> ::std::option::Option<#getter_result_ty> {
+                    self.#ident.inner_ref()#after_get
+                }
+
+                #[doc = #doc_setter]
+                #setter_visibility fn #setter(self, value: ::std::option::Option<impl Into<#ty>>) -> Self {
+                    Self {
+                        #ident: Self::#constructor_name(value.map(|v| v.into())),
+                        ..self
+                    }
+                }
+
+                #[doc = #doc_setter]
+                #setter_visibility fn #ident(self, value: impl Into<#ty>) -> Self {
+                    self.#setter(Some(value))
+                }
+
+                #push_item
+            }
+        };
+
         quote! {
             fn #constructor_name(value: ::std::option::Option<#ty>) -> crate::value::Value<#ty> {
                 #constructor_fn(value)
             }
 
-            #[doc = #doc_getter]
-            pub fn #getter(&self) -> ::std::option::Option<#getter_result_ty> {
-                self.#ident.inner_ref()#after_get
-            }
-
-            #[doc = #doc_setter]
-            #setter_visibility fn #setter(self, value: ::std::option::Option<impl Into<#ty>>) -> Self {
-                Self {
-                    #ident: Self::#constructor_name(value.map(|v| v.into())),
-                    ..self
-                }
-            }
-
-            #[doc = #doc_setter]
-            #setter_visibility fn #ident(self, value: impl Into<#ty>) -> Self {
-                self.#setter(Some(value))
-            }
-
-            #push_item
+            #accessors
         }
     }
 }
