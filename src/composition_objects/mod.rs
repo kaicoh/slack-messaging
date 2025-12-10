@@ -9,6 +9,7 @@ mod conversation_filter;
 mod dispatch_action_configuration;
 mod markdown_text;
 mod option;
+mod option_group;
 mod plain_text;
 mod text;
 
@@ -17,6 +18,7 @@ pub use conversation_filter::ConversationFilter;
 pub use dispatch_action_configuration::DispatchActionConfiguration;
 pub use markdown_text::MrkdwnText;
 pub use option::Opt;
+pub use option_group::OptGroup;
 pub use plain_text::PlainText;
 pub use text::Text;
 
@@ -28,6 +30,16 @@ mod test_helpers {
         PlainText {
             text: Some(text.into()),
             emoji: None,
+        }
+    }
+
+    pub fn option(text: impl Into<String>, value: impl Into<String>) -> Opt<PlainText> {
+        Opt {
+            phantom: std::marker::PhantomData,
+            text: Some(plain_text(text)),
+            value: Some(value.into()),
+            description: None,
+            url: None,
         }
     }
 }

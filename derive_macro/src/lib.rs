@@ -35,6 +35,10 @@ impl Target {
         self.data.clone().take_struct().unwrap().fields
     }
 
+    fn has_multiple_fields(&self) -> bool {
+        self.fields().len() > 1
+    }
+
     fn into_token_strem(self) -> TokenStream {
         if self.data.is_enum() {
             panic!("enum is not supported")
@@ -74,7 +78,10 @@ impl Target {
         let builder_field_names_3 = builder_field_names.clone();
         let builder_field_names_4 = builder_field_names.clone();
 
-        let accessors = builder_fields.iter().map(types::Field::builder_accessors);
+        let has_multi_fields = self.has_multiple_fields();
+        let accessors = builder_fields
+            .iter()
+            .map(|f| f.builder_accessors(has_multi_fields));
 
         let fields = self.fields();
         let build_target_fields = fields.iter().map(types::Field::build_target_field);

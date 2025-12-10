@@ -71,7 +71,7 @@ impl Field {
         }
     }
 
-    pub fn builder_accessors(&self) -> TokenStream {
+    pub fn builder_accessors(&self, has_multi_fields: bool) -> TokenStream {
         let ident = self.ident();
         let ty = self.inner_ty();
 
@@ -93,6 +93,11 @@ impl Field {
             quote! {}
         } else {
             quote! { pub }
+        };
+        let after_set = if has_multi_fields {
+            quote! { ..self }
+        } else {
+            quote! {}
         };
 
         let push_item = match (self.push_item.as_ref(), InnerType::new(self.inner_ty())) {
@@ -127,7 +132,7 @@ impl Field {
                 #setter_visibility fn #setter(self, value: ::std::option::Option<impl Into<#ty>>) -> Self {
                     Self {
                         #ident: Self::#constructor_name(value.map(|v| v.into())),
-                        ..self
+                        #after_set
                     }
                 }
 
