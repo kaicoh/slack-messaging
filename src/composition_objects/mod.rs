@@ -99,4 +99,11 @@ pub mod test_helpers {
             trigger_actions_on: Some(vec![TriggerAction::OnEnterPressed]),
         }
     }
+
+    pub fn slack_file() -> SlackFile {
+        SlackFile {
+            id: Some("F0123456".into()),
+            url: None,
+        }
+    }
 }

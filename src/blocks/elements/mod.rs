@@ -11,6 +11,7 @@ mod email_input;
 mod feedback_buttons;
 mod file_input;
 mod icon_button;
+mod image;
 
 pub use button::Button;
 pub use checkboxes::Checkboxes;
@@ -20,6 +21,7 @@ pub use email_input::EmailInput;
 pub use feedback_buttons::FeedbackButtons;
 pub use file_input::FileInput;
 pub use icon_button::IconButton;
+pub use image::Image;
 
 #[cfg(test)]
 pub mod test_helpers {
