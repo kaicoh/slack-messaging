@@ -93,4 +93,10 @@ pub mod test_helpers {
             style: None,
         }
     }
+
+    pub fn dispatch_action_config() -> DispatchActionConfiguration {
+        DispatchActionConfiguration {
+            trigger_actions_on: Some(vec![TriggerAction::OnEnterPressed]),
+        }
+    }
 }
