@@ -1,6 +1,5 @@
 use crate::composition_objects::types::InputParameter;
-use crate::validators;
-use crate::value::Value;
+use crate::validators::required;
 
 use derive_macro::Builder;
 use serde::Serialize;
@@ -68,16 +67,12 @@ use serde::Serialize;
 /// ```
 #[derive(Debug, Clone, Serialize, PartialEq, Builder)]
 pub struct Trigger {
-    #[builder(setter = "set_url")]
+    #[builder(validate("required"))]
     pub(crate) url: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(push_item = "customizable_input_parameter")]
     pub(crate) customizable_input_parameters: Option<Vec<InputParameter>>,
-}
-
-fn set_url(value: Option<String>) -> Value<String> {
-    pipe! { Value::new(value) => validators::required }
 }
 
 #[cfg(test)]

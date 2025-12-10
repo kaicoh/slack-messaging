@@ -7,11 +7,12 @@ use quote::{format_ident, quote};
 pub struct Field {
     pub ident: Option<syn::Ident>,
     pub ty: syn::Type,
-    pub setter: Option<syn::Expr>,
     pub private_setter: Option<bool>,
     pub push_item: Option<syn::Expr>,
     pub no_accessors: Option<bool>,
     pub phantom: Option<syn::LitStr>,
+    #[darling(default)]
+    pub validate: Vec<syn::LitStr>,
 }
 
 impl Field {
@@ -76,9 +77,18 @@ impl Field {
         let ty = self.inner_ty();
 
         let constructor_name = self.field_constructor_name();
-        let constructor_fn = match self.setter.as_ref() {
-            Some(path) => quote! { #path },
-            None => quote! { crate::value::Value::new },
+        let constructor_fn = if !self.validate.is_empty() {
+            let exprs: Vec<TokenStream> = self
+                .validate
+                .clone()
+                .iter()
+                .map(|lit| lit.value().parse().unwrap())
+                .collect();
+            quote! {
+                pipe! { crate::value::Value::new(value) => #(#exprs)|* }
+            }
+        } else {
+            quote! { crate::value::Value::new(value) }
         };
 
         let getter = format_ident!("get_{ident}");
@@ -147,7 +157,7 @@ impl Field {
 
         quote! {
             fn #constructor_name(value: ::std::option::Option<#ty>) -> crate::value::Value<#ty> {
-                #constructor_fn(value)
+                #constructor_fn
             }
 
             #accessors

@@ -1,7 +1,6 @@
 use crate::composition_objects::types::Conversation;
 use crate::errors::ValidationErrorKind;
-use crate::validators;
-use crate::value::Value;
+use crate::validators::*;
 
 use derive_macro::Builder;
 use serde::Serialize;
@@ -47,7 +46,7 @@ use serde::Serialize;
 #[builder(validate = "validate")]
 pub struct ConversationFilter {
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(push_item = "conversation", setter = "set_conversations")]
+    #[builder(push_item = "conversation", validate("list::not_empty"))]
     pub(crate) include: Option<Vec<Conversation>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -66,10 +65,6 @@ fn validate(builder: &ConversationFilterBuilder) -> Vec<ValidationErrorKind> {
     } else {
         vec![]
     }
-}
-
-fn set_conversations(value: Option<Vec<Conversation>>) -> Value<Vec<Conversation>> {
-    pipe! { Value::new(value) => validators::list::not_empty }
 }
 
 #[cfg(test)]

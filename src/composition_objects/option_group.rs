@@ -1,6 +1,5 @@
 use crate::composition_objects::{Opt, PlainText, types::TextInOption};
-use crate::validators;
-use crate::value::Value;
+use crate::validators::*;
 
 use derive_macro::Builder;
 use serde::Serialize;
@@ -76,27 +75,11 @@ pub struct OptGroup<T>
 where
     T: TextInOption,
 {
-    #[builder(setter = "set_label")]
+    #[builder(validate("required", "text_object::max_75"))]
     pub(crate) label: Option<PlainText>,
 
-    #[builder(push_item = "option", setter = "set_options")]
+    #[builder(push_item = "option", validate("required", "list::max_item_100"))]
     pub(crate) options: Option<Vec<Opt<T>>>,
-}
-
-fn set_label(value: Option<PlainText>) -> Value<PlainText> {
-    pipe! {
-        Value::new(value) =>
-            validators::required |
-            validators::text_object::max_75
-    }
-}
-
-fn set_options<T: TextInOption>(value: Option<Vec<Opt<T>>>) -> Value<Vec<Opt<T>>> {
-    pipe! {
-        Value::new(value) =>
-            validators::required |
-            validators::list::max_item_100
-    }
 }
 
 #[cfg(test)]

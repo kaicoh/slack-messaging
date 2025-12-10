@@ -1,5 +1,4 @@
-use crate::validators;
-use crate::value::Value;
+use crate::validators::*;
 
 use derive_macro::Builder;
 use serde::Serialize;
@@ -42,7 +41,7 @@ use serde::Serialize;
 #[derive(Debug, Clone, Serialize, Builder)]
 #[serde(tag = "type", rename = "mrkdwn")]
 pub struct MrkdwnText {
-    #[builder(setter = "set_text")]
+    #[builder(validate("required", "text::min_1", "text::max_3000"))]
     pub(crate) text: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -58,15 +57,6 @@ impl PartialEq for MrkdwnText {
             }
             _ => false,
         }
-    }
-}
-
-fn set_text(value: Option<String>) -> Value<String> {
-    pipe! {
-        Value::new(value) =>
-            validators::required |
-            validators::text::min_1 |
-            validators::text::max_3000
     }
 }
 

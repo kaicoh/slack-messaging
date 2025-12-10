@@ -1,6 +1,5 @@
 use crate::composition_objects::Trigger;
-use crate::validators;
-use crate::value::Value;
+use crate::validators::required;
 
 use derive_macro::Builder;
 use serde::Serialize;
@@ -66,12 +65,8 @@ use serde::Serialize;
 /// ```
 #[derive(Debug, Clone, Serialize, PartialEq, Builder)]
 pub struct Workflow {
-    #[builder(setter = "set_trigger")]
+    #[builder(validate("required"))]
     pub(crate) trigger: Option<Trigger>,
-}
-
-fn set_trigger(value: Option<Trigger>) -> Value<Trigger> {
-    pipe! { Value::new(value) => validators::required }
 }
 
 #[cfg(test)]

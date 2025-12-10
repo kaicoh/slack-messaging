@@ -1,6 +1,5 @@
 use crate::composition_objects::types::TriggerAction;
-use crate::validators;
-use crate::value::Value;
+use crate::validators::*;
 
 use derive_macro::Builder;
 use serde::Serialize;
@@ -45,12 +44,8 @@ use serde::Serialize;
 #[derive(Debug, Clone, Serialize, PartialEq, Builder)]
 pub struct DispatchActionConfiguration {
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(push_item = "trigger_action", setter = "set_triggers")]
+    #[builder(push_item = "trigger_action", validate("list::not_empty"))]
     pub(crate) trigger_actions_on: Option<Vec<TriggerAction>>,
-}
-
-fn set_triggers(value: Option<Vec<TriggerAction>>) -> Value<Vec<TriggerAction>> {
-    pipe! { Value::new(value) => validators::list::not_empty }
 }
 
 #[cfg(test)]

@@ -1,6 +1,5 @@
 use crate::composition_objects::types::{TextInOption, UrlAvailable, UrlUnavailable};
-use crate::validators;
-use crate::value::Value;
+use crate::validators::*;
 
 use derive_macro::Builder;
 use serde::Serialize;
@@ -52,18 +51,18 @@ pub struct Opt<T: TextInOption, P = UrlUnavailable> {
     #[builder(phantom = "P")]
     pub(crate) phantom: PhantomData<P>,
 
-    #[builder(setter = "set_text")]
+    #[builder(validate("required", "text_object::max_75"))]
     pub(crate) text: Option<T>,
 
-    #[builder(setter = "set_value")]
+    #[builder(validate("required", "text::max_150"))]
     pub(crate) value: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(setter = "set_description")]
+    #[builder(validate("text_object::max_75"))]
     pub(crate) description: Option<T>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(no_accessors, setter = "set_url")]
+    #[builder(no_accessors, validate("text::max_3000"))]
     pub(crate) url: Option<String>,
 }
 
@@ -85,30 +84,6 @@ impl<T: TextInOption> OptBuilder<T, UrlAvailable> {
     pub fn url(self, value: impl Into<String>) -> Self {
         self.set_url(Some(value))
     }
-}
-
-fn set_text<T: TextInOption>(value: Option<T>) -> Value<T> {
-    pipe! {
-        Value::new(value) =>
-            validators::required |
-            validators::text_object::max_75
-    }
-}
-
-fn set_value(value: Option<String>) -> Value<String> {
-    pipe! {
-        Value::new(value) =>
-            validators::required |
-            validators::text::max_150
-    }
-}
-
-fn set_description<T: TextInOption>(description: Option<T>) -> Value<T> {
-    pipe! { Value::new(description) => validators::text_object::max_75 }
-}
-
-fn set_url(url: Option<String>) -> Value<String> {
-    pipe! { Value::new(url) => validators::text::max_3000 }
 }
 
 #[cfg(test)]

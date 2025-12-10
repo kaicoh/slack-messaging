@@ -1,6 +1,5 @@
 use crate::composition_objects::{ConfirmationDialog, PlainText};
-use crate::validators;
-use crate::value::Value;
+use crate::validators::*;
 
 use derive_macro::Builder;
 use serde::Serialize;
@@ -52,19 +51,19 @@ use serde::Serialize;
 #[derive(Debug, Clone, Serialize, PartialEq, Builder)]
 #[serde(tag = "type", rename = "button")]
 pub struct Button {
-    #[builder(setter = "set_text")]
+    #[builder(validate("required", "text_object::max_75"))]
     pub(crate) text: Option<PlainText>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(setter = "set_action_id")]
+    #[builder(validate("text::max_255"))]
     pub(crate) action_id: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(setter = "set_url")]
+    #[builder(validate("text::max_3000"))]
     pub(crate) url: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(setter = "set_value")]
+    #[builder(validate("text::max_2000"))]
     pub(crate) value: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -75,7 +74,7 @@ pub struct Button {
     pub(crate) confirm: Option<ConfirmationDialog>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(setter = "set_accessibility_label")]
+    #[builder(validate("text::max_75"))]
     pub(crate) accessibility_label: Option<String>,
 }
 
@@ -89,30 +88,6 @@ impl ButtonBuilder {
     pub fn danger(self) -> Self {
         self.style("danger")
     }
-}
-
-fn set_text(text: Option<PlainText>) -> Value<PlainText> {
-    pipe! {
-        Value::new(text) =>
-            validators::required |
-            validators::text_object::max_75
-    }
-}
-
-fn set_action_id(action_id: Option<String>) -> Value<String> {
-    pipe! { Value::new(action_id) => validators::text::max_255 }
-}
-
-fn set_url(url: Option<String>) -> Value<String> {
-    pipe! { Value::new(url) => validators::text::max_3000 }
-}
-
-fn set_value(value: Option<String>) -> Value<String> {
-    pipe! { Value::new(value) => validators::text::max_2000 }
-}
-
-fn set_accessibility_label(label: Option<String>) -> Value<String> {
-    pipe! { Value::new(label) => validators::text::max_75 }
 }
 
 #[cfg(test)]

@@ -1,6 +1,5 @@
 use crate::composition_objects::{ConfirmationDialog, Opt, Text};
-use crate::validators;
-use crate::value::Value;
+use crate::validators::*;
 
 use derive_macro::Builder;
 use serde::Serialize;
@@ -74,10 +73,10 @@ use serde::Serialize;
 #[serde(tag = "type", rename = "checkboxes")]
 pub struct Checkboxes {
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(setter = "set_action_id")]
+    #[builder(validate("text::max_255"))]
     pub(crate) action_id: Option<String>,
 
-    #[builder(setter = "set_options", push_item = "option")]
+    #[builder(push_item = "option", validate("required", "list::max_item_10"))]
     pub(crate) options: Option<Vec<Opt<Text>>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -89,18 +88,6 @@ pub struct Checkboxes {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) focus_on_load: Option<bool>,
-}
-
-fn set_action_id(value: Option<String>) -> Value<String> {
-    pipe! { Value::new(value) => validators::text::max_255 }
-}
-
-fn set_options(value: Option<Vec<Opt<Text>>>) -> Value<Vec<Opt<Text>>> {
-    pipe! {
-        Value::new(value) =>
-            validators::required |
-            validators::list::max_item_10
-    }
 }
 
 #[cfg(test)]

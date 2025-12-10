@@ -1,5 +1,5 @@
 use crate::composition_objects::{MrkdwnText, PlainText, Text};
-use crate::validators;
+use crate::validators::required;
 
 use derive_macro::Builder;
 use serde::Serialize;
@@ -106,19 +106,11 @@ pub struct UrlAvailable;
 /// ```
 #[derive(Debug, Clone, Serialize, PartialEq, Builder)]
 pub struct InputParameter {
-    #[builder(setter = "set_name")]
+    #[builder(validate("required"))]
     pub(crate) name: Option<String>,
 
-    #[builder(setter = "set_value")]
+    #[builder(validate("required"))]
     pub(crate) value: Option<Value>,
-}
-
-fn set_name(value: Option<String>) -> crate::value::Value<String> {
-    pipe! { crate::value::Value::new(value) => validators::required }
-}
-
-fn set_value(value: Option<Value>) -> crate::value::Value<Value> {
-    pipe! { crate::value::Value::new(value) => validators::required }
 }
 
 #[cfg(test)]

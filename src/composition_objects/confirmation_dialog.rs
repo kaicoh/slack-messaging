@@ -1,6 +1,5 @@
 use crate::composition_objects::PlainText;
-use crate::validators;
-use crate::value::Value;
+use crate::validators::*;
 
 use derive_macro::Builder;
 use serde::Serialize;
@@ -64,16 +63,16 @@ use serde::Serialize;
 /// ```
 #[derive(Debug, Clone, Serialize, PartialEq, Builder)]
 pub struct ConfirmationDialog {
-    #[builder(setter = "set_title")]
+    #[builder(validate("required", "text_object::max_100"))]
     pub(crate) title: Option<PlainText>,
 
-    #[builder(setter = "set_text")]
+    #[builder(validate("required", "text_object::max_300"))]
     pub(crate) text: Option<PlainText>,
 
-    #[builder(setter = "set_confirm")]
+    #[builder(validate("required", "text_object::max_30"))]
     pub(crate) confirm: Option<PlainText>,
 
-    #[builder(setter = "set_deny")]
+    #[builder(validate("required", "text_object::max_30"))]
     pub(crate) deny: Option<PlainText>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -90,38 +89,6 @@ impl ConfirmationDialogBuilder {
     /// set "danger" to style field
     pub fn danger(self) -> Self {
         self.style("danger")
-    }
-}
-
-fn set_title(value: Option<PlainText>) -> Value<PlainText> {
-    pipe! {
-        Value::new(value) =>
-            validators::required |
-            validators::text_object::max_100
-    }
-}
-
-fn set_text(value: Option<PlainText>) -> Value<PlainText> {
-    pipe! {
-        Value::new(value) =>
-            validators::required |
-            validators::text_object::max_300
-    }
-}
-
-fn set_confirm(value: Option<PlainText>) -> Value<PlainText> {
-    pipe! {
-        Value::new(value) =>
-            validators::required |
-            validators::text_object::max_30
-    }
-}
-
-fn set_deny(value: Option<PlainText>) -> Value<PlainText> {
-    pipe! {
-        Value::new(value) =>
-            validators::required |
-            validators::text_object::max_30
     }
 }
 
