@@ -10,6 +10,7 @@ mod datetime_picker;
 mod email_input;
 mod feedback_buttons;
 mod file_input;
+mod icon_button;
 
 pub use button::Button;
 pub use checkboxes::Checkboxes;
@@ -18,6 +19,7 @@ pub use datetime_picker::DatetimePicker;
 pub use email_input::EmailInput;
 pub use feedback_buttons::FeedbackButtons;
 pub use file_input::FileInput;
+pub use icon_button::IconButton;
 
 #[cfg(test)]
 pub mod test_helpers {

@@ -5,3 +5,4 @@ pub use super::datetime_picker::DatetimePickerBuilder;
 pub use super::email_input::EmailInputBuilder;
 pub use super::feedback_buttons::FeedbackButtonsBuilder;
 pub use super::file_input::FileInputBuilder;
+pub use super::icon_button::IconButtonBuilder;

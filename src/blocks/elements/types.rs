@@ -4,6 +4,13 @@ use crate::validators::*;
 use derive_macro::Builder;
 use serde::Serialize;
 
+/// Icons for [`IconButton`](crate::blocks::elements::IconButton).
+#[derive(Debug, Copy, Clone, Serialize, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum Icon {
+    Trash,
+}
+
 /// Possible filetype values for filetypes field of
 /// [`FileInput`](crate::blocks::elements::FileInput).
 /// See [this](https://docs.slack.dev/reference/objects/file-object#types).
