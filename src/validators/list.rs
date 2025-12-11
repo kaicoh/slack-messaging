@@ -1,6 +1,4 @@
 use super::*;
-use crate::composition_objects::Opt;
-use crate::composition_objects::types::TextInOption;
 
 use paste::paste;
 
@@ -15,20 +13,6 @@ fn inner_validator<T>(
         value.push(error);
     }
     value
-}
-
-fn all<T>(
-    value: List<T>,
-    error: ValidationErrorKind,
-    predicate: impl Fn(&T) -> bool + Copy,
-) -> List<T> {
-    inner_validator(value, error, |l| l.iter().any(predicate))
-}
-
-fn opt_text_max_75<T: TextInOption>(opt: &Opt<T>) -> bool {
-    opt.text
-        .as_ref()
-        .is_some_and(|t| t.text().is_some_and(|t| t.len() > 75))
 }
 
 fn max_item<T>(max: usize, value: List<T>) -> List<T> {
@@ -55,57 +39,51 @@ pub(crate) fn not_empty<T>(value: List<T>) -> List<T> {
     inner_validator(value, ValidationErrorKind::EmptyArray, |l| l.is_empty())
 }
 
-pub(crate) fn all_opt_text_max_75<T: TextInOption>(value: List<Opt<T>>) -> List<Opt<T>> {
-    all(
-        value,
-        ValidationErrorKind::MaxTextLegth(75),
-        opt_text_max_75,
-    )
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::composition_objects::PlainText;
-    use crate::composition_objects::test_helpers::*;
 
-    #[test]
-    fn max_item_100_sets_error_if_the_list_has_more_than_100_items() {
-        let list_100: Vec<u8> = (0..100).collect();
-        let value = Value::new(Some(list_100));
-        let result = max_item_100(value);
-        assert!(result.errors.is_empty());
+    mod fn_max_item_100 {
+        use super::*;
 
-        let list_101: Vec<u8> = (0..101).collect();
-        let value = Value::new(Some(list_101));
-        let result = max_item_100(value);
-        assert_eq!(result.errors, vec![ValidationErrorKind::MaxArraySize(100)]);
+        #[test]
+        fn it_passes_if_the_list_length_is_smaller_than_100() {
+            let list: Vec<u8> = (0..100).collect();
+            let result = test(list);
+            assert!(result.errors.is_empty());
+        }
+
+        #[test]
+        fn it_sets_an_error_if_the_list_length_is_greater_than_101() {
+            let list: Vec<u8> = (0..101).collect();
+            let result = test(list);
+            assert_eq!(result.errors, vec![ValidationErrorKind::MaxArraySize(100)]);
+        }
+
+        fn test<T>(list: Vec<T>) -> List<T> {
+            max_item_100(Value::new(Some(list)))
+        }
     }
 
-    #[test]
-    fn not_empty_sets_error_if_the_list_is_empty() {
-        let list_0: Vec<u8> = vec![];
-        let value = Value::new(Some(list_0));
-        let result = not_empty(value);
-        assert_eq!(result.errors, vec![ValidationErrorKind::EmptyArray]);
+    mod fn_not_empty {
+        use super::*;
 
-        let list_1: Vec<u8> = vec![1];
-        let value = Value::new(Some(list_1));
-        let result = not_empty(value);
-        assert!(result.errors.is_empty());
-    }
+        #[test]
+        fn it_passes_if_the_list_is_not_empty() {
+            let list: Vec<u8> = vec![0];
+            let result = test(list);
+            assert!(result.errors.is_empty());
+        }
 
-    #[test]
-    fn all_opt_text_max_75_sets_error_if_the_opt_has_text_more_than_75_characters() {
-        let options: Vec<Opt<PlainText>> =
-            vec![option("foo", "bar"), option("a".repeat(76), "foobar")];
-        let value = Value::new(Some(options));
-        let result = all_opt_text_max_75(value);
-        assert_eq!(result.errors, vec![ValidationErrorKind::MaxTextLegth(75)]);
+        #[test]
+        fn it_sets_an_error_if_the_list_is_empty() {
+            let list: Vec<u8> = vec![];
+            let result = test(list);
+            assert_eq!(result.errors, vec![ValidationErrorKind::EmptyArray]);
+        }
 
-        let options: Vec<Opt<PlainText>> = vec![option("foo", "bar"), option("baz", "foobar")];
-        let value = Value::new(Some(options));
-        let result = all_opt_text_max_75(value);
-        assert!(result.errors.is_empty());
+        fn test<T>(list: Vec<T>) -> List<T> {
+            not_empty(Value::new(Some(list)))
+        }
     }
 }

@@ -32,23 +32,28 @@ mod tests {
     use super::*;
     use crate::composition_objects::PlainText;
 
-    #[test]
-    fn max_30_sets_error_if_the_value_has_more_than_30_characters() {
-        let text_30 = plain_text("a".repeat(30));
-        let value = Value::new(Some(text_30));
-        let result = max_30(value);
-        assert!(result.errors.is_empty());
+    mod fn_max_30 {
+        use super::*;
 
-        let text_31 = plain_text("a".repeat(31));
-        let value = Value::new(Some(text_31));
-        let result = max_30(value);
-        assert_eq!(result.errors, vec![ValidationErrorKind::MaxTextLegth(30)]);
-    }
+        #[test]
+        fn it_passes_if_the_text_length_is_smaller_than_30() {
+            let text = "a".repeat(30);
+            let result = test(text);
+            assert!(result.errors.is_empty());
+        }
 
-    fn plain_text(text: impl Into<String>) -> PlainText {
-        PlainText {
-            text: Some(text.into()),
-            emoji: None,
+        #[test]
+        fn it_sets_an_error_if_the_text_length_is_greater_than_31() {
+            let text = "a".repeat(31);
+            let result = test(text);
+            assert_eq!(result.errors, vec![ValidationErrorKind::MaxTextLegth(30)]);
+        }
+
+        fn test(text: impl Into<String>) -> Value<PlainText> {
+            max_30(Value::new(Some(PlainText {
+                text: Some(text.into()),
+                emoji: None,
+            })))
         }
     }
 }

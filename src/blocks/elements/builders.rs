@@ -20,3 +20,4 @@ pub use super::select_menus::{
     SelectMenuConversationsBuilder, SelectMenuExternalDataSourceBuilder,
     SelectMenuPublicChannelsBuilder, SelectMenuStaticOptionsBuilder, SelectMenuUsersBuilder,
 };
+pub use super::time_picker::TimePickerBuilder;

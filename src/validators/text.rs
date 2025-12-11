@@ -1,6 +1,6 @@
 use super::*;
 
-use chrono::NaiveDate;
+use chrono::{NaiveDate, NaiveTime};
 use once_cell::sync::Lazy;
 use paste::paste;
 use regex::Regex;
@@ -9,7 +9,10 @@ use std::error::Error;
 type Text = Value<String>;
 
 static DATE_FORMAT: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"(?x)(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})").unwrap());
+    Lazy::new(|| Regex::new(r"^(?x)(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})$").unwrap());
+
+static TIME_FORMAT: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"^(?x)(?P<hour>\d{2}):(?P<minute>\d{2})$").unwrap());
 
 fn max(max: usize, mut value: Text) -> Text {
     if value.inner_ref().is_some_and(|v| v.len() > max) {
@@ -31,6 +34,14 @@ fn is_valid_date(text: &str) -> Result<(), Box<dyn Error>> {
     let month: u32 = caps["month"].parse()?;
     let day: u32 = caps["day"].parse()?;
     NaiveDate::from_ymd_opt(year, month, day).ok_or("Invalid date")?;
+    Ok(())
+}
+
+fn is_valid_time(text: &str) -> Result<(), Box<dyn Error>> {
+    let caps = TIME_FORMAT.captures(text).ok_or("Failed to capture text")?;
+    let hour: u32 = caps["hour"].parse()?;
+    let minute: u32 = caps["minute"].parse()?;
+    NaiveTime::from_hms_opt(hour, minute, 0).ok_or("Invalid time")?;
     Ok(())
 }
 
@@ -59,57 +70,175 @@ pub(crate) fn date_format(mut value: Text) -> Text {
     value
 }
 
+pub(crate) fn time_format(mut value: Text) -> Text {
+    if value.inner_ref().is_some_and(|v| is_valid_time(v).is_err()) {
+        value.push(ValidationErrorKind::InvalidFormat("24-hour format HH:mm"));
+    }
+    value
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    #[test]
-    fn max_3000_sets_error_if_the_value_has_more_than_3000_characters() {
-        let text_3000 = "a".repeat(3000);
-        let value: Text = Value::new(Some(text_3000));
-        let result = max_3000(value);
-        assert!(result.errors.is_empty());
+    mod fn_max_3000 {
+        use super::*;
 
-        let text_3001 = "a".repeat(3001);
-        let value: Text = Value::new(Some(text_3001));
-        let result = max_3000(value);
-        assert_eq!(result.errors, vec![ValidationErrorKind::MaxTextLegth(3000)]);
+        #[test]
+        fn it_sets_an_error_if_the_value_has_more_than_3000_characters() {
+            let text = "a".repeat(3001);
+
+            let result = test(text);
+            assert_eq!(result.errors, vec![ValidationErrorKind::MaxTextLegth(3000)]);
+        }
+
+        #[test]
+        fn it_passes_if_the_value_has_less_than_3000_characters() {
+            let text = "a".repeat(3000);
+
+            let result = test(text);
+            assert!(result.errors.is_empty());
+        }
+
+        fn test(text: impl Into<String>) -> Text {
+            max_3000(Value::new(Some(text.into())))
+        }
     }
 
-    #[test]
-    fn min_1_sets_error_if_the_value_has_empty_string() {
-        let text_1 = "a".to_string();
-        let value: Text = Value::new(Some(text_1));
-        let result = min_1(value);
-        assert!(result.errors.is_empty());
+    mod fn_min_1 {
+        use super::*;
 
-        let text_0 = "".to_string();
-        let value: Text = Value::new(Some(text_0));
-        let result = min_1(value);
-        assert_eq!(result.errors, vec![ValidationErrorKind::MinTextLegth(1)]);
+        #[test]
+        fn it_sets_an_error_if_the_value_is_empty_string() {
+            let text = "".to_string();
+
+            let result = test(text);
+            assert_eq!(result.errors, vec![ValidationErrorKind::MinTextLegth(1)]);
+        }
+
+        #[test]
+        fn it_passes_if_the_value_has_more_than_1_characters() {
+            let text = "a".to_string();
+
+            let result = test(text);
+            assert!(result.errors.is_empty());
+        }
+
+        fn test(text: impl Into<String>) -> Text {
+            min_1(Value::new(Some(text.into())))
+        }
     }
 
-    #[test]
-    fn date_format_sets_error_if_the_value_does_not_meet_date_format() {
-        let date = "2010-03-14".to_string();
-        let value: Text = Value::new(Some(date));
-        let result = date_format(value);
-        assert!(result.errors.is_empty());
+    mod fn_date_format {
+        use super::*;
 
-        let invalid_date = "2015-02-29".to_string();
-        let value: Text = Value::new(Some(invalid_date));
-        let result = date_format(value);
-        assert_eq!(
-            result.errors,
-            vec![ValidationErrorKind::InvalidFormat("YYYY-MM-DD")]
-        );
+        #[test]
+        fn it_passes_if_the_value_match_the_date_format() {
+            let text = "2010-03-14";
 
-        let text = "foobar".to_string();
-        let value: Text = Value::new(Some(text));
-        let result = date_format(value);
-        assert_eq!(
-            result.errors,
-            vec![ValidationErrorKind::InvalidFormat("YYYY-MM-DD")]
-        );
+            let result = test(text);
+            assert!(result.errors.is_empty());
+        }
+
+        #[test]
+        fn it_sets_an_error_if_the_value_is_invalid_date() {
+            let text = "2015-02-29";
+
+            let result = test(text);
+            assert_eq!(
+                result.errors,
+                vec![ValidationErrorKind::InvalidFormat("YYYY-MM-DD")]
+            );
+        }
+
+        #[test]
+        fn it_set_an_error_if_the_value_does_not_match_the_date_format() {
+            let text = "foobar";
+
+            let result = test(text);
+            assert_eq!(
+                result.errors,
+                vec![ValidationErrorKind::InvalidFormat("YYYY-MM-DD")]
+            );
+
+            let text = "foo2025-12-11bar";
+
+            let result = test(text);
+            assert_eq!(
+                result.errors,
+                vec![ValidationErrorKind::InvalidFormat("YYYY-MM-DD")]
+            );
+        }
+
+        fn test(text: impl Into<String>) -> Text {
+            date_format(Value::new(Some(text.into())))
+        }
+    }
+
+    mod fn_time_format {
+        use super::*;
+
+        #[test]
+        fn it_passes_if_the_value_match_the_time_format() {
+            let text = "00:00";
+
+            let result = test(text);
+            assert!(result.errors.is_empty());
+
+            let text = "23:59";
+
+            let result = test(text);
+            assert!(result.errors.is_empty());
+        }
+
+        #[test]
+        fn it_sets_an_error_if_the_value_is_invalid_time() {
+            let text = "24:00";
+
+            let result = test(text);
+            assert_eq!(
+                result.errors,
+                vec![ValidationErrorKind::InvalidFormat("24-hour format HH:mm")]
+            );
+
+            let text = "23:60";
+
+            let result = test(text);
+            assert_eq!(
+                result.errors,
+                vec![ValidationErrorKind::InvalidFormat("24-hour format HH:mm")]
+            );
+
+            let text = "0:0";
+
+            let result = test(text);
+            assert_eq!(
+                result.errors,
+                vec![ValidationErrorKind::InvalidFormat("24-hour format HH:mm")]
+            );
+        }
+
+        #[test]
+        fn it_set_an_error_if_the_value_does_not_match_the_time_format() {
+            let text = "foobar";
+
+            let result = test(text);
+            assert_eq!(
+                result.errors,
+                vec![ValidationErrorKind::InvalidFormat("24-hour format HH:mm")]
+            );
+
+            let text = "foo12:30bar";
+
+            let result = test(text);
+            assert_eq!(
+                result.errors,
+                vec![ValidationErrorKind::InvalidFormat("24-hour format HH:mm")]
+            );
+        }
+
+        fn test(text: impl Into<String>) -> Text {
+            time_format(Value::new(Some(text.into())))
+        }
     }
 }

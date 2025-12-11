@@ -85,10 +85,7 @@ pub struct MultiSelectMenuStaticOptions {
     pub(crate) action_id: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(
-        push_item = "option",
-        validate("list::max_item_100", "list::all_opt_text_max_75")
-    )]
+    #[builder(push_item = "option", validate("list::max_item_100"))]
     pub(crate) options: Option<Vec<Opt<PlainText>>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -347,18 +344,6 @@ mod tests {
 
         let errors = err.field("options");
         assert!(errors.includes(ValidationErrorKind::MaxArraySize(100)));
-    }
-
-    #[test]
-    fn it_requires_each_option_text_less_than_75_characters_long() {
-        let err = MultiSelectMenuStaticOptions::builder()
-            .option(option("a".repeat(76), "val"))
-            .build()
-            .unwrap_err();
-        assert_eq!(err.object(), "MultiSelectMenuStaticOptions");
-
-        let errors = err.field("options");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(75)));
     }
 
     #[test]

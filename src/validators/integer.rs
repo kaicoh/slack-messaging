@@ -67,61 +67,92 @@ impl_min!(0, 1);
 mod tests {
     use super::*;
 
-    #[test]
-    fn ten_digits_sets_error_if_the_value_is_out_of_range() {
-        let v = 999_999_999i64;
-        let value = Value::new(Some(v));
-        let result = ten_digits(value);
-        assert_eq!(
-            result.errors,
-            vec![ValidationErrorKind::InvalidFormat("10 digits")]
-        );
+    mod fn_ten_digits {
+        use super::*;
 
-        let v = 1_000_000_000i64;
-        let value = Value::new(Some(v));
-        let result = ten_digits(value);
-        assert!(result.errors.is_empty());
+        #[test]
+        fn it_passes_if_the_value_is_greater_than_one_billion() {
+            let v = 1_000_000_000i64;
+            let result = test(v);
+            assert!(result.errors.is_empty());
+        }
 
-        let v = 9_999_999_999i64;
-        let value = Value::new(Some(v));
-        let result = ten_digits(value);
-        assert!(result.errors.is_empty());
+        #[test]
+        fn it_passes_if_the_value_is_smaller_than_9999999999() {
+            let v = 9_999_999_999i64;
+            let result = test(v);
+            assert!(result.errors.is_empty());
+        }
 
-        let v = 10_000_000_000i64;
-        let value = Value::new(Some(v));
-        let result = ten_digits(value);
-        assert_eq!(
-            result.errors,
-            vec![ValidationErrorKind::InvalidFormat("10 digits")]
-        );
+        #[test]
+        fn it_sets_an_error_if_the_value_is_smaller_than_one_billion() {
+            let v = 999_999_999i64;
+            let result = test(v);
+            assert_eq!(
+                result.errors,
+                vec![ValidationErrorKind::InvalidFormat("10 digits")]
+            );
+        }
+
+        #[test]
+        fn it_sets_an_error_if_the_value_is_greater_than_ten_billion() {
+            let v = 10_000_000_000i64;
+            let result = test(v);
+            assert_eq!(
+                result.errors,
+                vec![ValidationErrorKind::InvalidFormat("10 digits")]
+            );
+        }
+
+        fn test(int: i64) -> I64 {
+            ten_digits(Value::new(Some(int)))
+        }
     }
 
-    #[test]
-    fn max_10_sets_error_if_the_value_is_greater_than_10() {
-        let v = 10i64;
-        let value = Value::new(Some(v));
-        let result = max_10(value);
-        assert!(result.errors.is_empty());
+    mod fn_max_10 {
+        use super::*;
 
-        let v = 11i64;
-        let value = Value::new(Some(v));
-        let result = max_10(value);
-        assert_eq!(
-            result.errors,
-            vec![ValidationErrorKind::MaxIntegerValue(10)]
-        );
+        #[test]
+        fn it_passes_if_the_value_is_smaller_than_10() {
+            let v = 10i64;
+            let result = test(v);
+            assert!(result.errors.is_empty());
+        }
+
+        #[test]
+        fn it_sets_an_errors_if_the_value_is_greater_than_10() {
+            let v = 11i64;
+            let result = test(v);
+            assert_eq!(
+                result.errors,
+                vec![ValidationErrorKind::MaxIntegerValue(10)]
+            );
+        }
+
+        fn test(int: i64) -> I64 {
+            max_10(Value::new(Some(int)))
+        }
     }
 
-    #[test]
-    fn min_1_sets_error_if_the_value_is_smaller_than_1() {
-        let v = 1i64;
-        let value = Value::new(Some(v));
-        let result = min_1(value);
-        assert!(result.errors.is_empty());
+    mod fn_min_1 {
+        use super::*;
 
-        let v = 0i64;
-        let value = Value::new(Some(v));
-        let result = min_1(value);
-        assert_eq!(result.errors, vec![ValidationErrorKind::MinIntegerValue(1)]);
+        #[test]
+        fn it_passes_if_the_value_is_greater_than_1() {
+            let v = 1i64;
+            let result = test(v);
+            assert!(result.errors.is_empty());
+        }
+
+        #[test]
+        fn it_sets_an_errors_if_the_value_is_smaller_than_10() {
+            let v = 0i64;
+            let result = test(v);
+            assert_eq!(result.errors, vec![ValidationErrorKind::MinIntegerValue(1)]);
+        }
+
+        fn test(int: i64) -> I64 {
+            min_1(Value::new(Some(int)))
+        }
     }
 }
