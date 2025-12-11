@@ -19,6 +19,7 @@ mod plain_text_input;
 mod radio_button_group;
 mod select_menus;
 mod time_picker;
+mod url_input;
 
 pub use button::Button;
 pub use checkboxes::Checkboxes;
@@ -42,6 +43,7 @@ pub use select_menus::{
     SelectMenuStaticOptions, SelectMenuUsers,
 };
 pub use time_picker::TimePicker;
+pub use url_input::UrlInput;
 
 #[cfg(test)]
 pub mod test_helpers {

@@ -21,3 +21,4 @@ pub use super::select_menus::{
     SelectMenuPublicChannelsBuilder, SelectMenuStaticOptionsBuilder, SelectMenuUsersBuilder,
 };
 pub use super::time_picker::TimePickerBuilder;
+pub use super::url_input::UrlInputBuilder;
