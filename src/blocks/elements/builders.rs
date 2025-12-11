@@ -13,3 +13,4 @@ pub use super::multi_select_menus::{
     MultiSelectMenuUsersBuilder,
 };
 pub use super::number_input::NumberInputBuilder;
+pub use super::overflow_menu::OverflowMenuBuilder;

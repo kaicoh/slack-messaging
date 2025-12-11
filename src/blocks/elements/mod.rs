@@ -14,6 +14,7 @@ mod icon_button;
 mod image;
 mod multi_select_menus;
 mod number_input;
+mod overflow_menu;
 
 pub use button::Button;
 pub use checkboxes::Checkboxes;
@@ -29,6 +30,7 @@ pub use multi_select_menus::{
     MultiSelectMenuStaticOptions, MultiSelectMenuUsers,
 };
 pub use number_input::NumberInput;
+pub use overflow_menu::OverflowMenu;
 
 #[cfg(test)]
 pub mod test_helpers {
