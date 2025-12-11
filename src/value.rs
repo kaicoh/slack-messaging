@@ -70,6 +70,16 @@ impl_merge!(
     (v5, T5, E)
 );
 impl_merge!(
+    merge_7,
+    (v0, T0, E),
+    (v1, T1, E),
+    (v2, T2, E),
+    (v3, T3, E),
+    (v4, T4, E),
+    (v5, T5, E),
+    (v6, T6, E)
+);
+impl_merge!(
     merge_8,
     (v0, T0, E),
     (v1, T1, E),
@@ -79,4 +89,16 @@ impl_merge!(
     (v5, T5, E),
     (v6, T6, E),
     (v7, T7, E)
+);
+impl_merge!(
+    merge_9,
+    (v0, T0, E),
+    (v1, T1, E),
+    (v2, T2, E),
+    (v3, T3, E),
+    (v4, T4, E),
+    (v5, T5, E),
+    (v6, T6, E),
+    (v7, T7, E),
+    (v8, T8, E)
 );

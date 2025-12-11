@@ -67,6 +67,16 @@ pub mod test_helpers {
         }
     }
 
+    pub fn option_group(
+        label: impl Into<String>,
+        options: Vec<Opt<PlainText>>,
+    ) -> OptGroup<PlainText> {
+        OptGroup {
+            label: Some(plain_text(label)),
+            options: Some(options),
+        }
+    }
+
     pub fn input_param(name: impl Into<String>, value: impl Into<String>) -> InputParameter {
         InputParameter {
             name: Some(name.into()),
@@ -104,6 +114,14 @@ pub mod test_helpers {
         SlackFile {
             id: Some("F0123456".into()),
             url: None,
+        }
+    }
+
+    pub fn conversation_filter() -> ConversationFilter {
+        ConversationFilter {
+            include: Some(vec![Conversation::Public]),
+            exclude_external_shared_channels: None,
+            exclude_bot_users: None,
         }
     }
 }

@@ -5,6 +5,7 @@ use quote::{format_ident, quote};
 use syn::{DeriveInput, parse_macro_input};
 
 mod types;
+mod utils;
 
 // The main struct we get from parsing the attributes
 // Ref: https://github.com/TedDriggs/darling?tab=readme-ov-file#shape-validation

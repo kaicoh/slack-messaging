@@ -7,3 +7,8 @@ pub use super::feedback_buttons::FeedbackButtonsBuilder;
 pub use super::file_input::FileInputBuilder;
 pub use super::icon_button::IconButtonBuilder;
 pub use super::image::ImageBuilder;
+pub use super::multi_select_menus::{
+    MultiSelectMenuConversationsBuilder, MultiSelectMenuExternalDataSourceBuilder,
+    MultiSelectMenuPublicChannelsBuilder, MultiSelectMenuStaticOptionsBuilder,
+    MultiSelectMenuUsersBuilder,
+};

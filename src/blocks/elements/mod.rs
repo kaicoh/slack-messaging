@@ -12,6 +12,7 @@ mod feedback_buttons;
 mod file_input;
 mod icon_button;
 mod image;
+mod multi_select_menus;
 
 pub use button::Button;
 pub use checkboxes::Checkboxes;
@@ -22,6 +23,10 @@ pub use feedback_buttons::FeedbackButtons;
 pub use file_input::FileInput;
 pub use icon_button::IconButton;
 pub use image::Image;
+pub use multi_select_menus::{
+    MultiSelectMenuConversations, MultiSelectMenuExternalDataSource, MultiSelectMenuPublicChannels,
+    MultiSelectMenuStaticOptions, MultiSelectMenuUsers,
+};
 
 #[cfg(test)]
 pub mod test_helpers {
