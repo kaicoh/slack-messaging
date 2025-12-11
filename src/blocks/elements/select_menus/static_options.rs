@@ -5,19 +5,19 @@ use crate::validators::*;
 use derive_macro::Builder;
 use serde::Serialize;
 
-/// [Multi select menu of static options](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#static_multi_select)
+/// [Select menu of static options](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#static_multi_select)
 /// representation
 ///
 /// # Example
 ///
 /// ```
 /// use slack_messaging::plain_text;
-/// use slack_messaging::blocks::elements::MultiSelectMenuStaticOptions;
+/// use slack_messaging::blocks::elements::SelectMenuStaticOptions;
 /// use slack_messaging::composition_objects::Opt;
 /// # use std::error::Error;
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {
-/// let menu = MultiSelectMenuStaticOptions::builder()
+/// let menu = SelectMenuStaticOptions::builder()
 ///     .action_id("text1234")
 ///     .option(
 ///         Opt::builder()
@@ -31,11 +31,11 @@ use serde::Serialize;
 ///             .value("value-1")
 ///             .build()?
 ///     )
-///     .placeholder(plain_text!("Select items")?)
+///     .placeholder(plain_text!("Select an item")?)
 ///     .build()?;
 ///
 /// let expected = serde_json::json!({
-///     "type": "multi_static_select",
+///     "type": "static_select",
 ///     "action_id": "text1234",
 ///     "options": [
 ///         {
@@ -55,7 +55,7 @@ use serde::Serialize;
 ///     ],
 ///     "placeholder": {
 ///         "type": "plain_text",
-///         "text": "Select items"
+///         "text": "Select an item"
 ///     }
 /// });
 ///
@@ -64,9 +64,9 @@ use serde::Serialize;
 /// assert_eq!(json, expected);
 ///
 /// // If your object has any validation errors, the build method returns Result::Err
-/// let menu = MultiSelectMenuStaticOptions::builder()
+/// let menu = SelectMenuStaticOptions::builder()
 ///     .action_id("text1234")
-///     .placeholder(plain_text!("Select items")?)
+///     .placeholder(plain_text!("Select an item")?)
 ///     .build();
 ///
 /// assert!(menu.is_err());
@@ -77,18 +77,15 @@ use serde::Serialize;
 /// # }
 /// ```
 #[derive(Debug, Default, Clone, Serialize, PartialEq, Builder)]
-#[serde(tag = "type", rename = "multi_static_select")]
+#[serde(tag = "type", rename = "static_select")]
 #[builder(validate = "validate")]
-pub struct MultiSelectMenuStaticOptions {
+pub struct SelectMenuStaticOptions {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text::max_255"))]
     pub(crate) action_id: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(
-        push_item = "option",
-        validate("list::max_item_100", "list::all_opt_text_max_75")
-    )]
+    #[builder(push_item = "option", validate("list::max_item_100"))]
     pub(crate) options: Option<Vec<Opt<PlainText>>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -96,15 +93,10 @@ pub struct MultiSelectMenuStaticOptions {
     pub(crate) option_groups: Option<Vec<OptGroup<PlainText>>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(push_item = "initial_option")]
-    pub(crate) initial_options: Option<Vec<Opt<PlainText>>>,
+    pub(crate) initial_option: Option<Opt<PlainText>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) confirm: Option<ConfirmationDialog>,
-
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[builder(validate("integer::min_1"))]
-    pub(crate) max_selected_items: Option<i64>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) focus_on_load: Option<bool>,
@@ -114,7 +106,7 @@ pub struct MultiSelectMenuStaticOptions {
     pub(crate) placeholder: Option<PlainText>,
 }
 
-fn validate(builder: &MultiSelectMenuStaticOptionsBuilder) -> Vec<ValidationErrorKind> {
+fn validate(builder: &SelectMenuStaticOptionsBuilder) -> Vec<ValidationErrorKind> {
     match (
         builder.options.inner_ref(),
         builder.option_groups.inner_ref(),
@@ -143,46 +135,43 @@ mod tests {
     #[test]
     fn it_implements_builder() {
         // using options field
-        let expected = MultiSelectMenuStaticOptions {
-            action_id: Some("multi_select_0".into()),
+        let expected = SelectMenuStaticOptions {
+            action_id: Some("select_0".into()),
             options: Some(vec![option("opt0", "val0"), option("opt1", "val1")]),
             option_groups: None,
-            initial_options: Some(vec![option("opt0", "val0")]),
+            initial_option: Some(option("opt0", "val0")),
             confirm: Some(confirm()),
-            max_selected_items: Some(2),
             focus_on_load: Some(true),
-            placeholder: Some(plain_text("Select items")),
+            placeholder: Some(plain_text("Select item")),
         };
 
-        let val = MultiSelectMenuStaticOptions::builder()
-            .set_action_id(Some("multi_select_0"))
+        let val = SelectMenuStaticOptions::builder()
+            .set_action_id(Some("select_0"))
             .set_options(Some(vec![option("opt0", "val0"), option("opt1", "val1")]))
-            .set_initial_options(Some(vec![option("opt0", "val0")]))
+            .set_initial_option(Some(option("opt0", "val0")))
             .set_confirm(Some(confirm()))
-            .set_max_selected_items(Some(2))
             .set_focus_on_load(Some(true))
-            .set_placeholder(Some(plain_text("Select items")))
+            .set_placeholder(Some(plain_text("Select item")))
             .build()
             .unwrap();
 
         assert_eq!(val, expected);
 
-        let val = MultiSelectMenuStaticOptions::builder()
-            .action_id("multi_select_0")
+        let val = SelectMenuStaticOptions::builder()
+            .action_id("select_0")
             .options(vec![option("opt0", "val0"), option("opt1", "val1")])
-            .initial_options(vec![option("opt0", "val0")])
+            .initial_option(option("opt0", "val0"))
             .confirm(confirm())
-            .max_selected_items(2)
             .focus_on_load(true)
-            .placeholder(plain_text("Select items"))
+            .placeholder(plain_text("Select item"))
             .build()
             .unwrap();
 
         assert_eq!(val, expected);
 
         // using option_groups field
-        let expected = MultiSelectMenuStaticOptions {
-            action_id: Some("multi_select_0".into()),
+        let expected = SelectMenuStaticOptions {
+            action_id: Some("select_0".into()),
             options: None,
             option_groups: Some(vec![
                 option_group(
@@ -194,15 +183,14 @@ mod tests {
                     vec![option("opt10", "val10"), option("opt11", "val11")],
                 ),
             ]),
-            initial_options: Some(vec![option("opt00", "val00")]),
+            initial_option: Some(option("opt00", "val00")),
             confirm: Some(confirm()),
-            max_selected_items: Some(2),
             focus_on_load: Some(true),
-            placeholder: Some(plain_text("Select items")),
+            placeholder: Some(plain_text("Select item")),
         };
 
-        let val = MultiSelectMenuStaticOptions::builder()
-            .set_action_id(Some("multi_select_0"))
+        let val = SelectMenuStaticOptions::builder()
+            .set_action_id(Some("select_0"))
             .set_option_groups(Some(vec![
                 option_group(
                     "group0",
@@ -213,18 +201,17 @@ mod tests {
                     vec![option("opt10", "val10"), option("opt11", "val11")],
                 ),
             ]))
-            .set_initial_options(Some(vec![option("opt00", "val00")]))
+            .set_initial_option(Some(option("opt00", "val00")))
             .set_confirm(Some(confirm()))
-            .set_max_selected_items(Some(2))
             .set_focus_on_load(Some(true))
-            .set_placeholder(Some(plain_text("Select items")))
+            .set_placeholder(Some(plain_text("Select item")))
             .build()
             .unwrap();
 
         assert_eq!(val, expected);
 
-        let val = MultiSelectMenuStaticOptions::builder()
-            .action_id("multi_select_0")
+        let val = SelectMenuStaticOptions::builder()
+            .action_id("select_0")
             .option_groups(vec![
                 option_group(
                     "group0",
@@ -235,11 +222,10 @@ mod tests {
                     vec![option("opt10", "val10"), option("opt11", "val11")],
                 ),
             ])
-            .initial_options(vec![option("opt00", "val00")])
+            .initial_option(option("opt00", "val00"))
             .confirm(confirm())
-            .max_selected_items(2)
             .focus_on_load(true)
-            .placeholder(plain_text("Select items"))
+            .placeholder(plain_text("Select item"))
             .build()
             .unwrap();
 
@@ -248,18 +234,17 @@ mod tests {
 
     #[test]
     fn it_implements_push_item_method() {
-        let expected = MultiSelectMenuStaticOptions {
+        let expected = SelectMenuStaticOptions {
             action_id: None,
             options: Some(vec![option("opt0", "val0"), option("opt1", "val1")]),
             option_groups: None,
-            initial_options: None,
+            initial_option: None,
             confirm: None,
-            max_selected_items: None,
             focus_on_load: None,
             placeholder: None,
         };
 
-        let val = MultiSelectMenuStaticOptions::builder()
+        let val = SelectMenuStaticOptions::builder()
             .option(option("opt0", "val0"))
             .option(option("opt1", "val1"))
             .build()
@@ -267,7 +252,7 @@ mod tests {
 
         assert_eq!(val, expected);
 
-        let expected = MultiSelectMenuStaticOptions {
+        let expected = SelectMenuStaticOptions {
             action_id: None,
             options: None,
             option_groups: Some(vec![
@@ -280,14 +265,13 @@ mod tests {
                     vec![option("opt10", "val10"), option("opt11", "val11")],
                 ),
             ]),
-            initial_options: None,
+            initial_option: None,
             confirm: None,
-            max_selected_items: None,
             focus_on_load: None,
             placeholder: None,
         };
 
-        let val = MultiSelectMenuStaticOptions::builder()
+        let val = SelectMenuStaticOptions::builder()
             .option_group(option_group(
                 "group0",
                 vec![option("opt00", "val00"), option("opt01", "val01")],
@@ -300,36 +284,16 @@ mod tests {
             .unwrap();
 
         assert_eq!(val, expected);
-
-        let expected = MultiSelectMenuStaticOptions {
-            action_id: None,
-            options: Some(vec![option("opt", "val")]),
-            option_groups: None,
-            initial_options: Some(vec![option("opt0", "val0"), option("opt1", "val1")]),
-            confirm: None,
-            max_selected_items: None,
-            focus_on_load: None,
-            placeholder: None,
-        };
-
-        let val = MultiSelectMenuStaticOptions::builder()
-            .option(option("opt", "val"))
-            .initial_option(option("opt0", "val0"))
-            .initial_option(option("opt1", "val1"))
-            .build()
-            .unwrap();
-
-        assert_eq!(val, expected);
     }
 
     #[test]
     fn it_requires_action_id_less_than_255_characters_long() {
-        let err = MultiSelectMenuStaticOptions::builder()
+        let err = SelectMenuStaticOptions::builder()
             .option(option("opt", "val"))
             .action_id("a".repeat(256))
             .build()
             .unwrap_err();
-        assert_eq!(err.object(), "MultiSelectMenuStaticOptions");
+        assert_eq!(err.object(), "SelectMenuStaticOptions");
 
         let errors = err.field("action_id");
         assert!(errors.includes(ValidationErrorKind::MaxTextLegth(255)));
@@ -339,26 +303,14 @@ mod tests {
     fn it_requires_options_list_size_less_than_100() {
         let options: Vec<Opt<PlainText>> = (0..101).map(|_| option("opt", "val")).collect();
 
-        let err = MultiSelectMenuStaticOptions::builder()
+        let err = SelectMenuStaticOptions::builder()
             .options(options)
             .build()
             .unwrap_err();
-        assert_eq!(err.object(), "MultiSelectMenuStaticOptions");
+        assert_eq!(err.object(), "SelectMenuStaticOptions");
 
         let errors = err.field("options");
         assert!(errors.includes(ValidationErrorKind::MaxArraySize(100)));
-    }
-
-    #[test]
-    fn it_requires_each_option_text_less_than_75_characters_long() {
-        let err = MultiSelectMenuStaticOptions::builder()
-            .option(option("a".repeat(76), "val"))
-            .build()
-            .unwrap_err();
-        assert_eq!(err.object(), "MultiSelectMenuStaticOptions");
-
-        let errors = err.field("options");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(75)));
     }
 
     #[test]
@@ -367,37 +319,24 @@ mod tests {
             .map(|_| option_group("group", vec![option("opt", "val")]))
             .collect();
 
-        let err = MultiSelectMenuStaticOptions::builder()
+        let err = SelectMenuStaticOptions::builder()
             .option_groups(option_groups)
             .build()
             .unwrap_err();
-        assert_eq!(err.object(), "MultiSelectMenuStaticOptions");
+        assert_eq!(err.object(), "SelectMenuStaticOptions");
 
         let errors = err.field("option_groups");
         assert!(errors.includes(ValidationErrorKind::MaxArraySize(100)));
     }
 
     #[test]
-    fn it_requires_max_selected_items_greater_than_1() {
-        let err = MultiSelectMenuStaticOptions::builder()
-            .option(option("opt", "val"))
-            .max_selected_items(0)
-            .build()
-            .unwrap_err();
-        assert_eq!(err.object(), "MultiSelectMenuStaticOptions");
-
-        let errors = err.field("max_selected_items");
-        assert!(errors.includes(ValidationErrorKind::MinIntegerValue(1)));
-    }
-
-    #[test]
     fn it_requires_placeholder_text_less_than_150_characters_long() {
-        let err = MultiSelectMenuStaticOptions::builder()
+        let err = SelectMenuStaticOptions::builder()
             .option(option("opt", "val"))
             .placeholder(plain_text("a".repeat(151)))
             .build()
             .unwrap_err();
-        assert_eq!(err.object(), "MultiSelectMenuStaticOptions");
+        assert_eq!(err.object(), "SelectMenuStaticOptions");
 
         let errors = err.field("placeholder");
         assert!(errors.includes(ValidationErrorKind::MaxTextLegth(150)));
@@ -405,8 +344,8 @@ mod tests {
 
     #[test]
     fn it_requires_either_options_or_option_groups_is_set() {
-        let err = MultiSelectMenuStaticOptions::builder().build().unwrap_err();
-        assert_eq!(err.object(), "MultiSelectMenuStaticOptions");
+        let err = SelectMenuStaticOptions::builder().build().unwrap_err();
+        assert_eq!(err.object(), "SelectMenuStaticOptions");
 
         let errors = err.across_fields();
         assert!(errors.includes(ValidationErrorKind::EitherRequired(
@@ -417,12 +356,12 @@ mod tests {
 
     #[test]
     fn it_prevents_from_both_options_or_option_groups_are_set() {
-        let err = MultiSelectMenuStaticOptions::builder()
+        let err = SelectMenuStaticOptions::builder()
             .option(option("opt", "val"))
             .option_group(option_group("group", vec![option("opt", "val")]))
             .build()
             .unwrap_err();
-        assert_eq!(err.object(), "MultiSelectMenuStaticOptions");
+        assert_eq!(err.object(), "SelectMenuStaticOptions");
 
         let errors = err.across_fields();
         assert!(errors.includes(ValidationErrorKind::ExclusiveField(

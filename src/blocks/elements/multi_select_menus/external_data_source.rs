@@ -4,7 +4,7 @@ use crate::validators::*;
 use derive_macro::Builder;
 use serde::Serialize;
 
-/// [Multi select menu from external data source](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#external_multi_select)
+/// [Multi select menu of external data source](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#external_multi_select)
 /// representation
 ///
 /// # Example

@@ -17,6 +17,7 @@ mod number_input;
 mod overflow_menu;
 mod plain_text_input;
 mod radio_button_group;
+mod select_menus;
 
 pub use button::Button;
 pub use checkboxes::Checkboxes;
@@ -35,6 +36,10 @@ pub use number_input::NumberInput;
 pub use overflow_menu::OverflowMenu;
 pub use plain_text_input::PlainTextInput;
 pub use radio_button_group::RadioButtonGroup;
+pub use select_menus::{
+    SelectMenuConversations, SelectMenuExternalDataSource, SelectMenuPublicChannels,
+    SelectMenuStaticOptions, SelectMenuUsers,
+};
 
 #[cfg(test)]
 pub mod test_helpers {
