@@ -1,32 +1,67 @@
 use super::*;
+use paste::paste;
 
 type I64 = Value<i64>;
 
 static BILLION: i64 = 1_000_000_000;
 
-pub(crate) fn ten_digits(mut value: I64) -> I64 {
-    if value
-        .inner_ref()
-        .is_some_and(|&v| v < BILLION || v >= 10 * BILLION)
-    {
-        value.push(ValidationErrorKind::InvalidFormat("10 digits"));
+fn inner_validator(
+    mut value: I64,
+    error: ValidationErrorKind,
+    predicate: impl Fn(i64) -> bool,
+) -> I64 {
+    if value.inner_ref().copied().is_some_and(predicate) {
+        value.push(error);
     }
     value
 }
 
-pub(crate) fn max_10(mut value: I64) -> I64 {
-    if value.inner_ref().is_some_and(|&v| v > 10) {
-        value.push(ValidationErrorKind::MaxIntegerValue(10))
-    }
-    value
+pub(crate) fn ten_digits(value: I64) -> I64 {
+    inner_validator(
+        value,
+        ValidationErrorKind::InvalidFormat("10 digits"),
+        |v| v < BILLION || v >= 10 * BILLION,
+    )
 }
 
-pub(crate) fn min_1(mut value: I64) -> I64 {
-    if value.inner_ref().is_some_and(|&v| v < 1) {
-        value.push(ValidationErrorKind::MinIntegerValue(1))
-    }
-    value
+fn max(max: i64, value: I64) -> I64 {
+    inner_validator(value, ValidationErrorKind::MaxIntegerValue(max), |v| {
+        v > max
+    })
 }
+
+fn min(min: i64, value: I64) -> I64 {
+    inner_validator(value, ValidationErrorKind::MinIntegerValue(min), |v| {
+        v < min
+    })
+}
+
+macro_rules! impl_max {
+    ($($e:expr),*) => {
+        paste! {
+            $(
+                pub(crate) fn [<max_ $e>](value: I64) -> I64 {
+                    max($e, value)
+                }
+            )*
+        }
+    }
+}
+
+macro_rules! impl_min {
+    ($($e:expr),*) => {
+        paste! {
+            $(
+                pub(crate) fn [<min_ $e>](value: I64) -> I64 {
+                    min($e, value)
+                }
+            )*
+        }
+    }
+}
+
+impl_max!(10, 3000);
+impl_min!(0, 1);
 
 #[cfg(test)]
 mod tests {
