@@ -5,6 +5,7 @@ use derive_macro::Builder;
 use serde::Serialize;
 
 /// [Multi select menu from public channels](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#channel_multi_select)
+/// representation
 ///
 /// # Example
 ///

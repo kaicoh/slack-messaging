@@ -13,6 +13,7 @@ mod file_input;
 mod icon_button;
 mod image;
 mod multi_select_menus;
+mod number_input;
 
 pub use button::Button;
 pub use checkboxes::Checkboxes;
@@ -27,6 +28,7 @@ pub use multi_select_menus::{
     MultiSelectMenuConversations, MultiSelectMenuExternalDataSource, MultiSelectMenuPublicChannels,
     MultiSelectMenuStaticOptions, MultiSelectMenuUsers,
 };
+pub use number_input::NumberInput;
 
 #[cfg(test)]
 pub mod test_helpers {

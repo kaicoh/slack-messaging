@@ -1,3 +1,25 @@
+use once_cell::sync::Lazy;
+use std::collections::HashSet;
+
+static INTEGER_TYPES: Lazy<HashSet<&'static str>> = Lazy::new(|| {
+    [
+        "i8", "i16", "i32", "i64", "i128", "isize", "u8", "u16", "u32", "u64", "u128", "usize",
+    ]
+    .into()
+});
+
+pub fn is_integer_type(ty: &syn::Type) -> bool {
+    if let syn::Type::Path(syn::TypePath { path, .. }) = ty {
+        // Check if the path has only one segment (e.g., `u32` vs `std::u32`)
+        if path.segments.len() == 1 {
+            let segment = &path.segments[0];
+            // Check if the identifier is in our set of integer names
+            return INTEGER_TYPES.contains(segment.ident.to_string().as_str());
+        }
+    }
+    false
+}
+
 pub fn get_option_inner_type(ty: &syn::Type) -> Option<&syn::Type> {
     let syn::Type::Path(type_path) = ty else {
         return None; // Not a path type
@@ -53,7 +75,7 @@ pub enum InnerType {
 
 impl InnerType {
     pub fn new(ty: &syn::Type) -> Self {
-        if is_bool(ty) || is_static_str_ref(ty) {
+        if is_bool(ty) || is_static_str_ref(ty) || is_integer_type(ty) {
             return Self::CanCopy;
         }
 

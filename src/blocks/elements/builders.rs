@@ -12,3 +12,4 @@ pub use super::multi_select_menus::{
     MultiSelectMenuPublicChannelsBuilder, MultiSelectMenuStaticOptionsBuilder,
     MultiSelectMenuUsersBuilder,
 };
+pub use super::number_input::NumberInputBuilder;
