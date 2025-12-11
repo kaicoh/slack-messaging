@@ -22,6 +22,10 @@ impl Field {
         self.ident.as_ref().expect("ident should exist")
     }
 
+    pub fn ident_str(&self) -> String {
+        self.ident().to_string()
+    }
+
     pub fn inner_ty(&self) -> &syn::Type {
         get_option_inner_type(&self.ty).expect("field should be Option type")
     }
@@ -46,8 +50,7 @@ impl Field {
     }
 
     pub fn field_constructor_name(&self) -> TokenStream {
-        let ident = self.ident();
-        let constructor_name = format_ident!("new_{ident}");
+        let constructor_name = format_ident!("new_{}", strip_raw_ident(&self.ident_str()));
         quote! { #constructor_name }
     }
 
@@ -93,14 +96,14 @@ impl Field {
             quote! { crate::value::Value::new(value) }
         };
 
-        let getter = format_ident!("get_{ident}");
+        let getter = format_ident!("get_{}", strip_raw_ident(&self.ident_str()));
         let (getter_result_ty, after_get) = match InnerType::new(self.inner_ty()) {
             InnerType::CanCopy => (quote! { #ty }, quote! { .copied() }),
             InnerType::Vec(inner_ty) => (quote! { &[#inner_ty] }, quote! { .map(|v| v.as_ref()) }),
             InnerType::Other => (quote! { &#ty }, quote! {}),
         };
 
-        let setter = format_ident!("set_{ident}");
+        let setter = format_ident!("set_{}", strip_raw_ident(&self.ident_str()));
         let setter_visibility = if self.private_setter.is_some_and(|v| v) {
             quote! {}
         } else {

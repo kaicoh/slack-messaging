@@ -148,3 +148,7 @@ pub fn get_vec_inner_type(ty: &syn::Type) -> Option<syn::Type> {
     }
     None
 }
+
+pub fn strip_raw_ident(ident: &String) -> &str {
+    ident.trim_start_matches("r#")
+}
