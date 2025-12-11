@@ -124,4 +124,10 @@ pub mod test_helpers {
             exclude_bot_users: None,
         }
     }
+
+    pub fn workflow() -> Workflow {
+        Workflow {
+            trigger: Some(trigger()),
+        }
+    }
 }

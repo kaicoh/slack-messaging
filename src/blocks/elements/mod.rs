@@ -20,6 +20,7 @@ mod radio_button_group;
 mod select_menus;
 mod time_picker;
 mod url_input;
+mod workflow_button;
 
 pub use button::Button;
 pub use checkboxes::Checkboxes;
@@ -44,6 +45,7 @@ pub use select_menus::{
 };
 pub use time_picker::TimePicker;
 pub use url_input::UrlInput;
+pub use workflow_button::WorkflowButton;
 
 #[cfg(test)]
 pub mod test_helpers {

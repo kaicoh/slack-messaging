@@ -22,3 +22,4 @@ pub use super::select_menus::{
 };
 pub use super::time_picker::TimePickerBuilder;
 pub use super::url_input::UrlInputBuilder;
+pub use super::workflow_button::WorkflowButtonBuilder;
