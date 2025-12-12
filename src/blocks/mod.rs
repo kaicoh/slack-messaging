@@ -4,6 +4,8 @@ pub mod builders;
 pub mod elements;
 /// Module for building [`RichText`] block.
 pub mod rich_text;
+/// Module for building [`Table`] block.
+pub mod table;
 
 mod actions;
 mod context;
@@ -27,6 +29,7 @@ pub use input::{Input, InputElement};
 pub use markdown::Markdown;
 pub use rich_text::RichText;
 pub use section::{Accessory, Section};
+pub use table::Table;
 
 #[cfg(test)]
 pub mod test_helpers {

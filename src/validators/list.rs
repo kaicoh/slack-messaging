@@ -34,7 +34,7 @@ macro_rules! impl_max_item {
     }
 }
 
-impl_max_item!(5, 10, 25, 100);
+impl_max_item!(5, 10, 20, 25, 100);
 
 pub(crate) fn not_empty<T>(value: List<T>) -> List<T> {
     inner_validator(value, ValidationErrorKind::EmptyArray, |l| l.is_empty())

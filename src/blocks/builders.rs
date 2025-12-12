@@ -9,3 +9,4 @@ pub use super::input::InputElement;
 pub use super::markdown::MarkdownBuilder;
 pub use super::rich_text::RichTextBuilder;
 pub use super::section::SectionBuilder;
+pub use super::table::TableBuilder;
