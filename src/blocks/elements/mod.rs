@@ -1,46 +1,108 @@
-use super::{RichText, composition_objects};
-
-/// Builder objects for Block elements.
+/// builder objects for block elements.
 pub mod builders;
-/// Types for select menu element or multi select menu element.
-pub mod select_menu_types;
+/// Additional types to create block elements.
+pub mod types;
 
 mod button;
 mod checkboxes;
-mod datepicker;
-mod datetimepicker;
+mod date_picker;
+mod datetime_picker;
 mod email_input;
 mod feedback_buttons;
 mod file_input;
 mod icon_button;
 mod image;
-mod multi_select_menu;
+mod multi_select_menus;
 mod number_input;
 mod overflow_menu;
 mod plain_text_input;
 mod radio_button_group;
 mod rich_text_input;
-mod select_menu;
-mod timepicker;
+mod select_menus;
+mod time_picker;
 mod url_input;
 mod workflow_button;
 
 pub use button::Button;
 pub use checkboxes::Checkboxes;
-pub use datepicker::DatePicker;
-pub use datetimepicker::DatetimePicker;
+pub use date_picker::DatePicker;
+pub use datetime_picker::DatetimePicker;
 pub use email_input::EmailInput;
-pub use feedback_buttons::{FeedbackButton, FeedbackButtons};
-pub use file_input::{FileInput, FileType};
+pub use feedback_buttons::FeedbackButtons;
+pub use file_input::FileInput;
 pub use icon_button::IconButton;
 pub use image::Image;
-pub use multi_select_menu::{MultiSelect, MultiSelectMenu};
+pub use multi_select_menus::{
+    MultiSelectMenuConversations, MultiSelectMenuExternalDataSource, MultiSelectMenuPublicChannels,
+    MultiSelectMenuStaticOptions, MultiSelectMenuUsers,
+};
 pub use number_input::NumberInput;
 pub use overflow_menu::OverflowMenu;
 pub use plain_text_input::PlainTextInput;
 pub use radio_button_group::RadioButtonGroup;
 pub use rich_text_input::RichTextInput;
-pub use select_menu::{Select, SelectMenu};
-pub use timepicker::TimePicker;
+pub use select_menus::{
+    SelectMenuConversations, SelectMenuExternalDataSource, SelectMenuPublicChannels,
+    SelectMenuStaticOptions, SelectMenuUsers,
+};
+pub use time_picker::TimePicker;
 pub use url_input::UrlInput;
 pub use workflow_button::WorkflowButton;
+
+#[cfg(test)]
+pub mod test_helpers {
+    use super::types::*;
+    use super::*;
+    use crate::composition_objects::test_helpers::*;
+
+    pub fn btn(text: impl Into<String>, value: impl Into<String>) -> Button {
+        Button {
+            text: Some(plain_text(text)),
+            value: Some(value.into()),
+            action_id: None,
+            url: None,
+            confirm: None,
+            style: None,
+            accessibility_label: None,
+        }
+    }
+
+    pub fn datepicker() -> DatePicker {
+        DatePicker {
+            action_id: None,
+            initial_date: None,
+            confirm: None,
+            focus_on_load: None,
+            placeholder: None,
+        }
+    }
+
+    pub fn fb_buttons() -> FeedbackButtons {
+        FeedbackButtons {
+            action_id: None,
+            positive_button: Some(fb_btn("Good", "positive")),
+            negative_button: Some(fb_btn("Bad", "negative")),
+        }
+    }
+
+    pub fn text_input() -> PlainTextInput {
+        PlainTextInput {
+            action_id: Some("text_area_0".into()),
+            initial_value: None,
+            multiline: Some(true),
+            min_length: None,
+            max_length: Some(65535),
+            dispatch_action_config: None,
+            focus_on_load: None,
+            placeholder: Some(plain_text("Enter plain text")),
+        }
+    }
+
+    pub fn fb_btn(text: impl Into<String>, value: impl Into<String>) -> FeedbackButton {
+        FeedbackButton {
+            text: Some(plain_text(text)),
+            value: Some(value.into()),
+            accessibility_label: None,
+        }
+    }
+}

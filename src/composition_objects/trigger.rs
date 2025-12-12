@@ -1,31 +1,8 @@
-use serde::Serialize;
-use serde_json::Value;
+use crate::composition_objects::types::InputParameter;
+use crate::validators::required;
 
-/// Input parameter for [Trigger object](https://docs.slack.dev/reference/block-kit/composition-objects/trigger-object).
-///
-/// # Example
-///
-/// ```
-/// # use slack_messaging::composition_objects::InputParameter;
-/// let param = InputParameter::builder()
-///     .name("input_parameter_a")
-///     .value("Value for input param A")
-///     .build();
-///
-/// let expected = serde_json::json!({
-///     "name": "input_parameter_a",
-///     "value": "Value for input param A"
-/// });
-///
-/// let json = serde_json::to_value(param).unwrap();
-///
-/// assert_eq!(json, expected);
-/// ```
-#[derive(Debug, Clone, Serialize)]
-pub struct InputParameter {
-    pub(super) name: String,
-    pub(super) value: Value,
-}
+use derive_macro::Builder;
+use serde::Serialize;
 
 /// [Trigger object](https://docs.slack.dev/reference/block-kit/composition-objects/trigger-object)
 /// representation.
@@ -33,22 +10,25 @@ pub struct InputParameter {
 /// # Example
 ///
 /// ```
-/// # use slack_messaging::composition_objects::{InputParameter, Trigger};
+/// use slack_messaging::composition_objects::{types::InputParameter, Trigger};
+/// # use std::error::Error;
+///
+/// # fn try_main() -> Result<(), Box<dyn Error>> {
 /// let trigger = Trigger::builder()
 ///     .url("https://slack.com/shortcuts/Ft0123ABC456/123...xyz")
 ///     .customizable_input_parameter(
 ///         InputParameter::builder()
 ///             .name("input_parameter_a")
 ///             .value("Value for input param A")
-///             .build()
+///             .build()?
 ///     )
 ///     .customizable_input_parameter(
 ///         InputParameter::builder()
 ///             .name("input_parameter_b")
 ///             .value("Value for input param B")
-///             .build()
+///             .build()?
 ///     )
-///     .build();
+///     .build()?;
 ///
 /// let expected = serde_json::json!({
 ///     "url": "https://slack.com/shortcuts/Ft0123ABC456/123...xyz",
@@ -67,11 +47,102 @@ pub struct InputParameter {
 /// let json = serde_json::to_value(trigger).unwrap();
 ///
 /// assert_eq!(json, expected);
+///
+/// // If your object has any validation errors, the build method returns Result::Err
+/// let trigger = Trigger::builder()
+///     .customizable_input_parameter(
+///         InputParameter::builder()
+///             .name("input_parameter_a")
+///             .value("Value for input param A")
+///             .build()?
+///     )
+///     .build();
+///
+/// assert!(trigger.is_err());
+/// #     Ok(())
+/// # }
+/// # fn main() {
+/// #     try_main().unwrap()
+/// # }
 /// ```
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, PartialEq, Builder)]
 pub struct Trigger {
-    pub(super) url: String,
+    #[builder(validate("required"))]
+    pub(crate) url: Option<String>,
 
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub(super) customizable_input_parameters: Vec<InputParameter>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(push_item = "customizable_input_parameter")]
+    pub(crate) customizable_input_parameters: Option<Vec<InputParameter>>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::composition_objects::test_helpers::*;
+    use crate::errors::*;
+
+    #[test]
+    fn it_implements_builder() {
+        let expected = Trigger {
+            url: Some("https://slack.com/shortcuts/Ft0123ABC456/123...xyz".into()),
+            customizable_input_parameters: Some(vec![
+                input_param("param_0", "value_0"),
+                input_param("param_1", "value_1"),
+            ]),
+        };
+
+        let val = Trigger::builder()
+            .set_url(Some("https://slack.com/shortcuts/Ft0123ABC456/123...xyz"))
+            .set_customizable_input_parameters(Some(vec![
+                input_param("param_0", "value_0"),
+                input_param("param_1", "value_1"),
+            ]))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+
+        let val = Trigger::builder()
+            .url("https://slack.com/shortcuts/Ft0123ABC456/123...xyz")
+            .customizable_input_parameters(vec![
+                input_param("param_0", "value_0"),
+                input_param("param_1", "value_1"),
+            ])
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+    }
+
+    #[test]
+    fn it_implements_push_item_method() {
+        let expected = Trigger {
+            url: Some("https://slack.com/shortcuts/Ft0123ABC456/123...xyz".into()),
+            customizable_input_parameters: Some(vec![
+                input_param("param_0", "value_0"),
+                input_param("param_1", "value_1"),
+            ]),
+        };
+
+        let val = Trigger::builder()
+            .url("https://slack.com/shortcuts/Ft0123ABC456/123...xyz")
+            .customizable_input_parameter(input_param("param_0", "value_0"))
+            .customizable_input_parameter(input_param("param_1", "value_1"))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+    }
+
+    #[test]
+    fn it_requires_url_field() {
+        let err = Trigger::builder()
+            .customizable_input_parameter(input_param("param_0", "value_0"))
+            .build()
+            .unwrap_err();
+        assert_eq!(err.object(), "Trigger");
+
+        let errors = err.field("url");
+        assert!(errors.includes(ValidationErrorKind::Required));
+    }
 }

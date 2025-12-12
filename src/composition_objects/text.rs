@@ -19,7 +19,7 @@ use serde::Serialize;
 ///
 /// * The `text` field of [`Button`](crate::blocks::elements::Button) element.
 ///
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum Text {
     Plain(PlainText),
@@ -48,6 +48,7 @@ mod tests {
             .text("hello world")
             .emoji(true)
             .build()
+            .unwrap()
             .into();
 
         let json = serde_json::to_value(text).unwrap();
@@ -64,6 +65,7 @@ mod tests {
             .text("hello world")
             .verbatim(true)
             .build()
+            .unwrap()
             .into();
 
         let json = serde_json::to_value(text).unwrap();

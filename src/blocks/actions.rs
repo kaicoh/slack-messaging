@@ -1,7 +1,13 @@
-use super::elements::{
-    Button, Checkboxes, DatePicker, DatetimePicker, MultiSelectMenu, OverflowMenu,
-    RadioButtonGroup, SelectMenu, TimePicker, WorkflowButton,
+use crate::blocks::elements::{
+    Button, Checkboxes, DatePicker, DatetimePicker, MultiSelectMenuConversations,
+    MultiSelectMenuExternalDataSource, MultiSelectMenuPublicChannels, MultiSelectMenuStaticOptions,
+    MultiSelectMenuUsers, OverflowMenu, RadioButtonGroup, SelectMenuConversations,
+    SelectMenuExternalDataSource, SelectMenuPublicChannels, SelectMenuStaticOptions,
+    SelectMenuUsers, TimePicker, WorkflowButton,
 };
+use crate::validators::*;
+
+use derive_macro::Builder;
 use serde::Serialize;
 
 /// [Actions block](https://docs.slack.dev/reference/block-kit/blocks/actions-block)
@@ -12,35 +18,49 @@ use serde::Serialize;
 /// The following is reproduction of [the 1st sample actions](https://docs.slack.dev/reference/block-kit/blocks/actions-block#examples).
 ///
 /// ```
-/// # use slack_messaging::blocks::Actions;
-/// # use slack_messaging::blocks::elements::{Button, Select};
-/// # use slack_messaging::blocks::elements::select_menu_types::StaticOptions;
-/// # use slack_messaging::composition_objects::Opt;
-/// # use slack_messaging::plain_text;
+/// use slack_messaging::plain_text;
+/// use slack_messaging::blocks::Actions;
+/// use slack_messaging::blocks::elements::{Button, SelectMenuStaticOptions};
+/// use slack_messaging::composition_objects::Opt;
+/// # use std::error::Error;
+///
+/// # fn try_main() -> Result<(), Box<dyn Error>> {
 /// let actions = Actions::builder()
 ///     .block_id("actions1")
 ///     .element(
-///         Select::<StaticOptions>::builder()
+///         SelectMenuStaticOptions::builder()
 ///             .action_id("select_2")
-///             .placeholder("Which witch is the witchiest witch?")
-///             .set_options(
+///             .placeholder(plain_text!("Which witch is the witchiest witch?")?)
+///             .options(
 ///                 vec![
-///                     Opt::builder().text(plain_text!("Matilda")).value("matilda").build(),
-///                     Opt::builder().text(plain_text!("Glinda")).value("glinda").build(),
-///                     Opt::builder().text(plain_text!("Granny Weatherwax")).value("grannyWeatherwax").build(),
-///                     Opt::builder().text(plain_text!("Hermione")).value("hermione").build(),
+///                     Opt::builder()
+///                         .text(plain_text!("Matilda")?)
+///                         .value("matilda")
+///                         .build()?,
+///                     Opt::builder()
+///                         .text(plain_text!("Glinda")?)
+///                         .value("glinda")
+///                         .build()?,
+///                     Opt::builder()
+///                         .text(plain_text!("Granny Weatherwax")?)
+///                         .value("grannyWeatherwax")
+///                         .build()?,
+///                     Opt::builder()
+///                         .text(plain_text!("Hermione")?)
+///                         .value("hermione")
+///                         .build()?,
 ///                 ]
 ///             )
-///             .build()
+///             .build()?
 ///     )
 ///     .element(
 ///         Button::builder()
 ///             .action_id("button_1")
 ///             .value("cancel")
-///             .text("Cancel")
-///             .build()
+///             .text(plain_text!("Cancel")?)
+///             .build()?
 ///     )
-///     .build();
+///     .build()?;
 ///
 /// let expected = serde_json::json!({
 ///     "type": "actions",
@@ -99,67 +119,75 @@ use serde::Serialize;
 /// let json = serde_json::to_value(actions).unwrap();
 ///
 /// assert_eq!(json, expected);
+/// #     Ok(())
+/// # }
+/// # fn main() {
+/// #     try_main().unwrap()
+/// # }
 /// ```
 ///
 /// And the following is the [2nd sample actions](https://docs.slack.dev/reference/block-kit/blocks/actions-block#examples).
 ///
 /// ```
-/// # use slack_messaging::blocks::Actions;
-/// # use slack_messaging::blocks::elements::{Button, DatePicker, OverflowMenu};
-/// # use slack_messaging::composition_objects::Opt;
-/// # use slack_messaging::plain_text;
+/// use slack_messaging::plain_text;
+/// use slack_messaging::blocks::Actions;
+/// use slack_messaging::blocks::elements::{Button, DatePicker, OverflowMenu};
+/// use slack_messaging::composition_objects::Opt;
+/// # use std::error::Error;
+///
+/// # fn try_main() -> Result<(), Box<dyn Error>> {
 /// let actions = Actions::builder()
 ///     .block_id("actionblock789")
 ///     .element(
 ///         DatePicker::builder()
 ///             .action_id("datepicker123")
 ///             .initial_date("1990-04-28")
-///             .placeholder("Select a date")
-///             .build()
+///             .placeholder(plain_text!("Select a date")?)
+///             .build()?
 ///     )
 ///     .element(
 ///         OverflowMenu::builder()
 ///             .action_id("overflow")
 ///             .option(
 ///                 Opt::builder()
-///                     .text(plain_text!("*this is plain_text text*"))
+///                     .text(plain_text!("*this is plain_text text*")?)
 ///                     .value("value-0")
-///                     .build()
+///                     .build()?
 ///             )
 ///             .option(
 ///                 Opt::builder()
-///                     .text(plain_text!("*this is plain_text text*"))
+///                     .text(plain_text!("*this is plain_text text*")?)
 ///                     .value("value-1")
-///                     .build()
+///                     .build()?
 ///             )
 ///             .option(
 ///                 Opt::builder()
-///                     .text(plain_text!("*this is plain_text text*"))
+///                     .text(plain_text!("*this is plain_text text*")?)
 ///                     .value("value-2")
-///                     .build()
+///                     .build()?
 ///             )
 ///             .option(
 ///                 Opt::builder()
-///                     .text(plain_text!("*this is plain_text text*"))
+///                     .text(plain_text!("*this is plain_text text*")?)
 ///                     .value("value-3")
-///                     .build()
+///                     .build()?
 ///             )
 ///             .option(
 ///                 Opt::builder()
-///                     .text(plain_text!("*this is plain_text text*"))
+///                     .text(plain_text!("*this is plain_text text*")?)
 ///                     .value("value-4")
-///                     .build()
+///                     .build()?
 ///             )
-///             .build()
+///             .build()?
 ///     )
 ///     .element(
 ///         Button::builder()
 ///             .action_id("button")
 ///             .value("click_me_123")
-///             .text("Click Me")
-///             .build()
+///             .text(plain_text!("Click Me")?)
+///             .build()?
 ///     )
-///     .build();
+///     .build()?;
 ///
 /// let expected = serde_json::json!({
 ///     "type": "actions",
@@ -230,21 +258,26 @@ use serde::Serialize;
 /// let json = serde_json::to_value(actions).unwrap();
 ///
 /// assert_eq!(json, expected);
+/// #     Ok(())
+/// # }
+/// # fn main() {
+/// #     try_main().unwrap()
+/// # }
 /// ```
 ///
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, PartialEq, Builder)]
+#[serde(tag = "type", rename = "actions")]
 pub struct Actions {
-    #[serde(rename = "type")]
-    pub(super) kind: &'static str,
-
-    pub(super) elements: Vec<ActionsElement>,
+    #[builder(push_item = "element", validate("required", "list::max_item_25"))]
+    pub(crate) elements: Option<Vec<ActionsElement>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) block_id: Option<String>,
+    #[builder(validate("text::max_255"))]
+    pub(crate) block_id: Option<String>,
 }
 
 /// Objects that can be an element of the [Actions]'s elements field.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum ActionsElement {
     /// [Button element](https://docs.slack.dev/reference/block-kit/block-elements/button-element)
@@ -263,9 +296,25 @@ pub enum ActionsElement {
     /// representation
     DatetimePicker(Box<DatetimePicker>),
 
-    /// [Multi-select menu element](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element)
+    /// [Multi select menu of static options](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#static_multi_select)
     /// representation
-    MultiSelectMenu(Box<MultiSelectMenu>),
+    MultiSelectMenuStaticOptions(Box<MultiSelectMenuStaticOptions>),
+
+    /// [Multi select menu of external data source](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#external_multi_select)
+    /// representation
+    MultiSelectMenuExternalDataSource(Box<MultiSelectMenuExternalDataSource>),
+
+    /// [Multi select menu of users](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#users_multi_select)
+    /// representation
+    MultiSelectMenuUsers(Box<MultiSelectMenuUsers>),
+
+    /// [Multi select menu of conversations](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#conversation_multi_select)
+    /// representation
+    MultiSelectMenuConversations(Box<MultiSelectMenuConversations>),
+
+    /// [Multi select menu of public channels](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#channel_multi_select)
+    /// representation
+    MultiSelectMenuPublicChannels(Box<MultiSelectMenuPublicChannels>),
 
     /// [Overflow menu element](https://docs.slack.dev/reference/block-kit/block-elements/overflow-menu-element)
     /// representation
@@ -275,9 +324,25 @@ pub enum ActionsElement {
     /// representation
     RadioButtonGroup(Box<RadioButtonGroup>),
 
-    /// [Select menu element](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element)
+    /// [Select menu of static options](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select)
     /// representation
-    SelectMenu(Box<SelectMenu>),
+    SelectMenuStaticOptions(Box<SelectMenuStaticOptions>),
+
+    /// [Select menu of external data source](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#external_select)
+    /// representation
+    SelectMenuExternalDataSource(Box<SelectMenuExternalDataSource>),
+
+    /// [Select menu of users](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#users_select)
+    /// representation
+    SelectMenuUsers(Box<SelectMenuUsers>),
+
+    /// [Select menu of conversations](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#conversations_select)
+    /// representation
+    SelectMenuConversations(Box<SelectMenuConversations>),
+
+    /// [Select menu of public channels](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#channels_select)
+    /// representation
+    SelectMenuPublicChannels(Box<SelectMenuPublicChannels>),
 
     /// [Time picker element](https://docs.slack.dev/reference/block-kit/block-elements/time-picker-element)
     /// representation
@@ -289,7 +354,7 @@ pub enum ActionsElement {
 }
 
 macro_rules! actions_from {
-    ($($ty:ident),*) => {
+    ($($ty:ident,)*) => {
         $(
             impl From<$ty> for ActionsElement {
                 fn from(value: $ty) -> Self {
@@ -305,10 +370,100 @@ actions_from! {
     Checkboxes,
     DatePicker,
     DatetimePicker,
-    MultiSelectMenu,
+    MultiSelectMenuStaticOptions,
+    MultiSelectMenuExternalDataSource,
+    MultiSelectMenuUsers,
+    MultiSelectMenuConversations,
+    MultiSelectMenuPublicChannels,
     OverflowMenu,
     RadioButtonGroup,
-    SelectMenu,
+    SelectMenuStaticOptions,
+    SelectMenuExternalDataSource,
+    SelectMenuUsers,
+    SelectMenuConversations,
+    SelectMenuPublicChannels,
     TimePicker,
-    WorkflowButton
+    WorkflowButton,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::blocks::elements::test_helpers::*;
+    use crate::errors::*;
+
+    #[test]
+    fn it_implements_builder() {
+        let expected = Actions {
+            block_id: Some("actions_0".into()),
+            elements: Some(vec![datepicker().into(), btn("button_0", "value_0").into()]),
+        };
+
+        let val = Actions::builder()
+            .set_block_id(Some("actions_0"))
+            .set_elements(Some(vec![
+                datepicker().into(),
+                btn("button_0", "value_0").into(),
+            ]))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+
+        let val = Actions::builder()
+            .block_id("actions_0")
+            .elements(vec![datepicker().into(), btn("button_0", "value_0").into()])
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+    }
+
+    #[test]
+    fn it_implements_push_item_method() {
+        let expected = Actions {
+            block_id: None,
+            elements: Some(vec![datepicker().into(), btn("button_0", "value_0").into()]),
+        };
+
+        let val = Actions::builder()
+            .element(datepicker())
+            .element(btn("button_0", "value_0"))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+    }
+
+    #[test]
+    fn it_requries_elements_field() {
+        let err = Actions::builder().build().unwrap_err();
+        assert_eq!(err.object(), "Actions");
+
+        let errors = err.field("elements");
+        assert!(errors.includes(ValidationErrorKind::Required));
+    }
+
+    #[test]
+    fn it_requires_elements_list_size_less_than_25() {
+        let elements: Vec<ActionsElement> = (0..26).map(|_| btn("name", "value").into()).collect();
+        let err = Actions::builder().elements(elements).build().unwrap_err();
+        assert_eq!(err.object(), "Actions");
+
+        let errors = err.field("elements");
+        assert!(errors.includes(ValidationErrorKind::MaxArraySize(25)));
+    }
+
+    #[test]
+    fn it_requires_block_id_less_than_255_characters_long() {
+        let err = Actions::builder()
+            .block_id("a".repeat(256))
+            .element(datepicker())
+            .build()
+            .unwrap_err();
+        assert_eq!(err.object(), "Actions");
+
+        let errors = err.field("block_id");
+        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(255)));
+    }
 }

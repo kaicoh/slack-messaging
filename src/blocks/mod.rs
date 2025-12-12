@@ -1,8 +1,13 @@
-/// Builder objects for Blocks.
-pub mod builders;
+use serde::Serialize;
 
+/// Builders for blocks.
+pub mod builders;
 /// Objects from which blocks are composed.
 pub mod elements;
+/// Module for building [RichText] block.
+pub mod rich_text;
+/// Module for building [Table] block.
+pub mod table;
 
 mod actions;
 mod context;
@@ -16,14 +21,6 @@ mod markdown;
 mod section;
 mod video;
 
-use super::composition_objects;
-use serde::Serialize;
-
-/// Module for building [`RichText`] block.
-pub mod rich_text;
-/// Module for building [`Table`] block.
-pub mod table;
-
 pub use actions::{Actions, ActionsElement};
 pub use context::{Context, ContextElement};
 pub use context_actions::{ContextActions, ContextActionsElement};
@@ -33,13 +30,13 @@ pub use header::Header;
 pub use image::Image;
 pub use input::{Input, InputElement};
 pub use markdown::Markdown;
-pub use rich_text::{RichText, RichTextElement};
+pub use rich_text::RichText;
 pub use section::{Accessory, Section};
 pub use table::Table;
 pub use video::Video;
 
 /// Objects that can be set to blocks in [Message](crate::message::Message).
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum Block {
     /// [Actions block](https://docs.slack.dev/reference/block-kit/blocks/actions-block) representation
@@ -83,7 +80,7 @@ pub enum Block {
 }
 
 macro_rules! block_from {
-    ($($ty:ident),*) => {
+    ($($ty:ident,)*) => {
         $(
             impl From<$ty> for Block {
                 fn from(value: $ty) -> Self {
@@ -107,5 +104,37 @@ block_from! {
     RichText,
     Section,
     Table,
-    Video
+    Video,
+}
+
+#[cfg(test)]
+pub mod test_helpers {
+    use super::rich_text::test_helpers as rich_text_helper;
+    use super::rich_text::types::test_helpers::*;
+    use super::*;
+    use crate::composition_objects::test_helpers::*;
+
+    pub fn header(text: impl Into<String>) -> Header {
+        Header {
+            block_id: None,
+            text: Some(plain_text(text)),
+        }
+    }
+
+    pub fn section(text: impl Into<String>) -> Section {
+        Section {
+            block_id: None,
+            text: Some(mrkdwn_text(text).into()),
+            fields: None,
+            accessory: None,
+            expand: None,
+        }
+    }
+
+    pub fn rich_text() -> RichText {
+        RichText {
+            block_id: Some("rich_text_0".into()),
+            elements: Some(vec![rich_text_helper::section(vec![el_text("foo")]).into()]),
+        }
+    }
 }

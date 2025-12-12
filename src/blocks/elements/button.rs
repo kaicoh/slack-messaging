@@ -1,4 +1,7 @@
-use super::composition_objects::{ConfirmationDialog, PlainText};
+use crate::composition_objects::{ConfirmationDialog, PlainText};
+use crate::validators::*;
+
+use derive_macro::Builder;
 use serde::Serialize;
 
 /// [Button element](https://docs.slack.dev/reference/block-kit/block-elements/button-element)
@@ -7,12 +10,16 @@ use serde::Serialize;
 /// # Example
 ///
 /// ```
-/// # use slack_messaging::blocks::elements::Button;
+/// use slack_messaging::plain_text;
+/// use slack_messaging::blocks::elements::Button;
+/// # use std::error::Error;
+///
+/// # fn try_main() -> Result<(), Box<dyn Error>> {
 /// let button = Button::builder()
-///     .text("Click Me")
+///     .text(plain_text!("Click Me")?)
 ///     .value("click_me_123")
 ///     .action_id("button-0")
-///     .build();
+///     .build()?;
 ///
 /// let expected = serde_json::json!({
 ///     "type": "button",
@@ -27,29 +34,182 @@ use serde::Serialize;
 /// let json = serde_json::to_value(button).unwrap();
 ///
 /// assert_eq!(json, expected);
+///
+/// // If your object has any validation errors, the build method returns Result::Err
+/// let button = Button::builder()
+///     .value("click_me_123")
+///     .action_id("button-0")
+///     .build();
+///
+/// assert!(button.is_err());
+/// #     Ok(())
+/// # }
+/// # fn main() {
+/// #     try_main().unwrap()
+/// # }
 /// ```
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, PartialEq, Builder)]
+#[serde(tag = "type", rename = "button")]
 pub struct Button {
-    #[serde(rename = "type")]
-    pub(super) kind: &'static str,
-
-    pub(super) text: PlainText,
+    #[builder(validate("required", "text_object::max_75"))]
+    pub(crate) text: Option<PlainText>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) action_id: Option<String>,
+    #[builder(validate("text::max_255"))]
+    pub(crate) action_id: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) url: Option<String>,
+    #[builder(validate("text::max_3000"))]
+    pub(crate) url: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) value: Option<String>,
+    #[builder(validate("text::max_2000"))]
+    pub(crate) value: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) style: Option<&'static str>,
+    #[builder(private_setter)]
+    pub(crate) style: Option<&'static str>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) confirm: Option<ConfirmationDialog>,
+    pub(crate) confirm: Option<ConfirmationDialog>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) accessibility_label: Option<String>,
+    #[builder(validate("text::max_75"))]
+    pub(crate) accessibility_label: Option<String>,
+}
+
+impl ButtonBuilder {
+    /// set "primary" to style field
+    pub fn primary(self) -> Self {
+        self.style("primary")
+    }
+
+    /// set "danger" to style field
+    pub fn danger(self) -> Self {
+        self.style("danger")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::composition_objects::test_helpers::*;
+    use crate::errors::*;
+
+    #[test]
+    fn it_implements_builder() {
+        let expected = Button {
+            text: Some(plain_text("Click Me")),
+            action_id: Some("button_0".into()),
+            url: Some("https://docs.slack.dev/block-kit".into()),
+            value: Some("click_me_123".into()),
+            style: Some("primary"),
+            confirm: Some(confirm()),
+            accessibility_label: Some("Click Me!".into()),
+        };
+
+        let val = Button::builder()
+            .set_text(Some(plain_text("Click Me")))
+            .set_action_id(Some("button_0"))
+            .set_url(Some("https://docs.slack.dev/block-kit"))
+            .set_value(Some("click_me_123"))
+            .primary()
+            .set_confirm(Some(confirm()))
+            .set_accessibility_label(Some("Click Me!"))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+
+        let expected = Button {
+            style: Some("danger"),
+            ..expected
+        };
+
+        let val = Button::builder()
+            .text(plain_text("Click Me"))
+            .action_id("button_0")
+            .url("https://docs.slack.dev/block-kit")
+            .value("click_me_123")
+            .danger()
+            .confirm(confirm())
+            .accessibility_label("Click Me!")
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+    }
+
+    #[test]
+    fn it_requires_text_field() {
+        let err = Button::builder().build().unwrap_err();
+        assert_eq!(err.object(), "Button");
+
+        let errors = err.field("text");
+        assert!(errors.includes(ValidationErrorKind::Required));
+    }
+
+    #[test]
+    fn it_requires_text_less_than_75_characters_long() {
+        let err = Button::builder()
+            .text(plain_text("a".repeat(76)))
+            .build()
+            .unwrap_err();
+        assert_eq!(err.object(), "Button");
+
+        let errors = err.field("text");
+        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(75)));
+    }
+
+    #[test]
+    fn it_requires_action_id_less_than_255_characters_long() {
+        let err = Button::builder()
+            .text(plain_text("Click Me"))
+            .action_id("a".repeat(256))
+            .build()
+            .unwrap_err();
+        assert_eq!(err.object(), "Button");
+
+        let errors = err.field("action_id");
+        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(255)));
+    }
+
+    #[test]
+    fn it_requires_url_less_than_3000_characters_long() {
+        let err = Button::builder()
+            .text(plain_text("Click Me"))
+            .url("a".repeat(3001))
+            .build()
+            .unwrap_err();
+        assert_eq!(err.object(), "Button");
+
+        let errors = err.field("url");
+        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(3000)));
+    }
+
+    #[test]
+    fn it_requires_value_less_than_2000_characters_long() {
+        let err = Button::builder()
+            .text(plain_text("Click Me"))
+            .value("a".repeat(2001))
+            .build()
+            .unwrap_err();
+        assert_eq!(err.object(), "Button");
+
+        let errors = err.field("value");
+        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(2000)));
+    }
+
+    #[test]
+    fn it_requires_accessibility_label_less_than_75_characters_long() {
+        let err = Button::builder()
+            .text(plain_text("Click Me"))
+            .accessibility_label("a".repeat(76))
+            .build()
+            .unwrap_err();
+        assert_eq!(err.object(), "Button");
+
+        let errors = err.field("accessibility_label");
+        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(75)));
+    }
 }
