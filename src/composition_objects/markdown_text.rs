@@ -1,3 +1,6 @@
+use crate::validators::*;
+
+use derive_macro::Builder;
 use serde::Serialize;
 
 /// Markdown [text object](https://docs.slack.dev/reference/block-kit/composition-objects/text-object)
@@ -6,10 +9,13 @@ use serde::Serialize;
 /// # Example
 ///
 /// ```
-/// # use slack_messaging::composition_objects::MrkdwnText;
+/// use slack_messaging::composition_objects::MrkdwnText;
+/// # use std::error::Error;
+///
+/// # fn try_main() -> Result<(), Box<dyn Error>> {
 /// let text = MrkdwnText::builder()
 ///     .text("Hello, World!")
-///     .build();
+///     .build()?;
 ///
 /// let json = serde_json::to_value(text).unwrap();
 ///
@@ -19,26 +25,99 @@ use serde::Serialize;
 /// });
 ///
 /// assert_eq!(json, expected);
+///
+/// // If your object has any validation errors, the build method returns Result::Err
+/// let text = MrkdwnText::builder()
+///     .text("")
+///     .build();
+///
+/// assert!(text.is_err());
+/// #     Ok(())
+/// # }
+/// # fn main() {
+/// #     try_main().unwrap()
+/// # }
 /// ```
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Builder)]
 #[serde(tag = "type", rename = "mrkdwn")]
 pub struct MrkdwnText {
-    pub(super) text: String,
+    #[builder(validate("required", "text::min_1", "text::max_3000"))]
+    pub(crate) text: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(super) verbatim: Option<bool>,
+    pub(crate) verbatim: Option<bool>,
 }
 
 impl PartialEq for MrkdwnText {
     fn eq(&self, other: &Self) -> bool {
-        self.text.as_str() == other.text.as_str()
-            && self.verbatim.unwrap_or(false) == other.verbatim.unwrap_or(false)
+        match (self.text.as_ref(), other.text.as_ref()) {
+            (Some(t0), Some(t1)) => {
+                t0.as_str() == t1.as_str()
+                    && self.verbatim.unwrap_or(false) == other.verbatim.unwrap_or(false)
+            }
+            _ => false,
+        }
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::errors::*;
+
+    #[test]
+    fn it_implements_builder() {
+        let expected = MrkdwnText {
+            text: Some("Hello World:smile:".into()),
+            verbatim: Some(true),
+        };
+
+        let text = MrkdwnText::builder()
+            .text("Hello World:smile:")
+            .verbatim(true)
+            .build()
+            .unwrap();
+
+        assert_eq!(text, expected);
+
+        let text = MrkdwnText::builder()
+            .set_text(Some("Hello World:smile:"))
+            .set_verbatim(Some(true))
+            .build()
+            .unwrap();
+
+        assert_eq!(text, expected);
+    }
+
+    #[test]
+    fn it_requires_text() {
+        let err = MrkdwnText::builder().build().unwrap_err();
+        assert_eq!(err.object(), "MrkdwnText");
+
+        let text_err = err.field("text");
+        assert!(text_err.includes(ValidationErrorKind::Required));
+    }
+
+    #[test]
+    fn it_requires_text_more_than_1_character() {
+        let err = MrkdwnText::builder().text("").build().unwrap_err();
+        assert_eq!(err.object(), "MrkdwnText");
+
+        let text_err = err.field("text");
+        assert!(text_err.includes(ValidationErrorKind::MinTextLegth(1)));
+    }
+
+    #[test]
+    fn it_requires_text_less_than_3000_characters() {
+        let err = MrkdwnText::builder()
+            .text("a".repeat(3001))
+            .build()
+            .unwrap_err();
+        assert_eq!(err.object(), "MrkdwnText");
+
+        let text_err = err.field("text");
+        assert!(text_err.includes(ValidationErrorKind::MaxTextLegth(3000)));
+    }
 
     #[test]
     fn it_equals_with_same_text() {
@@ -68,7 +147,7 @@ mod tests {
 
     fn make_text(text: &str) -> MrkdwnText {
         MrkdwnText {
-            text: text.into(),
+            text: Some(text.into()),
             verbatim: None,
         }
     }

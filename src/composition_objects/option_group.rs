@@ -1,4 +1,7 @@
-use super::{Opt, PlainText};
+use crate::composition_objects::{Opt, PlainText, types::TextInOption};
+use crate::validators::*;
+
+use derive_macro::Builder;
 use serde::Serialize;
 
 /// [Option group object](https://docs.slack.dev/reference/block-kit/composition-objects/option-group-object)
@@ -7,23 +10,26 @@ use serde::Serialize;
 /// # Example
 ///
 /// ```
-/// # use slack_messaging::composition_objects::{OptGroup, Opt};
-/// # use slack_messaging::plain_text;
-/// let options = OptGroup::builder()
-///     .label("Group One")
+/// use slack_messaging::plain_text;
+/// use slack_messaging::composition_objects::{OptGroup, Opt, PlainText};
+/// # use std::error::Error;
+///
+/// # fn try_main() -> Result<(), Box<dyn Error>> {
+/// let options = OptGroup::<PlainText>::builder()
+///     .label(plain_text!("Group One")?)
 ///     .option(
 ///         Opt::builder()
-///             .text(plain_text!("option-0"))
+///             .text(plain_text!("option-0")?)
 ///             .value("value-0")
-///             .build()
+///             .build()?
 ///     )
 ///     .option(
 ///         Opt::builder()
-///             .text(plain_text!("option-1"))
+///             .text(plain_text!("option-1")?)
 ///             .value("value-1")
-///             .build()
+///             .build()?
 ///     )
-///     .build();
+///     .build()?;
 ///
 /// let expected = serde_json::json!({
 ///     "label": {
@@ -51,9 +57,144 @@ use serde::Serialize;
 /// let json = serde_json::to_value(options).unwrap();
 ///
 /// assert_eq!(json, expected);
+///
+/// // If your object has any validation errors, the build method returns Result::Err
+/// let options = OptGroup::<PlainText>::builder()
+///     .label(plain_text!("Group One")?)
+///     .build();
+///
+/// assert!(options.is_err());
+/// #     Ok(())
+/// # }
+/// # fn main() {
+/// #     try_main().unwrap()
+/// # }
 /// ```
-#[derive(Debug, Clone, Serialize)]
-pub struct OptGroup {
-    pub(super) label: PlainText,
-    pub(super) options: Vec<Opt>,
+#[derive(Debug, Clone, Serialize, PartialEq, Builder)]
+pub struct OptGroup<T>
+where
+    T: TextInOption,
+{
+    #[builder(validate("required", "text_object::max_75"))]
+    pub(crate) label: Option<PlainText>,
+
+    #[builder(push_item = "option", validate("required", "list::max_item_100"))]
+    pub(crate) options: Option<Vec<Opt<T>>>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::composition_objects::test_helpers::*;
+    use crate::errors::*;
+
+    #[test]
+    fn it_implements_builder() {
+        let expected = OptGroup {
+            label: Some(plain_text("foo")),
+            options: Some(vec![
+                option("text_0", "value_0"),
+                option("text_1", "value_1"),
+            ]),
+        };
+
+        let val = OptGroup::<PlainText>::builder()
+            .set_label(Some(plain_text("foo")))
+            .set_options(Some(vec![
+                option("text_0", "value_0"),
+                option("text_1", "value_1"),
+            ]))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+
+        let val = OptGroup::<PlainText>::builder()
+            .label(plain_text("foo"))
+            .options(vec![
+                option("text_0", "value_0"),
+                option("text_1", "value_1"),
+            ])
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+    }
+
+    #[test]
+    fn it_implements_push_item_method() {
+        let expected = OptGroup {
+            label: Some(plain_text("foo")),
+            options: Some(vec![
+                option("text_0", "value_0"),
+                option("text_1", "value_1"),
+            ]),
+        };
+
+        let val = OptGroup::<PlainText>::builder()
+            .label(plain_text("foo"))
+            .option(option("text_0", "value_0"))
+            .option(option("text_1", "value_1"))
+            .build()
+            .unwrap();
+
+        assert_eq!(val, expected);
+    }
+
+    #[test]
+    fn it_requires_label_field() {
+        let err = OptGroup::<PlainText>::builder()
+            .options(vec![
+                option("text_0", "value_0"),
+                option("text_1", "value_1"),
+            ])
+            .build()
+            .unwrap_err();
+        assert_eq!(err.object(), "OptGroup");
+
+        let errors = err.field("label");
+        assert!(errors.includes(ValidationErrorKind::Required));
+    }
+
+    #[test]
+    fn it_requires_label_less_than_75_characters_long() {
+        let err = OptGroup::<PlainText>::builder()
+            .label(plain_text("a".repeat(76)))
+            .options(vec![
+                option("text_0", "value_0"),
+                option("text_1", "value_1"),
+            ])
+            .build()
+            .unwrap_err();
+        assert_eq!(err.object(), "OptGroup");
+
+        let errors = err.field("label");
+        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(75)));
+    }
+
+    #[test]
+    fn it_requires_options_field() {
+        let err = OptGroup::<PlainText>::builder()
+            .label(plain_text("foo"))
+            .build()
+            .unwrap_err();
+        assert_eq!(err.object(), "OptGroup");
+
+        let errors = err.field("options");
+        assert!(errors.includes(ValidationErrorKind::Required));
+    }
+
+    #[test]
+    fn it_requires_options_size_less_than_100() {
+        let options: Vec<Opt<PlainText>> = (0..101).map(|_| option("opt", "val")).collect();
+        let err = OptGroup::<PlainText>::builder()
+            .label(plain_text("foo"))
+            .options(options)
+            .build()
+            .unwrap_err();
+        assert_eq!(err.object(), "OptGroup");
+
+        let errors = err.field("options");
+        assert!(errors.includes(ValidationErrorKind::MaxArraySize(100)));
+    }
 }
