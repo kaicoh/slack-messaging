@@ -1,3 +1,5 @@
+use serde::Serialize;
+
 /// Builders for blocks.
 pub mod builders;
 /// Objects from which blocks are composed.
@@ -33,16 +35,106 @@ pub use section::{Accessory, Section};
 pub use table::Table;
 pub use video::Video;
 
+/// Objects that can be set to blocks in [`Message`](crate::message::Message).
+#[derive(Debug, Clone, Serialize, PartialEq)]
+#[serde(untagged)]
+pub enum Block {
+    /// [Actions block](https://docs.slack.dev/reference/block-kit/blocks/actions-block) representation
+    Actions(Box<Actions>),
+
+    /// [Context block](https://docs.slack.dev/reference/block-kit/blocks/context-block) representation
+    Context(Box<Context>),
+
+    /// [Context actions block](https://docs.slack.dev/reference/block-kit/blocks/context-actions-block) representation
+    ContextActions(Box<ContextActions>),
+
+    /// [Divider block](https://docs.slack.dev/reference/block-kit/blocks/divider-block) representation
+    Divider(Box<Divider>),
+
+    /// [File block](https://docs.slack.dev/reference/block-kit/blocks/file-block) representation
+    File(Box<File>),
+
+    /// [Header block](https://docs.slack.dev/reference/block-kit/blocks/header-block) representation
+    Header(Box<Header>),
+
+    /// [Image block](https://docs.slack.dev/reference/block-kit/blocks/image-block) representation
+    Image(Box<Image>),
+
+    /// [Input block](https://docs.slack.dev/reference/block-kit/blocks/input-block) representation
+    Input(Box<Input>),
+
+    /// [Markdown block](https://docs.slack.dev/reference/block-kit/blocks/markdown-block) representation
+    Markdown(Box<Markdown>),
+
+    /// [Rich text block](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block) representation
+    RichText(Box<RichText>),
+
+    /// [Section block](https://docs.slack.dev/reference/block-kit/blocks/section-block) representation
+    Section(Box<Section>),
+
+    /// [Table block](https://docs.slack.dev/reference/block-kit/blocks/table-block) representation
+    Table(Box<Table>),
+
+    /// [Video block](https://docs.slack.dev/reference/block-kit/blocks/video-block) representation
+    Video(Box<Video>),
+}
+
+macro_rules! block_from {
+    ($($ty:ident,)*) => {
+        $(
+            impl From<$ty> for Block {
+                fn from(value: $ty) -> Self {
+                    Self::$ty(Box::new(value))
+                }
+            }
+         )*
+    }
+}
+
+block_from! {
+    Actions,
+    Context,
+    ContextActions,
+    Divider,
+    File,
+    Header,
+    Image,
+    Input,
+    Markdown,
+    RichText,
+    Section,
+    Table,
+    Video,
+}
+
 #[cfg(test)]
 pub mod test_helpers {
-    use super::rich_text::test_helpers::*;
+    use super::rich_text::test_helpers as rich_text_helper;
     use super::rich_text::types::test_helpers::*;
     use super::*;
+    use crate::composition_objects::test_helpers::*;
+
+    pub fn header(text: impl Into<String>) -> Header {
+        Header {
+            block_id: None,
+            text: Some(plain_text(text)),
+        }
+    }
+
+    pub fn section(text: impl Into<String>) -> Section {
+        Section {
+            block_id: None,
+            text: Some(mrkdwn_text(text).into()),
+            fields: None,
+            accessory: None,
+            expand: None,
+        }
+    }
 
     pub fn rich_text() -> RichText {
         RichText {
             block_id: Some("rich_text_0".into()),
-            elements: Some(vec![section(vec![el_text("foo")]).into()]),
+            elements: Some(vec![rich_text_helper::section(vec![el_text("foo")]).into()]),
         }
     }
 }

@@ -79,7 +79,7 @@ mod tests {
 }
 
 /// The range of broadcast for
-/// [`RichTextElementBroadcast`](crate::blocks::rich_text::element_types::RichTextElementBroadcast) element.
+/// [`RichTextElementBroadcast`](crate::blocks::rich_text::types::RichTextElementBroadcast) element.
 #[derive(Debug, Copy, Clone, Serialize, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum BroadcastRange {

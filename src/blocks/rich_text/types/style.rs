@@ -7,10 +7,10 @@ use std::marker::PhantomData;
 /// ## Example 1 (`bold`, `italic`, `strike`, `highlight`, `client_highlight` and `unlink` are avialable)
 ///
 /// For
-/// [`RichTextElementChannel`](crate::blocks::rich_text::element_types::RichTextElementChannel),
-/// [`RichTextElementUser`](crate::blocks::rich_text::element_types::RichTextElementUser)
+/// [`RichTextElementChannel`](crate::blocks::rich_text::types::RichTextElementChannel),
+/// [`RichTextElementUser`](crate::blocks::rich_text::types::RichTextElementUser)
 /// and
-/// [`RichTextElementUserGroup`](crate::blocks::rich_text::element_types::RichTextElementUserGroup).
+/// [`RichTextElementUserGroup`](crate::blocks::rich_text::types::RichTextElementUserGroup).
 /// ```
 /// use slack_messaging::blocks::rich_text::types::{RichTextStyle, StyleTypeSix};
 /// # use std::error::Error;
@@ -39,9 +39,9 @@ use std::marker::PhantomData;
 /// ## Example 2 (`bold`, `italic`, `strike` and `code` are avialable)
 ///
 /// For
-/// [`RichTextElementLink`](crate::blocks::rich_text::element_types::RichTextElementLink)
+/// [`RichTextElementLink`](crate::blocks::rich_text::types::RichTextElementLink)
 /// and
-/// [`RichTextElementText`](crate::blocks::rich_text::element_types::RichTextElementText).
+/// [`RichTextElementText`](crate::blocks::rich_text::types::RichTextElementText).
 /// ```
 /// use slack_messaging::blocks::rich_text::types::{RichTextStyle, StyleTypeFour};
 /// # use std::error::Error;

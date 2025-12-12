@@ -7,7 +7,7 @@ macro_rules! pipe {
     }};
 }
 
-/// Shorthand to build [PlainText](crate::composition_objects::PlainText).
+/// Shorthand to build [`PlainText`](crate::composition_objects::PlainText).
 ///
 /// ```
 /// # use slack_messaging::plain_text;
@@ -44,7 +44,7 @@ macro_rules! plain_text {
     };
 }
 
-/// Shorthand to build [MrkdwnText](crate::composition_objects::MrkdwnText).
+/// Shorthand to build [`MrkdwnText`](crate::composition_objects::MrkdwnText).
 ///
 /// ```
 /// # use slack_messaging::mrkdwn;
