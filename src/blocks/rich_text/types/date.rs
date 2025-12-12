@@ -9,7 +9,7 @@ use serde::Serialize;
 /// # Example
 ///
 /// ```
-/// use slack_messaging::blocks::rich_text::element_types::RichTextElementDate;
+/// use slack_messaging::blocks::rich_text::types::RichTextElementDate;
 /// # use std::error::Error;
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {

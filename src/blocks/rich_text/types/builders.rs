@@ -4,6 +4,7 @@ pub use super::color::RichTextElementColorBuilder;
 pub use super::date::RichTextElementDateBuilder;
 pub use super::emoji::RichTextElementEmojiBuilder;
 pub use super::link::RichTextElementLinkBuilder;
+pub use super::style::RichTextStyleBuilder;
 pub use super::text::RichTextElementTextBuilder;
 pub use super::user::RichTextElementUserBuilder;
 pub use super::usergroup::RichTextElementUserGroupBuilder;

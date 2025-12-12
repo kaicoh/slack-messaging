@@ -1,4 +1,4 @@
-use crate::blocks::rich_text::element_types::types::{RichTextStyle, StyleTypeSix};
+use crate::blocks::rich_text::types::{RichTextStyle, StyleTypeSix};
 use crate::validators::*;
 
 use derive_macro::Builder;
@@ -10,8 +10,7 @@ use serde::Serialize;
 /// # Example
 ///
 /// ```
-/// use slack_messaging::blocks::rich_text::element_types::{RichTextElementUserGroup,
-/// types::RichTextStyle};
+/// use slack_messaging::blocks::rich_text::types::{RichTextElementUserGroup, RichTextStyle};
 /// # use std::error::Error;
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {
@@ -60,7 +59,7 @@ pub struct RichTextElementUserGroup {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::blocks::rich_text::element_types::test_helpers::*;
+    use crate::blocks::rich_text::types::test_helpers::*;
     use crate::errors::*;
 
     #[test]

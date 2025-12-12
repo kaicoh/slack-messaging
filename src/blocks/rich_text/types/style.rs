@@ -2,19 +2,6 @@ use derive_macro::Builder;
 use serde::Serialize;
 use std::marker::PhantomData;
 
-/// The range of broadcast for
-/// [`RichTextElementBroadcast`](crate::blocks::rich_text::element_types::RichTextElementBroadcast) element.
-#[derive(Debug, Copy, Clone, Serialize, PartialEq)]
-#[serde(rename_all = "snake_case")]
-pub enum BroadcastRange {
-    /// notifies only the active members of a channel.
-    Here,
-    /// notifies all members of a channel.
-    Channel,
-    /// notifies every person in the #general channel.
-    Everyone,
-}
-
 /// Style object for rich text element types.
 ///
 /// ## Example 1 (`bold`, `italic`, `strike`, `highlight`, `client_highlight` and `unlink` are avialable)
@@ -25,7 +12,7 @@ pub enum BroadcastRange {
 /// and
 /// [`RichTextElementUserGroup`](crate::blocks::rich_text::element_types::RichTextElementUserGroup).
 /// ```
-/// use slack_messaging::blocks::rich_text::element_types::types::{RichTextStyle, StyleTypeSix};
+/// use slack_messaging::blocks::rich_text::types::{RichTextStyle, StyleTypeSix};
 /// # use std::error::Error;
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {
@@ -56,7 +43,7 @@ pub enum BroadcastRange {
 /// and
 /// [`RichTextElementText`](crate::blocks::rich_text::element_types::RichTextElementText).
 /// ```
-/// use slack_messaging::blocks::rich_text::element_types::types::{RichTextStyle, StyleTypeFour};
+/// use slack_messaging::blocks::rich_text::types::{RichTextStyle, StyleTypeFour};
 /// # use std::error::Error;
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {

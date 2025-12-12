@@ -1,4 +1,3 @@
-use crate::blocks::rich_text::element_types::types::BroadcastRange;
 use crate::validators::*;
 
 use derive_macro::Builder;
@@ -10,7 +9,7 @@ use serde::Serialize;
 /// # Example
 ///
 /// ```
-/// use slack_messaging::blocks::rich_text::element_types::{RichTextElementBroadcast, types::BroadcastRange};
+/// use slack_messaging::blocks::rich_text::types::{RichTextElementBroadcast, BroadcastRange};
 /// # use std::error::Error;
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {
@@ -77,4 +76,17 @@ mod tests {
         let errors = err.field("range");
         assert!(errors.includes(ValidationErrorKind::Required));
     }
+}
+
+/// The range of broadcast for
+/// [`RichTextElementBroadcast`](crate::blocks::rich_text::element_types::RichTextElementBroadcast) element.
+#[derive(Debug, Copy, Clone, Serialize, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum BroadcastRange {
+    /// notifies only the active members of a channel.
+    Here,
+    /// notifies all members of a channel.
+    Channel,
+    /// notifies every person in the #general channel.
+    Everyone,
 }
