@@ -77,6 +77,14 @@ pub mod test_helpers {
         }
     }
 
+    pub fn fb_buttons() -> FeedbackButtons {
+        FeedbackButtons {
+            action_id: None,
+            positive_button: Some(fb_btn("Good", "positive")),
+            negative_button: Some(fb_btn("Bad", "negative")),
+        }
+    }
+
     pub fn fb_btn(text: impl Into<String>, value: impl Into<String>) -> FeedbackButton {
         FeedbackButton {
             text: Some(plain_text(text)),

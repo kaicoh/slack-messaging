@@ -354,7 +354,7 @@ pub enum ActionsElement {
 }
 
 macro_rules! actions_from {
-    ($($ty:ident),*) => {
+    ($($ty:ident,)*) => {
         $(
             impl From<$ty> for ActionsElement {
                 fn from(value: $ty) -> Self {
@@ -383,7 +383,7 @@ actions_from! {
     SelectMenuConversations,
     SelectMenuPublicChannels,
     TimePicker,
-    WorkflowButton
+    WorkflowButton,
 }
 
 #[cfg(test)]

@@ -6,8 +6,10 @@ pub mod elements;
 pub mod rich_text;
 
 mod actions;
+mod context_actions;
 
 pub use actions::{Actions, ActionsElement};
+pub use context_actions::{ContextActions, ContextActionsElement};
 pub use rich_text::RichText;
 
 #[cfg(test)]
