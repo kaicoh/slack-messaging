@@ -91,8 +91,7 @@ pub struct RichTextInput {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::blocks::rich_text::test_helpers::*;
-    use crate::blocks::rich_text::types::test_helpers::*;
+    use crate::blocks::test_helpers::*;
     use crate::composition_objects::test_helpers::*;
     use crate::errors::*;
 
@@ -161,12 +160,5 @@ mod tests {
 
         let errors = err.field("placeholder");
         assert!(errors.includes(ValidationErrorKind::MaxTextLegth(150)));
-    }
-
-    fn rich_text() -> RichText {
-        RichText {
-            block_id: Some("rich_text_0".into()),
-            elements: Some(vec![section(vec![el_text("foo")]).into()]),
-        }
     }
 }

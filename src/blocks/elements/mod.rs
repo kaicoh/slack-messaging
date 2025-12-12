@@ -52,7 +52,30 @@ pub use workflow_button::WorkflowButton;
 #[cfg(test)]
 pub mod test_helpers {
     use super::types::*;
+    use super::*;
     use crate::composition_objects::test_helpers::*;
+
+    pub fn btn(text: impl Into<String>, value: impl Into<String>) -> Button {
+        Button {
+            text: Some(plain_text(text)),
+            value: Some(value.into()),
+            action_id: None,
+            url: None,
+            confirm: None,
+            style: None,
+            accessibility_label: None,
+        }
+    }
+
+    pub fn datepicker() -> DatePicker {
+        DatePicker {
+            action_id: None,
+            initial_date: None,
+            confirm: None,
+            focus_on_load: None,
+            placeholder: None,
+        }
+    }
 
     pub fn fb_btn(text: impl Into<String>, value: impl Into<String>) -> FeedbackButton {
         FeedbackButton {
