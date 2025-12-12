@@ -2,7 +2,7 @@ use super::TableCell;
 
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// Single table row representation being set to the rows field in [`Table`](crate::blocks::Table) object.

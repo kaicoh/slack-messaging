@@ -1,7 +1,7 @@
 use crate::composition_objects::{ConfirmationDialog, ConversationFilter, PlainText};
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Select menu of conversations](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#conversations_select)

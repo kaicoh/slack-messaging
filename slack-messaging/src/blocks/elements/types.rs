@@ -1,7 +1,7 @@
 use crate::composition_objects::PlainText;
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// Icons for [`IconButton`](crate::blocks::elements::IconButton).

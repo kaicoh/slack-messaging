@@ -1,7 +1,7 @@
 use crate::blocks::elements::{FeedbackButtons, IconButton};
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Context actions block](https://docs.slack.dev/reference/block-kit/blocks/context-actions-block)

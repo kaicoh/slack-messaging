@@ -1,7 +1,7 @@
 use crate::composition_objects::Trigger;
 use crate::validators::required;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Workflow object](https://docs.slack.dev/reference/block-kit/composition-objects/workflow-object)

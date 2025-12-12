@@ -1,6 +1,6 @@
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Markdown block](https://docs.slack.dev/reference/block-kit/blocks/markdown-block)

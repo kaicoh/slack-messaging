@@ -1,6 +1,6 @@
 use crate::errors::ValidationErrorKind;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Slack file object](https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object)

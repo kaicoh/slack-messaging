@@ -7,8 +7,8 @@ use crate::blocks::elements::{
 };
 use crate::validators::*;
 
-use derive_macro::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Actions block](https://docs.slack.dev/reference/block-kit/blocks/actions-block)
 /// representation.

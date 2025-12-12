@@ -1,4 +1,4 @@
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// Value being set to the align field in [`ColumnSetting`] object.

@@ -2,7 +2,7 @@ use crate::blocks::RichText;
 use crate::composition_objects::{DispatchActionConfiguration, PlainText};
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Rich text input element](https://docs.slack.dev/reference/block-kit/block-elements/rich-text-input-element)

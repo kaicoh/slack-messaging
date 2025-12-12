@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Create release
         uses: taiki-e/create-gh-release-action@v1
@@ -25,10 +25,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install stable toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Publish
-        run: cargo publish --all-features --token ${{ secrets.CARGO_TOKEN }}
+      - name: Publish derive library
+        run: cargo publish -p slack-messaging-derive --all-features --token ${{ secrets.CARGO_TOKEN }}
+
+      - name: Publish library
+        run: cargo publish -p slack-messaging --all-features --token ${{ secrets.CARGO_TOKEN }}

@@ -1,7 +1,7 @@
 use crate::composition_objects::{DispatchActionConfiguration, PlainText};
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Number input element](https://docs.slack.dev/reference/block-kit/block-elements/number-input-element)

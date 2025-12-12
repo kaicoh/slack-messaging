@@ -2,7 +2,7 @@ use crate::blocks::elements::Image;
 use crate::composition_objects::Text;
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Context block](https://docs.slack.dev/reference/block-kit/blocks/context-block)

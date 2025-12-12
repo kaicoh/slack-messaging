@@ -1,7 +1,7 @@
 use crate::composition_objects::{ConfirmationDialog, PlainText};
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Date picker element](https://docs.slack.dev/reference/block-kit/block-elements/date-picker-element)

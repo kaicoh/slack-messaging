@@ -1,7 +1,7 @@
 use crate::composition_objects::types::{TextInOption, UrlAvailable, UrlUnavailable};
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 use std::marker::PhantomData;
 

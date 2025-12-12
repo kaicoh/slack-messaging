@@ -1,7 +1,7 @@
 use crate::composition_objects::types::InputParameter;
 use crate::validators::required;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Trigger object](https://docs.slack.dev/reference/block-kit/composition-objects/trigger-object)

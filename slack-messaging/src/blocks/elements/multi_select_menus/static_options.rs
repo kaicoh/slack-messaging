@@ -2,7 +2,7 @@ use crate::composition_objects::{ConfirmationDialog, Opt, OptGroup, PlainText};
 use crate::errors::ValidationErrorKind;
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Multi select menu of static options](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#static_multi_select)

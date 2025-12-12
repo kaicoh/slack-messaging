@@ -2,7 +2,7 @@ use crate::composition_objects::types::Conversation;
 use crate::errors::ValidationErrorKind;
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Conversation filter object](https://docs.slack.dev/reference/block-kit/composition-objects/conversation-filter-object)

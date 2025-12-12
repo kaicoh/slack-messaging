@@ -2,7 +2,7 @@ use crate::composition_objects::SlackFile;
 use crate::errors::ValidationErrorKind;
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Image element](https://docs.slack.dev/reference/block-kit/block-elements/image-element)

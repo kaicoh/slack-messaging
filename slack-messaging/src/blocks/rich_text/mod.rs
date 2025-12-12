@@ -1,6 +1,6 @@
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use paste::paste;
 use serde::Serialize;
 

@@ -1,7 +1,7 @@
 use crate::blocks::Block;
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [`Message`](https://docs.slack.dev/messaging#payloads)

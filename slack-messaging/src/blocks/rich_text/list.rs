@@ -1,7 +1,7 @@
 use super::RichTextSection;
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Rich text list element](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block#rich_text_list)

@@ -9,7 +9,7 @@ use crate::composition_objects::Text;
 use crate::errors::ValidationErrorKind;
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Section block](https://docs.slack.dev/reference/block-kit/blocks/section-block)

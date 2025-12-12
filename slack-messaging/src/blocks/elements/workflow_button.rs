@@ -1,7 +1,7 @@
 use crate::composition_objects::{PlainText, Workflow};
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Workflow button element](https://docs.slack.dev/reference/block-kit/block-elements/workflow-button-element)

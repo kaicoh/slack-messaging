@@ -1,7 +1,7 @@
 use crate::composition_objects::PlainText;
 use crate::validators::*;
 
-use derive_macro::Builder;
+use slack_messaging_derive::Builder;
 use serde::Serialize;
 
 /// [Header block](https://docs.slack.dev/reference/block-kit/blocks/header-block)
