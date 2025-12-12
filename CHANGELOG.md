@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.6.0][] - 2025-12-13
+
+### Breaking Changes
+
+- Build method of all builder objects becomes to **return enum Result not the target object**.
+- The `select menu element` and the `multi-select menu element` are renewed.
+
+| 0.6.0 | 0.5.x |
+| --- | --- |
+| MultiSelectMenuConversations | MultiSelect\<Conversations\> |
+| MultiSelectMenuExternals | MultiSelect\<ExternalDataSource\> |
+| MultiSelectMenuPublicChannels | MultiSelect\<PublicChannels\> |
+| MultiSelectMenuStaticOptions | MultiSelect\<StaticOptions\> |
+| MultiSelectMenuUsers | MultiSelect\<Users\> |
+| SelectMenuConversations | Select\<Conversations\> |
+| SelectMenuExternals | Select\<ExternalDataSource\> |
+| SelectMenuPublicChannels | Select\<PublicChannels\> |
+| SelectMenuStaticOptions | Select\<StaticOptions\> |
+| SelectMenuUsers | Select\<Users\> |
+
+- Remove `fmt` feature because it is not a task this crate provide.
+
 ## [0.5.3][] - 2025-11-26
 
 - https://github.com/kaicoh/slack-messaging/pull/23 Support `ContextActions` block.
@@ -85,6 +107,7 @@ And the `select menu element` and the `multi-select menu element` are renewed.
 
 - pre-release
 
+[0.6.0]: https://github.com/kaicoh/slack-messaging/releases/v0.6.0
 [0.5.3]: https://github.com/kaicoh/slack-messaging/releases/v0.5.3
 [0.5.2]: https://github.com/kaicoh/slack-messaging/releases/v0.5.2
 [0.5.1]: https://github.com/kaicoh/slack-messaging/releases/v0.5.1
