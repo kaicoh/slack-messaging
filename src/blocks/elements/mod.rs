@@ -17,6 +17,7 @@ mod number_input;
 mod overflow_menu;
 mod plain_text_input;
 mod radio_button_group;
+mod rich_text_input;
 mod select_menus;
 mod time_picker;
 mod url_input;
@@ -39,6 +40,7 @@ pub use number_input::NumberInput;
 pub use overflow_menu::OverflowMenu;
 pub use plain_text_input::PlainTextInput;
 pub use radio_button_group::RadioButtonGroup;
+pub use rich_text_input::RichTextInput;
 pub use select_menus::{
     SelectMenuConversations, SelectMenuExternalDataSource, SelectMenuPublicChannels,
     SelectMenuStaticOptions, SelectMenuUsers,
