@@ -1,0 +1,28 @@
+[package]
+name = "slack-messaging"
+version = "0.6.0"
+authors = ["kaicoh <sumireminami@gmail.com>"]
+edition = "2024"
+keywords = ["slack", "messaging", "webhook"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/kaicoh/slack-messaging"
+documentation = "https://docs.rs/slack-messaging"
+description = "Support building Slack Block Kit message"
+
+[package.metadata.docs.rs]
+all-features = true
+
+[dependencies]
+chrono = "0.4"
+once_cell = { workspace = true }
+paste = "1.0"
+regex = "1.12"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+slack-messaging-derive = { version = "0.6.0", path = "../slack-messaging-derive" }
+thiserror = "2.0"
+
+[dev-dependencies]
+reqwest = { version = "0.12", features = ["json"] }
+tokio = { version = "1", features = ["full"] }
