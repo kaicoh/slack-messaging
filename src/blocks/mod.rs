@@ -12,6 +12,7 @@ mod divider;
 mod file;
 mod header;
 mod image;
+mod input;
 
 pub use actions::{Actions, ActionsElement};
 pub use context::{Context, ContextElement};
@@ -20,6 +21,7 @@ pub use divider::Divider;
 pub use file::{File, FileSource};
 pub use header::Header;
 pub use image::Image;
+pub use input::{Input, InputElement};
 pub use rich_text::RichText;
 
 #[cfg(test)]

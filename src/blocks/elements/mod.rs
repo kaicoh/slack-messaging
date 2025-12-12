@@ -85,6 +85,19 @@ pub mod test_helpers {
         }
     }
 
+    pub fn text_input() -> PlainTextInput {
+        PlainTextInput {
+            action_id: Some("text_area_0".into()),
+            initial_value: None,
+            multiline: Some(true),
+            min_length: None,
+            max_length: Some(65535),
+            dispatch_action_config: None,
+            focus_on_load: None,
+            placeholder: Some(plain_text("Enter plain text")),
+        }
+    }
+
     pub fn fb_btn(text: impl Into<String>, value: impl Into<String>) -> FeedbackButton {
         FeedbackButton {
             text: Some(plain_text(text)),
