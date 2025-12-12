@@ -10,12 +10,14 @@ mod context;
 mod context_actions;
 mod divider;
 mod file;
+mod header;
 
 pub use actions::{Actions, ActionsElement};
 pub use context::{Context, ContextElement};
 pub use context_actions::{ContextActions, ContextActionsElement};
 pub use divider::Divider;
 pub use file::{File, FileSource};
+pub use header::Header;
 pub use rich_text::RichText;
 
 #[cfg(test)]
