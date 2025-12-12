@@ -1,4 +1,5 @@
 use super::*;
+use crate::composition_objects::types::TextObject;
 
 use paste::paste;
 
@@ -37,6 +38,13 @@ impl_max_item!(5, 10, 25, 100);
 
 pub(crate) fn not_empty<T>(value: List<T>) -> List<T> {
     inner_validator(value, ValidationErrorKind::EmptyArray, |l| l.is_empty())
+}
+
+pub(crate) fn each_text_max_2000<T: TextObject>(value: List<T>) -> List<T> {
+    inner_validator(value, ValidationErrorKind::MaxTextLegth(2000), |l| {
+        l.iter()
+            .any(|t| t.text().is_some_and(|text| text.len() > 2000))
+    })
 }
 
 #[cfg(test)]

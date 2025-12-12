@@ -25,7 +25,17 @@ macro_rules! impl_max {
     }
 }
 
-impl_max!(30, 75, 100, 150, 300, 2000);
+impl_max!(30, 75, 100, 150, 300, 2000, 3000);
+
+pub(crate) fn min_1<T: TextObject>(mut value: Value<T>) -> Value<T> {
+    if value
+        .inner_ref()
+        .is_some_and(|v| v.text().is_some_and(|t| t.is_empty()))
+    {
+        value.push(ValidationErrorKind::MinTextLegth(1));
+    }
+    value
+}
 
 #[cfg(test)]
 mod tests {

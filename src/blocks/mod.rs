@@ -14,6 +14,7 @@ mod header;
 mod image;
 mod input;
 mod markdown;
+mod section;
 
 pub use actions::{Actions, ActionsElement};
 pub use context::{Context, ContextElement};
@@ -25,6 +26,7 @@ pub use image::Image;
 pub use input::{Input, InputElement};
 pub use markdown::Markdown;
 pub use rich_text::RichText;
+pub use section::{Accessory, Section};
 
 #[cfg(test)]
 pub mod test_helpers {
