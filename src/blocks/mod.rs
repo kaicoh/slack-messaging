@@ -4,9 +4,9 @@ use serde::Serialize;
 pub mod builders;
 /// Objects from which blocks are composed.
 pub mod elements;
-/// Module for building [`RichText`] block.
+/// Module for building [RichText] block.
 pub mod rich_text;
-/// Module for building [`Table`] block.
+/// Module for building [Table] block.
 pub mod table;
 
 mod actions;
@@ -35,7 +35,7 @@ pub use section::{Accessory, Section};
 pub use table::Table;
 pub use video::Video;
 
-/// Objects that can be set to blocks in [`Message`](crate::message::Message).
+/// Objects that can be set to blocks in [Message](crate::message::Message).
 #[derive(Debug, Clone, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum Block {

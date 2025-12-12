@@ -47,7 +47,7 @@ pub struct File {
     pub(crate) block_id: Option<String>,
 }
 
-/// Values that can be set to the source field of [`File`].
+/// Values that can be set to the source field of [File].
 #[derive(Debug, Copy, Clone, Serialize, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum FileSource {

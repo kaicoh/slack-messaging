@@ -5,7 +5,7 @@ pub use super::divider::DividerBuilder;
 pub use super::file::FileBuilder;
 pub use super::header::HeaderBuilder;
 pub use super::image::ImageBuilder;
-pub use super::input::InputElement;
+pub use super::input::InputBuilder;
 pub use super::markdown::MarkdownBuilder;
 pub use super::rich_text::RichTextBuilder;
 pub use super::section::SectionBuilder;

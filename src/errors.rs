@@ -1,7 +1,7 @@
 use std::borrow::Cow;
 use thiserror::Error;
 
-/// Validation error object
+/// Validation error variants.
 #[derive(Debug, Clone, Copy, PartialEq, Error)]
 pub enum ValidationErrorKind {
     #[error("required")]
@@ -38,6 +38,7 @@ pub enum ValidationErrorKind {
     NoFieldProvided,
 }
 
+/// Validation error from single field or across fields.
 #[derive(Debug, Clone, PartialEq, Error)]
 pub enum ValidationError {
     #[error("AcrossFieldsError {0:?}")]
@@ -73,6 +74,7 @@ impl ValidationError {
         }
     }
 
+    /// Returns field name of the error. If it is an across field error, this method returns None.
     pub fn field(&self) -> Option<&str> {
         if let Self::SingleField { field, .. } = self {
             Some(field)
@@ -81,6 +83,7 @@ impl ValidationError {
         }
     }
 
+    /// Returns all error variants.
     pub fn errors(&self) -> &[ValidationErrorKind] {
         match self {
             Self::AcrossFields(errors) => errors,
@@ -89,6 +92,7 @@ impl ValidationError {
     }
 }
 
+/// Validation errors objects that every builder object can return as Result::Err
 #[derive(Debug, Clone, PartialEq, Error)]
 #[error("Validation Error {{ object: {object:}, errors: {errors:?} }}")]
 pub struct ValidationErrors {
@@ -97,10 +101,12 @@ pub struct ValidationErrors {
 }
 
 impl ValidationErrors {
+    /// Returns the source object name of the error.
     pub fn object(&self) -> &str {
         &self.object
     }
 
+    /// Returns all validation errors of the object includes.
     pub fn errors(&self) -> &[ValidationError] {
         &self.errors
     }
