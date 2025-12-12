@@ -8,10 +8,12 @@ pub mod rich_text;
 mod actions;
 mod context;
 mod context_actions;
+mod divider;
 
 pub use actions::{Actions, ActionsElement};
 pub use context::{Context, ContextElement};
 pub use context_actions::{ContextActions, ContextActionsElement};
+pub use divider::Divider;
 pub use rich_text::RichText;
 
 #[cfg(test)]
