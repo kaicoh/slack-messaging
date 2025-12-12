@@ -69,7 +69,7 @@ pub fn get_option_inner_type(ty: &syn::Type) -> Option<&syn::Type> {
 #[derive(Debug)]
 pub enum InnerType {
     CanCopy,
-    Vec(syn::Type),
+    Vec(Box<syn::Type>),
     Other,
 }
 
@@ -80,7 +80,7 @@ impl InnerType {
         }
 
         if let Some(inner_ty) = get_vec_inner_type(ty) {
-            return Self::Vec(inner_ty);
+            return Self::Vec(Box::new(inner_ty));
         }
 
         Self::Other
@@ -111,7 +111,7 @@ pub fn is_static_str_ref(ty: &syn::Type) -> bool {
     {
         // Check for the 'static lifetime
         if let Some(lt) = lifetime {
-            if lt.ident.to_string() != "static" {
+            if lt.ident != "static" {
                 return false;
             }
         } else {
@@ -122,12 +122,13 @@ pub fn is_static_str_ref(ty: &syn::Type) -> bool {
         }
 
         // Check if the inner type is `str`
-        if let syn::Type::Path(syn::TypePath { path, .. }) = &**elem {
-            if path.segments.len() == 1 && path.segments[0].ident == "str" {
-                // Ensure there are no generic arguments on `str`
-                if let syn::PathArguments::None = path.segments[0].arguments {
-                    return true;
-                }
+        if let syn::Type::Path(syn::TypePath { path, .. }) = &**elem
+            && path.segments.len() == 1
+            && path.segments[0].ident == "str"
+        {
+            // Ensure there are no generic arguments on `str`
+            if let syn::PathArguments::None = path.segments[0].arguments {
+                return true;
             }
         }
     }
@@ -135,20 +136,17 @@ pub fn is_static_str_ref(ty: &syn::Type) -> bool {
 }
 
 pub fn get_vec_inner_type(ty: &syn::Type) -> Option<syn::Type> {
-    if let syn::Type::Path(type_path) = ty {
-        if let Some(last_segment) = type_path.path.segments.last() {
-            if last_segment.ident == "Vec" {
-                if let syn::PathArguments::AngleBracketed(generics) = &last_segment.arguments {
-                    if let Some(syn::GenericArgument::Type(inner_ty)) = generics.args.first() {
-                        return Some(inner_ty.clone());
-                    }
-                }
-            }
-        }
+    if let syn::Type::Path(type_path) = ty
+        && let Some(last_segment) = type_path.path.segments.last()
+        && last_segment.ident == "Vec"
+        && let syn::PathArguments::AngleBracketed(generics) = &last_segment.arguments
+        && let Some(syn::GenericArgument::Type(inner_ty)) = generics.args.first()
+    {
+        return Some(inner_ty.clone());
     }
     None
 }
 
-pub fn strip_raw_ident(ident: &String) -> &str {
+pub fn strip_raw_ident(ident: &str) -> &str {
     ident.trim_start_matches("r#")
 }
