@@ -17,6 +17,7 @@ mod image;
 mod input;
 mod markdown;
 mod section;
+mod video;
 
 pub use actions::{Actions, ActionsElement};
 pub use context::{Context, ContextElement};
@@ -30,6 +31,7 @@ pub use markdown::Markdown;
 pub use rich_text::RichText;
 pub use section::{Accessory, Section};
 pub use table::Table;
+pub use video::Video;
 
 #[cfg(test)]
 pub mod test_helpers {

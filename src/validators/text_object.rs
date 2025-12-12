@@ -25,7 +25,7 @@ macro_rules! impl_max {
     }
 }
 
-impl_max!(30, 75, 100, 150, 300, 2000, 3000);
+impl_max!(30, 75, 100, 150, 200, 300, 2000, 3000);
 
 pub(crate) fn min_1<T: TextObject>(mut value: Value<T>) -> Value<T> {
     if value
