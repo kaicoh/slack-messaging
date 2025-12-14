@@ -145,7 +145,7 @@ mod tests {
         }
 
         #[test]
-        fn it_sets_an_errors_if_the_value_is_smaller_than_10() {
+        fn it_sets_an_errors_if_the_value_is_smaller_than_1() {
             let v = 0i64;
             let result = test(v);
             assert_eq!(result.errors, vec![ValidationErrorKind::MinIntegerValue(1)]);
