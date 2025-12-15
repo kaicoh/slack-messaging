@@ -66,4 +66,29 @@ mod tests {
             })))
         }
     }
+
+    mod fn_min_1 {
+        use super::*;
+
+        #[test]
+        fn it_passes_if_the_text_length_is_greater_than_1() {
+            let text = "a";
+            let result = test(text);
+            assert!(result.errors.is_empty());
+        }
+
+        #[test]
+        fn it_sets_an_error_if_the_text_length_is_smaller_than_0() {
+            let text = "";
+            let result = test(text);
+            assert_eq!(result.errors, vec![ValidationErrorKind::MinTextLegth(1)]);
+        }
+
+        fn test(text: impl Into<String>) -> Value<PlainText> {
+            min_1(Value::new(Some(PlainText {
+                text: Some(text.into()),
+                emoji: None,
+            })))
+        }
+    }
 }

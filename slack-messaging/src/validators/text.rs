@@ -14,21 +14,18 @@ static DATE_FORMAT: Lazy<Regex> =
 static TIME_FORMAT: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"^(?x)(?P<hour>\d{2}):(?P<minute>\d{2})$").unwrap());
 
-fn max(max: usize, mut value: Text) -> Text {
-    if value.inner_ref().is_some_and(|v| v.len() > max) {
-        value.push(ValidationErrorKind::MaxTextLegth(max));
+fn inner_validator(
+    mut value: Text,
+    error: ValidationErrorKind,
+    predicate: impl Fn(&str) -> bool,
+) -> Text {
+    if value.inner_ref().is_some_and(|v| predicate(v.as_ref())) {
+        value.push(error);
     }
     value
 }
 
-fn min(min: usize, mut value: Text) -> Text {
-    if value.inner_ref().as_ref().is_some_and(|v| v.len() < min) {
-        value.push(ValidationErrorKind::MinTextLegth(min));
-    }
-    value
-}
-
-fn is_valid_date(text: &str) -> Result<(), Box<dyn Error>> {
+fn validate_date(text: &str) -> Result<(), Box<dyn Error>> {
     let caps = DATE_FORMAT.captures(text).ok_or("Failed to capture text")?;
     let year: i32 = caps["year"].parse()?;
     let month: u32 = caps["month"].parse()?;
@@ -37,7 +34,11 @@ fn is_valid_date(text: &str) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-fn is_valid_time(text: &str) -> Result<(), Box<dyn Error>> {
+fn is_invalid_date(text: &str) -> bool {
+    validate_date(text).is_err()
+}
+
+fn validate_time(text: &str) -> Result<(), Box<dyn Error>> {
     let caps = TIME_FORMAT.captures(text).ok_or("Failed to capture text")?;
     let hour: u32 = caps["hour"].parse()?;
     let minute: u32 = caps["minute"].parse()?;
@@ -45,12 +46,20 @@ fn is_valid_time(text: &str) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+fn is_invalid_time(text: &str) -> bool {
+    validate_time(text).is_err()
+}
+
 macro_rules! impl_max {
     ($($e:expr),*) => {
         paste! {
             $(
                 pub(crate) fn [<max_ $e>](value: Text) -> Text {
-                    max($e, value)
+                    inner_validator(
+                        value,
+                        ValidationErrorKind::MaxTextLegth($e),
+                        |v| { v.len() > $e }
+                    )
                 }
             )*
         }
@@ -60,21 +69,25 @@ macro_rules! impl_max {
 impl_max!(50, 75, 150, 255, 2000, 3000, 12000);
 
 pub(crate) fn min_1(value: Text) -> Text {
-    min(1, value)
+    inner_validator(value, ValidationErrorKind::MinTextLegth(1), |v| {
+        v.is_empty()
+    })
 }
 
-pub(crate) fn date_format(mut value: Text) -> Text {
-    if value.inner_ref().is_some_and(|v| is_valid_date(v).is_err()) {
-        value.push(ValidationErrorKind::InvalidFormat("YYYY-MM-DD"));
-    }
-    value
+pub(crate) fn date_format(value: Text) -> Text {
+    inner_validator(
+        value,
+        ValidationErrorKind::InvalidFormat("YYYY-MM-DD"),
+        is_invalid_date,
+    )
 }
 
-pub(crate) fn time_format(mut value: Text) -> Text {
-    if value.inner_ref().is_some_and(|v| is_valid_time(v).is_err()) {
-        value.push(ValidationErrorKind::InvalidFormat("24-hour format HH:mm"));
-    }
-    value
+pub(crate) fn time_format(value: Text) -> Text {
+    inner_validator(
+        value,
+        ValidationErrorKind::InvalidFormat("24-hour format HH:mm"),
+        is_invalid_time,
+    )
 }
 
 #[cfg(test)]
