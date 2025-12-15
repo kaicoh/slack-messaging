@@ -57,7 +57,7 @@ macro_rules! impl_max {
                 pub(crate) fn [<max_ $e>](value: Text) -> Text {
                     inner_validator(
                         value,
-                        ValidationErrorKind::MaxTextLegth($e),
+                        ValidationErrorKind::MaxTextLength($e),
                         |v| { v.len() > $e }
                     )
                 }
@@ -69,7 +69,7 @@ macro_rules! impl_max {
 impl_max!(50, 75, 150, 255, 2000, 3000, 12000);
 
 pub(crate) fn min_1(value: Text) -> Text {
-    inner_validator(value, ValidationErrorKind::MinTextLegth(1), |v| {
+    inner_validator(value, ValidationErrorKind::MinTextLength(1), |v| {
         v.is_empty()
     })
 }
@@ -102,7 +102,10 @@ mod tests {
             let text = "a".repeat(3001);
 
             let result = test(text);
-            assert_eq!(result.errors, vec![ValidationErrorKind::MaxTextLegth(3000)]);
+            assert_eq!(
+                result.errors,
+                vec![ValidationErrorKind::MaxTextLength(3000)]
+            );
         }
 
         #[test]
@@ -126,7 +129,7 @@ mod tests {
             let text = "".to_string();
 
             let result = test(text);
-            assert_eq!(result.errors, vec![ValidationErrorKind::MinTextLegth(1)]);
+            assert_eq!(result.errors, vec![ValidationErrorKind::MinTextLength(1)]);
         }
 
         #[test]

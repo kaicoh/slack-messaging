@@ -275,7 +275,7 @@ mod tests {
         assert_eq!(err.object(), "Input");
 
         let errors = err.field("label");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(2000)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(2000)));
     }
 
     #[test]
@@ -301,7 +301,7 @@ mod tests {
         assert_eq!(err.object(), "Input");
 
         let errors = err.field("block_id");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(255)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(255)));
     }
 
     #[test]
@@ -315,6 +315,6 @@ mod tests {
         assert_eq!(err.object(), "Input");
 
         let errors = err.field("hint");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(2000)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(2000)));
     }
 }

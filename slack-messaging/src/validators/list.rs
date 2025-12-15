@@ -41,7 +41,7 @@ pub(crate) fn not_empty<T>(value: List<T>) -> List<T> {
 }
 
 pub(crate) fn each_text_max_2000<T: TextObject>(value: List<T>) -> List<T> {
-    inner_validator(value, ValidationErrorKind::MaxTextLegth(2000), |l| {
+    inner_validator(value, ValidationErrorKind::MaxTextLength(2000), |l| {
         l.iter()
             .any(|t| t.text().is_some_and(|text| text.len() > 2000))
     })
@@ -110,7 +110,7 @@ mod tests {
         fn it_sets_an_error_if_at_least_one_text_length_is_more_than_2000() {
             let list = vec!["a".repeat(2001), "foobar".into()];
             let result = test(list);
-            assert_eq!(result.errors, vec![ValidationErrorKind::MaxTextLegth(2000)]);
+            assert_eq!(result.errors, vec![ValidationErrorKind::MaxTextLength(2000)]);
         }
 
         fn test(list: Vec<String>) -> List<PlainText> {

@@ -97,7 +97,7 @@ mod tests {
         assert_eq!(err.object(), "Header");
 
         let errors = err.field("text");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(150)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(150)));
     }
 
     #[test]
@@ -110,6 +110,6 @@ mod tests {
         assert_eq!(err.object(), "Header");
 
         let errors = err.field("block_id");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(255)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(255)));
     }
 }

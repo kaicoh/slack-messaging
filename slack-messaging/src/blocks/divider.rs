@@ -71,6 +71,6 @@ mod tests {
         assert_eq!(err.object(), "Divider");
 
         let errors = err.field("block_id");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(255)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(255)));
     }
 }

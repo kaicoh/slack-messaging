@@ -183,7 +183,7 @@ mod tests {
         assert_eq!(err.object(), "Video");
 
         let errors = err.field("author_name");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(50)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(50)));
     }
 
     #[test]
@@ -199,7 +199,7 @@ mod tests {
         assert_eq!(err.object(), "Video");
 
         let errors = err.field("block_id");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(255)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(255)));
     }
 
     #[test]
@@ -215,7 +215,7 @@ mod tests {
         assert_eq!(err.object(), "Video");
 
         let errors = err.field("description");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(200)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(200)));
     }
 
     #[test]
@@ -244,7 +244,7 @@ mod tests {
         assert_eq!(err.object(), "Video");
 
         let errors = err.field("title");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(200)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(200)));
     }
 
     #[test]

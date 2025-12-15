@@ -169,7 +169,7 @@ mod tests {
         assert_eq!(err.object(), "OptGroup");
 
         let errors = err.field("label");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(75)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(75)));
     }
 
     #[test]

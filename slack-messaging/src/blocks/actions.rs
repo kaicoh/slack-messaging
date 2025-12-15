@@ -464,6 +464,6 @@ mod tests {
         assert_eq!(err.object(), "Actions");
 
         let errors = err.field("block_id");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(255)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(255)));
     }
 }

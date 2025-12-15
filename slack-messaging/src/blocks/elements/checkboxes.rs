@@ -180,7 +180,7 @@ mod tests {
         assert_eq!(err.object(), "Checkboxes");
 
         let errors = err.field("action_id");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(255)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(255)));
     }
 
     #[test]

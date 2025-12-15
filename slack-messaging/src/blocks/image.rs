@@ -175,7 +175,7 @@ mod tests {
         assert_eq!(err.object(), "Image");
 
         let errors = err.field("alt_text");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(2000)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(2000)));
     }
 
     #[test]
@@ -188,7 +188,7 @@ mod tests {
         assert_eq!(err.object(), "Image");
 
         let errors = err.field("image_url");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(3000)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(3000)));
     }
 
     #[test]
@@ -202,7 +202,7 @@ mod tests {
         assert_eq!(err.object(), "Image");
 
         let errors = err.field("title");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(2000)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(2000)));
     }
 
     #[test]
@@ -216,7 +216,7 @@ mod tests {
         assert_eq!(err.object(), "Image");
 
         let errors = err.field("block_id");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(255)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(255)));
     }
 
     #[test]

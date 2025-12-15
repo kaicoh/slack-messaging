@@ -329,7 +329,7 @@ mod tests {
         assert_eq!(err.object(), "MultiSelectMenuStaticOptions");
 
         let errors = err.field("action_id");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(255)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(255)));
     }
 
     #[test]
@@ -385,7 +385,7 @@ mod tests {
         assert_eq!(err.object(), "MultiSelectMenuStaticOptions");
 
         let errors = err.field("placeholder");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(150)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(150)));
     }
 
     #[test]

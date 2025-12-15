@@ -154,7 +154,7 @@ mod tests {
         assert_eq!(err.object(), "Image");
 
         let errors = err.field("image_url");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(3000)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(3000)));
     }
 
     #[test]

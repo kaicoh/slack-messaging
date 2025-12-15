@@ -184,7 +184,7 @@ mod tests {
         assert_eq!(err.object(), "WorkflowButton");
 
         let errors = err.field("text");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(75)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(75)));
     }
 
     #[test]
@@ -211,7 +211,7 @@ mod tests {
         assert_eq!(err.object(), "WorkflowButton");
 
         let errors = err.field("action_id");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(255)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(255)));
     }
 
     #[test]
@@ -239,6 +239,6 @@ mod tests {
         assert_eq!(err.object(), "WorkflowButton");
 
         let errors = err.field("accessibility_label");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(75)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(75)));
     }
 }
