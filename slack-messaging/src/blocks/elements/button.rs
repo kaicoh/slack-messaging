@@ -158,7 +158,7 @@ mod tests {
         assert_eq!(err.object(), "Button");
 
         let errors = err.field("text");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(75)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(75)));
     }
 
     #[test]
@@ -171,7 +171,7 @@ mod tests {
         assert_eq!(err.object(), "Button");
 
         let errors = err.field("action_id");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(255)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(255)));
     }
 
     #[test]
@@ -184,7 +184,7 @@ mod tests {
         assert_eq!(err.object(), "Button");
 
         let errors = err.field("url");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(3000)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(3000)));
     }
 
     #[test]
@@ -197,7 +197,7 @@ mod tests {
         assert_eq!(err.object(), "Button");
 
         let errors = err.field("value");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(2000)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(2000)));
     }
 
     #[test]
@@ -210,6 +210,6 @@ mod tests {
         assert_eq!(err.object(), "Button");
 
         let errors = err.field("accessibility_label");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(75)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(75)));
     }
 }

@@ -174,7 +174,7 @@ mod tests {
         assert_eq!(err.object(), "Opt");
 
         let errors = err.field("text");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(75)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(75)));
     }
 
     #[test]
@@ -199,7 +199,7 @@ mod tests {
         assert_eq!(err.object(), "Opt");
 
         let errors = err.field("value");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(150)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(150)));
     }
 
     #[test]
@@ -213,7 +213,7 @@ mod tests {
         assert_eq!(err.object(), "Opt");
 
         let errors = err.field("description");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(75)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(75)));
     }
 
     #[test]
@@ -228,6 +228,6 @@ mod tests {
         assert_eq!(err.object(), "Opt");
 
         let errors = err.field("url");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(3000)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(3000)));
     }
 }

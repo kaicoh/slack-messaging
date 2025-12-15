@@ -1,7 +1,7 @@
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// Markdown [text object](https://docs.slack.dev/reference/block-kit/composition-objects/text-object)
 /// representation.
@@ -104,7 +104,7 @@ mod tests {
         assert_eq!(err.object(), "MrkdwnText");
 
         let text_err = err.field("text");
-        assert!(text_err.includes(ValidationErrorKind::MinTextLegth(1)));
+        assert!(text_err.includes(ValidationErrorKind::MinTextLength(1)));
     }
 
     #[test]
@@ -116,7 +116,7 @@ mod tests {
         assert_eq!(err.object(), "MrkdwnText");
 
         let text_err = err.field("text");
-        assert!(text_err.includes(ValidationErrorKind::MaxTextLegth(3000)));
+        assert!(text_err.includes(ValidationErrorKind::MaxTextLength(3000)));
     }
 
     #[test]

@@ -8,7 +8,7 @@ fn max<T: TextObject>(max: usize, mut value: Value<T>) -> Value<T> {
         .inner_ref()
         .is_some_and(|v| v.text().is_some_and(|t| t.len() > max))
     {
-        value.push(ValidationErrorKind::MaxTextLegth(max));
+        value.push(ValidationErrorKind::MaxTextLength(max));
     }
     value
 }
@@ -32,7 +32,7 @@ pub(crate) fn min_1<T: TextObject>(mut value: Value<T>) -> Value<T> {
         .inner_ref()
         .is_some_and(|v| v.text().is_some_and(|t| t.is_empty()))
     {
-        value.push(ValidationErrorKind::MinTextLegth(1));
+        value.push(ValidationErrorKind::MinTextLength(1));
     }
     value
 }
@@ -56,11 +56,36 @@ mod tests {
         fn it_sets_an_error_if_the_text_length_is_greater_than_31() {
             let text = "a".repeat(31);
             let result = test(text);
-            assert_eq!(result.errors, vec![ValidationErrorKind::MaxTextLegth(30)]);
+            assert_eq!(result.errors, vec![ValidationErrorKind::MaxTextLength(30)]);
         }
 
         fn test(text: impl Into<String>) -> Value<PlainText> {
             max_30(Value::new(Some(PlainText {
+                text: Some(text.into()),
+                emoji: None,
+            })))
+        }
+    }
+
+    mod fn_min_1 {
+        use super::*;
+
+        #[test]
+        fn it_passes_if_the_text_length_is_greater_than_1() {
+            let text = "a";
+            let result = test(text);
+            assert!(result.errors.is_empty());
+        }
+
+        #[test]
+        fn it_sets_an_error_if_the_text_length_is_smaller_than_0() {
+            let text = "";
+            let result = test(text);
+            assert_eq!(result.errors, vec![ValidationErrorKind::MinTextLength(1)]);
+        }
+
+        fn test(text: impl Into<String>) -> Value<PlainText> {
+            min_1(Value::new(Some(PlainText {
                 text: Some(text.into()),
                 emoji: None,
             })))

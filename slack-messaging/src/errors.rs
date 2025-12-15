@@ -8,10 +8,10 @@ pub enum ValidationErrorKind {
     Required,
 
     #[error("max text length `{0}` characters")]
-    MaxTextLegth(usize),
+    MaxTextLength(usize),
 
     #[error("min text length `{0}` characters")]
-    MinTextLegth(usize),
+    MinTextLength(usize),
 
     #[error("max array length `{0}` items")]
     MaxArraySize(usize),

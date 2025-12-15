@@ -9,8 +9,8 @@ use crate::composition_objects::Text;
 use crate::errors::ValidationErrorKind;
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Section block](https://docs.slack.dev/reference/block-kit/blocks/section-block)
 /// representation.
@@ -285,7 +285,7 @@ mod tests {
         assert_eq!(err.object(), "Section");
 
         let errors = err.field("text");
-        assert!(errors.includes(ValidationErrorKind::MinTextLegth(1)));
+        assert!(errors.includes(ValidationErrorKind::MinTextLength(1)));
     }
 
     #[test]
@@ -297,7 +297,7 @@ mod tests {
         assert_eq!(err.object(), "Section");
 
         let errors = err.field("text");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(3000)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(3000)));
     }
 
     #[test]
@@ -310,7 +310,7 @@ mod tests {
         assert_eq!(err.object(), "Section");
 
         let errors = err.field("block_id");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(255)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(255)));
     }
 
     #[test]
@@ -332,7 +332,7 @@ mod tests {
         assert_eq!(err.object(), "Section");
 
         let errors = err.field("fields");
-        assert!(errors.includes(ValidationErrorKind::MaxTextLegth(2000)));
+        assert!(errors.includes(ValidationErrorKind::MaxTextLength(2000)));
     }
 
     #[test]

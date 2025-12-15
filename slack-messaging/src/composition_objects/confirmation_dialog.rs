@@ -171,7 +171,7 @@ mod tests {
         assert_eq!(err.object(), "ConfirmationDialog");
 
         let title_err = err.field("title");
-        assert!(title_err.includes(ValidationErrorKind::MaxTextLegth(100)));
+        assert!(title_err.includes(ValidationErrorKind::MaxTextLength(100)));
     }
 
     #[test]
@@ -200,7 +200,7 @@ mod tests {
         assert_eq!(err.object(), "ConfirmationDialog");
 
         let text_err = err.field("text");
-        assert!(text_err.includes(ValidationErrorKind::MaxTextLegth(300)));
+        assert!(text_err.includes(ValidationErrorKind::MaxTextLength(300)));
     }
 
     #[test]
@@ -229,7 +229,7 @@ mod tests {
         assert_eq!(err.object(), "ConfirmationDialog");
 
         let confirm_err = err.field("confirm");
-        assert!(confirm_err.includes(ValidationErrorKind::MaxTextLegth(30)));
+        assert!(confirm_err.includes(ValidationErrorKind::MaxTextLength(30)));
     }
 
     #[test]
@@ -258,6 +258,6 @@ mod tests {
         assert_eq!(err.object(), "ConfirmationDialog");
 
         let deny_err = err.field("deny");
-        assert!(deny_err.includes(ValidationErrorKind::MaxTextLegth(30)));
+        assert!(deny_err.includes(ValidationErrorKind::MaxTextLength(30)));
     }
 }
