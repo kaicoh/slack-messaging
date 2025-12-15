@@ -2,8 +2,8 @@ use crate::composition_objects::{ConfirmationDialog, Opt, OptGroup, PlainText};
 use crate::errors::ValidationErrorKind;
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Multi select menu of static options](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#static_multi_select)
 /// representation
@@ -111,11 +111,8 @@ pub struct MultiSelectMenuStaticOptions {
     pub(crate) placeholder: Option<PlainText>,
 }
 
-fn validate(builder: &MultiSelectMenuStaticOptionsBuilder) -> Vec<ValidationErrorKind> {
-    match (
-        builder.options.inner_ref(),
-        builder.option_groups.inner_ref(),
-    ) {
+fn validate(val: &MultiSelectMenuStaticOptions) -> Vec<ValidationErrorKind> {
+    match (val.options.as_ref(), val.option_groups.as_ref()) {
         (Some(_), Some(_)) => {
             vec![ValidationErrorKind::ExclusiveField(
                 "options",

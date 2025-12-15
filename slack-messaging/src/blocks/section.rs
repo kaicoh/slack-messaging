@@ -96,8 +96,8 @@ pub struct Section {
     pub(crate) expand: Option<bool>,
 }
 
-fn validate(builder: &SectionBuilder) -> Vec<ValidationErrorKind> {
-    match (builder.text.inner_ref(), builder.fields.inner_ref()) {
+fn validate(val: &Section) -> Vec<ValidationErrorKind> {
+    match (val.text.as_ref(), val.fields.as_ref()) {
         (None, None) => {
             vec![ValidationErrorKind::EitherRequired("text", "fields")]
         }

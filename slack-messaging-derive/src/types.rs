@@ -40,7 +40,7 @@ impl Field {
         if self.is_phantom() {
             quote! { #ident: ::std::marker::PhantomData }
         } else {
-            quote! { #ident }
+            quote! { #ident: #ident.inner }
         }
     }
 

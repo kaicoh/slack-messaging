@@ -2,8 +2,8 @@ use crate::composition_objects::types::Conversation;
 use crate::errors::ValidationErrorKind;
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Conversation filter object](https://docs.slack.dev/reference/block-kit/composition-objects/conversation-filter-object)
 /// representation.
@@ -56,10 +56,10 @@ pub struct ConversationFilter {
     pub(crate) exclude_bot_users: Option<bool>,
 }
 
-fn validate(builder: &ConversationFilterBuilder) -> Vec<ValidationErrorKind> {
-    if builder.get_include().is_none()
-        && builder.get_exclude_external_shared_channels().is_none()
-        && builder.get_exclude_bot_users().is_none()
+fn validate(val: &ConversationFilter) -> Vec<ValidationErrorKind> {
+    if val.include.is_none()
+        && val.exclude_external_shared_channels.is_none()
+        && val.exclude_bot_users.is_none()
     {
         vec![ValidationErrorKind::NoFieldProvided]
     } else {

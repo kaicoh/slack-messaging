@@ -1,7 +1,7 @@
 use crate::errors::ValidationErrorKind;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Slack file object](https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object)
 /// representation.
@@ -44,8 +44,8 @@ pub struct SlackFile {
     pub(crate) url: Option<String>,
 }
 
-fn validate(builder: &SlackFileBuilder) -> Vec<ValidationErrorKind> {
-    match (builder.id.inner_ref(), builder.url.inner_ref()) {
+fn validate(val: &SlackFile) -> Vec<ValidationErrorKind> {
+    match (val.id.as_ref(), val.url.as_ref()) {
         (Some(_), Some(_)) => vec![ValidationErrorKind::ExclusiveField("id", "url")],
         (None, None) => vec![ValidationErrorKind::EitherRequired("id", "url")],
         _ => vec![],

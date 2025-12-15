@@ -2,8 +2,8 @@ use crate::composition_objects::{PlainText, SlackFile};
 use crate::errors::ValidationErrorKind;
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Image block](https://docs.slack.dev/reference/block-kit/blocks/image-block)
 /// representation.
@@ -66,11 +66,8 @@ pub struct Image {
     pub(crate) slack_file: Option<SlackFile>,
 }
 
-fn validate(builder: &ImageBuilder) -> Vec<ValidationErrorKind> {
-    match (
-        builder.image_url.inner_ref(),
-        builder.slack_file.inner_ref(),
-    ) {
+fn validate(val: &Image) -> Vec<ValidationErrorKind> {
+    match (val.image_url.as_ref(), val.slack_file.as_ref()) {
         (Some(_), Some(_)) => {
             vec![ValidationErrorKind::ExclusiveField(
                 "image_url",

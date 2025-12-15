@@ -54,7 +54,7 @@ impl Target {
         let doc_build_method = format!("build [`{ident}`] object.");
 
         let validate_across_fields = match self.validate() {
-            Some(path) => quote! { #path(self) },
+            Some(path) => quote! { #path(value) },
             None => quote! { vec![] },
         };
         // fields of builder object. they doesn't includes phantom type.
@@ -70,14 +70,9 @@ impl Target {
             })
             .collect::<Vec<types::Field>>();
 
-        let merge_fn = format_ident!("merge_{}", builder_fields.len() + 1);
-
         let builder_field_names = builder_fields.iter().map(types::Field::field_name);
         let builder_field_names_0 = builder_field_names.clone();
         let builder_field_names_1 = builder_field_names.clone();
-        let builder_field_names_2 = builder_field_names.clone();
-        let builder_field_names_3 = builder_field_names.clone();
-        let builder_field_names_4 = builder_field_names.clone();
 
         let has_multi_fields = self.has_multiple_fields();
         let accessors = builder_fields
@@ -111,39 +106,35 @@ impl Target {
             impl #imp #builder #ty #whr {
                 #(#accessors)*
 
-                fn validate_across_fields(&self) -> Vec<crate::errors::ValidationErrorKind> {
-                    #validate_across_fields
+                fn validate_across_fields(value: &#ident #ty) -> [::std::option::Option<crate::errors::ValidationError>; 1] {
+                    let errors: Vec<crate::errors::ValidationErrorKind> = #validate_across_fields;
+                    let error = crate::errors::ValidationError::new_across_fields(errors);
+                    [error]
                 }
 
                 #[doc = #doc_build_method]
                 pub fn build(self) -> ::std::result::Result<#ident #ty, crate::errors::ValidationErrors> {
-                    let v0 = crate::value::Value::<()> {
-                        inner: None,
-                        errors: self.validate_across_fields(),
+                    let Self { #expand_builder_fields } = self;
+
+                    let built = #ident {
+                        #(#build_target_fields),*
                     };
 
-                    let Self { #expand_builder_fields } = self;
-                    crate::value::#merge_fn(v0, #(#builder_field_names_1),*)
-                        .map(|(_, #(#builder_field_names_2),*)| #ident {
-                            #(#build_target_fields),*
-                        })
-                        .map_err(|(e_0, #(#builder_field_names_3),*)| {
-                            let errors = [
-                                #(crate::errors::ValidationError::new_single_field(stringify!(#builder_field_names_4), #builder_field_names_4)),*
-                            ]
-                            .into_iter()
-                            .filter_map(|v| v)
-                            .chain([crate::errors::ValidationError::new_across_fields(e_0)]
-                                .into_iter()
-                                .filter_map(|v| v)
-                            )
-                            .collect();
-
-                            crate::errors::ValidationErrors {
-                                object: ::std::borrow::Cow::Borrowed(stringify!(#ident)),
-                                errors,
-                            }
-                        })
+                    let errors: Vec<crate::errors::ValidationError> = Self::validate_across_fields(&built)
+                        .into_iter()
+                        .chain([
+                            #(crate::errors::ValidationError::new_single_field(stringify!(#builder_field_names_1), #builder_field_names_1.errors)),*
+                        ])
+                        .filter_map(|v| v)
+                        .collect();
+                    if !errors.is_empty() {
+                        return Err(crate::errors::ValidationErrors {
+                            object: ::std::borrow::Cow::Borrowed(stringify!(#ident)),
+                            errors,
+                        });
+                    }   else {
+                        return Ok(built);
+                    }
                 }
             }
 
