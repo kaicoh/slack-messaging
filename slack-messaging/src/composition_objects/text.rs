@@ -55,7 +55,7 @@ use slack_messaging_derive::Builder;
 /// #     try_main().unwrap()
 /// # }
 ///```
-#[derive(Debug, Clone, PartialEq, Builder)]
+#[derive(Debug, Clone, Builder)]
 pub struct Text<T> {
     #[builder(phantom = "T")]
     pub(crate) r#type: std::marker::PhantomData<T>,
@@ -96,7 +96,7 @@ impl TextBuilder<Plain> {
         self.emoji.inner_ref().copied()
     }
 
-    /// set emoji field value and turned self into `TextBuilder<Plain>`.
+    /// set emoji field value.
     pub fn set_emoji(self, emoji: Option<impl Into<bool>>) -> TextBuilder<Plain> {
         Self {
             emoji: Self::new_emoji(emoji.map(|v| v.into())),
@@ -104,7 +104,7 @@ impl TextBuilder<Plain> {
         }
     }
 
-    /// set emoji field value and turned self into `TextBuilder<Plain>`.
+    /// set emoji field value.
     pub fn emoji(self, emoji: impl Into<bool>) -> TextBuilder<Plain> {
         self.set_emoji(Some(emoji))
     }
@@ -116,7 +116,7 @@ impl TextBuilder<Mrkdwn> {
         self.verbatim.inner_ref().copied()
     }
 
-    /// set verbatim field value and turned self into `TextBuilder<Mrkdwn>`.
+    /// set verbatim field value.
     pub fn set_verbatim(self, verbatim: Option<impl Into<bool>>) -> TextBuilder<Mrkdwn> {
         Self {
             verbatim: Self::new_verbatim(verbatim.map(|v| v.into())),
@@ -124,9 +124,29 @@ impl TextBuilder<Mrkdwn> {
         }
     }
 
-    /// set verbatim field value and turned self into `TextBuilder<Mrkdwn>`.
+    /// set verbatim field value.
     pub fn verbatim(self, verbatim: impl Into<bool>) -> TextBuilder<Mrkdwn> {
         self.set_verbatim(Some(verbatim))
+    }
+}
+
+impl PartialEq for Text<Plain> {
+    fn eq(&self, other: &Self) -> bool {
+        match (self.text(), other.text()) {
+            (Some(text1), Some(text2)) if text1 != text2 => return false,
+            (None, Some(_)) | (Some(_), None) => return false,
+            _ => self.emoji.unwrap_or(false) == other.emoji.unwrap_or(false),
+        }
+    }
+}
+
+impl PartialEq for Text<Mrkdwn> {
+    fn eq(&self, other: &Self) -> bool {
+        match (self.text(), other.text()) {
+            (Some(text1), Some(text2)) if text1 != text2 => return false,
+            (None, Some(_)) | (Some(_), None) => return false,
+            _ => self.verbatim.unwrap_or(false) == other.verbatim.unwrap_or(false),
+        }
     }
 }
 
