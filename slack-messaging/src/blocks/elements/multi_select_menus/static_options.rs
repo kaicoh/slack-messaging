@@ -86,7 +86,7 @@ pub struct MultiSelectMenuStaticOptions {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(push_item = "option", validate("list::max_item_100"))]
-    pub(crate) options: Option<Vec<Opt<Text<Plain>>>>,
+    pub(crate) options: Option<Vec<Opt>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(push_item = "option_group", validate("list::max_item_100"))]
