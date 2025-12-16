@@ -7,6 +7,22 @@ use slack_messaging_derive::Builder;
 /// [Number input element](https://docs.slack.dev/reference/block-kit/block-elements/number-input-element)
 /// representation.
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/number-input-element).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | is_decimal_allowed | bool | Yes | N/A |
+/// | action_id | String | No | Max length 255 characters |
+/// | initial_value | String | No | N/A |
+/// | min_value | String | No | N/A |
+/// | max_value | String | No | N/A |
+/// | dispatch_action_config | [DispatchActionConfiguration] | No | N/A |
+/// | focus_on_load | bool | No | N/A |
+/// | placeholder | [Text<Plain>] | No | Max length 150 characters |
+///
 /// # Example
 ///
 /// ```

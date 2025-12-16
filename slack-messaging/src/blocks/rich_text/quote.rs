@@ -1,11 +1,21 @@
 use crate::blocks::rich_text::types::RichTextElementType;
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Rich text quote element](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block#rich_text_quote)
 /// representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block#rich_text_quote).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | elements | Vec<[RichTextElementType]> | Yes | N/A |
+/// | border | i64 | No | N/A |
 ///
 /// # Example
 ///

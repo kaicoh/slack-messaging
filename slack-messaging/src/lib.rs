@@ -7,7 +7,7 @@ mod macros;
 pub mod blocks;
 /// Objects can be used inside of block elements.
 pub mod composition_objects;
-/// Validation error module.
+/// Error types used in this crate.
 pub mod errors;
 
 mod message;

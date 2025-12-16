@@ -8,6 +8,21 @@ use slack_messaging_derive::Builder;
 /// [Conversation filter object](https://docs.slack.dev/reference/block-kit/composition-objects/conversation-filter-object)
 /// representation.
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/composition-objects/conversation-filter-object).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | include | Vec<[Conversation]> | No | Must contain at least one item if provided |
+/// | exclude_external_shared_channels | bool | No | N/A |
+/// | exclude_bot_users | bool | No | N/A |
+///
+/// # Validation Across Fields
+///
+/// * At least one of the fields must be provided.
+///
 /// # Example
 ///
 /// ```

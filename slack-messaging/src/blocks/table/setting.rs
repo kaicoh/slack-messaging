@@ -1,5 +1,5 @@
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// Value being set to the align field in [`ColumnSetting`] object.
 #[derive(Debug, Copy, Clone, Serialize, PartialEq)]

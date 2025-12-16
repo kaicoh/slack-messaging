@@ -7,6 +7,20 @@ use slack_messaging_derive::Builder;
 /// [Multi select menu of public channels](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#channel_multi_select)
 /// representation
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#channel_multi_select).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | action_id | String | No | Max length 255 characters |
+/// | initial_channels | Vec<String> | No | N/A |
+/// | confirm | [ConfirmationDialog] | No | N/A |
+/// | max_selected_items | i64 | No | Min value 1 |
+/// | focus_on_load | bool | No | N/A |
+/// | placeholder | [Text<Plain>] | No | Max length 150 characters |
+///
 /// # Example
 ///
 /// ```

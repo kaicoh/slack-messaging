@@ -14,6 +14,20 @@ use slack_messaging_derive::Builder;
 /// [Input block](https://docs.slack.dev/reference/block-kit/blocks/input-block)
 /// representation.
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/input-block).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | label | [Text<Plain>] | Yes | Max length 2000 characters |
+/// | element | [InputElement] | Yes | N/A |
+/// | dispatch_action | bool | No | N/A |
+/// | block_id | String | No | Max length 255 characters |
+/// | hint | [Text<Plain>] | No | Max length 2000 characters |
+/// | optional | bool | No | N/A |
+///
 /// # Example
 ///
 /// ```

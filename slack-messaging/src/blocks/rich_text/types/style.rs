@@ -1,8 +1,11 @@
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 use std::marker::PhantomData;
 
 /// Style object for rich text element types.
+///
+/// The available style types are different depending on the rich text element type.
+/// Please refer to the examples below.
 ///
 /// ## Example 1 (`bold`, `italic`, `strike`, `highlight`, `client_highlight` and `unlink` are avialable)
 ///

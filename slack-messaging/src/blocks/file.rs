@@ -1,10 +1,21 @@
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [File block](https://docs.slack.dev/reference/block-kit/blocks/file-block)
 /// representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/file-block).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | external_id | String | Yes | N/A |
+/// | source | [FileSource] | Yes | N/A |
+/// | block_id | String | No | Maximum 255 characters |
 ///
 /// # Example
 ///

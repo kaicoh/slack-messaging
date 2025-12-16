@@ -8,6 +8,16 @@ use slack_messaging_derive::Builder;
 /// [Context block](https://docs.slack.dev/reference/block-kit/blocks/context-block)
 /// representation.
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/context-block).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | elements | Vec<[ContextElement]> | Yes | Max 10 items |
+/// | block_id | String | No | Maximum 255 characters |
+///
 /// # Example
 ///
 /// The following is reproduction of [the sample context](https://docs.slack.dev/reference/block-kit/blocks/context-block#examples).

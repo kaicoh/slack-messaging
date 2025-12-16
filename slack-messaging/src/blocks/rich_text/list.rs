@@ -1,11 +1,24 @@
 use super::RichTextSection;
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Rich text list element](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block#rich_text_list)
 /// representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block#rich_text_list).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | style | [ListStyle] | Yes | N/A |
+/// | elements | Vec<[RichTextSection]> | Yes | N/A |
+/// | indent | i64 | No | N/A |
+/// | offset | i64 | No | N/A |
+/// | border | i64 | No | N/A |
 ///
 /// # Example
 ///

@@ -8,6 +8,23 @@ use slack_messaging_derive::Builder;
 /// [Image block](https://docs.slack.dev/reference/block-kit/blocks/image-block)
 /// representation.
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/image-block).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | alt_text | String | Yes | Maximum 2000 characters |
+/// | image_url | String | Conditional* | Maximum 3000 characters |
+/// | title | [Text<Plain>] | No | Maximum 2000 characters |
+/// | block_id | String | No | Maximum 255 characters |
+/// | slack_file | [SlackFile] | Conditional* | N/A |
+///
+/// # Validation Across Fields
+///
+/// * Either `image_url` or `slack_file` is required. Both fields cannot be set simultaneously.
+///
 /// # Example
 ///
 /// ```

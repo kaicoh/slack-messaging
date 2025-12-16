@@ -1,11 +1,21 @@
 use crate::blocks::rich_text::types::{RichTextStyle, StyleTypeSix};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [user element type](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block#user-element-type)
 /// for rich text.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block#user-element-type).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | user_id | String | Yes | N/A |
+/// | style | [RichTextStyle<StyleTypeSix>] | No | N/A |
 ///
 /// # Example
 ///

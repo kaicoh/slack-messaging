@@ -9,10 +9,32 @@ use slack_messaging_derive::Builder;
 /// This is a generic struct that can represent either a plain text object or a markdown text
 /// object, depending on the type parameter `T`.
 ///
-/// If you want to create a plain text object, use `Text<Plain>`. If you want to create a markdown
-/// text object, use `Text<Mrkdwn>`.
+/// # Type Parameters
+///
+/// * `T`: The type of text object. It can be either [`Plain`] for plain text or [`Mrkdwn`] for
+///   markdown text.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [Slack API
+/// documentation](https://docs.slack.dev/reference/block-kit/composition-objects/text-object).
+///
+/// ## `Text<Plain>`
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | text | String | Yes | Minimum length: 1 character, Maximum length: 3000 characters. |
+/// | emoji | bool | No | N/A |
+///
+/// ## `Text<Mrkdwn>`
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | text | String | Yes | Minimum length: 1 character, Maximum length: 3000 characters. |
+/// | verbatim | bool | No | N/A |
 ///
 /// # Example
+///
 ///```
 /// use slack_messaging::composition_objects::{Text, Plain, Mrkdwn};
 /// # use std::error::Error;

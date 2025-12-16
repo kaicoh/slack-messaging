@@ -7,6 +7,19 @@ use slack_messaging_derive::Builder;
 /// [Select menu of users](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#users_select)
 /// representation
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#users_select).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | action_id | String | No | Max length 255 characters |
+/// | initial_user | String | No | N/A |
+/// | confirm | [ConfirmationDialog] | No | N/A |
+/// | focus_on_load | bool | No | N/A |
+/// | placeholder | [Text<Plain>] | No | Max length 150 characters |
+///
 /// # Example
 ///
 /// ```

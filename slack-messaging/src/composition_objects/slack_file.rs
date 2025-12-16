@@ -6,6 +6,20 @@ use slack_messaging_derive::Builder;
 /// [Slack file object](https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object)
 /// representation.
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | id | String | Conditionally | N/A |
+/// | url | String | Conditionally | N/A |
+///
+/// # Validation Across Fields
+///
+/// * Exactly one of the fields `id` or `url` must be provided.
+///
 /// # Example
 ///
 /// ```

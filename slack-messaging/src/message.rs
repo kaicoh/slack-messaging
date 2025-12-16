@@ -1,13 +1,11 @@
 use crate::blocks::Block;
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [`Message`](https://docs.slack.dev/messaging#payloads)
 /// representation.
-///
-/// # Example
 ///
 /// See also [Header](crate::blocks::Header), [Section](crate::blocks::Section)
 /// and [any other blocks](crate::blocks) to know how to build these blocks.
@@ -18,6 +16,24 @@ use serde::Serialize;
 /// For example, according to [the official document](https://docs.slack.dev/reference/block-kit/blocks?available-in-surfaces=Home+tabs),
 /// you can include up to 50 blocks in each message. If you include more than 50
 /// blocks in a message, the build method of [MessageBuilder] returns Result::Err.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/messaging#payloads).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | text | String | No | N/A |
+/// | blocks | Vec<[Block]> | No | Maximum 50 items |
+/// | thread_ts | String | No | N/A |
+/// | mrkdwn | bool | No | N/A |
+/// | response_type | String | No | N/A |
+/// | replace_original | bool | No | N/A |
+/// | delete_original | bool | No | N/A |
+/// | reply_broadcast | bool | No | N/A |
+///
+/// # Example
 ///
 /// ```
 /// use slack_messaging::{mrkdwn, plain_text, Message};

@@ -8,9 +8,22 @@ use slack_messaging_derive::Builder;
 /// representation.
 ///
 /// This is a generic struct that can represent an option group object with different text object
-/// types. The type parameter `T` specifies the type of the [`Opt`] objects in the `options` field. By default, it uses [`Plain`] text objects.
-/// `T` must implement the [`TextExt`] trait because the `text` field of the [`Opt`] objects
-/// requires text objects.
+/// types.
+///
+/// # Type Parameters
+///
+/// * `T`: The type of text object used for the `text` field of the [`Opt`] objects in the
+/// `options` field. Defaults to `Text<Plain>`. Must implement the [`TextExt`] trait.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/composition-objects/option-group-object).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | label | [Text]<[Plain]> | Yes | Max length 75 characters |
+/// | options | Vec<[Opt]<`T`>> | Yes | Must contain at least one and at most 100 items |
 ///
 /// # Example
 ///

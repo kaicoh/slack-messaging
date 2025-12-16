@@ -7,6 +7,19 @@ use slack_messaging_derive::Builder;
 /// [Workflow button element](https://docs.slack.dev/reference/block-kit/block-elements/workflow-button-element)
 /// representation.
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/workflow-button-element).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | text | [Text<Plain>] | Yes | Max length 75 characters |
+/// | action_id | String | Yes | Max length 255 characters |
+/// | workflow | [Workflow] | Yes | N/A |
+/// | style | &'static str | No | Must be one of "primary", "danger" |
+/// | accessibility_label | String | No | Max length 75 characters |
+///
 /// # Example
 ///
 /// ```

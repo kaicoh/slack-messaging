@@ -2,10 +2,19 @@ use super::TableCell;
 
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// Single table row representation being set to the rows field in [`Table`](crate::blocks::Table) object.
+///
+/// Table rows contain an array of table cells, each represented by
+/// [`TableCell`] enum.
+///
+/// # Fields and Validations
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | cells | Vec<[TableCell]> | Yes | Maximum of 20 items |
 ///
 /// # Example
 ///

@@ -13,14 +13,24 @@ use std::marker::PhantomData;
 ///
 /// This is a generic struct that can represent an option object with different text object types.
 ///
-/// The type parameter `T` specifies the type of text object used for the `text` and `description`.
-/// By default, it uses [`Plain`] text objects.
-/// `T` must implement the [`TextExt`] trait because the `text` and `description` fields require text
-/// objects.
+/// # Type Parameters
 ///
-/// The type parameter `P` is a phantom type used to control the availability of the `url` field.
-/// By default, it uses [`UrlUnavailable`], which means the `url` field is not available. If you want
-/// to include the `url` field, use [`UrlAvailable`].
+/// * `T`: The type of text object used for the `text` and `description` fields. Defaults to
+/// `Text<Plain>`. Must implement the [`TextExt`] trait.
+/// * `P`: A phantom type used to control the availability of the `url` field. Defaults to
+/// [`UrlUnavailable`]. Use [`UrlAvailable`] to include the `url` field.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/composition-objects/option-object).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | text | type parameter `T` bounds [TextExt] | Yes | Max length 75 characters |
+/// | value | String | Yes | Max length 150 characters |
+/// | description | type parameter `T` bounds [TextExt] | No | Max length 75 characters |
+/// | url | String | No (only if type parameter `P` is [UrlAvailable]) | Max length 3000 characters |
 ///
 /// # Example
 ///

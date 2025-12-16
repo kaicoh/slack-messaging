@@ -7,6 +7,20 @@ use slack_messaging_derive::Builder;
 /// [Time picker element](https://docs.slack.dev/reference/block-kit/block-elements/time-picker-element)
 /// representation.
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/time-picker-element).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | action_id | String | No | Max length 255 characters |
+/// | initial_time | String | No | Must match the format "HH:mm" (24-hour format) |
+/// | confirm | [ConfirmationDialog] | No | N/A |
+/// | focus_on_load | bool | No | N/A |
+/// | placeholder | [Text<Plain>] | No | Max length 150 characters |
+/// | timezone | String | No | N/A |
+///
 /// # Example
 ///
 /// ```

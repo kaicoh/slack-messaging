@@ -1,10 +1,19 @@
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [broadcast element type](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block/#broadcast-element-type)
 /// for rich text.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block/#broadcast-element-type).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | range | [BroadcastRange] | Yes | N/A |
 ///
 /// # Example
 ///

@@ -7,6 +7,17 @@ use slack_messaging_derive::Builder;
 /// [Overflow menu element](https://docs.slack.dev/reference/block-kit/block-elements/overflow-menu-element)
 /// representation.
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/overflow-menu-element).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | action_id | String | No | Max length 255 characters |
+/// | options | Vec<[Opt<Text<Plain>, UrlAvailable>]> | Yes | Max 5 items |
+/// | confirm | [ConfirmationDialog] | No | N/A |
+///
 /// # Example
 ///
 /// ```

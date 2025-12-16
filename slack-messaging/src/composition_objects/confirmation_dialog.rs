@@ -7,6 +7,19 @@ use slack_messaging_derive::Builder;
 /// [Confirmation dialog object](https://docs.slack.dev/reference/block-kit/composition-objects/confirmation-dialog-object)
 /// representation.
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/composition-objects/confirmation-dialog-object).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | title | [Text]<[Plain]> | Yes | Max length 100 characters |
+/// | text | [Text]<[Plain]> | Yes | Max length 300 characters |
+/// | confirm | [Text]<[Plain]> | Yes | Max length 30 characters |
+/// | deny | [Text]<[Plain]> | Yes | Max length 30 characters |
+/// | style | &str | No | Must be either "primary" or "danger" |
+///
 /// # Example
 ///
 /// ```

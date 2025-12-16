@@ -15,6 +15,24 @@ use slack_messaging_derive::Builder;
 /// [Section block](https://docs.slack.dev/reference/block-kit/blocks/section-block)
 /// representation.
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/section-block).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | text | [TextContent] | Conditionally | Minimum 1 character, Maximum 3000 characters |
+/// | block_id | String | No | Maximum 255 characters |
+/// | fields | Vec<[TextContent]> | Conditionally | Maximum 10 items, Each item maximum 2000
+/// characters |
+/// | accessory | [Accessory] | No | N/A |
+/// | expand | bool | No | N/A |
+///
+/// # Validation Across Fields
+///
+/// * Either `text` or `fields` is required. Both fields cannot be omitted.
+///
 /// # Example
 ///
 /// ```

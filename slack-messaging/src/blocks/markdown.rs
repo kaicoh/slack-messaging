@@ -1,10 +1,20 @@
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Markdown block](https://docs.slack.dev/reference/block-kit/blocks/markdown-block)
 /// representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/markdown-block).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | text | String | Yes | Maximum 12000 characters |
+/// | block_id | String | No | Maximum 255 characters |
 ///
 /// # Example
 ///
@@ -107,4 +117,3 @@ mod tests {
         assert!(errors.includes(ValidationErrorKind::MaxTextLength(255)));
     }
 }
-

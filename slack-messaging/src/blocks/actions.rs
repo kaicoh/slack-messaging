@@ -13,6 +13,16 @@ use slack_messaging_derive::Builder;
 /// [Actions block](https://docs.slack.dev/reference/block-kit/blocks/actions-block)
 /// representation.
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/actions-block).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | elements | Vec<[ActionsElement]> | Yes | Maximum of 25 items |
+/// | block_id | String | No | Maximum 255 characters |
+///
 /// # Example
 ///
 /// The following is reproduction of [the 1st sample actions](https://docs.slack.dev/reference/block-kit/blocks/actions-block#examples).

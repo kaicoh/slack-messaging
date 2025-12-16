@@ -266,6 +266,17 @@ pub enum FileType {
 /// Button object to be set to the `positive_buttons` and `negative_buttons`
 /// fields of [`FeedbackButtons`](crate::blocks::elements::FeedbackButtons) object.
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | text | [Text<Plain>] | Yes | Max length 75 characters |
+/// | value | String | Yes | Max length 2000 characters |
+/// | accessibility_label | String | No | Max length 75 characters |
+///
 /// # Example
 ///
 /// ```

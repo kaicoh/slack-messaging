@@ -1,11 +1,23 @@
 use crate::composition_objects::ConfirmationDialog;
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Datetime picker element](https://docs.slack.dev/reference/block-kit/block-elements/datetime-picker-element)
 /// representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/datetime-picker-element).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | action_id | String | No | Max length 255 characters |
+/// | initial_date_time | i64 | No | Must match 10 digits format |
+/// | confirm | [ConfirmationDialog] | No | N/A |
+/// | focus_on_load | bool | No | N/A |
 ///
 /// # Example
 ///

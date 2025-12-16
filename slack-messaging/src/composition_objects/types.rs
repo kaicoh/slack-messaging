@@ -37,6 +37,16 @@ pub struct UrlAvailable;
 
 /// Input parameter for [Trigger object](https://docs.slack.dev/reference/block-kit/composition-objects/trigger-object).
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/composition-objects/trigger-object).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | name | String | Yes | N/A |
+/// | value | [Value] | Yes | N/A |
+///
 /// # Example
 ///
 /// ```
