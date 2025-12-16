@@ -1,8 +1,8 @@
-use crate::composition_objects::PlainText;
+use crate::composition_objects::{Plain, Text};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Confirmation dialog object](https://docs.slack.dev/reference/block-kit/composition-objects/confirmation-dialog-object)
 /// representation.
@@ -64,16 +64,16 @@ use serde::Serialize;
 #[derive(Debug, Clone, Serialize, PartialEq, Builder)]
 pub struct ConfirmationDialog {
     #[builder(validate("required", "text_object::max_100"))]
-    pub(crate) title: Option<PlainText>,
+    pub(crate) title: Option<Text<Plain>>,
 
     #[builder(validate("required", "text_object::max_300"))]
-    pub(crate) text: Option<PlainText>,
+    pub(crate) text: Option<Text<Plain>>,
 
     #[builder(validate("required", "text_object::max_30"))]
-    pub(crate) confirm: Option<PlainText>,
+    pub(crate) confirm: Option<Text<Plain>>,
 
     #[builder(validate("required", "text_object::max_30"))]
-    pub(crate) deny: Option<PlainText>,
+    pub(crate) deny: Option<Text<Plain>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(private_setter)]
@@ -101,22 +101,10 @@ mod tests {
     #[test]
     fn it_implements_builder() {
         let expected = ConfirmationDialog {
-            title: Some(PlainText {
-                text: Some("Are you sure?".into()),
-                emoji: None,
-            }),
-            text: Some(PlainText {
-                text: Some("Wouldn't you prefer a good game of _chess_?".into()),
-                emoji: None,
-            }),
-            confirm: Some(PlainText {
-                text: Some("Do it".into()),
-                emoji: None,
-            }),
-            deny: Some(PlainText {
-                text: Some("Stop, I've changed my mind!".into()),
-                emoji: None,
-            }),
+            title: Some(plain_text("Are you sure?")),
+            text: Some(plain_text("Wouldn't you prefer a good game of _chess_?")),
+            confirm: Some(plain_text("Do it")),
+            deny: Some(plain_text("Stop, I've changed my mind!")),
             style: Some("primary"),
         };
 

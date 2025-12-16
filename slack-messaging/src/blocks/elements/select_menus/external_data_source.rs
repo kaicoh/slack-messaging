@@ -1,8 +1,8 @@
-use crate::composition_objects::{ConfirmationDialog, Opt, PlainText};
+use crate::composition_objects::{ConfirmationDialog, Opt, Plain, Text};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Select menu of external data source](https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#external_select)
 /// representation
@@ -59,7 +59,7 @@ pub struct SelectMenuExternalDataSource {
     pub(crate) min_query_length: Option<i64>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(crate) initial_option: Option<Opt<PlainText>>,
+    pub(crate) initial_option: Option<Opt>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) confirm: Option<ConfirmationDialog>,
@@ -69,7 +69,7 @@ pub struct SelectMenuExternalDataSource {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text_object::max_150"))]
-    pub(crate) placeholder: Option<PlainText>,
+    pub(crate) placeholder: Option<Text<Plain>>,
 }
 
 #[cfg(test)]

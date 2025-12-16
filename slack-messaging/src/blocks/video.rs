@@ -1,8 +1,8 @@
-use crate::composition_objects::PlainText;
+use crate::composition_objects::{Plain, Text};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Video block](https://docs.slack.dev/reference/block-kit/blocks/video-block)
 /// representation.
@@ -71,7 +71,7 @@ pub struct Video {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text_object::max_200"))]
-    pub(crate) description: Option<PlainText>,
+    pub(crate) description: Option<Text<Plain>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) provider_icon_url: Option<String>,
@@ -80,7 +80,7 @@ pub struct Video {
     pub(crate) provider_name: Option<String>,
 
     #[builder(validate("required", "text_object::max_200"))]
-    pub(crate) title: Option<PlainText>,
+    pub(crate) title: Option<Text<Plain>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) title_url: Option<String>,

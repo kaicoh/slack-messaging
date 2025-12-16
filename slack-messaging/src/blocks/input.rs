@@ -5,11 +5,11 @@ use crate::blocks::elements::{
     SelectMenuConversations, SelectMenuExternalDataSource, SelectMenuPublicChannels,
     SelectMenuStaticOptions, SelectMenuUsers, TimePicker, UrlInput,
 };
-use crate::composition_objects::PlainText;
+use crate::composition_objects::{Plain, Text};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Input block](https://docs.slack.dev/reference/block-kit/blocks/input-block)
 /// representation.
@@ -68,7 +68,7 @@ use serde::Serialize;
 #[serde(tag = "type", rename = "input")]
 pub struct Input {
     #[builder(validate("required", "text_object::max_2000"))]
-    pub(crate) label: Option<PlainText>,
+    pub(crate) label: Option<Text<Plain>>,
 
     #[builder(validate("required"))]
     pub(crate) element: Option<InputElement>,
@@ -82,7 +82,7 @@ pub struct Input {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text_object::max_2000"))]
-    pub(crate) hint: Option<PlainText>,
+    pub(crate) hint: Option<Text<Plain>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) optional: Option<bool>,

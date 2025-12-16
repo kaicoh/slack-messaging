@@ -1,4 +1,4 @@
-use crate::composition_objects::{ConfirmationDialog, Opt, OptGroup, PlainText};
+use crate::composition_objects::{ConfirmationDialog, Opt, OptGroup, Plain, Text};
 use crate::errors::ValidationErrorKind;
 use crate::validators::*;
 
@@ -86,14 +86,14 @@ pub struct SelectMenuStaticOptions {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(push_item = "option", validate("list::max_item_100"))]
-    pub(crate) options: Option<Vec<Opt<PlainText>>>,
+    pub(crate) options: Option<Vec<Opt>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(push_item = "option_group", validate("list::max_item_100"))]
-    pub(crate) option_groups: Option<Vec<OptGroup<PlainText>>>,
+    pub(crate) option_groups: Option<Vec<OptGroup>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(crate) initial_option: Option<Opt<PlainText>>,
+    pub(crate) initial_option: Option<Opt>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) confirm: Option<ConfirmationDialog>,
@@ -103,7 +103,7 @@ pub struct SelectMenuStaticOptions {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text_object::max_150"))]
-    pub(crate) placeholder: Option<PlainText>,
+    pub(crate) placeholder: Option<Text<Plain>>,
 }
 
 fn validate(val: &SelectMenuStaticOptions) -> Vec<ValidationErrorKind> {
@@ -298,7 +298,7 @@ mod tests {
 
     #[test]
     fn it_requires_options_list_size_less_than_100() {
-        let options: Vec<Opt<PlainText>> = (0..101).map(|_| option("opt", "val")).collect();
+        let options: Vec<Opt> = (0..101).map(|_| option("opt", "val")).collect();
 
         let err = SelectMenuStaticOptions::builder()
             .options(options)
@@ -312,7 +312,7 @@ mod tests {
 
     #[test]
     fn it_requires_option_groups_list_size_less_than_100() {
-        let option_groups: Vec<OptGroup<PlainText>> = (0..101)
+        let option_groups: Vec<OptGroup> = (0..101)
             .map(|_| option_group("group", vec![option("opt", "val")]))
             .collect();
 

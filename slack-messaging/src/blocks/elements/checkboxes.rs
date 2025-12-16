@@ -1,8 +1,8 @@
-use crate::composition_objects::{ConfirmationDialog, Opt, Text};
+use crate::composition_objects::{ConfirmationDialog, Opt, TextContent};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Checkboxes](https://docs.slack.dev/reference/block-kit/block-elements/checkboxes-element)
 /// representation.
@@ -12,7 +12,7 @@ use serde::Serialize;
 /// ```
 /// use slack_messaging::mrkdwn;
 /// use slack_messaging::blocks::elements::Checkboxes;
-/// use slack_messaging::composition_objects::{Opt, Text};
+/// use slack_messaging::composition_objects::Opt;
 /// # use std::error::Error;
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {
@@ -77,11 +77,11 @@ pub struct Checkboxes {
     pub(crate) action_id: Option<String>,
 
     #[builder(push_item = "option", validate("required", "list::max_item_10"))]
-    pub(crate) options: Option<Vec<Opt<Text>>>,
+    pub(crate) options: Option<Vec<Opt<TextContent>>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(push_item = "initial_option")]
-    pub(crate) initial_options: Option<Vec<Opt<Text>>>,
+    pub(crate) initial_options: Option<Vec<Opt<TextContent>>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) confirm: Option<ConfirmationDialog>,
@@ -194,7 +194,7 @@ mod tests {
 
     #[test]
     fn it_requires_options_item_size_less_than_10() {
-        let options: Vec<Opt<Text>> = (0..11).map(|_| option_t("opt", "val")).collect();
+        let options: Vec<Opt<TextContent>> = (0..11).map(|_| option_t("opt", "val")).collect();
         let err = Checkboxes::builder().options(options).build().unwrap_err();
         assert_eq!(err.object(), "Checkboxes");
 

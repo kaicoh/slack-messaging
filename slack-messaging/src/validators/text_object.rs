@@ -1,23 +1,30 @@
 use super::*;
-use crate::composition_objects::types::TextObject;
+use crate::composition_objects::TextExt;
 
 use paste::paste;
 
-fn max<T: TextObject>(max: usize, mut value: Value<T>) -> Value<T> {
-    if value
-        .inner_ref()
-        .is_some_and(|v| v.text().is_some_and(|t| t.len() > max))
-    {
-        value.push(ValidationErrorKind::MaxTextLength(max));
+fn inner_validator<T, F>(mut value: Value<T>, error: ValidationErrorKind, f: F) -> Value<T>
+where
+    T: TextExt,
+    F: Fn(&str) -> bool,
+{
+    if value.inner_ref().is_some_and(|v| v.text().is_some_and(f)) {
+        value.push(error);
     }
     value
+}
+
+fn max<T: TextExt>(max: usize, value: Value<T>) -> Value<T> {
+    inner_validator(value, ValidationErrorKind::MaxTextLength(max), |t| {
+        t.len() > max
+    })
 }
 
 macro_rules! impl_max {
     ($($e:expr),*) => {
         paste! {
             $(
-                pub(crate) fn [<max_ $e>]<T: TextObject>(value: Value<T>) -> Value<T> {
+                pub(crate) fn [<max_ $e>]<T: TextExt>(value: Value<T>) -> Value<T> {
                     max($e, value)
                 }
             )*
@@ -27,20 +34,25 @@ macro_rules! impl_max {
 
 impl_max!(30, 75, 100, 150, 200, 300, 2000, 3000);
 
-pub(crate) fn min_1<T: TextObject>(mut value: Value<T>) -> Value<T> {
-    if value
-        .inner_ref()
-        .is_some_and(|v| v.text().is_some_and(|t| t.is_empty()))
-    {
-        value.push(ValidationErrorKind::MinTextLength(1));
-    }
-    value
+pub(crate) fn min_1<T: TextExt>(value: Value<T>) -> Value<T> {
+    inner_validator(value, ValidationErrorKind::MinTextLength(1), |t| {
+        t.is_empty()
+    })
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::composition_objects::PlainText;
+    use crate::composition_objects::{Plain, Text};
+
+    fn plain_text(text: impl Into<String>) -> Value<Text<Plain>> {
+        Value::new(Some(Text::<Plain> {
+            r#type: std::marker::PhantomData,
+            text: Some(text.into()),
+            emoji: None,
+            verbatim: None,
+        }))
+    }
 
     mod fn_max_30 {
         use super::*;
@@ -59,11 +71,8 @@ mod tests {
             assert_eq!(result.errors, vec![ValidationErrorKind::MaxTextLength(30)]);
         }
 
-        fn test(text: impl Into<String>) -> Value<PlainText> {
-            max_30(Value::new(Some(PlainText {
-                text: Some(text.into()),
-                emoji: None,
-            })))
+        fn test(text: impl Into<String>) -> Value<Text<Plain>> {
+            max_30(plain_text(text))
         }
     }
 
@@ -84,11 +93,8 @@ mod tests {
             assert_eq!(result.errors, vec![ValidationErrorKind::MinTextLength(1)]);
         }
 
-        fn test(text: impl Into<String>) -> Value<PlainText> {
-            min_1(Value::new(Some(PlainText {
-                text: Some(text.into()),
-                emoji: None,
-            })))
+        fn test(text: impl Into<String>) -> Value<Text<Plain>> {
+            min_1(plain_text(text))
         }
     }
 }

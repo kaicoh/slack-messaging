@@ -7,13 +7,14 @@ macro_rules! pipe {
     }};
 }
 
-/// Shorthand to build [`PlainText`](crate::composition_objects::PlainText).
+/// Shorthand to build [`Text`](crate::composition_objects::Text) object with `type` set to
+/// `plain_text`.
 ///
 /// ```
 /// # use slack_messaging::plain_text;
-/// # use slack_messaging::composition_objects::PlainText;
+/// # use slack_messaging::composition_objects::{Text, Plain};
 /// let text = plain_text!("Hello, World!");
-/// let expected = PlainText::builder()
+/// let expected = Text::<Plain>::builder()
 ///     .text("Hello, World!")
 ///     .build();
 ///
@@ -24,7 +25,7 @@ macro_rules! pipe {
 /// let name = "Tanaka";
 ///
 /// let text = plain_text!("{greet}, {name}!");
-/// let expected = PlainText::builder()
+/// let expected = Text::<Plain>::builder()
 ///     .text("Hi, Tanaka!")
 ///     .build();
 ///
@@ -33,24 +34,25 @@ macro_rules! pipe {
 #[macro_export]
 macro_rules! plain_text {
     ($fmt:expr) => {
-        $crate::composition_objects::PlainText::builder()
+        $crate::composition_objects::Text::<$crate::composition_objects::Plain>::builder()
             .text(format!($fmt))
             .build()
     };
     ($fmt:expr, $($arg:tt)+) => {
-        $crate::composition_objects::PlainText::builder()
+        $crate::composition_objects::Text::<$crate::composition_objects::Plain>::builder()
             .text(format!($fmt, $($arg)+))
             .build()
     };
 }
 
-/// Shorthand to build [`MrkdwnText`](crate::composition_objects::MrkdwnText).
+/// Shorthand to build [`Text`](crate::composition_objects::Text) object with `type` set to
+/// `mrkdwn`.
 ///
 /// ```
 /// # use slack_messaging::mrkdwn;
-/// # use slack_messaging::composition_objects::MrkdwnText;
+/// # use slack_messaging::composition_objects::{Text, Mrkdwn};
 /// let text = mrkdwn!("Hello, World!");
-/// let expected = MrkdwnText::builder()
+/// let expected = Text::<Mrkdwn>::builder()
 ///     .text("Hello, World!")
 ///     .build();
 ///
@@ -61,7 +63,7 @@ macro_rules! plain_text {
 /// let name = "Tanaka";
 ///
 /// let text = mrkdwn!("{greet}, {name}!");
-/// let expected = MrkdwnText::builder()
+/// let expected = Text::<Mrkdwn>::builder()
 ///     .text("Hi, Tanaka!")
 ///     .build();
 ///
@@ -70,12 +72,12 @@ macro_rules! plain_text {
 #[macro_export]
 macro_rules! mrkdwn {
     ($fmt:expr) => {
-        $crate::composition_objects::MrkdwnText::builder()
+        $crate::composition_objects::Text::<$crate::composition_objects::Mrkdwn>::builder()
             .text(format!($fmt))
             .build()
     };
     ($fmt:expr, $($arg:tt)+) => {
-        $crate::composition_objects::MrkdwnText::builder()
+        $crate::composition_objects::Text::<$crate::composition_objects::Mrkdwn>::builder()
             .text(format!($fmt, $($arg)+))
             .build()
     };
@@ -83,7 +85,7 @@ macro_rules! mrkdwn {
 
 #[cfg(test)]
 mod tests {
-    use crate::composition_objects::{MrkdwnText, PlainText};
+    use crate::composition_objects::Text;
 
     #[test]
     fn pipe_chains_multiple_functions() {
@@ -109,7 +111,7 @@ mod tests {
     #[test]
     fn it_works_macro_plain_text_given_expression() {
         let text = plain_text!("Hello, Tanaka!");
-        let expected = PlainText::builder().text("Hello, Tanaka!").build();
+        let expected = Text::builder().text("Hello, Tanaka!").build();
         assert_eq!(text, expected);
     }
 
@@ -117,14 +119,14 @@ mod tests {
     fn it_works_macro_plain_text_given_expression_and_tokens() {
         let name = "Tanaka";
         let text = plain_text!("Hello, {name}!");
-        let expected = PlainText::builder().text("Hello, Tanaka!").build();
+        let expected = Text::builder().text("Hello, Tanaka!").build();
         assert_eq!(text, expected);
     }
 
     #[test]
     fn it_works_macro_mrkdwn_given_expression() {
         let text = mrkdwn!("Hello, Tanaka!");
-        let expected = MrkdwnText::builder().text("Hello, Tanaka!").build();
+        let expected = Text::builder().text("Hello, Tanaka!").build();
         assert_eq!(text, expected);
     }
 
@@ -132,7 +134,7 @@ mod tests {
     fn it_works_macro_mrkdwn_given_expression_and_tokens() {
         let name = "Tanaka";
         let text = mrkdwn!("Hello, {name}!");
-        let expected = MrkdwnText::builder().text("Hello, Tanaka!").build();
+        let expected = Text::builder().text("Hello, Tanaka!").build();
         assert_eq!(text, expected);
     }
 }

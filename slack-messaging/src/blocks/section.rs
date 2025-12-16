@@ -5,7 +5,7 @@ use crate::blocks::elements::{
     SelectMenuExternalDataSource, SelectMenuPublicChannels, SelectMenuStaticOptions,
     SelectMenuUsers, TimePicker, WorkflowButton,
 };
-use crate::composition_objects::Text;
+use crate::composition_objects::TextContent;
 use crate::errors::ValidationErrorKind;
 use crate::validators::*;
 
@@ -76,7 +76,7 @@ use slack_messaging_derive::Builder;
 pub struct Section {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text_object::min_1", "text_object::max_3000"))]
-    pub(crate) text: Option<Text>,
+    pub(crate) text: Option<TextContent>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text::max_255"))]
@@ -87,7 +87,7 @@ pub struct Section {
         push_item = "field",
         validate("list::max_item_10", "list::each_text_max_2000")
     )]
-    pub(crate) fields: Option<Vec<Text>>,
+    pub(crate) fields: Option<Vec<TextContent>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) accessory: Option<Accessory>,
@@ -315,7 +315,7 @@ mod tests {
 
     #[test]
     fn it_requires_fields_list_size_less_than_10() {
-        let fields: Vec<Text> = (0..11).map(|_| plain_text("foobar").into()).collect();
+        let fields: Vec<TextContent> = (0..11).map(|_| plain_text("foobar").into()).collect();
         let err = Section::builder().fields(fields).build().unwrap_err();
         assert_eq!(err.object(), "Section");
 

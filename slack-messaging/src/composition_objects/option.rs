@@ -1,22 +1,36 @@
-use crate::composition_objects::types::{TextInOption, UrlAvailable, UrlUnavailable};
+use crate::composition_objects::{
+    Plain, Text, TextExt,
+    types::{UrlAvailable, UrlUnavailable},
+};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 use std::marker::PhantomData;
 
 /// [Option object](https://docs.slack.dev/reference/block-kit/composition-objects/option-object)
 /// representation.
 ///
+/// This is a generic struct that can represent an option object with different text object types.
+///
+/// The type parameter `T` specifies the type of text object used for the `text` and `description`.
+/// By default, it uses [`Plain`] text objects.
+/// `T` must implement the [`TextExt`] trait because the `text` and `description` fields require text
+/// objects.
+///
+/// The type parameter `P` is a phantom type used to control the availability of the `url` field.
+/// By default, it uses [`UrlUnavailable`], which means the `url` field is not available. If you want
+/// to include the `url` field, use [`UrlAvailable`].
+///
 /// # Example
 ///
 /// ```
 /// use slack_messaging::plain_text;
-/// use slack_messaging::composition_objects::{Opt, PlainText};
+/// use slack_messaging::composition_objects::{Opt, Plain, Text, types::UrlAvailable};
 /// # use std::error::Error;
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {
-/// let option = Opt::<PlainText>::builder()
+/// let option: Opt = Opt::builder()
 ///     .text(plain_text!("Maru")?)
 ///     .value("maru")
 ///     .build()?;
@@ -33,8 +47,28 @@ use std::marker::PhantomData;
 ///
 /// assert_eq!(json, expected);
 ///
+/// // Using UrlAvailable to include the url field
+/// let option_with_url = Opt::<Text<Plain>, UrlAvailable>::builder()
+///    .text(plain_text!("Maru")?)
+///    .value("maru")
+///    .url("https://example.com/maru")
+///    .build()?;
+///
+/// let expected_with_url = serde_json::json!({
+///    "text": {
+///        "type": "plain_text",
+///        "text": "Maru"
+///    },
+///    "value": "maru",
+///    "url": "https://example.com/maru"
+/// });
+///
+/// let json_with_url = serde_json::to_value(option_with_url).unwrap();
+///
+/// assert_eq!(json_with_url, expected_with_url);
+///
 /// // If your object has any validation errors, the build method returns Result::Err
-/// let option = Opt::<PlainText>::builder()
+/// let option = Opt::<Text<Plain>>::builder()
 ///     .text(plain_text!("Maru")?)
 ///     .build();
 ///
@@ -46,7 +80,11 @@ use std::marker::PhantomData;
 /// # }
 /// ```
 #[derive(Debug, Clone, Serialize, PartialEq, Builder)]
-pub struct Opt<T: TextInOption, P = UrlUnavailable> {
+#[serde(bound(serialize = "T: Serialize"))]
+pub struct Opt<T = Text<Plain>, P = UrlUnavailable>
+where
+    T: TextExt,
+{
     #[serde(skip)]
     #[builder(phantom = "P")]
     pub(crate) phantom: PhantomData<P>,
@@ -66,7 +104,7 @@ pub struct Opt<T: TextInOption, P = UrlUnavailable> {
     pub(crate) url: Option<String>,
 }
 
-impl<T: TextInOption> OptBuilder<T, UrlAvailable> {
+impl<T: TextExt> OptBuilder<T, UrlAvailable> {
     /// get url field value.
     pub fn get_url(&self) -> Option<&String> {
         self.url.inner_ref()
@@ -89,20 +127,20 @@ impl<T: TextInOption> OptBuilder<T, UrlAvailable> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::composition_objects::{PlainText, test_helpers::*};
+    use crate::composition_objects::test_helpers::*;
     use crate::errors::*;
 
     #[test]
     fn it_implements_builder() {
         let expected = Opt {
-            phantom: PhantomData,
+            phantom: PhantomData::<UrlUnavailable>,
             text: Some(plain_text("foo")),
             value: Some("bar".into()),
             description: Some(plain_text("baz")),
             url: None,
         };
 
-        let val = Opt::<PlainText>::builder()
+        let val = Opt::builder()
             .set_text(Some(plain_text("foo")))
             .set_value(Some("bar"))
             .set_description(Some(plain_text("baz")))
@@ -111,7 +149,7 @@ mod tests {
 
         assert_eq!(val, expected);
 
-        let val = Opt::<PlainText>::builder()
+        let val = Opt::builder()
             .text(plain_text("foo"))
             .value("bar")
             .description(plain_text("baz"))
@@ -123,7 +161,7 @@ mod tests {
 
     #[test]
     fn url_field_is_available_if_the_valid_type_is_used() {
-        let expected = Opt::<PlainText, UrlAvailable> {
+        let expected = Opt::<_, UrlAvailable> {
             phantom: PhantomData,
             text: Some(plain_text("foo")),
             value: Some("bar".into()),
@@ -131,7 +169,7 @@ mod tests {
             url: Some("foobarbaz".into()),
         };
 
-        let val = Opt::<PlainText, UrlAvailable>::builder()
+        let val = Opt::<_, UrlAvailable>::builder()
             .set_text(Some(plain_text("foo")))
             .set_value(Some("bar"))
             .set_description(Some(plain_text("baz")))
@@ -141,7 +179,7 @@ mod tests {
 
         assert_eq!(val, expected);
 
-        let val = Opt::<PlainText, UrlAvailable>::builder()
+        let val = Opt::<_, UrlAvailable>::builder()
             .text(plain_text("foo"))
             .value("bar")
             .description(plain_text("baz"))
@@ -154,7 +192,7 @@ mod tests {
 
     #[test]
     fn it_requires_text_field() {
-        let err = Opt::<PlainText>::builder()
+        let err = Opt::<Text<Plain>>::builder()
             .value("bar")
             .build()
             .unwrap_err();
@@ -166,7 +204,7 @@ mod tests {
 
     #[test]
     fn it_requires_text_field_less_than_75_characters_long() {
-        let err = Opt::<PlainText>::builder()
+        let err = Opt::<Text<Plain>>::builder()
             .text(plain_text("a".repeat(76)))
             .value("bar")
             .build()
@@ -179,7 +217,7 @@ mod tests {
 
     #[test]
     fn it_requires_value_field() {
-        let err = Opt::<PlainText>::builder()
+        let err = Opt::<Text<Plain>>::builder()
             .text(plain_text("foo"))
             .build()
             .unwrap_err();
@@ -191,7 +229,7 @@ mod tests {
 
     #[test]
     fn it_requires_value_field_less_than_150_characters_long() {
-        let err = Opt::<PlainText>::builder()
+        let err = Opt::<Text<Plain>>::builder()
             .text(plain_text("foo"))
             .value("a".repeat(151))
             .build()
@@ -204,7 +242,7 @@ mod tests {
 
     #[test]
     fn it_requires_description_field_less_than_75_characters_long() {
-        let err = Opt::<PlainText>::builder()
+        let err = Opt::<Text<Plain>>::builder()
             .text(plain_text("foo"))
             .value("bar")
             .description(plain_text("a".repeat(76)))
@@ -218,7 +256,7 @@ mod tests {
 
     #[test]
     fn it_requires_url_field_less_than_3000_characters_long() {
-        let err = Opt::<PlainText, UrlAvailable>::builder()
+        let err = Opt::<Text<Plain>, UrlAvailable>::builder()
             .text(plain_text("foo"))
             .value("bar")
             .description(plain_text("baz"))

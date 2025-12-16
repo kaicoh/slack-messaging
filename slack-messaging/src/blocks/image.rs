@@ -1,4 +1,4 @@
-use crate::composition_objects::{PlainText, SlackFile};
+use crate::composition_objects::{Plain, SlackFile, Text};
 use crate::errors::ValidationErrorKind;
 use crate::validators::*;
 
@@ -56,7 +56,7 @@ pub struct Image {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text_object::max_2000"))]
-    pub(crate) title: Option<PlainText>,
+    pub(crate) title: Option<Text<Plain>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text::max_255"))]

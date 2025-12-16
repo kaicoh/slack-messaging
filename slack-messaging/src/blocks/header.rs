@@ -1,8 +1,8 @@
-use crate::composition_objects::PlainText;
+use crate::composition_objects::{Plain, Text};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Header block](https://docs.slack.dev/reference/block-kit/blocks/header-block)
 /// representation.
@@ -42,7 +42,7 @@ use serde::Serialize;
 #[serde(tag = "type", rename = "header")]
 pub struct Header {
     #[builder(validate("required", "text_object::max_150"))]
-    pub(crate) text: Option<PlainText>,
+    pub(crate) text: Option<Text<Plain>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text::max_255"))]

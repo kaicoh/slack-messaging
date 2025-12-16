@@ -1,9 +1,9 @@
 use crate::blocks::elements::Image;
-use crate::composition_objects::Text;
+use crate::composition_objects::TextContent;
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Context block](https://docs.slack.dev/reference/block-kit/blocks/context-block)
 /// representation.
@@ -74,7 +74,7 @@ pub enum ContextElement {
 
     /// [Text object](https://docs.slack.dev/reference/block-kit/composition-objects/text-object)
     /// representation
-    Text(Box<Text>),
+    Text(Box<TextContent>),
 }
 
 impl From<Image> for ContextElement {
@@ -85,10 +85,10 @@ impl From<Image> for ContextElement {
 
 impl<T> From<T> for ContextElement
 where
-    Text: From<T>,
+    TextContent: From<T>,
 {
     fn from(value: T) -> Self {
-        Self::Text(Box::new(Text::from(value)))
+        Self::Text(Box::new(TextContent::from(value)))
     }
 }
 

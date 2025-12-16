@@ -1,8 +1,8 @@
-use crate::composition_objects::{ConfirmationDialog, Opt, PlainText, types::UrlAvailable};
+use crate::composition_objects::{ConfirmationDialog, Opt, Plain, Text, types::UrlAvailable};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Overflow menu element](https://docs.slack.dev/reference/block-kit/block-elements/overflow-menu-element)
 /// representation.
@@ -77,7 +77,7 @@ pub struct OverflowMenu {
     pub(crate) action_id: Option<String>,
 
     #[builder(push_item = "option", validate("required", "list::max_item_5"))]
-    pub(crate) options: Option<Vec<Opt<PlainText, UrlAvailable>>>,
+    pub(crate) options: Option<Vec<Opt<Text<Plain>, UrlAvailable>>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) confirm: Option<ConfirmationDialog>,
@@ -174,7 +174,7 @@ mod tests {
         assert!(errors.includes(ValidationErrorKind::MaxArraySize(5)));
     }
 
-    fn option(text: impl Into<String>, value: impl Into<String>) -> Opt<PlainText, UrlAvailable> {
+    fn option(text: impl Into<String>, value: impl Into<String>) -> Opt<Text<Plain>, UrlAvailable> {
         Opt {
             phantom: std::marker::PhantomData,
             text: Some(plain_text(text)),

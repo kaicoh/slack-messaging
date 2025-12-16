@@ -1,8 +1,8 @@
-use crate::composition_objects::{ConfirmationDialog, PlainText};
+use crate::composition_objects::{ConfirmationDialog, Plain, Text};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Time picker element](https://docs.slack.dev/reference/block-kit/block-elements/time-picker-element)
 /// representation.
@@ -69,7 +69,7 @@ pub struct TimePicker {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text_object::max_150"))]
-    pub(crate) placeholder: Option<PlainText>,
+    pub(crate) placeholder: Option<Text<Plain>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) timezone: Option<String>,

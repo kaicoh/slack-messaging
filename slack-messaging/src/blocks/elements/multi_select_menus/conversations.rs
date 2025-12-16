@@ -1,8 +1,8 @@
-use crate::composition_objects::{ConfirmationDialog, ConversationFilter, PlainText};
+use crate::composition_objects::{ConfirmationDialog, ConversationFilter, Plain, Text};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Multi select menu of conversation list](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#conversation_multi_select)
 /// representation
@@ -76,7 +76,7 @@ pub struct MultiSelectMenuConversations {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text_object::max_150"))]
-    pub(crate) placeholder: Option<PlainText>,
+    pub(crate) placeholder: Option<Text<Plain>>,
 }
 
 #[cfg(test)]
