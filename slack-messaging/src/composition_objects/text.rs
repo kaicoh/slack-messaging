@@ -133,8 +133,8 @@ impl TextBuilder<Mrkdwn> {
 impl PartialEq for Text<Plain> {
     fn eq(&self, other: &Self) -> bool {
         match (self.text(), other.text()) {
-            (Some(text1), Some(text2)) if text1 != text2 => return false,
-            (None, Some(_)) | (Some(_), None) => return false,
+            (Some(text1), Some(text2)) if text1 != text2 => false,
+            (None, Some(_)) | (Some(_), None) => false,
             _ => self.emoji.unwrap_or(false) == other.emoji.unwrap_or(false),
         }
     }
@@ -143,8 +143,8 @@ impl PartialEq for Text<Plain> {
 impl PartialEq for Text<Mrkdwn> {
     fn eq(&self, other: &Self) -> bool {
         match (self.text(), other.text()) {
-            (Some(text1), Some(text2)) if text1 != text2 => return false,
-            (None, Some(_)) | (Some(_), None) => return false,
+            (Some(text1), Some(text2)) if text1 != text2 => false,
+            (None, Some(_)) | (Some(_), None) => false,
             _ => self.verbatim.unwrap_or(false) == other.verbatim.unwrap_or(false),
         }
     }
@@ -307,6 +307,44 @@ mod tests {
             let json = serde_json::to_value(&text).unwrap();
             assert_eq!(json, expected);
         }
+
+        #[test]
+        fn it_equals_another_plain_text() {
+            let text1 = Text::<Plain> {
+                r#type: std::marker::PhantomData,
+                text: Some("Hello".into()),
+                emoji: Some(true),
+                verbatim: None,
+            };
+            let text2 = Text::<Plain> {
+                r#type: std::marker::PhantomData,
+                text: Some("Hello".into()),
+                emoji: Some(true),
+                verbatim: None,
+            };
+            let text3 = Text::<Plain> {
+                r#type: std::marker::PhantomData,
+                text: Some("Hello".into()),
+                emoji: Some(false),
+                verbatim: None,
+            };
+            let text4 = Text::<Plain> {
+                r#type: std::marker::PhantomData,
+                text: Some("World".into()),
+                emoji: Some(true),
+                verbatim: None,
+            };
+            let text5 = Text::<Plain> {
+                r#type: std::marker::PhantomData,
+                text: Some("Hello".into()),
+                emoji: None,
+                verbatim: None,
+            };
+            assert_eq!(text1, text2);
+            assert_ne!(text1, text3);
+            assert_ne!(text1, text4);
+            assert_eq!(text3, text5);
+        }
     }
 
     mod mrkdwn_text {
@@ -354,6 +392,44 @@ mod tests {
             });
             let json = serde_json::to_value(&text).unwrap();
             assert_eq!(json, expected);
+        }
+
+        #[test]
+        fn it_equals_another_mrkdwn_text() {
+            let text1 = Text::<Mrkdwn> {
+                r#type: std::marker::PhantomData,
+                text: Some("*Hello*".into()),
+                emoji: None,
+                verbatim: Some(true),
+            };
+            let text2 = Text::<Mrkdwn> {
+                r#type: std::marker::PhantomData,
+                text: Some("*Hello*".into()),
+                emoji: None,
+                verbatim: Some(true),
+            };
+            let text3 = Text::<Mrkdwn> {
+                r#type: std::marker::PhantomData,
+                text: Some("*Hello*".into()),
+                emoji: None,
+                verbatim: Some(false),
+            };
+            let text4 = Text::<Mrkdwn> {
+                r#type: std::marker::PhantomData,
+                text: Some("_World_".into()),
+                emoji: None,
+                verbatim: Some(true),
+            };
+            let text5 = Text::<Mrkdwn> {
+                r#type: std::marker::PhantomData,
+                text: Some("*Hello*".into()),
+                emoji: None,
+                verbatim: None,
+            };
+            assert_eq!(text1, text2);
+            assert_ne!(text1, text3);
+            assert_ne!(text1, text4);
+            assert_eq!(text3, text5);
         }
     }
 
