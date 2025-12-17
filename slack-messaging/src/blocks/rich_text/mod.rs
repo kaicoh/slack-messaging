@@ -1,8 +1,8 @@
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use paste::paste;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// Builder objects for [rich text sub-elements](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block/#usage-info).
 pub mod builders;
@@ -59,7 +59,17 @@ impl_sub_element! {
     Quote,
 }
 
-// [Rich text block](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block) representation.
+/// [Rich text block](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block) representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | elements | Vec<[RichTextSubElement]> | Yes | N/A |
+/// | block_id | String | No | Max length 255 characters |
 ///
 /// # Example
 ///

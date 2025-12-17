@@ -1,15 +1,25 @@
 use crate::blocks::elements::{FeedbackButtons, IconButton};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Context actions block](https://docs.slack.dev/reference/block-kit/blocks/context-actions-block)
 /// representation.
 ///
-/// The following is reproduction of [the sample context actions block](https://docs.slack.dev/reference/block-kit/blocks/context-actions-block#examples).
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/context-actions-block).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | elements | Vec<[ContextActionsElement]> | Yes | Maximum 5 items |
+/// | block_id | String | No | Maximum 255 characters |
 ///
 /// # Example
+///
+/// The following is reproduction of [the sample context actions block](https://docs.slack.dev/reference/block-kit/blocks/context-actions-block#examples).
 ///
 /// ## Context actions block with feedback buttons.
 ///

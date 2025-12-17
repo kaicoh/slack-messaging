@@ -1,11 +1,20 @@
 use crate::composition_objects::types::TriggerAction;
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Dispatch action configuration](https://docs.slack.dev/reference/block-kit/composition-objects/dispatch-action-configuration-object)
 /// representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/composition-objects/dispatch-action-configuration-object).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | trigger_actions_on | Vec<[TriggerAction]> | No | Must contain at least one item if provided |
 ///
 /// # Example
 ///

@@ -1,27 +1,36 @@
-use crate::composition_objects::{DispatchActionConfiguration, PlainText};
+use crate::composition_objects::{DispatchActionConfiguration, Plain, Text};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Email input element](https://docs.slack.dev/reference/block-kit/block-elements/email-input-element)
 /// representation.
 ///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/email-input-element).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | action_id | String | No | Max length 255 characters |
+/// | initial_value | String | No | N/A |
+/// | dispatch_action_config | [DispatchActionConfiguration] | No | N/A |
+/// | focus_on_load | bool | No | N/A |
+/// | placeholder | [Text]<[Plain]> | No | Max length 150 characters |
+///
 /// # Example
 ///
 /// ```
+/// use slack_messaging::plain_text;
 /// use slack_messaging::blocks::elements::EmailInput;
-/// use slack_messaging::composition_objects::PlainText;
 /// # use std::error::Error;
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {
 /// let input = EmailInput::builder()
 ///     .action_id("input_email")
-///     .placeholder(
-///         PlainText::builder()
-///             .text("Enter an email")
-///             .build()?
-///     )
+///     .placeholder(plain_text!("Enter an email")?)
 ///     .build()?;
 ///
 /// let expected = serde_json::json!({
@@ -40,11 +49,7 @@ use serde::Serialize;
 /// // If your object has any validation errors, the build method returns Result::Err
 /// let input = EmailInput::builder()
 ///     .action_id("input_email")
-///     .placeholder(
-///         PlainText::builder()
-///             .text("verrrrrrry long text".repeat(10))
-///             .build()?
-///     )
+///     .placeholder(plain_text!("{}", "verrrrrrry long text".repeat(10))?)
 ///     .build();
 ///
 /// assert!(input.is_err());
@@ -72,7 +77,7 @@ pub struct EmailInput {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text_object::max_150"))]
-    pub(crate) placeholder: Option<PlainText>,
+    pub(crate) placeholder: Option<Text<Plain>>,
 }
 
 #[cfg(test)]

@@ -1,10 +1,20 @@
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [emoji element type](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block/#emoji-element-type)
 /// for rich text.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block/#emoji-element-type).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | name | String | Yes | N/A |
+/// | unicode | String | No | N/A |
 ///
 /// # Example
 ///

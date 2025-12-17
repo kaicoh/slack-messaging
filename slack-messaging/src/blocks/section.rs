@@ -5,7 +5,7 @@ use crate::blocks::elements::{
     SelectMenuExternalDataSource, SelectMenuPublicChannels, SelectMenuStaticOptions,
     SelectMenuUsers, TimePicker, WorkflowButton,
 };
-use crate::composition_objects::Text;
+use crate::composition_objects::TextContent;
 use crate::errors::ValidationErrorKind;
 use crate::validators::*;
 
@@ -14,6 +14,24 @@ use slack_messaging_derive::Builder;
 
 /// [Section block](https://docs.slack.dev/reference/block-kit/blocks/section-block)
 /// representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/section-block).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | text | [TextContent] | Conditionally | Minimum 1 character, Maximum 3000 characters |
+/// | block_id | String | No | Maximum 255 characters |
+/// | fields | Vec<[TextContent]> | Conditionally | Maximum 10 items, Each item maximum 2000
+/// characters |
+/// | accessory | [Accessory] | No | N/A |
+/// | expand | bool | No | N/A |
+///
+/// # Validation Across Fields
+///
+/// * Either `text` or `fields` is required. Both fields cannot be omitted.
 ///
 /// # Example
 ///
@@ -76,7 +94,7 @@ use slack_messaging_derive::Builder;
 pub struct Section {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text_object::min_1", "text_object::max_3000"))]
-    pub(crate) text: Option<Text>,
+    pub(crate) text: Option<TextContent>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text::max_255"))]
@@ -87,7 +105,7 @@ pub struct Section {
         push_item = "field",
         validate("list::max_item_10", "list::each_text_max_2000")
     )]
-    pub(crate) fields: Option<Vec<Text>>,
+    pub(crate) fields: Option<Vec<TextContent>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) accessory: Option<Accessory>,
@@ -315,7 +333,7 @@ mod tests {
 
     #[test]
     fn it_requires_fields_list_size_less_than_10() {
-        let fields: Vec<Text> = (0..11).map(|_| plain_text("foobar").into()).collect();
+        let fields: Vec<TextContent> = (0..11).map(|_| plain_text("foobar").into()).collect();
         let err = Section::builder().fields(fields).build().unwrap_err();
         assert_eq!(err.object(), "Section");
 

@@ -1,11 +1,26 @@
 use crate::blocks::elements::types::Icon;
-use crate::composition_objects::{ConfirmationDialog, PlainText};
+use crate::composition_objects::{ConfirmationDialog, Plain, Text};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Icon button element](https://docs.slack.dev/reference/block-kit/block-elements/icon-button-element) representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/icon-button-element).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | icon | [Icon] | Yes | N/A |
+/// | text | [Text]<[Plain]> | Yes | N/A |
+/// | action_id | String | No | Max length 255 characters |
+/// | value | String | No | Max length 2000 characters |
+/// | confirm | [ConfirmationDialog] | No | N/A |
+/// | accessibility_label | String | No | Max length 75 characters |
+/// | visible_to_user_ids | `Vec<String>` | No | N/A |
 ///
 /// # Example
 ///
@@ -56,7 +71,7 @@ pub struct IconButton {
     pub(crate) icon: Option<Icon>,
 
     #[builder(validate("required"))]
-    pub(crate) text: Option<PlainText>,
+    pub(crate) text: Option<Text<Plain>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text::max_255"))]

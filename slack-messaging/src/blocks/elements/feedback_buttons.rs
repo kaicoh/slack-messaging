@@ -1,10 +1,21 @@
 use crate::blocks::elements::types::FeedbackButton;
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Feedback buttons element](https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element) representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | action_id | String | No | Max length 255 characters |
+/// | positive_button | [FeedbackButton] | Yes | N/A |
+/// | negative_button | [FeedbackButton] | Yes | N/A |
 ///
 /// # Example
 ///

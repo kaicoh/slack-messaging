@@ -1,11 +1,24 @@
-use crate::composition_objects::{ConfirmationDialog, Opt, Text};
+use crate::composition_objects::{ConfirmationDialog, Opt, TextContent};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Radio buton group element](https://docs.slack.dev/reference/block-kit/block-elements/radio-button-group-element)
 /// representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/radio-button-group-element).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | action_id | String | No | Max length 255 characters |
+/// | options | Vec<[Opt]<[TextContent]>> | Yes | Max 10 items |
+/// | initial_option | [Opt]<[TextContent]> | No | N/A |
+/// | confirm | [ConfirmationDialog] | No | N/A |
+/// | focus_on_load | bool | No | N/A |
 ///
 /// # Example
 ///
@@ -77,10 +90,10 @@ pub struct RadioButtonGroup {
     pub(crate) action_id: Option<String>,
 
     #[builder(push_item = "option", validate("required", "list::max_item_10"))]
-    pub(crate) options: Option<Vec<Opt<Text>>>,
+    pub(crate) options: Option<Vec<Opt<TextContent>>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub(crate) initial_option: Option<Opt<Text>>,
+    pub(crate) initial_option: Option<Opt<TextContent>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) confirm: Option<ConfirmationDialog>,
@@ -174,7 +187,7 @@ mod tests {
 
     #[test]
     fn it_requires_options_item_size_less_than_10() {
-        let options: Vec<Opt<Text>> = (0..11).map(|_| option_t("opt", "val")).collect();
+        let options: Vec<Opt<TextContent>> = (0..11).map(|_| option_t("opt", "val")).collect();
         let err = RadioButtonGroup::builder()
             .options(options)
             .build()

@@ -1,11 +1,22 @@
 use crate::blocks::elements::types::FileType;
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [File input element](https://docs.slack.dev/reference/block-kit/block-elements/file-input-element)
 /// representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/file-input-element).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | action_id | String | No | Max length 255 characters |
+/// | filetypes | Vec<[FileType]> | No | N/A |
+/// | max_files | i64 | No | Min value 1, Max value 10 |
 ///
 /// # Example
 ///

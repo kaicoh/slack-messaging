@@ -1,21 +1,29 @@
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 use std::marker::PhantomData;
 
 /// Style object for rich text element types.
 ///
-/// ## Example 1 (`bold`, `italic`, `strike`, `highlight`, `client_highlight` and `unlink` are avialable)
+/// The available style types are different depending on the rich text element type.
+/// Please refer to the examples below.
 ///
-/// For
-/// [`RichTextElementChannel`](crate::blocks::rich_text::types::RichTextElementChannel),
-/// [`RichTextElementUser`](crate::blocks::rich_text::types::RichTextElementUser)
-/// and
-/// [`RichTextElementUserGroup`](crate::blocks::rich_text::types::RichTextElementUserGroup).
+/// # Type Parameters
+///
+/// * `T`: The style type. Can be either [`StyleTypeSix`] or [`StyleTypeFour`].
+///
+/// | Type | Available Styles | Used For |
+/// |------|------------------|----------|
+/// | [`StyleTypeSix`] | `bold`, `italic`, `strike`, `highlight`, `client_highlight`, `unlink` | [RichTextElementChannel](crate::blocks::rich_text::types::RichTextElementChannel), [RichTextElementUser](crate::blocks::rich_text::types::RichTextElementUser), [RichTextElementUserGroup](crate::blocks::rich_text::types::RichTextElementUserGroup) |
+/// | [`StyleTypeFour`] | `bold`, `italic`, `strike`, `code` | [RichTextElementLink](crate::blocks::rich_text::types::RichTextElementLink), [RichTextElementText](crate::blocks::rich_text::types::RichTextElementText) |
+///
+/// # Example
+///
 /// ```
-/// use slack_messaging::blocks::rich_text::types::{RichTextStyle, StyleTypeSix};
+/// use slack_messaging::blocks::rich_text::types::{RichTextStyle, StyleTypeSix, StyleTypeFour};
 /// # use std::error::Error;
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {
+/// // Use StyleTypeSix.
 /// let style = RichTextStyle::<StyleTypeSix>::builder()
 ///     .bold(true)
 ///     .highlight(true)
@@ -28,25 +36,7 @@ use std::marker::PhantomData;
 ///
 /// let json = serde_json::to_value(style).unwrap();
 ///
-/// assert_eq!(json, expected);
-/// #     Ok(())
-/// # }
-/// # fn main() {
-/// #     try_main().unwrap()
-/// # }
-/// ```
-///
-/// ## Example 2 (`bold`, `italic`, `strike` and `code` are avialable)
-///
-/// For
-/// [`RichTextElementLink`](crate::blocks::rich_text::types::RichTextElementLink)
-/// and
-/// [`RichTextElementText`](crate::blocks::rich_text::types::RichTextElementText).
-/// ```
-/// use slack_messaging::blocks::rich_text::types::{RichTextStyle, StyleTypeFour};
-/// # use std::error::Error;
-///
-/// # fn try_main() -> Result<(), Box<dyn Error>> {
+/// // Use StyleTypeFour.
 /// let style = RichTextStyle::<StyleTypeFour>::builder()
 ///     .bold(true)
 ///     .code(true)

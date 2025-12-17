@@ -1,11 +1,20 @@
 use crate::composition_objects::Trigger;
 use crate::validators::required;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Workflow object](https://docs.slack.dev/reference/block-kit/composition-objects/workflow-object)
 /// representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/composition-objects/workflow-object).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | trigger | [Trigger] | Yes | N/A |
 ///
 /// # Example
 ///

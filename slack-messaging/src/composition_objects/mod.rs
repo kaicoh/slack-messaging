@@ -7,10 +7,8 @@ pub mod types;
 mod confirmation_dialog;
 mod conversation_filter;
 mod dispatch_action_configuration;
-mod markdown_text;
 mod option;
 mod option_group;
-mod plain_text;
 mod slack_file;
 mod text;
 mod trigger;
@@ -19,12 +17,10 @@ mod workflow;
 pub use confirmation_dialog::ConfirmationDialog;
 pub use conversation_filter::ConversationFilter;
 pub use dispatch_action_configuration::DispatchActionConfiguration;
-pub use markdown_text::MrkdwnText;
 pub use option::Opt;
 pub use option_group::OptGroup;
-pub use plain_text::PlainText;
 pub use slack_file::SlackFile;
-pub use text::Text;
+pub use text::{Mrkdwn, Plain, Text, TextContent, TextExt};
 pub use trigger::Trigger;
 pub use workflow::Workflow;
 
@@ -33,21 +29,25 @@ pub mod test_helpers {
     use super::types::*;
     use super::*;
 
-    pub fn plain_text(text: impl Into<String>) -> PlainText {
-        PlainText {
+    pub fn plain_text(text: impl Into<String>) -> Text<Plain> {
+        Text::<Plain> {
+            r#type: std::marker::PhantomData,
             text: Some(text.into()),
             emoji: None,
-        }
-    }
-
-    pub fn mrkdwn_text(text: impl Into<String>) -> MrkdwnText {
-        MrkdwnText {
-            text: Some(text.into()),
             verbatim: None,
         }
     }
 
-    pub fn option(text: impl Into<String>, value: impl Into<String>) -> Opt<PlainText> {
+    pub fn mrkdwn_text(text: impl Into<String>) -> Text<Mrkdwn> {
+        Text::<Mrkdwn> {
+            r#type: std::marker::PhantomData,
+            text: Some(text.into()),
+            emoji: None,
+            verbatim: None,
+        }
+    }
+
+    pub fn option(text: impl Into<String>, value: impl Into<String>) -> Opt {
         Opt {
             phantom: std::marker::PhantomData,
             text: Some(plain_text(text)),
@@ -57,7 +57,7 @@ pub mod test_helpers {
         }
     }
 
-    pub fn option_t(text: impl Into<String>, value: impl Into<String>) -> Opt<Text> {
+    pub fn option_t(text: impl Into<String>, value: impl Into<String>) -> Opt<TextContent> {
         Opt {
             phantom: std::marker::PhantomData,
             text: Some(mrkdwn_text(text).into()),
@@ -67,10 +67,7 @@ pub mod test_helpers {
         }
     }
 
-    pub fn option_group(
-        label: impl Into<String>,
-        options: Vec<Opt<PlainText>>,
-    ) -> OptGroup<PlainText> {
+    pub fn option_group(label: impl Into<String>, options: Vec<Opt>) -> OptGroup {
         OptGroup {
             label: Some(plain_text(label)),
             options: Some(options),

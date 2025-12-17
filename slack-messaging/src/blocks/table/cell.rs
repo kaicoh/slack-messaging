@@ -5,8 +5,10 @@ use serde::Serialize;
 #[derive(Debug, Clone, Serialize, PartialEq)]
 #[serde(rename_all = "snake_case", tag = "type", content = "text")]
 pub enum TableCell {
+    /// A plain text table cell
     RawText(String),
 
+    /// A rich text table cell
     #[serde(untagged)]
     RichText(RichText),
 }

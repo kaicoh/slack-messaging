@@ -1,11 +1,25 @@
-use crate::composition_objects::{ConfirmationDialog, PlainText};
+use crate::composition_objects::{ConfirmationDialog, Plain, Text};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Multi select menu of user list](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#users_multi_select)
 /// representation
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#users_multi_select).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | action_id | String | No | Max length 255 characters |
+/// | initial_users | `Vec<String>` | No | N/A |
+/// | confirm | [ConfirmationDialog] | No | N/A |
+/// | max_selected_items | i64 | No | Min value 1 |
+/// | focus_on_load | bool | No | N/A |
+/// | placeholder | [Text]<[Plain]> | No | Max length 150 characters |
 ///
 /// # Example
 ///
@@ -70,7 +84,7 @@ pub struct MultiSelectMenuUsers {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text_object::max_150"))]
-    pub(crate) placeholder: Option<PlainText>,
+    pub(crate) placeholder: Option<Text<Plain>>,
 }
 
 #[cfg(test)]

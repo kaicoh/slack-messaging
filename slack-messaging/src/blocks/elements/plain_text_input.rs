@@ -1,11 +1,27 @@
-use crate::composition_objects::{DispatchActionConfiguration, PlainText};
+use crate::composition_objects::{DispatchActionConfiguration, Plain, Text};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Plain-text input element](https://docs.slack.dev/reference/block-kit/block-elements/plain-text-input-element)
 /// representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/plain-text-input-element).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | action_id | String | No | Max length 255 characters |
+/// | initial_value | String | No | N/A |
+/// | multiline | bool | No | N/A |
+/// | min_length | i64 | No | Min value 0, Max value 3000 |
+/// | max_length | i64 | No | Min value 1, Max value 3000 |
+/// | dispatch_action_config | [DispatchActionConfiguration] | No | N/A |
+/// | focus_on_load | bool | No | N/A |
+/// | placeholder | [Text]<[Plain]> | No | Max length 150 characters |
 ///
 /// # Example
 ///
@@ -78,7 +94,7 @@ pub struct PlainTextInput {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text_object::max_150"))]
-    pub(crate) placeholder: Option<PlainText>,
+    pub(crate) placeholder: Option<Text<Plain>>,
 }
 
 #[cfg(test)]
