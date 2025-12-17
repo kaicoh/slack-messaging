@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.0][] - 2025-12-17
+
+### Breaking Changes
+
+- Recreate types using generics.
+- The `PlainText` and `MrkdwnText` structs are now generic types.
+- Text composition object API has been updated to use generic type parameters.
+
 ## [0.6.0][] - 2025-12-13
 
 ### Breaking Changes
@@ -107,6 +115,7 @@ And the `select menu element` and the `multi-select menu element` are renewed.
 
 - pre-release
 
+[0.7.0]: https://github.com/kaicoh/slack-messaging/releases/v0.7.0
 [0.6.0]: https://github.com/kaicoh/slack-messaging/releases/v0.6.0
 [0.5.3]: https://github.com/kaicoh/slack-messaging/releases/v0.5.3
 [0.5.2]: https://github.com/kaicoh/slack-messaging/releases/v0.5.2
