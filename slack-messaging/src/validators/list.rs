@@ -1,5 +1,5 @@
 use super::*;
-use crate::composition_objects::types::TextObject;
+use crate::composition_objects::TextExt;
 
 use paste::paste;
 
@@ -40,7 +40,7 @@ pub(crate) fn not_empty<T>(value: List<T>) -> List<T> {
     inner_validator(value, ValidationErrorKind::EmptyArray, |l| l.is_empty())
 }
 
-pub(crate) fn each_text_max_2000<T: TextObject>(value: List<T>) -> List<T> {
+pub(crate) fn each_text_max_2000<T: TextExt>(value: List<T>) -> List<T> {
     inner_validator(value, ValidationErrorKind::MaxTextLength(2000), |l| {
         l.iter()
             .any(|t| t.text().is_some_and(|text| text.len() > 2000))
@@ -97,7 +97,7 @@ mod tests {
 
     mod fn_each_text_max_2000 {
         use super::*;
-        use crate::composition_objects::PlainText;
+        use crate::composition_objects::{Plain, Text};
 
         #[test]
         fn it_passes_if_the_all_text_length_is_less_than_2000() {
@@ -110,16 +110,16 @@ mod tests {
         fn it_sets_an_error_if_at_least_one_text_length_is_more_than_2000() {
             let list = vec!["a".repeat(2001), "foobar".into()];
             let result = test(list);
-            assert_eq!(result.errors, vec![ValidationErrorKind::MaxTextLength(2000)]);
+            assert_eq!(
+                result.errors,
+                vec![ValidationErrorKind::MaxTextLength(2000)]
+            );
         }
 
-        fn test(list: Vec<String>) -> List<PlainText> {
-            let list: Vec<PlainText> = list
+        fn test(list: Vec<String>) -> List<Text<Plain>> {
+            let list = list
                 .into_iter()
-                .map(|text| PlainText {
-                    text: Some(text),
-                    emoji: None,
-                })
+                .map(|text| Text::builder().text(text).build().unwrap())
                 .collect();
             each_text_max_2000(Value::new(Some(list)))
         }

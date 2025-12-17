@@ -1,7 +1,7 @@
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// Builders for table elements.
 pub mod builders;
@@ -15,6 +15,17 @@ pub use row::TableRow;
 pub use setting::{ColumnAlignment, ColumnSetting};
 
 /// [Table block](https://docs.slack.dev/reference/block-kit/blocks/table-block) representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/table-block).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | block_id | String | No | Maximum 255 characters |
+/// | rows | Vec<[TableRow]> | Yes | Maximum 100 items |
+/// | column_settings | Vec<[ColumnSetting]> | No | Maximum 20 items |
 ///
 /// # Example
 ///

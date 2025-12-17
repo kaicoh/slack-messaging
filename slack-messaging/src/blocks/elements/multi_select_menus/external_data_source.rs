@@ -1,11 +1,26 @@
-use crate::composition_objects::{ConfirmationDialog, Opt, PlainText};
+use crate::composition_objects::{ConfirmationDialog, Opt, Plain, Text};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Multi select menu of external data source](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#external_multi_select)
 /// representation
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#external_multi_select).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | action_id | String | No | Max length 255 characters |
+/// | min_query_length | i64 | No | N/A |
+/// | initial_options | Vec<[Opt]> | No | N/A |
+/// | confirm | [ConfirmationDialog] | No | N/A |
+/// | max_selected_items | i64 | No | Min value 1 |
+/// | focus_on_load | bool | No | N/A |
+/// | placeholder | [Text]<[Plain]> | No | Max length 150 characters |
 ///
 /// # Example
 ///
@@ -62,7 +77,7 @@ pub struct MultiSelectMenuExternalDataSource {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(push_item = "initial_option")]
-    pub(crate) initial_options: Option<Vec<Opt<PlainText>>>,
+    pub(crate) initial_options: Option<Vec<Opt>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) confirm: Option<ConfirmationDialog>,
@@ -76,7 +91,7 @@ pub struct MultiSelectMenuExternalDataSource {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text_object::max_150"))]
-    pub(crate) placeholder: Option<PlainText>,
+    pub(crate) placeholder: Option<Text<Plain>>,
 }
 
 #[cfg(test)]

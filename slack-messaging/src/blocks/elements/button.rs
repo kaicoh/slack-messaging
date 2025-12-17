@@ -1,11 +1,26 @@
-use crate::composition_objects::{ConfirmationDialog, PlainText};
+use crate::composition_objects::{ConfirmationDialog, Plain, Text};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Button element](https://docs.slack.dev/reference/block-kit/block-elements/button-element)
 /// representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/button-element).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | text | [Text]<[Plain]> | Yes | Max length 75 characters |
+/// | action_id | String | No | Max length 255 characters |
+/// | url | String | No | Max length 3000 characters |
+/// | value | String | No | Max length 2000 characters |
+/// | style | &str | No | Must be either "primary" or "danger" |
+/// | confirm | [ConfirmationDialog] | No | N/A |
+/// | accessibility_label | String | No | Max length 75 characters |
 ///
 /// # Example
 ///
@@ -52,7 +67,7 @@ use serde::Serialize;
 #[serde(tag = "type", rename = "button")]
 pub struct Button {
     #[builder(validate("required", "text_object::max_75"))]
-    pub(crate) text: Option<PlainText>,
+    pub(crate) text: Option<Text<Plain>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text::max_255"))]

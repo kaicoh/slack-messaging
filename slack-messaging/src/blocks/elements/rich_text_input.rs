@@ -1,12 +1,25 @@
 use crate::blocks::RichText;
-use crate::composition_objects::{DispatchActionConfiguration, PlainText};
+use crate::composition_objects::{DispatchActionConfiguration, Plain, Text};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Rich text input element](https://docs.slack.dev/reference/block-kit/block-elements/rich-text-input-element)
 /// representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/block-elements/rich-text-input-element).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | action_id | String | Yes | Max length 255 characters |
+/// | initial_value | [RichText] | No | N/A |
+/// | dispatch_action_config | [DispatchActionConfiguration] | No | N/A |
+/// | focus_on_load | bool | No | N/A |
+/// | placeholder | [Text]<[Plain]> | No | Max length 150 characters |
 ///
 /// # Example
 ///
@@ -85,7 +98,7 @@ pub struct RichTextInput {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text_object::max_150"))]
-    pub(super) placeholder: Option<PlainText>,
+    pub(super) placeholder: Option<Text<Plain>>,
 }
 
 #[cfg(test)]

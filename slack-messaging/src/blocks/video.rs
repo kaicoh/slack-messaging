@@ -1,11 +1,29 @@
-use crate::composition_objects::PlainText;
+use crate::composition_objects::{Plain, Text};
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Video block](https://docs.slack.dev/reference/block-kit/blocks/video-block)
 /// representation.
+///
+/// # Fields and Validations
+///
+/// For more details, see the [official
+/// documentation](https://docs.slack.dev/reference/block-kit/blocks/video-block).
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | alt_text | String | Yes | N/A |
+/// | author_name | String | No | Maximum 50 characters |
+/// | block_id | String | No | Maximum 255 characters |
+/// | description | [Text]<[Plain]> | No | Maximum 200 characters |
+/// | provider_icon_url | String | No | N/A |
+/// | provider_name | String | No | N/A |
+/// | title | [Text]<[Plain]> | Yes | Maximum 200 characters |
+/// | title_url | String | No | N/A |
+/// | thumbnail_url | String | Yes | N/A |
+/// | video_url | String | Yes | N/A |
 ///
 /// # Example
 ///
@@ -71,7 +89,7 @@ pub struct Video {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[builder(validate("text_object::max_200"))]
-    pub(crate) description: Option<PlainText>,
+    pub(crate) description: Option<Text<Plain>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) provider_icon_url: Option<String>,
@@ -80,7 +98,7 @@ pub struct Video {
     pub(crate) provider_name: Option<String>,
 
     #[builder(validate("required", "text_object::max_200"))]
-    pub(crate) title: Option<PlainText>,
+    pub(crate) title: Option<Text<Plain>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) title_url: Option<String>,
