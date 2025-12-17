@@ -17,7 +17,7 @@ use slack_messaging_derive::Builder;
 /// |-------|------|----------|------------|
 /// | alt_text | String | Yes | Maximum 2000 characters |
 /// | image_url | String | Conditional* | Maximum 3000 characters |
-/// | title | [Text<Plain>] | No | Maximum 2000 characters |
+/// | title | [Text]<[Plain]> | No | Maximum 2000 characters |
 /// | block_id | String | No | Maximum 255 characters |
 /// | slack_file | [SlackFile] | Conditional* | N/A |
 ///

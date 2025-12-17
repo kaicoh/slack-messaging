@@ -17,10 +17,10 @@ use slack_messaging_derive::Builder;
 /// | alt_text | String | Yes | N/A |
 /// | author_name | String | No | Maximum 50 characters |
 /// | block_id | String | No | Maximum 255 characters |
-/// | description | [Text<Plain>] | No | Maximum 200 characters |
+/// | description | [Text]<[Plain]> | No | Maximum 200 characters |
 /// | provider_icon_url | String | No | N/A |
 /// | provider_name | String | No | N/A |
-/// | title | [Text<Plain>] | Yes | Maximum 200 characters |
+/// | title | [Text]<[Plain]> | Yes | Maximum 200 characters |
 /// | title_url | String | No | N/A |
 /// | thumbnail_url | String | Yes | N/A |
 /// | video_url | String | Yes | N/A |

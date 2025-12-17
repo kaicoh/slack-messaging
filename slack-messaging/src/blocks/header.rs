@@ -14,7 +14,7 @@ use slack_messaging_derive::Builder;
 ///
 /// | Field | Type | Required | Validation |
 /// |-------|------|----------|------------|
-/// | text | [Text<Plain>] | Yes | Maximum 150 characters |
+/// | text | [Text]<[Plain]> | Yes | Maximum 150 characters |
 /// | block_id | String | No | Maximum 255 characters |
 ///
 /// # Example

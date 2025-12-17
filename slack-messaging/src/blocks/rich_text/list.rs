@@ -115,7 +115,9 @@ pub struct RichTextList {
 #[derive(Debug, Clone, Serialize, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum ListStyle {
+    /// Bullet list style.
     Bullet,
+    /// Ordered list style.
     Ordered,
 }
 

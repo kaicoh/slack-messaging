@@ -15,7 +15,7 @@ use slack_messaging_derive::Builder;
 /// | Field | Type | Required | Validation |
 /// |-------|------|----------|------------|
 /// | action_id | String | No | Max length 255 characters |
-/// | options | Vec<[Opt<Text<Plain>, UrlAvailable>]> | Yes | Max 5 items |
+/// | options | Vec<[Opt]<[Text]<[Plain]>, [UrlAvailable]>> | Yes | Max 5 items |
 /// | confirm | [ConfirmationDialog] | No | N/A |
 ///
 /// # Example

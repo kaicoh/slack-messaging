@@ -21,7 +21,7 @@ use slack_messaging_derive::Builder;
 /// | initial_option | [Opt] | No | N/A |
 /// | confirm | [ConfirmationDialog] | No | N/A |
 /// | focus_on_load | bool | No | N/A |
-/// | placeholder | [Text<Plain>] | No | Max length 150 characters |
+/// | placeholder | [Text]<[Plain]> | No | Max length 150 characters |
 ///
 /// # Validation Across Fields
 ///

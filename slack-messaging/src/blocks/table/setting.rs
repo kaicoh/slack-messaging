@@ -11,6 +11,40 @@ pub enum ColumnAlignment {
 }
 
 /// Object as an element of the column_settings field in [`Table`](crate::blocks::Table) object.
+///
+/// # Fields and Validations
+///
+/// | Field | Type | Required | Validation |
+/// |-------|------|----------|------------|
+/// | align | [ColumnAlignment] | No | N/A |
+/// | is_wrapped | bool | No | N/A |
+///
+/// # Example
+///
+/// ```
+/// use slack_messaging::blocks::table::{ColumnAlignment, ColumnSetting};
+/// # use std::error::Error;
+///
+/// # fn try_main() -> Result<(), Box<dyn Error>> {
+/// let setting = ColumnSetting::builder()
+///    .align(ColumnAlignment::Center)
+///    .is_wrapped(true)
+///    .build()?;
+///
+/// let expected = serde_json::json!({
+///     "align": "center",
+///     "is_wrapped": true
+/// });
+///
+/// let json = serde_json::to_value(setting).unwrap();
+///
+/// assert_eq!(json, expected);
+/// #     Ok(())
+/// # }
+/// # fn main() {
+/// #     try_main().unwrap()
+/// # }
+/// ```
 #[derive(Debug, Clone, Serialize, PartialEq, Builder)]
 pub struct ColumnSetting {
     #[serde(skip_serializing_if = "Option::is_none")]

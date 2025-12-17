@@ -17,7 +17,7 @@ use slack_messaging_derive::Builder;
 /// | url | String | Yes | N/A |
 /// | text | String | No | N/A |
 /// | unsafe | bool | No | N/A |
-/// | style | [RichTextStyle<StyleTypeFour>] | No | N/A |
+/// | style | [RichTextStyle]<[StyleTypeFour]> | No | N/A |
 ///
 /// # Example
 ///

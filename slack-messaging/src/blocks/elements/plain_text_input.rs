@@ -21,7 +21,7 @@ use slack_messaging_derive::Builder;
 /// | max_length | i64 | No | Min value 1, Max value 3000 |
 /// | dispatch_action_config | [DispatchActionConfiguration] | No | N/A |
 /// | focus_on_load | bool | No | N/A |
-/// | placeholder | [Text<Plain>] | No | Max length 150 characters |
+/// | placeholder | [Text]<[Plain]> | No | Max length 150 characters |
 ///
 /// # Example
 ///

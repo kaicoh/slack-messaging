@@ -18,7 +18,7 @@ use slack_messaging_derive::Builder;
 /// | initial_time | String | No | Must match the format "HH:mm" (24-hour format) |
 /// | confirm | [ConfirmationDialog] | No | N/A |
 /// | focus_on_load | bool | No | N/A |
-/// | placeholder | [Text<Plain>] | No | Max length 150 characters |
+/// | placeholder | [Text]<[Plain]> | No | Max length 150 characters |
 /// | timezone | String | No | N/A |
 ///
 /// # Example

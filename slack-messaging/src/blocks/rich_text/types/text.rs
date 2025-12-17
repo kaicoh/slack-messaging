@@ -15,7 +15,7 @@ use slack_messaging_derive::Builder;
 /// | Field | Type | Required | Validation |
 /// |-------|------|----------|------------|
 /// | text | String | Yes | N/A |
-/// | style | [RichTextStyle<StyleTypeFour>] | No | N/A |
+/// | style | [RichTextStyle]<[StyleTypeFour]> | No | N/A |
 ///
 /// # Example
 ///

@@ -16,9 +16,9 @@ use std::marker::PhantomData;
 /// # Type Parameters
 ///
 /// * `T`: The type of text object used for the `text` and `description` fields. Defaults to
-/// `Text<Plain>`. Must implement the [`TextExt`] trait.
+///   `Text<Plain>`. Must implement the [`TextExt`] trait.
 /// * `P`: A phantom type used to control the availability of the `url` field. Defaults to
-/// [`UrlUnavailable`]. Use [`UrlAvailable`] to include the `url` field.
+///   [`UrlUnavailable`]. Use [`UrlAvailable`] to include the `url` field.
 ///
 /// # Fields and Validations
 ///

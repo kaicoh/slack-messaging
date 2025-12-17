@@ -13,7 +13,7 @@ use slack_messaging_derive::Builder;
 /// # Type Parameters
 ///
 /// * `T`: The type of text object used for the `text` field of the [`Opt`] objects in the
-/// `options` field. Defaults to `Text<Plain>`. Must implement the [`TextExt`] trait.
+///   `options` field. Defaults to `Text<Plain>`. Must implement the [`TextExt`] trait.
 ///
 /// # Fields and Validations
 ///
@@ -23,7 +23,7 @@ use slack_messaging_derive::Builder;
 /// | Field | Type | Required | Validation |
 /// |-------|------|----------|------------|
 /// | label | [Text]<[Plain]> | Yes | Max length 75 characters |
-/// | options | Vec<[Opt]<`T`>> | Yes | Must contain at least one and at most 100 items |
+/// | options | Vec<[Opt]<`T`>> | Yes | Must contain at most 100 items |
 ///
 /// # Example
 ///

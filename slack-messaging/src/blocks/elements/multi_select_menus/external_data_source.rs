@@ -20,7 +20,7 @@ use slack_messaging_derive::Builder;
 /// | confirm | [ConfirmationDialog] | No | N/A |
 /// | max_selected_items | i64 | No | Min value 1 |
 /// | focus_on_load | bool | No | N/A |
-/// | placeholder | [Text<Plain>] | No | Max length 150 characters |
+/// | placeholder | [Text]<[Plain]> | No | Max length 150 characters |
 ///
 /// # Example
 ///

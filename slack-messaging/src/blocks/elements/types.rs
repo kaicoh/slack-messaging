@@ -273,7 +273,7 @@ pub enum FileType {
 ///
 /// | Field | Type | Required | Validation |
 /// |-------|------|----------|------------|
-/// | text | [Text<Plain>] | Yes | Max length 75 characters |
+/// | text | [Text]<[Plain]> | Yes | Max length 75 characters |
 /// | value | String | Yes | Max length 2000 characters |
 /// | accessibility_label | String | No | Max length 75 characters |
 ///

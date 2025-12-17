@@ -15,13 +15,13 @@ use slack_messaging_derive::Builder;
 /// | Field | Type | Required | Validation |
 /// |-------|------|----------|------------|
 /// | action_id | String | No | Max length 255 characters |
-/// | initial_conversations | Vec<String> | No | N/A |
+/// | initial_conversations | `Vec<String>` | No | N/A |
 /// | default_to_current_conversation | bool | No | N/A |
 /// | confirm | [ConfirmationDialog] | No | N/A |
 /// | max_selected_items | i64 | No | Min value 1 |
 /// | filter | [ConversationFilter] | No | N/A |
 /// | focus_on_load | bool | No | N/A |
-/// | placeholder | [Text<Plain>] | No | Max length 150 characters |
+/// | placeholder | [Text]<[Plain]> | No | Max length 150 characters |
 ///
 /// # Example
 ///
