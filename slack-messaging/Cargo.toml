@@ -1,6 +1,6 @@
 [package]
 name = "slack-messaging"
-version = "0.7.1"
+version = "0.7.2"
 authors = ["kaicoh <sumireminami@gmail.com>"]
 edition = "2024"
 keywords = ["slack", "messaging", "webhook"]
@@ -20,7 +20,7 @@ paste = "1.0"
 regex = "1.12"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-slack-messaging-derive = { version = "0.7.1", path = "../slack-messaging-derive" }
+slack-messaging-derive = { version = "0.7.2", path = "../slack-messaging-derive" }
 thiserror = "2.0"
 
 [dev-dependencies]
