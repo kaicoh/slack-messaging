@@ -3,6 +3,7 @@ use crate::value::Value;
 
 pub(crate) mod integer;
 pub(crate) mod list;
+pub(crate) mod rich_text;
 pub(crate) mod text;
 pub(crate) mod text_object;
 
