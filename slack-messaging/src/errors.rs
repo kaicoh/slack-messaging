@@ -47,6 +47,10 @@ pub enum ValidationErrorKind {
     /// At least one field is required but none is provided.
     #[error("required at least one field")]
     NoFieldProvided,
+
+    /// Rich text block should have exactly one element.
+    #[error("rich text block should have exactly one element")]
+    RichTextSingleElement,
 }
 
 /// Validation error from single field or across fields.

@@ -19,6 +19,7 @@ mod image;
 mod input;
 mod markdown;
 mod section;
+mod task_card;
 mod video;
 
 pub use actions::{Actions, ActionsElement};
@@ -33,6 +34,7 @@ pub use markdown::Markdown;
 pub use rich_text::RichText;
 pub use section::{Accessory, Section};
 pub use table::Table;
+pub use task_card::{TaskCard, TaskStatus};
 pub use video::Video;
 
 /// Objects that can be set to blocks in [Message](crate::message::Message).
