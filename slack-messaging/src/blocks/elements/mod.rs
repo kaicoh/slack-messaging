@@ -21,6 +21,7 @@ mod rich_text_input;
 mod select_menus;
 mod time_picker;
 mod url_input;
+mod url_source;
 mod workflow_button;
 
 pub use button::Button;
@@ -47,6 +48,7 @@ pub use select_menus::{
 };
 pub use time_picker::TimePicker;
 pub use url_input::UrlInput;
+pub use url_source::UrlSource;
 pub use workflow_button::WorkflowButton;
 
 #[cfg(test)]
