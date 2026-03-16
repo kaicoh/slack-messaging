@@ -16,6 +16,7 @@ use slack_messaging_derive::Builder;
 /// |-------|------|----------|------------|
 /// | elements | Vec<[RichTextElementType]> | Yes | N/A |
 /// | border | i64 | No | N/A |
+/// | language | String | No | N/A |
 ///
 /// # Example
 ///
@@ -65,6 +66,9 @@ pub struct RichTextPreformatted {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) border: Option<i64>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) language: Option<String>,
 }
 
 #[cfg(test)]
@@ -78,11 +82,13 @@ mod tests {
         let expected = RichTextPreformatted {
             elements: Some(vec![el_text("foo"), el_emoji("bar")]),
             border: Some(3),
+            language: Some("python".into()),
         };
 
         let val = RichTextPreformatted::builder()
             .set_elements(Some(vec![el_text("foo"), el_emoji("bar")]))
             .set_border(Some(3))
+            .set_language(Some("python"))
             .build()
             .unwrap();
 
@@ -91,6 +97,7 @@ mod tests {
         let val = RichTextPreformatted::builder()
             .elements(vec![el_text("foo"), el_emoji("bar")])
             .border(3)
+            .language("python")
             .build()
             .unwrap();
 
@@ -102,6 +109,7 @@ mod tests {
         let expected = RichTextPreformatted {
             elements: Some(vec![el_text("foo"), el_emoji("bar")]),
             border: None,
+            language: None,
         };
 
         let val = RichTextPreformatted::builder()
