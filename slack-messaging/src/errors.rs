@@ -44,6 +44,9 @@ pub enum ValidationErrorKind {
     #[error("required either {0} or {1}")]
     EitherRequired(&'static str, &'static str),
 
+    #[error("at least one of {0}, {1}, {2}, or {3} is required")]
+    AtLeastOneOf4(&'static str, &'static str, &'static str, &'static str),
+
     /// At least one field is required but none is provided.
     #[error("required at least one field")]
     NoFieldProvided,

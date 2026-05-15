@@ -1,7 +1,7 @@
 use crate::validators::*;
 
-use slack_messaging_derive::Builder;
 use serde::Serialize;
+use slack_messaging_derive::Builder;
 
 /// [Divider block](https://docs.slack.dev/reference/block-kit/blocks/divider-block)
 /// representation.

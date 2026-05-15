@@ -188,8 +188,8 @@ pub struct Plan {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use super::super::test_helpers::*;
+    use super::*;
     use crate::errors::*;
 
     #[test]

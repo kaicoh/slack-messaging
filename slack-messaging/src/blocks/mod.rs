@@ -11,6 +11,7 @@ pub mod table;
 
 mod actions;
 mod alert;
+mod card;
 mod context;
 mod context_actions;
 mod divider;
@@ -26,6 +27,7 @@ mod video;
 
 pub use actions::{Actions, ActionsElement};
 pub use alert::{Alert, AlertLevel};
+pub use card::Card;
 pub use context::{Context, ContextElement};
 pub use context_actions::{ContextActions, ContextActionsElement};
 pub use divider::Divider;
@@ -50,6 +52,10 @@ pub enum Block {
 
     /// [Alert block](https://docs.slack.dev/reference/block-kit/blocks/alert-block) representation
     Alert(Box<Alert>),
+
+    /// [Card block](https://docs.slack.dev/reference/block-kit/blocks/card-block)
+    /// representation
+    Card(Box<Card>),
 
     /// [Context block](https://docs.slack.dev/reference/block-kit/blocks/context-block) representation
     Context(Box<Context>),
@@ -106,6 +112,7 @@ macro_rules! block_from {
 block_from! {
     Actions,
     Alert,
+    Card,
     Context,
     ContextActions,
     Divider,
