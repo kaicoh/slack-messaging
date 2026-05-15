@@ -99,6 +99,10 @@ pub enum Block {
     /// [Table block](https://docs.slack.dev/reference/block-kit/blocks/table-block) representation
     Table(Box<Table>),
 
+    /// [Task card block](https://docs.slack.dev/reference/block-kit/blocks/task-card-block)
+    /// representation
+    TaskCard(Box<TaskCard>),
+
     /// [Video block](https://docs.slack.dev/reference/block-kit/blocks/video-block) representation
     Video(Box<Video>),
 }
@@ -132,6 +136,7 @@ block_from! {
     RichText,
     Section,
     Table,
+    TaskCard,
     Video,
 }
 
