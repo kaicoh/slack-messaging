@@ -1,4 +1,7 @@
 pub use super::actions::ActionsBuilder;
+pub use super::alert::AlertBuilder;
+pub use super::card::CardBuilder;
+pub use super::carousel::CarouselBuilder;
 pub use super::context::ContextBuilder;
 pub use super::context_actions::ContextActionsBuilder;
 pub use super::divider::DividerBuilder;
@@ -7,6 +10,7 @@ pub use super::header::HeaderBuilder;
 pub use super::image::ImageBuilder;
 pub use super::input::InputBuilder;
 pub use super::markdown::MarkdownBuilder;
+pub use super::plan::PlanBuilder;
 pub use super::rich_text::RichTextBuilder;
 pub use super::section::SectionBuilder;
 pub use super::table::TableBuilder;

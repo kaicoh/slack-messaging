@@ -10,6 +10,9 @@ pub mod rich_text;
 pub mod table;
 
 mod actions;
+mod alert;
+mod card;
+mod carousel;
 mod context;
 mod context_actions;
 mod divider;
@@ -18,11 +21,15 @@ mod header;
 mod image;
 mod input;
 mod markdown;
+mod plan;
 mod section;
 mod task_card;
 mod video;
 
 pub use actions::{Actions, ActionsElement};
+pub use alert::{Alert, AlertLevel};
+pub use card::Card;
+pub use carousel::Carousel;
 pub use context::{Context, ContextElement};
 pub use context_actions::{ContextActions, ContextActionsElement};
 pub use divider::Divider;
@@ -31,6 +38,7 @@ pub use header::Header;
 pub use image::Image;
 pub use input::{Input, InputElement};
 pub use markdown::Markdown;
+pub use plan::Plan;
 pub use rich_text::RichText;
 pub use section::{Accessory, Section};
 pub use table::Table;
@@ -43,6 +51,17 @@ pub use video::Video;
 pub enum Block {
     /// [Actions block](https://docs.slack.dev/reference/block-kit/blocks/actions-block) representation
     Actions(Box<Actions>),
+
+    /// [Alert block](https://docs.slack.dev/reference/block-kit/blocks/alert-block) representation
+    Alert(Box<Alert>),
+
+    /// [Card block](https://docs.slack.dev/reference/block-kit/blocks/card-block)
+    /// representation
+    Card(Box<Card>),
+
+    /// [Carousel block](https://docs.slack.dev/reference/block-kit/blocks/carousel-block)
+    /// representation
+    Carousel(Box<Carousel>),
 
     /// [Context block](https://docs.slack.dev/reference/block-kit/blocks/context-block) representation
     Context(Box<Context>),
@@ -67,6 +86,9 @@ pub enum Block {
 
     /// [Markdown block](https://docs.slack.dev/reference/block-kit/blocks/markdown-block) representation
     Markdown(Box<Markdown>),
+
+    /// [Plan block](https://docs.slack.dev/reference/block-kit/blocks/plan-block) representation
+    Plan(Box<Plan>),
 
     /// [Rich text block](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block) representation
     RichText(Box<RichText>),
@@ -95,6 +117,9 @@ macro_rules! block_from {
 
 block_from! {
     Actions,
+    Alert,
+    Card,
+    Carousel,
     Context,
     ContextActions,
     Divider,
@@ -103,6 +128,7 @@ block_from! {
     Image,
     Input,
     Markdown,
+    Plan,
     RichText,
     Section,
     Table,
@@ -137,6 +163,18 @@ pub mod test_helpers {
         RichText {
             block_id: Some("rich_text_0".into()),
             elements: Some(vec![rich_text_helper::section(vec![el_text("foo")]).into()]),
+        }
+    }
+
+    pub fn task_card() -> TaskCard {
+        TaskCard {
+            task_id: Some("task_0".into()),
+            title: Some("Fetching weather data".into()),
+            status: Some(TaskStatus::Pending),
+            output: None,
+            details: None,
+            sources: None,
+            block_id: None,
         }
     }
 }
