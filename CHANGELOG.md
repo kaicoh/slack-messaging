@@ -1,8 +1,8 @@
 # Changelog
 
-## [0.7.4][] - 2026-03-19
+## [0.7.4][] - 2026-05-15
 
-- Support `Plan` block.
+- Support `Alert`, `Card`, `Carousel`, and `Plan` blocks.
 
 ## [0.7.3][] - 2026-03-16
 
