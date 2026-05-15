@@ -18,6 +18,7 @@ mod header;
 mod image;
 mod input;
 mod markdown;
+mod plan;
 mod section;
 mod task_card;
 mod video;
@@ -31,6 +32,7 @@ pub use header::Header;
 pub use image::Image;
 pub use input::{Input, InputElement};
 pub use markdown::Markdown;
+pub use plan::Plan;
 pub use rich_text::RichText;
 pub use section::{Accessory, Section};
 pub use table::Table;
@@ -137,6 +139,18 @@ pub mod test_helpers {
         RichText {
             block_id: Some("rich_text_0".into()),
             elements: Some(vec![rich_text_helper::section(vec![el_text("foo")]).into()]),
+        }
+    }
+
+    pub fn task_card() -> TaskCard {
+        TaskCard {
+            task_id: Some("task_0".into()),
+            title: Some("Fetching weather data".into()),
+            status: Some(TaskStatus::Pending),
+            output: None,
+            details: None,
+            sources: None,
+            block_id: None,
         }
     }
 }

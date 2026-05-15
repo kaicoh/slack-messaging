@@ -7,6 +7,7 @@ pub use super::header::HeaderBuilder;
 pub use super::image::ImageBuilder;
 pub use super::input::InputBuilder;
 pub use super::markdown::MarkdownBuilder;
+pub use super::plan::PlanBuilder;
 pub use super::rich_text::RichTextBuilder;
 pub use super::section::SectionBuilder;
 pub use super::table::TableBuilder;
