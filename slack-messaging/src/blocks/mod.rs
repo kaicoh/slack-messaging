@@ -10,6 +10,7 @@ pub mod rich_text;
 pub mod table;
 
 mod actions;
+mod alert;
 mod context;
 mod context_actions;
 mod divider;
@@ -24,6 +25,7 @@ mod task_card;
 mod video;
 
 pub use actions::{Actions, ActionsElement};
+pub use alert::{Alert, AlertLevel};
 pub use context::{Context, ContextElement};
 pub use context_actions::{ContextActions, ContextActionsElement};
 pub use divider::Divider;
@@ -45,6 +47,9 @@ pub use video::Video;
 pub enum Block {
     /// [Actions block](https://docs.slack.dev/reference/block-kit/blocks/actions-block) representation
     Actions(Box<Actions>),
+
+    /// [Alert block](https://docs.slack.dev/reference/block-kit/blocks/alert-block) representation
+    Alert(Box<Alert>),
 
     /// [Context block](https://docs.slack.dev/reference/block-kit/blocks/context-block) representation
     Context(Box<Context>),
@@ -69,6 +74,9 @@ pub enum Block {
 
     /// [Markdown block](https://docs.slack.dev/reference/block-kit/blocks/markdown-block) representation
     Markdown(Box<Markdown>),
+
+    /// [Plan block](https://docs.slack.dev/reference/block-kit/blocks/plan-block) representation
+    Plan(Box<Plan>),
 
     /// [Rich text block](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block) representation
     RichText(Box<RichText>),
@@ -97,6 +105,7 @@ macro_rules! block_from {
 
 block_from! {
     Actions,
+    Alert,
     Context,
     ContextActions,
     Divider,
@@ -105,6 +114,7 @@ block_from! {
     Image,
     Input,
     Markdown,
+    Plan,
     RichText,
     Section,
     Table,

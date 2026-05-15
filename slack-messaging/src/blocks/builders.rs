@@ -1,4 +1,5 @@
 pub use super::actions::ActionsBuilder;
+pub use super::alert::AlertBuilder;
 pub use super::context::ContextBuilder;
 pub use super::context_actions::ContextActionsBuilder;
 pub use super::divider::DividerBuilder;
