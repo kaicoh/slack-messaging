@@ -10,7 +10,7 @@ mod cell;
 mod row;
 mod setting;
 
-pub use cell::TableCell;
+pub use cell::{TableCell, RawText};
 pub use row::TableRow;
 pub use setting::{ColumnAlignment, ColumnSetting};
 

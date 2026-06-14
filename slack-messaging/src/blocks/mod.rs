@@ -8,6 +8,8 @@ pub mod elements;
 pub mod rich_text;
 /// Module for building [Table] block.
 pub mod table;
+/// Module for building [DataTable] block.
+pub mod data_table;
 
 mod actions;
 mod alert;
@@ -32,6 +34,7 @@ pub use card::Card;
 pub use carousel::Carousel;
 pub use context::{Context, ContextElement};
 pub use context_actions::{ContextActions, ContextActionsElement};
+pub use data_table::DataTable;
 pub use divider::Divider;
 pub use file::{File, FileSource};
 pub use header::Header;
@@ -68,6 +71,9 @@ pub enum Block {
 
     /// [Context actions block](https://docs.slack.dev/reference/block-kit/blocks/context-actions-block) representation
     ContextActions(Box<ContextActions>),
+
+    /// [Data table block](https://docs.slack.dev/reference/block-kit/blocks/data-table-block) representation
+    DataTable(Box<DataTable>),
 
     /// [Divider block](https://docs.slack.dev/reference/block-kit/blocks/divider-block) representation
     Divider(Box<Divider>),
@@ -126,6 +132,7 @@ block_from! {
     Carousel,
     Context,
     ContextActions,
+    DataTable,
     Divider,
     File,
     Header,

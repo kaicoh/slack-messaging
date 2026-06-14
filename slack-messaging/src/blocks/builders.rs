@@ -4,6 +4,7 @@ pub use super::card::CardBuilder;
 pub use super::carousel::CarouselBuilder;
 pub use super::context::ContextBuilder;
 pub use super::context_actions::ContextActionsBuilder;
+pub use super::data_table::DataTableBuilder;
 pub use super::divider::DividerBuilder;
 pub use super::file::FileBuilder;
 pub use super::header::HeaderBuilder;

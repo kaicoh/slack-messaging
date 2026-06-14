@@ -20,6 +20,10 @@ pub enum ValidationErrorKind {
     #[error("max array length `{0}` items")]
     MaxArraySize(usize),
 
+    /// Field does not meet minimum array length.
+    #[error("min array length `{0}` items")]
+    MinArraySize(usize),
+
     /// Field does not meet non-empty condition.
     #[error("the array cannot be empty")]
     EmptyArray,
