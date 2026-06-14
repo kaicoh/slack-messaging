@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.5][] - 2026-06-14
+
+- Support `DataTable` block.
+
 ## [0.7.4][] - 2026-05-15
 
 - Support `Alert`, `Card`, `Carousel`, and `Plan` blocks.
@@ -132,6 +136,7 @@ And the `select menu element` and the `multi-select menu element` are renewed.
 
 - pre-release
 
+[0.7.5]: https://github.com/kaicoh/slack-messaging/releases/v0.7.5
 [0.7.4]: https://github.com/kaicoh/slack-messaging/releases/v0.7.4
 [0.7.3]: https://github.com/kaicoh/slack-messaging/releases/v0.7.3
 [0.7.2]: https://github.com/kaicoh/slack-messaging/releases/v0.7.2
