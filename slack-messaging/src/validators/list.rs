@@ -22,6 +22,12 @@ fn max_item<T>(max: usize, value: List<T>) -> List<T> {
     })
 }
 
+fn min_item<T>(min: usize, value: List<T>) -> List<T> {
+    inner_validator(value, ValidationErrorKind::MinArraySize(min), |l| {
+        l.len() < min
+    })
+}
+
 macro_rules! impl_max_item {
     ($($e:expr),*) => {
         paste! {
@@ -34,7 +40,21 @@ macro_rules! impl_max_item {
     }
 }
 
-impl_max_item!(5, 10, 20, 25, 50, 100);
+impl_max_item!(5, 10, 20, 25, 50, 100, 101);
+
+macro_rules! impl_min_item {
+    ($($e:expr),*) => {
+        paste! {
+            $(
+                pub(crate) fn [<min_item_ $e>]<T>(value: List<T>) -> List<T> {
+                    min_item($e, value)
+                }
+            )*
+        }
+    }
+}
+
+impl_min_item!(2);
 
 pub(crate) fn not_empty<T>(value: List<T>) -> List<T> {
     inner_validator(value, ValidationErrorKind::EmptyArray, |l| l.is_empty())
@@ -70,6 +90,28 @@ mod tests {
 
         fn test<T>(list: Vec<T>) -> List<T> {
             max_item_100(Value::new(Some(list)))
+        }
+    }
+
+    mod fn_min_item_2 {
+        use super::*;
+
+        #[test]
+        fn it_passes_if_the_list_length_is_greater_than_2() {
+            let list: Vec<u8> = (0..3).collect();
+            let result = test(list);
+            assert!(result.errors.is_empty());
+        }
+
+        #[test]
+        fn it_sets_an_error_if_the_list_length_is_smaller_than_2() {
+            let list: Vec<u8> = vec![0];
+            let result = test(list);
+            assert_eq!(result.errors, vec![ValidationErrorKind::MinArraySize(2)]);
+        }
+
+        fn test<T>(list: Vec<T>) -> List<T> {
+            min_item_2(Value::new(Some(list)))
         }
     }
 

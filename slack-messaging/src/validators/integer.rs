@@ -60,7 +60,7 @@ macro_rules! impl_min {
     }
 }
 
-impl_max!(10, 3000);
+impl_max!(10, 100, 3000);
 impl_min!(0, 1);
 
 #[cfg(test)]
