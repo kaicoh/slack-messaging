@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.6][] - 2026-06-20
+
+- Introduce prelude module for rich text objects.
+
 ## [0.7.5][] - 2026-06-14
 
 - Support `DataTable` block.
@@ -136,6 +140,7 @@ And the `select menu element` and the `multi-select menu element` are renewed.
 
 - pre-release
 
+[0.7.6]: https://github.com/kaicoh/slack-messaging/releases/v0.7.6
 [0.7.5]: https://github.com/kaicoh/slack-messaging/releases/v0.7.5
 [0.7.4]: https://github.com/kaicoh/slack-messaging/releases/v0.7.4
 [0.7.3]: https://github.com/kaicoh/slack-messaging/releases/v0.7.3

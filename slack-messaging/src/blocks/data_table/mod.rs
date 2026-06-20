@@ -32,10 +32,8 @@ pub use row::DataTableRow;
 /// # Example
 ///
 /// ```
-/// use slack_messaging::blocks::{RichText, DataTable};
-/// use slack_messaging::blocks::rich_text::RichTextSection;
-/// use slack_messaging::blocks::rich_text::types::{RichTextElementText, RichTextStyle};
-/// use slack_messaging::blocks::data_table::DataTableRow;
+/// use slack_messaging::blocks::rich_text::prelude::*;
+/// use slack_messaging::blocks::data_table::*;
 /// # use std::error::Error;
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {

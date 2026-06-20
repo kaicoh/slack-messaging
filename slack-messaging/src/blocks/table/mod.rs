@@ -30,9 +30,8 @@ pub use setting::{ColumnAlignment, ColumnSetting};
 /// # Example
 ///
 /// ```
-/// use slack_messaging::blocks::{RichText, Table};
-/// use slack_messaging::blocks::rich_text::{types::RichTextElementLink, RichTextSection};
-/// use slack_messaging::blocks::table::{ColumnAlignment, ColumnSetting, TableRow};
+/// use slack_messaging::blocks::rich_text::prelude::*;
+/// use slack_messaging::blocks::table::*;
 /// # use std::error::Error;
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {

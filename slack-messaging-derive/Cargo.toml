@@ -1,6 +1,6 @@
 [package]
 name = "slack-messaging-derive"
-version = "0.7.5"
+version = "0.7.6"
 edition = "2024"
 authors = ["kaicoh <sumireminami@gmail.com>"]
 keywords = ["slack", "messaging", "webhook"]
