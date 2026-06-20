@@ -117,7 +117,7 @@ mod tests {
 
         let val = Context::builder()
             .set_block_id(Some("context_0"))
-            .set_elements(Some(vec![mrkdwn_text("foo").into()]))
+            .set_elements(Some(vec![mrkdwn_text("foo")]))
             .build()
             .unwrap();
 
@@ -125,7 +125,7 @@ mod tests {
 
         let val = Context::builder()
             .block_id("context_0")
-            .elements(vec![mrkdwn_text("foo").into()])
+            .elements(vec![mrkdwn_text("foo")])
             .build()
             .unwrap();
 

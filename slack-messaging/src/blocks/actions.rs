@@ -413,8 +413,8 @@ mod tests {
             .set_block_id(Some("actions_0"))
             .set_elements(Some(vec![
                 datepicker().into(),
-                btn("button_0", "value_0").into(),
-            ]))
+                btn("button_0", "value_0").into()
+            ] as Vec<ActionsElement>))
             .build()
             .unwrap();
 
@@ -422,7 +422,10 @@ mod tests {
 
         let val = Actions::builder()
             .block_id("actions_0")
-            .elements(vec![datepicker().into(), btn("button_0", "value_0").into()])
+            .elements(vec![
+                datepicker().into(),
+                btn("button_0", "value_0").into()
+            ] as Vec<ActionsElement>)
             .build()
             .unwrap();
 

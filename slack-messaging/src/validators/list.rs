@@ -1,5 +1,6 @@
 use super::*;
 use crate::composition_objects::TextExt;
+use crate::blocks::data_visualization::charts::DataSeries;
 
 use paste::paste;
 
@@ -40,7 +41,7 @@ macro_rules! impl_max_item {
     }
 }
 
-impl_max_item!(5, 10, 20, 25, 50, 100, 101);
+impl_max_item!(5, 6, 10, 20, 25, 50, 100, 101);
 
 macro_rules! impl_min_item {
     ($($e:expr),*) => {
@@ -64,6 +65,25 @@ pub(crate) fn each_text_max_2000<T: TextExt>(value: List<T>) -> List<T> {
     inner_validator(value, ValidationErrorKind::MaxTextLength(2000), |l| {
         l.iter()
             .any(|t| t.text().is_some_and(|text| text.len() > 2000))
+    })
+}
+
+pub(crate) fn each_max_20_chars(value: List<String>) -> List<String> {
+    inner_validator(value, ValidationErrorKind::MaxTextLength(20), |l| {
+        l.iter().any(|s| s.len() > 20)
+    })
+}
+
+pub(crate) fn unique_series_names(value: List<DataSeries>) -> List<DataSeries> {
+    inner_validator(value, ValidationErrorKind::UniqueSeriesName, |l| {
+        let mut names = std::collections::HashSet::new();
+        l.iter().any(|series| {
+            if let Some(name) = series.name.as_ref() {
+                !names.insert(name)
+            } else {
+                false
+            }
+        })
     })
 }
 
@@ -164,6 +184,69 @@ mod tests {
                 .map(|text| Text::builder().text(text).build().unwrap())
                 .collect();
             each_text_max_2000(Value::new(Some(list)))
+        }
+    }
+
+    mod fn_each_max_20_chars {
+        use super::*;
+
+        #[test]
+        fn it_passes_if_the_all_item_length_is_less_than_20() {
+            let list = vec!["a".repeat(20), "foobar".into()];
+            let result = test(list);
+            assert!(result.errors.is_empty());
+        }
+
+        #[test]
+        fn it_sets_an_error_if_at_least_one_item_length_is_more_than_20() {
+            let list = vec!["a".repeat(21), "foobar".into()];
+            let result = test(list);
+            assert_eq!(
+                result.errors,
+                vec![ValidationErrorKind::MaxTextLength(20)]
+            );
+        }
+
+        fn test(list: Vec<String>) -> List<String> {
+            each_max_20_chars(Value::new(Some(list)))
+        }
+    }
+
+    mod fn_unique_series_names {
+        use super::*;
+        use crate::blocks::data_visualization::charts::data_points;
+
+        #[test]
+        fn it_passes_if_all_series_names_are_unique() {
+            let list = vec!["Series 1", "Series 2", "Series 3"];
+            let result = test(list);
+            assert!(result.errors.is_empty());
+        }
+
+        #[test]
+        fn it_sets_an_error_if_at_least_one_series_name_is_duplicated() {
+            let list = vec!["Series 1", "Series 2", "Series 1"];
+            let result = test(list);
+            assert_eq!(
+                result.errors,
+                vec![ValidationErrorKind::UniqueSeriesName]
+            );
+        }
+
+        fn test(list: Vec<&str>) -> List<DataSeries> {
+            let series: Vec<DataSeries> = list.into_iter().map(data_series).collect();
+            unique_series_names(Value::new(Some(series)))
+        }
+
+        fn data_series(name: &str) -> DataSeries {
+            DataSeries::builder()
+                .name(name)
+                .data(data_points(vec![
+                    ("Mon", 200),
+                    ("Tue", 120),
+                ]).unwrap())
+                .build()
+                .unwrap()
         }
     }
 }
