@@ -106,7 +106,7 @@ mod tests {
 
         let val = MultiSelectMenuPublicChannels::builder()
             .set_action_id(Some("multi_select_0"))
-            .set_initial_channels(Some(vec!["foo".into(), "bar".into()]))
+            .set_initial_channels(Some(vec!["foo", "bar"]))
             .set_confirm(Some(confirm()))
             .set_max_selected_items(Some(2))
             .set_focus_on_load(Some(true))
@@ -118,7 +118,7 @@ mod tests {
 
         let val = MultiSelectMenuPublicChannels::builder()
             .action_id("multi_select_0")
-            .initial_channels(vec!["foo".into(), "bar".into()])
+            .initial_channels(vec!["foo", "bar"])
             .confirm(confirm())
             .max_selected_items(2)
             .focus_on_load(true)

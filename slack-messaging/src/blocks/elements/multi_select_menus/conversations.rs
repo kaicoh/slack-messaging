@@ -116,7 +116,7 @@ mod tests {
 
         let val = MultiSelectMenuConversations::builder()
             .set_action_id(Some("multi_select_0"))
-            .set_initial_conversations(Some(vec!["foo".into(), "bar".into()]))
+            .set_initial_conversations(Some(vec!["foo", "bar"]))
             .set_default_to_current_conversation(Some(false))
             .set_confirm(Some(confirm()))
             .set_max_selected_items(Some(2))
@@ -130,7 +130,7 @@ mod tests {
 
         let val = MultiSelectMenuConversations::builder()
             .action_id("multi_select_0")
-            .initial_conversations(vec!["foo".into(), "bar".into()])
+            .initial_conversations(vec!["foo", "bar"])
             .default_to_current_conversation(false)
             .confirm(confirm())
             .max_selected_items(2)
