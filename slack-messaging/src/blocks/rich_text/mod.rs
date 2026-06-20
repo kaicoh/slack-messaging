@@ -10,6 +10,20 @@ pub mod builders;
 /// Objects representing [rich text element types](https://docs.slack.dev/reference/block-kit/blocks/rich-text-block/#element-types).
 pub mod types;
 
+/// Re-export of all rich text sub-elements and types.
+pub mod prelude {
+    pub use super::types::*;
+    pub use super::{
+        ListStyle,
+        RichText,
+        RichTextList,
+        RichTextPreformatted,
+        RichTextQuote,
+        RichTextSection,
+        RichTextSubElement,
+    };
+}
+
 mod list;
 mod preformatted;
 mod quote;
@@ -74,9 +88,7 @@ impl_sub_element! {
 /// # Example
 ///
 /// ```
-/// use slack_messaging::blocks::RichText;
-/// use slack_messaging::blocks::rich_text::RichTextSection;
-/// use slack_messaging::blocks::rich_text::types::{RichTextElementText, RichTextStyle};
+/// use slack_messaging::blocks::rich_text::prelude::*;
 /// # use std::error::Error;
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {

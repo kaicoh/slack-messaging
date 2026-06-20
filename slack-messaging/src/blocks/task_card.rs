@@ -27,10 +27,9 @@ use slack_messaging_derive::Builder;
 /// card](https://docs.slack.dev/reference/block-kit/blocks/task-card-block#examples).
 ///
 /// ```
-/// use slack_messaging::blocks::{RichText, TaskCard, TaskStatus};
+/// use slack_messaging::blocks::{TaskCard, TaskStatus};
 /// use slack_messaging::blocks::elements::UrlSource;
-/// use slack_messaging::blocks::rich_text::RichTextSection;
-/// use slack_messaging::blocks::rich_text::types::RichTextElementText;
+/// use slack_messaging::blocks::rich_text::prelude::*;
 /// # use std::error::Error;
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {

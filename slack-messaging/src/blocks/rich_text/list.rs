@@ -23,8 +23,7 @@ use slack_messaging_derive::Builder;
 /// # Example
 ///
 /// ```
-/// use slack_messaging::blocks::rich_text::{RichTextList, ListStyle, RichTextSection};
-/// use slack_messaging::blocks::rich_text::types::RichTextElementText;
+/// use slack_messaging::blocks::rich_text::prelude::*;
 /// # use std::error::Error;
 ///
 /// # fn try_main() -> Result<(), Box<dyn Error>> {
