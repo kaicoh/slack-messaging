@@ -41,7 +41,7 @@ use slack_messaging_derive::Builder;
 ///
 /// // If your object has any validation errors, the build method returns Result::Err
 /// let config = DispatchActionConfiguration::builder()
-///     .trigger_actions_on(vec![])
+///     .trigger_actions_on(vec![] as Vec<TriggerAction>)
 ///     .build();
 /// assert!(config.is_err());
 /// #     Ok(())
@@ -113,7 +113,7 @@ mod tests {
     #[test]
     fn it_requires_trigger_actions_on_field_not_empty() {
         let err = DispatchActionConfiguration::builder()
-            .trigger_actions_on(vec![])
+            .trigger_actions_on(vec![] as Vec<TriggerAction>)
             .build()
             .unwrap_err();
         assert_eq!(err.object(), "DispatchActionConfiguration");

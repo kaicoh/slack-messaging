@@ -179,7 +179,7 @@ mod tests {
         let val = RichText::builder()
             .set_block_id(Some("rich_text_0"))
             .set_elements(Some(vec![
-                section(vec![el_text("foo"), el_emoji("var")]).into(),
+                section(vec![el_text("foo"), el_emoji("var")]),
             ]))
             .build()
             .unwrap();
@@ -188,7 +188,7 @@ mod tests {
 
         let val = RichText::builder()
             .block_id("rich_text_0")
-            .elements(vec![section(vec![el_text("foo"), el_emoji("var")]).into()])
+            .elements(vec![section(vec![el_text("foo"), el_emoji("var")])])
             .build()
             .unwrap();
 

@@ -158,7 +158,7 @@ mod tests {
     #[test]
     fn it_requires_include_field_not_empty() {
         let err = ConversationFilter::builder()
-            .include(vec![])
+            .include(vec![] as Vec<Conversation>)
             .build()
             .unwrap_err();
         assert_eq!(err.object(), "ConversationFilter");

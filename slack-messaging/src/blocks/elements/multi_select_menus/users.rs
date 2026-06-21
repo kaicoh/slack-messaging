@@ -106,7 +106,7 @@ mod tests {
 
         let val = MultiSelectMenuUsers::builder()
             .set_action_id(Some("multi_select_0"))
-            .set_initial_users(Some(vec!["USER0".into(), "USER1".into()]))
+            .set_initial_users(Some(vec!["USER0", "USER1"]))
             .set_confirm(Some(confirm()))
             .set_max_selected_items(Some(2))
             .set_focus_on_load(Some(true))
@@ -118,7 +118,7 @@ mod tests {
 
         let val = MultiSelectMenuUsers::builder()
             .action_id("multi_select_0")
-            .initial_users(vec!["USER0".into(), "USER1".into()])
+            .initial_users(vec!["USER0", "USER1"])
             .confirm(confirm())
             .max_selected_items(2)
             .focus_on_load(true)
