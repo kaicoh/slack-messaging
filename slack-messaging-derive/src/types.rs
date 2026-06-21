@@ -119,12 +119,12 @@ impl Field {
                 quote! { <Iter, Inner> },
                 quote! { Iter },
                 quote! { val.into_iter().map(|v| v.into()).collect() },
-                quote! { where Iter: IntoIterator<Item = Inner>, Inner: Into<#inner_ty> }
+                quote! { where Iter: ::std::iter::IntoIterator<Item = Inner>, Inner: ::std::convert::Into<#inner_ty> }
             )
         } else {
             (
                 quote! {},
-                quote! { impl Into<#ty> },
+                quote! { impl ::std::convert::Into<#ty> },
                 quote! { val.into() },
                 quote! {},
             )
@@ -136,7 +136,7 @@ impl Field {
 
                 quote! {
                     #[doc = #doc]
-                    pub fn #expr(mut self, value: impl Into<#inner_ty>) -> Self {
+                    pub fn #expr(mut self, value: impl ::std::convert::Into<#inner_ty>) -> Self {
                         let mut list = self.#ident.take_inner().unwrap_or_default();
                         list.push(value.into());
                         self.#ident(list)

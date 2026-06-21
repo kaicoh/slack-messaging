@@ -98,7 +98,7 @@ impl Target {
             }
 
             #[doc = #doc_builder]
-            #[derive(Debug)]
+            #[derive(::std::fmt::Debug)]
             pub struct #builder #ty #whr {
                 #(#init_builder_fields,)*
             }
@@ -107,7 +107,7 @@ impl Target {
                 #(#accessors)*
 
                 fn validate_across_fields(value: &#ident #ty) -> [::std::option::Option<crate::errors::ValidationError>; 1] {
-                    let errors: Vec<crate::errors::ValidationErrorKind> = #validate_across_fields;
+                    let errors: ::std::vec::Vec<crate::errors::ValidationErrorKind> = #validate_across_fields;
                     let error = crate::errors::ValidationError::new_across_fields(errors);
                     [error]
                 }
@@ -120,7 +120,7 @@ impl Target {
                         #(#build_target_fields),*
                     };
 
-                    let errors: Vec<crate::errors::ValidationError> = Self::validate_across_fields(&built)
+                    let errors: ::std::vec::Vec<crate::errors::ValidationError> = Self::validate_across_fields(&built)
                         .into_iter()
                         .chain([
                             #(crate::errors::ValidationError::new_single_field(stringify!(#builder_field_names_1), #builder_field_names_1.errors)),*
@@ -128,17 +128,17 @@ impl Target {
                         .filter_map(|v| v)
                         .collect();
                     if !errors.is_empty() {
-                        return Err(crate::errors::ValidationErrors {
+                        return ::std::result::Result::Err(crate::errors::ValidationErrors {
                             object: ::std::borrow::Cow::Borrowed(stringify!(#ident)),
                             errors,
                         });
                     }   else {
-                        return Ok(built);
+                        return ::std::result::Result::Ok(built);
                     }
                 }
             }
 
-            impl #imp Default for #builder #ty #whr {
+            impl #imp ::std::default::Default for #builder #ty #whr {
                 fn default() -> Self {
                     Self {
                         #(#default_fields,)*
