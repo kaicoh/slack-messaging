@@ -118,7 +118,7 @@ mod tests {
             .set_value(Some("delete_item"))
             .set_confirm(Some(confirm()))
             .set_accessibility_label(Some("Delete!"))
-            .set_visible_to_user_ids(Some(vec!["USER0".into(), "USER1".into()]))
+            .set_visible_to_user_ids(Some(vec!["USER0", "USER1"]))
             .build()
             .unwrap();
 
@@ -131,7 +131,7 @@ mod tests {
             .value("delete_item")
             .confirm(confirm())
             .accessibility_label("Delete!")
-            .visible_to_user_ids(vec!["USER0".into(), "USER1".into()])
+            .visible_to_user_ids(vec!["USER0", "USER1"])
             .build()
             .unwrap();
 

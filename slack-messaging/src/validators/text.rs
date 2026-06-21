@@ -66,7 +66,7 @@ macro_rules! impl_max {
     }
 }
 
-impl_max!(50, 75, 150, 255, 2000, 3000, 12000);
+impl_max!(20, 50, 75, 150, 255, 2000, 3000, 12000);
 
 pub(crate) fn min_1(value: Text) -> Text {
     inner_validator(value, ValidationErrorKind::MinTextLength(1), |v| {

@@ -314,7 +314,10 @@ mod tests {
 
     #[test]
     fn it_requires_elements_to_have_at_least_1_item() {
-        let err = Carousel::builder().elements(vec![]).build().unwrap_err();
+        let err = Carousel::builder()
+            .elements(vec![] as Vec<Card>)
+            .build()
+            .unwrap_err();
         assert_eq!(err.object(), "Carousel");
 
         let errors = err.field("elements");

@@ -255,7 +255,7 @@ mod tests {
             .set_fields(Some(vec![
                 plain_text("bar").into(),
                 mrkdwn_text("baz").into(),
-            ]))
+            ] as Vec<TextContent>))
             .set_accessory(Some(btn("btn0", "val0")))
             .set_expand(Some(true))
             .build()
@@ -266,7 +266,10 @@ mod tests {
         let val = Section::builder()
             .text(mrkdwn_text("foo"))
             .block_id("section_0")
-            .fields(vec![plain_text("bar").into(), mrkdwn_text("baz").into()])
+            .fields(vec![
+                plain_text("bar").into(),
+                mrkdwn_text("baz").into(),
+            ] as Vec<TextContent>)
             .accessory(btn("btn0", "val0"))
             .expand(true)
             .build()

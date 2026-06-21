@@ -114,6 +114,21 @@ impl Field {
         } else {
             quote! {}
         };
+        let (setter_generic, setter_arg, setter_logic, setter_bounds) = if let InnerType::Vec(inner_ty) = InnerType::new(self.inner_ty()) {
+            (
+                quote! { <Iter, Inner> },
+                quote! { Iter },
+                quote! { val.into_iter().map(|v| v.into()).collect() },
+                quote! { where Iter: IntoIterator<Item = Inner>, Inner: Into<#inner_ty> }
+            )
+        } else {
+            (
+                quote! {},
+                quote! { impl Into<#ty> },
+                quote! { val.into() },
+                quote! {},
+            )
+        };
 
         let push_item = match (self.push_item.as_ref(), InnerType::new(self.inner_ty())) {
             (Some(expr), InnerType::Vec(inner_ty)) => {
@@ -144,15 +159,15 @@ impl Field {
                 }
 
                 #[doc = #doc_setter]
-                #setter_visibility fn #setter(self, value: ::std::option::Option<impl Into<#ty>>) -> Self {
+                #setter_visibility fn #setter #setter_generic (self, value: ::std::option::Option<#setter_arg>) -> Self #setter_bounds {
                     Self {
-                        #ident: Self::#constructor_name(value.map(|v| v.into())),
+                        #ident: Self::#constructor_name(value.map(|val| #setter_logic)),
                         #after_set
                     }
                 }
 
                 #[doc = #doc_setter]
-                #setter_visibility fn #ident(self, value: impl Into<#ty>) -> Self {
+                #setter_visibility fn #ident #setter_generic(self, value: #setter_arg) -> Self #setter_bounds {
                     self.#setter(Some(value))
                 }
 

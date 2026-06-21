@@ -40,6 +40,10 @@ pub enum ValidationErrorKind {
     #[error("min value is `{0}")]
     MinIntegerValue(i64),
 
+    /// Field must be greater than zero.
+    #[error("value must be greater than zero")]
+    MustBeGreaterThanZero,
+
     /// Both fields are provided but only one is allowed.
     #[error("cannot provide both {0} and {1}")]
     ExclusiveField(&'static str, &'static str),
@@ -62,6 +66,13 @@ pub enum ValidationErrorKind {
     /// Rich text cannot be used for a table header row.
     #[error("rich text cannot be used for a table header row")]
     RichTextTableHeader,
+    /// Each series within a chart must have a unique name.
+    #[error("each series within a chart must have a unique name")]
+    UniqueSeriesName,
+
+    /// Every data point label in every series must match a value in axis config categories.
+    #[error("every data point label in every series must match a value in axis config categories")]
+    DataPointLabelMatching,
 }
 
 /// Validation error from single field or across fields.

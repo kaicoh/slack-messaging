@@ -183,7 +183,7 @@ mod tests {
 
         let val = ContextActions::builder()
             .set_block_id(Some("context_actions_0"))
-            .set_elements(Some(vec![fb_buttons().into()]))
+            .set_elements(Some(vec![fb_buttons()]))
             .build()
             .unwrap();
 
@@ -191,7 +191,7 @@ mod tests {
 
         let val = ContextActions::builder()
             .block_id("context_actions_0")
-            .elements(vec![fb_buttons().into()])
+            .elements(vec![fb_buttons()])
             .build()
             .unwrap();
 

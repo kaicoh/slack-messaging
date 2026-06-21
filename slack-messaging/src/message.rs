@@ -172,7 +172,7 @@ mod tests {
             .set_blocks(Some(vec![
                 header("this is a header block").into(),
                 section("this is a section block").into(),
-            ]))
+            ] as Vec<Block>))
             .set_thread_ts(Some("thread ts"))
             .set_mrkdwn(Some(true))
             .set_response_type(Some("response type"))
@@ -189,7 +189,7 @@ mod tests {
             .blocks(vec![
                 header("this is a header block").into(),
                 section("this is a section block").into(),
-            ])
+            ] as Vec<Block>)
             .thread_ts("thread ts")
             .mrkdwn(true)
             .response_type("response type")
