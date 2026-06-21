@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.7][] - 2026-06-21
+
+- Support `DataVisualization` block.
+- Improve type inference for vector type.
+- Fix validation of `DataTable` block.
+
 ## [0.7.6][] - 2026-06-20
 
 - Introduce prelude module for rich text objects.
@@ -140,6 +146,7 @@ And the `select menu element` and the `multi-select menu element` are renewed.
 
 - pre-release
 
+[0.7.7]: https://github.com/kaicoh/slack-messaging/releases/v0.7.7
 [0.7.6]: https://github.com/kaicoh/slack-messaging/releases/v0.7.6
 [0.7.5]: https://github.com/kaicoh/slack-messaging/releases/v0.7.5
 [0.7.4]: https://github.com/kaicoh/slack-messaging/releases/v0.7.4
