@@ -66,6 +66,7 @@ pub enum ValidationErrorKind {
     /// Rich text cannot be used for a table header row.
     #[error("rich text cannot be used for a table header row")]
     RichTextTableHeader,
+
     /// Each series within a chart must have a unique name.
     #[error("each series within a chart must have a unique name")]
     UniqueSeriesName,

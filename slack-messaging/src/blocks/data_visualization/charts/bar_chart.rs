@@ -1,4 +1,4 @@
-use super::{AxisConfig, DataSeries, ValidateXYChart};
+use super::{unique_series_names, AxisConfig, DataSeries, ValidateXYChart};
 
 use crate::errors::ValidationErrorKind;
 use crate::validators::*;
@@ -97,7 +97,7 @@ use slack_messaging_derive::Builder;
 pub struct BarChart {
     #[builder(
         push_item = "push_series",
-        validate("required", "list::not_empty", "list::max_item_6", "list::unique_series_names")
+        validate("required", "list::not_empty", "list::max_item_6", "unique_series_names")
     )]
     pub(crate) series: Option<Vec<DataSeries>>,
 
