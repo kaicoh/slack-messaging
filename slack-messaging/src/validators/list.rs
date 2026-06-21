@@ -5,7 +5,7 @@ use paste::paste;
 
 type List<T> = Value<Vec<T>>;
 
-fn inner_validator<T>(
+pub(crate) fn inner_validator<T>(
     mut value: List<T>,
     error: ValidationErrorKind,
     predicate: impl Fn(&[T]) -> bool,

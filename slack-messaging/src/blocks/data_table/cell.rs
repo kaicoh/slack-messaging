@@ -17,6 +17,20 @@ pub enum DataTableCell {
     RichText(RichText),
 }
 
+impl DataTableCell {
+    pub fn is_raw_text(&self) -> bool {
+        matches!(self, Self::RawText(_))
+    }
+
+    pub fn is_raw_number(&self) -> bool {
+        matches!(self, Self::RawNumber(_))
+    }
+
+    pub fn is_rich_text(&self) -> bool {
+        matches!(self, Self::RichText(_))
+    }
+}
+
 impl<T: Into<String>> From<T> for DataTableCell {
     fn from(value: T) -> Self {
         Self::RawText(RawText::from(value))

@@ -1,3 +1,5 @@
+use crate::errors::ValidationErrorKind;
+use crate::value::Value;
 use crate::validators::*;
 
 use serde::Serialize;
@@ -24,7 +26,7 @@ pub use row::DataTableRow;
 /// | Field | Type | Required | Validation |
 /// |-------|------|----------|------------|
 /// | block_id | String | No | Maximum 255 characters. |
-/// | rows | Vec<[DataTableRow]> | Yes | Maximum 101 items (100 regular rows plus the header). Minimum 2 items (1 regular row plus the header). |
+/// | rows | Vec<[DataTableRow]> | Yes | Maximum 101 items (100 regular rows plus the header). Minimum 2 items (1 regular row plus the header). The first row is a header, and `rich_text` cannot be used for the header cells. |
 /// | caption | String | Yes | N/A |
 /// | page_size | i64 | No | Minimum 1, maximum 100. |
 /// | row_header_column_index | i64 | No | Minimum 0. |
@@ -247,7 +249,10 @@ pub struct DataTable {
     #[builder(validate("text::max_255"))]
     pub(crate) block_id: Option<String>,
 
-    #[builder(push_item = "row", validate("required", "list::min_item_2", "list::max_item_101"))]
+    #[builder(
+        push_item = "row",
+        validate("required", "list::min_item_2", "list::max_item_101", "valid_header")
+    )]
     pub(crate) rows: Option<Vec<DataTableRow>>,
 
     #[builder(validate("required"))]
@@ -262,10 +267,19 @@ pub struct DataTable {
     pub(crate) row_header_column_index: Option<i64>,
 }
 
+fn valid_header(value: Value<Vec<DataTableRow>>) -> Value<Vec<DataTableRow>> {
+    list::inner_validator(value, ValidationErrorKind::RichTextTableHeader, |rows| {
+        rows.first().and_then(|row| row.cells.as_ref()).is_some_and(|cells| {
+            cells.iter().any(DataTableCell::is_rich_text)
+        })
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::errors::*;
+    use crate::blocks::rich_text::prelude::*;
 
     #[test]
     fn it_implements_builder() {
@@ -383,6 +397,20 @@ mod tests {
     }
 
     #[test]
+    fn it_requires_rows_field_to_have_header_row_without_rich_text() {
+        let err = DataTable::builder()
+            .caption("A Fabulous Table")
+            .row(rich_text_row(vec!["foo", "bar", "baz"]))
+            .row(row(vec!["000", "001", "002"]))
+            .build()
+            .unwrap_err();
+        assert_eq!(err.object(), "DataTable");
+
+        let errors = err.field("rows");
+        assert!(errors.includes(ValidationErrorKind::RichTextTableHeader));
+    }
+
+    #[test]
     fn it_requires_caption_field() {
         let err = DataTable::builder()
             .row(row(vec!["foo", "bar", "baz"]))
@@ -442,5 +470,28 @@ mod tests {
 
     fn row<T: Into<DataTableCell>>(cells: Vec<T>) -> DataTableRow {
         DataTableRow::from_iter(cells)
+    }
+
+    fn rich_text_row(cells: Vec<&str>) -> DataTableRow {
+        let cells = cells
+            .into_iter()
+            .map(|text| {
+                RichText::builder()
+                    .element(
+                        RichTextSection::builder()
+                            .element(
+                                RichTextElementText::builder()
+                                    .text(text)
+                                    .build()
+                                    .unwrap(),
+                            )
+                            .build()
+                            .unwrap(),
+                    )
+                    .build()
+                    .unwrap()
+            })
+            .collect::<Vec<RichText>>();
+        row(cells)
     }
 }

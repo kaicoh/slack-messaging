@@ -58,6 +58,10 @@ pub enum ValidationErrorKind {
     /// Rich text block should have exactly one element.
     #[error("rich text block should have exactly one element")]
     RichTextSingleElement,
+
+    /// Rich text cannot be used for a table header row.
+    #[error("rich text cannot be used for a table header row")]
+    RichTextTableHeader,
 }
 
 /// Validation error from single field or across fields.
