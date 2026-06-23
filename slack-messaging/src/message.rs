@@ -1,3 +1,4 @@
+use crate::attachment::Attachment;
 use crate::blocks::Block;
 use crate::validators::*;
 
@@ -143,6 +144,10 @@ pub struct Message {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) reply_broadcast: Option<bool>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[builder(push_item = "attachment", validate("list::max_item_20"))]
+    pub(crate) attachments: Option<Vec<Attachment>>,
 }
 
 #[cfg(test)]
@@ -165,6 +170,7 @@ mod tests {
             replace_original: Some(true),
             delete_original: Some(true),
             reply_broadcast: Some(true),
+            attachments: None,
         };
 
         let val = Message::builder()
@@ -216,6 +222,7 @@ mod tests {
             replace_original: None,
             delete_original: None,
             reply_broadcast: None,
+            attachments: None,
         };
 
         let val = Message::builder()

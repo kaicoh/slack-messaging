@@ -10,8 +10,10 @@ pub mod composition_objects;
 /// Error types used in this crate.
 pub mod errors;
 
+mod attachment;
 mod message;
 mod validators;
 mod value;
 
+pub use attachment::{Attachment, AttachmentBuilder};
 pub use message::{Message, MessageBuilder};
